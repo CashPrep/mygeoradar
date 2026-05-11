@@ -1,0 +1,27 @@
+import { Navbar } from '@/components/layout/Navbar'
+import { Footer } from '@/components/layout/Footer'
+import { HeroSection } from '@/components/home/HeroSection'
+import { EngineBar } from '@/components/home/EngineBar'
+import { FeaturesGrid } from '@/components/home/FeaturesGrid'
+import { HowItWorks } from '@/components/home/HowItWorks'
+import { SampleResult } from '@/components/home/SampleResult'
+import { ReviewsSection } from '@/components/home/ReviewsSection'
+import { PricingSection } from '@/components/home/PricingSection'
+import { CtaBanner } from '@/components/home/CtaBanner'
+
+export default function HomePage() {
+  return (
+    <main className="min-h-screen bg-background">
+      <Navbar />
+      <HeroSection />
+      <EngineBar />
+      <FeaturesGrid />
+      <HowItWorks />
+      <SampleResult />
+      <ReviewsSection />
+      <PricingSection />
+      <CtaBanner />
+      <Footer />
+    </main>
+  )
+}
