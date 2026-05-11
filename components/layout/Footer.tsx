@@ -11,6 +11,7 @@ const footerLinks = {
     { href: '/blog',                  label: 'Blog' },
     { href: '/blog/what-is-geo',      label: 'What is GEO?' },
     { href: '/blog/ai-search-guide',  label: 'AI Search Guide' },
+    { href: '/about',                 label: 'About the Founder' },
   ],
   Legal: [
     { href: '/privacy', label: 'Privacy Policy' },
@@ -31,7 +32,7 @@ export function Footer() {
               <span className="font-bold">my<span className="text-accent">geo</span>radar</span>
             </Link>
             <p className="text-sm text-muted leading-relaxed">
-              See how AI answers see your business — and get a clear plan to show up more.
+              See how AI engines see your business — and get a clear plan to show up more.
             </p>
           </div>
 
@@ -55,8 +56,8 @@ export function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-muted">© {new Date().getFullYear()} MyGeoRadar. All rights reserved.</p>
-          <p className="text-xs text-muted">Built for businesses that want to be found in the AI era.</p>
+          <p className="text-xs text-muted">&copy; {new Date().getFullYear()} MyGeoRadar. All rights reserved.</p>
+          <p className="text-xs text-muted">Built by Andrew Garber &mdash; Elon University AI Scholar.</p>
         </div>
       </div>
     </footer>
