@@ -1,8 +1,8 @@
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
-import { Button } from '@/components/ui/Button'
 import { ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'What is GEO? The Beginner\'s Guide to Generative Engine Optimization',
@@ -96,9 +96,12 @@ export default function WhatIsGeoPage() {
         <div className="mt-10 p-6 bg-surface-2 border border-border rounded-xl flex flex-col gap-4">
           <p className="font-semibold text-foreground">Ready to see your AI visibility score?</p>
           <p className="text-sm text-foreground-dim">Run a $1 scan and get your full report in under 60 seconds.</p>
-          <Button variant="primary" onClick={() => {}} className="w-fit">
+          <Link
+            href="/scan"
+            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors w-fit"
+          >
             Run my scan <ArrowRight className="w-4 h-4" />
-          </Button>
+          </Link>
         </div>
 
       </article>
