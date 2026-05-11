@@ -1,6 +1,5 @@
 import OpenAI from 'openai'
 import type { ScanReport, EngineResult, ActionItem, VisibilityLevel } from './types'
-import { AI_ENGINES } from './constants'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -24,24 +23,47 @@ export async function runGeoScan(scan: {
   const topicList   = scan.topics.join(', ')
 
   const prompt = `
-You are a Generative Engine Optimization (GEO) analyst. Simulate how 4 major AI engines (ChatGPT, Perplexity, Gemini, Claude) would respond to search queries related to a business, and score their visibility.
+You are a senior GEO (Generative Engine Optimization) analyst with deep knowledge of how ChatGPT, Perplexity, Gemini, and Claude retrieve and cite local businesses.
 
-Business: ${scan.business_name}
-Website: ${scan.website}${locationStr}
-Topics to evaluate: ${topicList}
+Your task: simulate how each AI engine would respond to queries about this business, then score their AI visibility.
 
-For each AI engine, simulate realistic AI search behavior and score the business 0-100 on how likely it is to be mentioned, cited, or recommended for each topic.
+## Business
+- Name: ${scan.business_name}
+- Website: ${scan.website}${locationStr}
+- Industry: ${scan.industry || 'Not specified'}
+- Topics to evaluate: ${topicList}
 
-Return ONLY valid JSON in this exact structure:
+## Scoring Rubric (apply to EACH engine independently)
+Score each topic 0–100 based on realistic probability of being cited:
+- 80–100 (Excellent): Business is very likely to be mentioned by name. Strong online presence, lots of reviews, structured data, authoritative content.
+- 60–79 (Good): Business may be mentioned. Has some digital footprint but gaps exist.
+- 40–59 (Weak): Business is unlikely to be mentioned unless very local-specific query. Limited signals.
+- 0–39 (Poor): Business would not be mentioned. Minimal or no AI-visible presence.
+
+## Engine-Specific Behavior
+- ChatGPT: Uses training data + browsing. Favors well-known brands, Wikipedia-level entities, businesses with strong review profiles and schema markup.
+- Perplexity: Real-time web retrieval. Favors recent content, active websites, news mentions, fresh reviews. Penalizes outdated or thin sites.
+- Gemini: Tightly integrated with Google ecosystem. Heavily weights Google Business Profile completeness, Google reviews, local pack signals.
+- Claude: Training data only (no browsing by default). Favors businesses mentioned in editorial content, industry publications, and authoritative web pages.
+
+## Output Format
+Return ONLY valid JSON. No markdown, no explanation.
 {
   "engines": [
     {
       "engine": "chatgpt",
       "engineLabel": "ChatGPT",
       "overallScore": 45,
-      "summary": "2-3 sentence summary of visibility on this engine",
+      "summary": "2-3 sentence realistic summary of how ChatGPT currently handles queries about this business and why it scores this way.",
       "topics": [
-        { "topic": "topic name", "score": 40, "level": "weak", "mentioned": false, "sentiment": "neutral" }
+        {
+          "topic": "exact topic string from input",
+          "score": 40,
+          "level": "weak",
+          "mentioned": false,
+          "sentiment": "neutral",
+          "snippet": "A short example of what this AI engine might actually say when asked about this topic — realistic, specific, 1-2 sentences."
+        }
       ]
     }
   ],
@@ -49,40 +71,52 @@ Return ONLY valid JSON in this exact structure:
   "topActions": [
     {
       "priority": "high",
-      "category": "content",
-      "title": "Short action title",
-      "description": "Specific, actionable 1-2 sentence description",
+      "category": "schema",
+      "title": "Concise action title (max 8 words)",
+      "description": "Specific, implementable instruction. What exactly to do, why it matters for AI visibility, expected impact.",
       "effort": "easy"
     }
   ],
-  "quickWins": ["Short quick win tip 1", "Short quick win tip 2", "Short quick win tip 3"]
+  "quickWins": [
+    "Specific quick win with a concrete action — not generic advice",
+    "Second quick win",
+    "Third quick win"
+  ]
 }
 
-Engines to include: chatgpt, perplexity, gemini, claude
-Topics to score: ${scan.topics.map((t) => `"${t}"`).join(', ')}
-Provide 5 topActions ordered by priority (high first).
-Provide 3 quickWins.
-All scores are integers 0-100.
-Level values: "excellent" (80+), "good" (60-79), "weak" (40-59), "poor" (0-39)
+Rules:
+- engines array must contain exactly 4 items: chatgpt, perplexity, gemini, claude — in that order
+- topics array inside each engine must contain exactly ${scan.topics.length} items matching the input topics
+- topActions must contain exactly 5 items, ordered high → medium → low priority
+- quickWins must contain exactly 3 items
+- All scores are integers 0–100
+- Be realistic — most small/unknown businesses will score 20–50, not 70+
+- snippet should sound like an actual AI response, not a score description
 `.trim()
 
   const completion = await openai.chat.completions.create({
-    model:       'gpt-4o',
-    messages:    [{ role: 'user', content: prompt }],
-    temperature: 0.4,
+    model:           'gpt-4o',
+    messages:        [{ role: 'user', content: prompt }],
+    temperature:     0.3,
     response_format: { type: 'json_object' },
+    max_tokens:      4000,
   })
 
   const raw = JSON.parse(completion.choices[0].message.content!)
 
   const engines: EngineResult[] = (raw.engines ?? []).map((e: EngineResult) => ({
     ...e,
-    topics: e.topics.map((t) => ({ ...t, level: scoreToLevel(t.score) })),
+    overallScore: Math.round(e.overallScore),
+    topics: e.topics.map((t) => ({
+      ...t,
+      score: Math.round(t.score),
+      level: scoreToLevel(t.score),
+    })),
   }))
 
-  const overallScore: number = raw.overallScore ?? Math.round(
-    engines.reduce((sum, e) => sum + e.overallScore, 0) / engines.length
-  )
+  const overallScore: number = raw.overallScore != null
+    ? Math.round(raw.overallScore)
+    : Math.round(engines.reduce((sum, e) => sum + e.overallScore, 0) / engines.length)
 
   return {
     overallScore,
