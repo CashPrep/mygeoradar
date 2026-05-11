@@ -70,7 +70,7 @@ function DashboardInner() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold">Dashboard</h1>
-        <Badge variant="outline">Admin</Badge>
+        <Badge variant="neutral">Admin</Badge>
       </div>
 
       {/* Stats */}
