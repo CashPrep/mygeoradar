@@ -50,7 +50,7 @@ export function HeroSection() {
 
         <p className="text-lg md:text-xl text-foreground-dim max-w-2xl leading-relaxed">
           See exactly how ChatGPT, Perplexity, Gemini and Claude answer questions
-          about your business — and get a clear, weekly action plan to show up more.
+          about your business — and get a clear, actionable plan to show up more.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">

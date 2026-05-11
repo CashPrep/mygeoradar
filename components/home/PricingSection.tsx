@@ -10,7 +10,7 @@ const included = [
   'Prioritized 5-item action plan',
   'Schema & entity improvement tips',
   'Content gap analysis',
-  'Shareable PDF report',
+  'Shareable report link',
   'No subscription required',
 ]
 

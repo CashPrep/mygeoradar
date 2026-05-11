@@ -7,6 +7,7 @@ import { HowItWorks } from '@/components/home/HowItWorks'
 import { SampleResult } from '@/components/home/SampleResult'
 import { ReviewsSection } from '@/components/home/ReviewsSection'
 import { PricingSection } from '@/components/home/PricingSection'
+import { FaqSection } from '@/components/home/FaqSection'
 import { CtaBanner } from '@/components/home/CtaBanner'
 
 export default function HomePage() {
@@ -20,6 +21,7 @@ export default function HomePage() {
       <SampleResult />
       <ReviewsSection />
       <PricingSection />
+      <FaqSection />
       <CtaBanner />
       <Footer />
     </main>
