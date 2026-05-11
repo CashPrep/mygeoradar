@@ -7,6 +7,10 @@ export async function GET(
 ) {
   const { id } = params
 
+  if (!supabase) {
+    return NextResponse.json({ error: 'Supabase client not initialized.' }, { status: 500 })
+  }
+
   const { data, error } = await supabase
     .from('scan_reports')
     .select('*')
