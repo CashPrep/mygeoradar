@@ -52,7 +52,7 @@ function ReviewModal({ onClose }: { onClose: () => void }) {
 
     setError('')
     setLoading(true)
-    const { error: sbError } = await supabase.from('reviews').insert([{
+    const { error: sbError } = await supabase!.from('reviews').insert([{
       name:          form.name.trim(),
       business_name: form.business_name.trim() || null,
       business_type: form.business_type.trim() || null,
