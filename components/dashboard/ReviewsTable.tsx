@@ -24,7 +24,7 @@ type ReviewRow = {
   approved: boolean
 }
 
-export function ReviewsTable({ secretKey, onUpdate }: { secretKey: string; onUpdate: () => void }) {
+export function ReviewsTable({ secretKey, onUpdate }: { secretKey: string; onUpdate?: () => void }) {
   const [reviews, setReviews] = useState<ReviewRow[]>([])
   const [loading, setLoading] = useState(true)
   const [busy,    setBusy]    = useState<string | null>(null)
