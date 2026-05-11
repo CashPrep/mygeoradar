@@ -1,5 +1,5 @@
 import { Resend } from 'resend'
-import type { ScanReport } from './types'
+import type { ScanReport, ActionItem } from './types'
 import { formatScore, getScoreHex } from './utils'
 
 export async function sendScanReport(
@@ -38,9 +38,10 @@ export async function sendScanReport(
     <!-- Top actions -->
     <div style="margin-bottom:24px">
       <h2 style="font-size:16px;font-weight:600;margin:0 0 12px;color:#e8e8f0">Top Recommendations</h2>
-      ${topActions.map((action: string) => `
-      <div style="background:#0d0d1a;border:1px solid #1e1e3a;border-radius:8px;padding:12px 16px;margin-bottom:8px;font-size:14px;color:#c8c8d8">
-        ${action}
+      ${topActions.map((action: ActionItem) => `
+      <div style="background:#0d0d1a;border:1px solid #1e1e3a;border-radius:8px;padding:12px 16px;margin-bottom:8px">
+        <p style="font-size:14px;font-weight:600;color:#e8e8f0;margin:0 0 4px">${action.title}</p>
+        <p style="font-size:13px;color:#c8c8d8;margin:0">${action.description}</p>
       </div>`).join('')}
     </div>
 
