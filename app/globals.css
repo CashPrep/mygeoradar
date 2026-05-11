@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -14,31 +14,43 @@
   }
 
   body {
-    background-color: #080810;
-    color: #e8e8f0;
+    background-color: #09090b;
+    color: #fafafa;
   }
 
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: #0e0e1a; }
-  ::-webkit-scrollbar-thumb { background: #2a2a4a; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #4f8ef760; }
-  ::selection { background: #4f8ef730; color: #e8e8f0; }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #52525b; }
+  ::selection { background: #10b98130; color: #fafafa; }
 }
 
 @layer components {
-  /* Backgrounds */
-  .bg-dots {
-    background-image: radial-gradient(circle, #1e1e3a 1px, transparent 1px);
-    background-size: 24px 24px;
+
+  /* Subtle noise texture overlay — adds tactile depth without dot grid cliche */
+  .bg-noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 128px 128px;
   }
+
+  /* Very faint grid — much subtler than dot grid, used sparingly */
   .bg-grid {
     background-image:
-      linear-gradient(#1a1a2e 1px, transparent 1px),
-      linear-gradient(90deg, #1a1a2e 1px, transparent 1px);
-    background-size: 40px 40px;
+      linear-gradient(#27272a 1px, transparent 1px),
+      linear-gradient(90deg, #27272a 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.3;
   }
+
+  /* Top radial glow — emerald tint */
   .glow-top {
-    background: radial-gradient(ellipse 80% 50% at 50% -10%, #4f8ef718, transparent 70%);
+    background: radial-gradient(ellipse 70% 40% at 50% -5%, #10b98112, transparent 70%);
+  }
+
+  /* Bottom fade for sections */
+  .glow-bottom {
+    background: radial-gradient(ellipse 60% 40% at 50% 110%, #10b9810a, transparent 70%);
   }
 
   /* Cards */
@@ -71,7 +83,7 @@
   .input-base {
     @apply w-full bg-surface-2 border border-border rounded-lg px-4 py-3
            text-foreground placeholder:text-muted text-sm
-           focus:outline-none focus:ring-2 focus:ring-accent/40 focus:border-accent
+           focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent
            transition-all duration-150 hover:border-border-bright;
   }
 
@@ -82,7 +94,7 @@
 
   /* Shimmer skeleton */
   .shimmer {
-    background: linear-gradient(90deg, #0e0e1a 25%, #14142a 50%, #0e0e1a 75%);
+    background: linear-gradient(90deg, #111113 25%, #18181b 50%, #111113 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -91,17 +103,23 @@
     0%   { background-position: 200% 0; }
     100% { background-position: -200% 0; }
   }
+
+  /* Divider line with fade */
+  .divider {
+    @apply w-full h-px bg-gradient-to-r from-transparent via-border to-transparent;
+  }
 }
 
 @layer utilities {
+  /* Signature gradient: crisp white fading into emerald — distinctive, not AI-template */
   .text-gradient {
-    background: linear-gradient(135deg, #e8e8f0 0%, #4f8ef7 50%, #a78bfa 100%);
+    background: linear-gradient(135deg, #fafafa 0%, #10b981 60%, #059669 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-gradient-subtle {
-    background: linear-gradient(135deg, #e8e8f0 60%, #4f8ef7 100%);
+    background: linear-gradient(135deg, #fafafa 70%, #10b981 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
