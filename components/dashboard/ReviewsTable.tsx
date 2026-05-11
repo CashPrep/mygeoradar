@@ -53,7 +53,7 @@ export function ReviewsTable({ secretKey, onUpdate }: { secretKey: string; onUpd
     })
     setReviews((prev) => prev.map((r) => r.id === id ? { ...r, approved } : r))
     setBusy(null)
-    onUpdate()
+    onUpdate?.()
   }
 
   if (loading) return <p className="text-muted text-sm">Loading reviews...</p>
