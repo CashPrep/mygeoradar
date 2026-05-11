@@ -14,12 +14,24 @@ const faqs = [
     a: 'Yes — significantly. Traditional SEO optimizes for Google\'s algorithm (keywords, backlinks, crawl signals). GEO (Generative Engine Optimization) optimizes for how AI models retrieve and cite businesses. The signals are different: structured data, entity recognition, review depth, editorial mentions, and E-E-A-T content all matter more to AI engines than raw keyword density.',
   },
   {
+    q: 'How is this different from just asking ChatGPT myself?',
+    a: 'Asking ChatGPT yourself gives you one unstructured answer with no scoring, no competitive context, and no action plan. MyGeoRadar runs structured queries across four AI engines simultaneously, scores each one on a consistent 0–100 rubric, and delivers a prioritized list of exactly what to fix — not just what the AI said.',
+  },
+  {
+    q: 'What happens to my data?',
+    a: 'Your business name and website are used only to run your scan. We do not sell your data, share it with third parties, or use it for training. Your report lives at a unique URL tied to your scan — only people you share that link with can see it. See our Privacy Policy for full details.',
+  },
+  {
     q: 'How accurate are the scores?',
     a: 'The scan uses GPT-4o to simulate AI engine behavior based on realistic criteria for each platform — ChatGPT\'s training data patterns, Perplexity\'s real-time retrieval bias, Gemini\'s Google ecosystem weighting, and Claude\'s editorial content preference. Scores reflect probability of citation, not a live query. Think of it as a strategic benchmark, not a live ping.',
   },
   {
     q: 'Do I need an account to get my report?',
     a: 'No. You enter your business details, pay $1, and your full report loads on-screen within ~20 seconds. Your report has a permanent shareable URL you can bookmark or forward — no login required.',
+  },
+  {
+    q: 'Can I rescan after making improvements?',
+    a: 'Yes — and we encourage it. Each scan is a new $1 purchase. Once you\'ve acted on your report (updating your website, building citations, improving reviews), run a fresh scan to see how your scores change. It\'s the fastest way to measure GEO progress.',
   },
   {
     q: 'Why is it only $1?',
