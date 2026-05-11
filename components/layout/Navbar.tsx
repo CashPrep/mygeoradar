@@ -10,10 +10,11 @@ const navLinks = [
   { href: '/#how-it-works', label: 'How it works' },
   { href: '/#pricing',      label: 'Pricing' },
   { href: '/blog',          label: 'Blog' },
+  { href: '/about',         label: 'About' },
 ]
 
 export function Navbar() {
-  const [open, setOpen]       = useState(false)
+  const [open, setOpen]         = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
