@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
-import { ArrowRight, ArrowLeft, X, Radar } from 'lucide-react'
+import { ArrowRight, ArrowLeft, X, Radar, Monitor, Mail, FileText } from 'lucide-react'
 import { clsx } from 'clsx'
 
 const INDUSTRY_SUGGESTIONS: Record<string, string[]> = {
@@ -249,7 +249,7 @@ export default function ScanPage() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium">Email <span className="text-muted text-xs">(optional — get your report by email)</span></label>
+                <label className="text-sm font-medium">Email <span className="text-muted text-xs">(optional — get your report by email too)</span></label>
                 <input
                   className="input"
                   type="email"
@@ -257,6 +257,23 @@ export default function ScanPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+              </div>
+
+              {/* What you get */}
+              <div className="bg-surface-2 border border-border rounded-xl p-4 flex flex-col gap-3">
+                <p className="text-xs font-semibold text-muted uppercase tracking-wide">What happens after you pay</p>
+                <div className="flex items-start gap-3 text-sm">
+                  <Monitor className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Report appears on-screen instantly</span> — you&apos;ll be redirected here while we run the scan (~20 sec).</p>
+                </div>
+                <div className="flex items-start gap-3 text-sm">
+                  <Mail className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Email copy sent to you</span> — if you enter your email above, we&apos;ll send a full summary once the scan completes.</p>
+                </div>
+                <div className="flex items-start gap-3 text-sm">
+                  <FileText className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Shareable link</span> — your report has a permanent URL you can bookmark or share with your team.</p>
+                </div>
               </div>
 
               {/* Summary */}
@@ -274,7 +291,7 @@ export default function ScanPage() {
               <div className="flex items-center justify-between px-4 py-3 bg-accent/10 border border-accent/20 rounded-xl">
                 <div>
                   <p className="font-semibold text-foreground">AI Visibility Scan</p>
-                  <p className="text-xs text-muted">One-time payment &middot; Full report instantly</p>
+                  <p className="text-xs text-muted">One-time payment &middot; Report ready in ~20 seconds</p>
                 </div>
                 <p className="text-2xl font-bold text-accent">$1</p>
               </div>
@@ -294,7 +311,7 @@ export default function ScanPage() {
                   Pay $1 & Run Scan <Radar className="w-4 h-4" />
                 </Button>
               </div>
-              <p className="text-xs text-center text-muted">Secure payment by Stripe &middot; No subscription</p>
+              <p className="text-xs text-center text-muted">Secure payment by Stripe &middot; No subscription &middot; No account required</p>
             </div>
           )}
         </div>

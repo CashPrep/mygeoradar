@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: NextRequest) {
   try {
-    const { businessName, website, topics, location, industry } = await req.json()
+    const { businessName, website, topics, location, industry, email } = await req.json()
 
     if (!businessName || !website || !topics?.length) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
 
     const scanId = nanoid(10)
 
-    // Save scan stub to Supabase before payment
     const { error: dbError } = await supabase.from('scan_reports').insert([{
       id:            scanId,
       business_name: businessName,
@@ -25,6 +24,7 @@ export async function POST(req: NextRequest) {
       topics,
       location:      location || null,
       industry:      industry || null,
+      email:         email    || null,
       paid:          false,
     }])
 
@@ -39,9 +39,12 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       line_items: [{
         price_data: {
-          currency:   'usd',
-          unit_amount: 100,
-          product:    'prod_UUkMvY3Fjwy4pM',
+          currency:     'usd',
+          unit_amount:  100,
+          product_data: {
+            name:        'AI Visibility Scan',
+            description: 'One-time GEO scan across ChatGPT, Perplexity, Gemini & Claude',
+          },
         },
         quantity: 1,
       }],

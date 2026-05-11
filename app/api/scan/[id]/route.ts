@@ -11,9 +11,7 @@ export async function GET(
     return NextResponse.json({ error: 'Supabase client not initialized.' }, { status: 500 })
   }
 
-  const client = supabase
-
-  const { data, error } = await client
+  const { data, error } = await supabase
     .from('scan_reports')
     .select('*')
     .eq('id', id)
@@ -23,15 +21,19 @@ export async function GET(
     return NextResponse.json({ error: 'Report not found.' }, { status: 404 })
   }
 
-  const report = {
-    id:           data.id,
-    domain:       data.domain,
-    score:        data.score,
-    issues:       data.issues,
-    website:      data.website,
-    topics:       data.topics,
-    createdAt:    data.created_at,
-  }
-
-  return NextResponse.json(report)
+  return NextResponse.json({
+    id:            data.id,
+    business_name: data.business_name,
+    website:       data.website,
+    topics:        data.topics,
+    location:      data.location,
+    industry:      data.industry,
+    paid:          data.paid,
+    created_at:    data.created_at,
+    overall_score: data.overall_score,
+    level:         data.level,
+    engines:       data.engines,
+    top_actions:   data.top_actions,
+    quick_wins:    data.quick_wins,
+  })
 }
