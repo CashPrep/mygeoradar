@@ -11,7 +11,9 @@ export async function GET(
     return NextResponse.json({ error: 'Supabase client not initialized.' }, { status: 500 })
   }
 
-  const { data, error } = await supabase
+  const client = supabase
+
+  const { data, error } = await client
     .from('scan_reports')
     .select('*')
     .eq('id', id)
@@ -22,20 +24,14 @@ export async function GET(
   }
 
   const report = {
-    id:            data.id,
-    createdAt:     data.created_at,
-    businessName:  data.business_name,
-    website:       data.website,
-    topics:        data.topics,
-    location:      data.location,
-    industry:      data.industry,
-    overallScore:  data.overall_score ?? 0,
-    level:         data.level ?? 'poor',
-    engines:       data.engines ?? [],
-    topActions:    data.top_actions ?? [],
-    quickWins:     data.quick_wins ?? [],
-    paid:          data.paid,
+    id:           data.id,
+    domain:       data.domain,
+    score:        data.score,
+    issues:       data.issues,
+    website:      data.website,
+    topics:       data.topics,
+    createdAt:    data.created_at,
   }
 
-  return NextResponse.json({ report })
+  return NextResponse.json(report)
 }
