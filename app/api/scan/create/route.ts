@@ -39,12 +39,9 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       line_items: [{
         price_data: {
-          currency: 'usd',
+          currency:   'usd',
           unit_amount: 100,
-          product_data: {
-            name: 'MyGeoRadar AI Visibility Scan',
-            description: `AI visibility scan for ${businessName} across ChatGPT, Perplexity, Gemini & Claude`,
-          },
+          product:    'prod_UUkMvY3Fjwy4pM',
         },
         quantity: 1,
       }],
