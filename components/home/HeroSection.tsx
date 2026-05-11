@@ -1,94 +1,94 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Badge } from '@/components/ui/Badge'
-import { ArrowRight, Radar, Zap } from 'lucide-react'
+import { ArrowRight, CheckCircle2 } from 'lucide-react'
+
+const stats = [
+  { value: '4', label: 'AI engines checked' },
+  { value: '$1', label: 'one-time, no account' },
+  { value: '<60s', label: 'to your full report' },
+]
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-24 pb-20 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-28 pb-24 overflow-hidden">
 
-      {/* Dot grid background */}
-      <div className="absolute inset-0 bg-dots opacity-40" />
-
-      {/* Top glow */}
+      {/* Subtle top glow only — no dot grid, no rings */}
       <div className="absolute inset-0 glow-top pointer-events-none" />
-
-      {/* Animated radar rings */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="absolute rounded-full border border-accent/10 animate-ping"
-            style={{
-              width:  `${i * 200}px`,
-              height: `${i * 200}px`,
-              top: `${-i * 100}px`,
-              left: `${-i * 100}px`,
-              animationDelay: `${i * 0.6}s`,
-              animationDuration: '3s',
-            }}
-          />
-        ))}
-      </div>
+      <div className="absolute inset-0 bg-noise pointer-events-none" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-6">
+      <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-7">
 
-        <Badge variant="accent" className="gap-2">
-          <Zap className="w-3 h-3" />
-          Built for the AI search era
-        </Badge>
+        {/* Eyebrow */}
+        <div className="flex items-center gap-2 bg-surface border border-border rounded-full px-4 py-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+          <span className="text-xs font-medium text-foreground-dim tracking-wide">
+            AI search is replacing Google. Is your business ready?
+          </span>
+        </div>
 
-        <h1 className="text-4xl md:text-6xl font-bold leading-tight tracking-tight">
-          Most SEO tools were built{' '}
-          <br className="hidden md:block" />
-          <span className="text-gradient">before AI search existed.</span>
+        {/* Headline — no gradient text on the main message, gradient only on the pivot word */}
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
+          Your business is invisible
           <br />
-          We weren&apos;t.
+          <span className="text-gradient">to AI search.</span>
+          <br />
+          <span className="text-foreground">We’ll show you why.</span>
         </h1>
 
-        <p className="text-lg md:text-xl text-foreground-dim max-w-2xl leading-relaxed">
-          See exactly how ChatGPT, Perplexity, Gemini and Claude answer questions
-          about your business — and get a clear, actionable plan to show up more.
+        <p className="text-base md:text-lg text-foreground-dim max-w-xl leading-relaxed">
+          ChatGPT, Perplexity, Gemini and Claude are answering millions of
+          purchase decisions every day. See exactly where your business stands
+          — and get a real plan to fix it.
         </p>
 
-        {/* Primary CTA — dominant */}
-        <div className="flex flex-col items-center gap-3 mt-2 w-full sm:w-auto">
+        {/* CTA */}
+        <div className="flex flex-col items-center gap-3 w-full sm:w-auto">
           <Button
             variant="primary"
             size="lg"
-            className="w-full sm:w-auto"
+            className="w-full sm:w-auto px-8"
             onClick={() => window.location.href = '/scan'}
           >
             Run your AI radar scan
             <ArrowRight className="w-4 h-4" />
           </Button>
-
-          {/* Secondary CTA — plain text link, not a competing button */}
           <button
-            className="text-sm text-muted hover:text-foreground transition-colors underline underline-offset-4"
+            className="text-sm text-muted hover:text-foreground-dim transition-colors"
             onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            See how it works
+            See how it works ↓
           </button>
         </div>
 
-        <p className="text-sm text-muted">
-          One-time scan &middot; <span className="text-foreground font-semibold">$1.00</span> &middot; Results in under 60 seconds
-        </p>
-
-        {/* Mini radar icon */}
-        <div className="mt-6 relative">
-          <div className="w-16 h-16 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center">
-            <Radar className="w-7 h-7 text-accent animate-pulse-slow" />
-          </div>
-          <div className="absolute inset-0 rounded-full border border-accent/20 animate-ping" style={{ animationDuration: '2s' }} />
+        {/* Trust micro-copy */}
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          {[
+            'One-time $1 payment',
+            'No account required',
+            'Secure checkout via Stripe',
+          ].map((item) => (
+            <div key={item} className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+              <span className="text-xs text-muted">{item}</span>
+            </div>
+          ))}
         </div>
 
-        {/* Founder blurb */}
-        <p className="text-xs text-muted max-w-sm leading-relaxed">
-          Built by an indie founder obsessed with how AI is reshaping search — and what that means for real businesses trying to get found.
+        {/* Stat bar */}
+        <div className="w-full max-w-lg mt-2 grid grid-cols-3 divide-x divide-border border border-border rounded-xl bg-surface overflow-hidden">
+          {stats.map((s) => (
+            <div key={s.label} className="flex flex-col items-center py-4 px-2">
+              <span className="text-xl font-bold text-foreground">{s.value}</span>
+              <span className="text-xs text-muted mt-0.5 text-center leading-snug">{s.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Founder line */}
+        <p className="text-xs text-muted">
+          Built by Andrew Garber &middot; Elon University AI Scholar
         </p>
 
       </div>
