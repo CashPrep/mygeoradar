@@ -53,22 +53,25 @@ export function HeroSection() {
           about your business — and get a clear, actionable plan to show up more.
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3 mt-2">
+        {/* Primary CTA — dominant */}
+        <div className="flex flex-col items-center gap-3 mt-2 w-full sm:w-auto">
           <Button
             variant="primary"
             size="lg"
+            className="w-full sm:w-auto"
             onClick={() => window.location.href = '/scan'}
           >
             Run your AI radar scan
             <ArrowRight className="w-4 h-4" />
           </Button>
-          <Button
-            variant="secondary"
-            size="lg"
+
+          {/* Secondary CTA — plain text link, not a competing button */}
+          <button
+            className="text-sm text-muted hover:text-foreground transition-colors underline underline-offset-4"
             onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
           >
             See how it works
-          </Button>
+          </button>
         </div>
 
         <p className="text-sm text-muted">
@@ -82,6 +85,12 @@ export function HeroSection() {
           </div>
           <div className="absolute inset-0 rounded-full border border-accent/20 animate-ping" style={{ animationDuration: '2s' }} />
         </div>
+
+        {/* Founder blurb */}
+        <p className="text-xs text-muted max-w-sm leading-relaxed">
+          Built by an indie founder obsessed with how AI is reshaping search — and what that means for real businesses trying to get found.
+        </p>
+
       </div>
     </section>
   )
