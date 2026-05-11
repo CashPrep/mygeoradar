@@ -41,7 +41,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <head>
+      <body className="bg-background text-foreground font-sans antialiased min-h-screen">
+        {children}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-49BR1TEVM4"
           strategy="afterInteractive"
@@ -54,9 +55,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('config', 'G-49BR1TEVM4');
           `}
         </Script>
-      </head>
-      <body className="bg-background text-foreground font-sans antialiased min-h-screen">
-        {children}
       </body>
     </html>
   )
