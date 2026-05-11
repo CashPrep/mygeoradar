@@ -25,7 +25,7 @@ export async function sendScanReport(
     <div style="text-align:center;margin-bottom:32px">
       <p style="color:#4f8ef7;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px">MyGeoRadar</p>
       <h1 style="font-size:24px;font-weight:700;margin:0 0 8px;color:#e8e8f0">Your AI Visibility Report</h1>
-      <p style="color:#9898b0;font-size:14px;margin:0">${report.domain}</p>
+      <p style="color:#9898b0;font-size:14px;margin:0">${report.website}</p>
     </div>
 
     <!-- Score card -->
@@ -55,7 +55,7 @@ export async function sendScanReport(
   await resend.emails.send({
     from: 'MyGeoRadar <reports@mygeoradar.com>',
     to: email,
-    subject: `Your AI Visibility Report — ${report.domain}`,
+    subject: `Your AI Visibility Report — ${report.website}`,
     html,
   })
 }
