@@ -1,7 +1,11 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Check, ArrowRight } from 'lucide-react'
+import { Check, ArrowRight, Tag } from 'lucide-react'
+
+const FULL_PRICE  = 49.99
+const PROMO_PRICE = 24.99
+const PROMO_PCT   = 50
 
 const included = [
   'Visibility scan across 4 AI engines',
@@ -26,15 +30,25 @@ export function PricingSection() {
       </div>
 
       <div className="max-w-sm mx-auto">
+        {/* Promo banner above card */}
+        <div className="mb-4 flex items-center gap-2 px-4 py-2.5 bg-green-500/10 border border-green-500/30 rounded-xl">
+          <Tag className="w-4 h-4 text-green-400 flex-shrink-0" />
+          <p className="text-sm text-green-400 font-semibold">
+            🎉 {PROMO_PCT}% off your first scan — applied automatically at checkout
+          </p>
+        </div>
+
         <div className="card p-8 flex flex-col gap-6 shadow-glow-sm border-accent/30">
 
           {/* Price */}
           <div className="text-center">
+            <p className="text-sm text-muted line-through mb-1">${FULL_PRICE.toFixed(2)}</p>
             <div className="flex items-end justify-center gap-1">
-              <span className="text-5xl font-bold text-foreground">$1</span>
-              <span className="text-foreground-dim mb-2">.00</span>
+              <span className="text-5xl font-bold text-green-400">${Math.floor(PROMO_PRICE)}</span>
+              <span className="text-green-400 text-2xl font-bold mb-1">.{String(PROMO_PRICE.toFixed(2).split('.')[1])}</span>
             </div>
-            <p className="text-sm text-muted mt-1">per scan &middot; one-time &middot; no account needed</p>
+            <p className="text-sm text-muted mt-1">first scan &middot; one-time &middot; no account needed</p>
+            <p className="text-xs text-muted mt-0.5">${FULL_PRICE.toFixed(2)} per scan after that</p>
           </div>
 
           {/* Features */}
