@@ -28,7 +28,6 @@ export async function POST(req: NextRequest) {
     const ip     = getClientIp(req)
     const scanId = nanoid(10)
 
-    // Determine whether the promo is actually valid for this IP
     let promoAllowed = false
     if (usePromo && ip !== 'unknown') {
       const { data: prior } = await supabase
