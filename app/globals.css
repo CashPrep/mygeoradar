@@ -27,14 +27,14 @@
 
 @layer components {
 
-  /* Subtle noise texture overlay — adds tactile depth without dot grid cliche */
+  /* Subtle noise texture overlay */
   .bg-noise {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 128px 128px;
   }
 
-  /* Very faint grid — much subtler than dot grid, used sparingly */
+  /* Very faint grid */
   .bg-grid {
     background-image:
       linear-gradient(#27272a 1px, transparent 1px),
@@ -79,7 +79,8 @@
            px-5 py-2.5 rounded-lg transition-all duration-150 active:scale-[0.98];
   }
 
-  /* Inputs */
+  /* Input — used everywhere. .input-base is the same, kept as alias */
+  .input,
   .input-base {
     @apply w-full bg-surface-2 border border-border rounded-lg px-4 py-3
            text-foreground placeholder:text-muted text-sm
@@ -111,7 +112,6 @@
 }
 
 @layer utilities {
-  /* Signature gradient: crisp white fading into emerald — distinctive, not AI-template */
   .text-gradient {
     background: linear-gradient(135deg, #fafafa 0%, #10b981 60%, #059669 100%);
     -webkit-background-clip: text;
