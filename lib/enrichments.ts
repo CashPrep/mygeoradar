@@ -48,7 +48,7 @@ function flattenTypes(schemas: object[]): string[] {
     }
   }
   schemas.forEach(walk)
-  return [...new Set(types)]
+  return Array.from(new Set(types))
 }
 
 function hasType(presentTypes: string[], target: string): boolean {
@@ -163,7 +163,6 @@ async function analyzeCompetitorGap(
 ): Promise<CompetitorGap | null> {
   const locationStr = location ? ` in ${location}` : ''
 
-  // Step 1: Ask GPT-4o to identify 2 real competitor domains
   const identifyPrompt = `You are a competitive research expert.
 
 Business: ${businessName} (${website})${locationStr}
@@ -196,7 +195,6 @@ Return ONLY valid JSON:
 
   if (!competitorList.length) return null
 
-  // Step 2: Fetch each competitor site and extract their real schemas in parallel
   const competitorData = await Promise.all(
     competitorList.map(async (c) => {
       const html      = await fetchHtml(c.domain)
@@ -206,7 +204,6 @@ Return ONLY valid JSON:
     })
   )
 
-  // Step 3: Ask GPT-4o to score each competitor and produce closing moves
   const analyzePrompt = `You are a GEO (Generative Engine Optimization) analyst.
 
 You are comparing a business against its competitors for AI search visibility.
