@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { supabase } from '@/lib/supabase'
 import { runGeoScan } from '@/lib/geo'
+import { runEnrichments } from '@/lib/enrichments'
 import { sendScanReport } from '@/lib/email'
 import type { ScanReport } from '@/lib/types'
 
@@ -38,20 +39,27 @@ export async function POST(req: NextRequest) {
 
     if (!scan) return NextResponse.json({ ok: true })
 
-    // Mark paid immediately
+    // Mark paid immediately so report page stops showing "waiting for payment"
     await supabase.from('scan_reports').update({ paid: true }).eq('id', scanId)
 
-    // Run GEO scan then save + email
-    runGeoScan(scan).then(async (result) => {
+    // Run GEO scan + enrichments in parallel
+    Promise.all([
+      runGeoScan(scan),
+      runEnrichments(scan),
+    ]).then(async ([result, enrichments]) => {
+
       await supabase.from('scan_reports').update({
         overall_score: result.overallScore,
         level:         result.level,
         engines:       result.engines,
         top_actions:   result.topActions,
         quick_wins:    result.quickWins,
+        schema_check:  enrichments.schemaCheck,
+        content_gaps:  enrichments.contentGaps,
+        gbp_signal:    enrichments.gbpSignal,
       }).eq('id', scanId)
 
-      // Send email if provided
+      // Send email if address available
       const email = scan.email || session.customer_details?.email
       if (email) {
         const fullReport: ScanReport = {
@@ -63,6 +71,9 @@ export async function POST(req: NextRequest) {
           location:     scan.location,
           industry:     scan.industry,
           paid:         true,
+          schemaCheck:  enrichments.schemaCheck,
+          contentGaps:  enrichments.contentGaps,
+          gbpSignal:    enrichments.gbpSignal,
           ...result,
         }
         await sendScanReport(email, fullReport).catch(console.error)
