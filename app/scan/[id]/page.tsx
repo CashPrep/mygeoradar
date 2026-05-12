@@ -3,10 +3,15 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
-import type { ScanReport, EngineResult, ActionItem } from '@/lib/types'
+import type { ScanReport, EngineResult, ActionItem, SchemaCheck, ContentGapItem, GbpSignal } from '@/lib/types'
 import { getScoreColor, getScoreHex, formatScore } from '@/lib/utils'
-import { Radar, Share2, RefreshCw, Zap } from 'lucide-react'
+import {
+  Radar, Share2, RefreshCw, Zap, Code2, MessageSquareText,
+  MapPin, CheckCircle2, XCircle, AlertCircle, ChevronDown, ChevronUp
+} from 'lucide-react'
 import { clsx } from 'clsx'
+
+// ─── Score Ring ─────────────────────────────────────────────────────────────
 
 function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size?: number; strokeWidth?: number }) {
   const radius       = (size - strokeWidth) / 2
@@ -16,7 +21,7 @@ function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size
   return (
     <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="#1e1e3a" strokeWidth={strokeWidth} />
+        <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="#27272a" strokeWidth={strokeWidth} />
         <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke={color} strokeWidth={strokeWidth}
           strokeLinecap="round" strokeDasharray={circumference} strokeDashoffset={offset}
           style={{ transition: 'stroke-dashoffset 1s ease' }} />
@@ -28,6 +33,8 @@ function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size
     </div>
   )
 }
+
+// ─── Engine Card ─────────────────────────────────────────────────────────────
 
 const ENGINE_ICONS: Record<string, string> = { chatgpt: '🤖', perplexity: '🔍', gemini: '✨', claude: '🧠' }
 
@@ -50,9 +57,9 @@ function EngineCard({ engine }: { engine: EngineResult }) {
               <span className={clsx('text-xs font-bold', getScoreColor(t.score))}>{t.score}</span>
             </div>
             <div className="h-1.5 bg-surface-2 rounded-full overflow-hidden">
-              <div className="h-full rounded-full" style={{
+              <div className="h-full rounded-full transition-all" style={{
                 width: `${t.score}%`,
-                background: t.score >= 80 ? '#22c55e' : t.score >= 60 ? '#4f8ef7' : t.score >= 40 ? '#f59e0b' : '#ef4444'
+                background: t.score >= 80 ? '#22c55e' : t.score >= 60 ? '#10b981' : t.score >= 40 ? '#f59e0b' : '#ef4444'
               }} />
             </div>
             {t.snippet && <p className="text-xs text-muted mt-1.5 italic leading-relaxed">&ldquo;{t.snippet}&rdquo;</p>}
@@ -62,6 +69,8 @@ function EngineCard({ engine }: { engine: EngineResult }) {
     </div>
   )
 }
+
+// ─── Action Plan ─────────────────────────────────────────────────────────────
 
 const EFFORT_COLORS: Record<string, string> = {
   easy:   'text-success border-success/30 bg-success/10',
@@ -117,11 +126,175 @@ function ActionPlan({ actions, quickWins }: { actions: ActionItem[]; quickWins: 
   )
 }
 
+// ─── Schema Checker Section ───────────────────────────────────────────────────
+
+const IMPACT_BADGE: Record<string, string> = {
+  high:   'text-danger  bg-danger/10  border-danger/20',
+  medium: 'text-warning bg-warning/10 border-warning/20',
+  low:    'text-muted   bg-surface-2  border-border',
+}
+
+function SchemaCheckerSection({ schema }: { schema: SchemaCheck }) {
+  const [expanded, setExpanded] = useState(false)
+  const missing  = schema.checked.filter(c => !c.found && c.impact === 'high')
+  const present  = schema.checked.filter(c => c.found)
+
+  return (
+    <div className="card p-5 flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Code2 className="w-4 h-4 text-accent" />
+          <h3 className="font-semibold text-foreground">Schema / Structured Data</h3>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className={clsx('text-sm font-bold', schema.score >= 60 ? 'text-success' : schema.score >= 30 ? 'text-warning' : 'text-danger')}>
+            {schema.score}/100
+          </span>
+          {!schema.fetchedOk && (
+            <span className="text-xs text-muted border border-border rounded-full px-2 py-0.5">site unreachable</span>
+          )}
+        </div>
+      </div>
+
+      {missing.length > 0 && (
+        <div className="bg-danger/5 border border-danger/20 rounded-xl p-4 flex flex-col gap-2">
+          <p className="text-xs font-semibold text-danger uppercase tracking-wide">Critical gaps ({missing.length} missing high-impact schemas)</p>
+          {missing.map((item) => (
+            <div key={item.type} className="flex items-start gap-2 text-sm">
+              <XCircle className="w-4 h-4 text-danger flex-shrink-0 mt-0.5" />
+              <div>
+                <span className="font-medium text-foreground">{item.type}</span>
+                <p className="text-xs text-foreground-dim mt-0.5">{item.note}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {present.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {present.map((item) => (
+            <span key={item.type} className="flex items-center gap-1.5 px-2.5 py-1 bg-success/10 border border-success/20 rounded-lg text-xs text-success">
+              <CheckCircle2 className="w-3 h-3" /> {item.type}
+            </span>
+          ))}
+        </div>
+      )}
+
+      <button
+        onClick={() => setExpanded(e => !e)}
+        className="flex items-center gap-1.5 text-xs text-muted hover:text-foreground-dim transition-colors self-start"
+      >
+        {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+        {expanded ? 'Hide' : 'Show'} all {schema.checked.length} schema checks
+      </button>
+
+      {expanded && (
+        <div className="flex flex-col gap-2">
+          {schema.checked.map((item) => (
+            <div key={item.type} className="flex items-start gap-3 p-3 bg-surface-2 rounded-lg">
+              {item.found
+                ? <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
+                : <XCircle className="w-4 h-4 text-muted flex-shrink-0 mt-0.5" />
+              }
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-medium text-foreground">{item.type}</span>
+                  <span className={clsx('text-xs px-1.5 py-0.5 rounded border', IMPACT_BADGE[item.impact])}>{item.impact}</span>
+                </div>
+                {!item.found && <p className="text-xs text-foreground-dim mt-1">{item.note}</p>}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Content Gaps Section ─────────────────────────────────────────────────────
+
+const ENGINE_LABEL: Record<string, string> = {
+  chatgpt: 'ChatGPT', perplexity: 'Perplexity', gemini: 'Gemini', claude: 'Claude'
+}
+
+function ContentGapsSection({ gaps }: { gaps: ContentGapItem[] }) {
+  return (
+    <div className="card p-5 flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <MessageSquareText className="w-4 h-4 text-accent" />
+        <h3 className="font-semibold text-foreground">Content Gap Analysis</h3>
+      </div>
+      <p className="text-sm text-foreground-dim">
+        These are questions AI engines are actively answering about your industry that your site doesn&apos;t adequately cover. Each one is an opportunity to rank.
+      </p>
+      <div className="flex flex-col gap-3">
+        {gaps.map((gap, i) => (
+          <div key={i} className="p-4 bg-surface-2 border border-border rounded-xl flex flex-col gap-2">
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-sm font-medium text-foreground leading-snug">&ldquo;{gap.question}&rdquo;</p>
+              <span className="text-xs px-2 py-0.5 bg-surface border border-border rounded-full text-muted flex-shrink-0">
+                {ENGINE_LABEL[gap.engine] ?? gap.engine}
+              </span>
+            </div>
+            <div className="flex items-start gap-2">
+              <AlertCircle className="w-3.5 h-3.5 text-warning flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-foreground-dim">{gap.missing}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── GBP Signal Section ─────────────────────────────────────────────────────────
+
+function GbpSignalSection({ gbp }: { gbp: GbpSignal }) {
+  const signals = [
+    { label: 'LocalBusiness schema detected',       ok: gbp.detected },
+    { label: 'Review / AggregateRating schema',     ok: gbp.hasReviewSchema },
+    { label: 'Business name consistent in markup',  ok: gbp.hasNapConsistency },
+  ]
+  return (
+    <div className="card p-5 flex flex-col gap-4">
+      <div className="flex items-center gap-2">
+        <MapPin className="w-4 h-4 text-accent" />
+        <h3 className="font-semibold text-foreground">Google Business Profile Signals</h3>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        {signals.map((s) => (
+          <div key={s.label} className={clsx(
+            'flex items-center gap-2 p-3 rounded-xl border text-sm',
+            s.ok ? 'bg-success/5 border-success/20 text-success' : 'bg-surface-2 border-border text-muted'
+          )}>
+            {s.ok
+              ? <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+              : <XCircle className="w-4 h-4 flex-shrink-0" />
+            }
+            <span className="leading-snug text-xs">{s.label}</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-col gap-2">
+        {gbp.recommendations.map((rec, i) => (
+          <div key={i} className="flex items-start gap-2 text-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0 mt-1.5" />
+            <p className="text-foreground-dim">{rec}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+// ─── Main Page ─────────────────────────────────────────────────────────────
+
 export default function ScanResultPage() {
-  const { id }                     = useParams<{ id: string }>()
-  const [report,    setReport]     = useState<ScanReport | null>(null)
-  const [status,    setStatus]     = useState<'loading' | 'pending' | 'ready' | 'error'>('loading')
-  const [pollCount, setPollCount]  = useState(0)
+  const { id }                    = useParams<{ id: string }>()
+  const [report,    setReport]    = useState<ScanReport | null>(null)
+  const [status,    setStatus]    = useState<'loading' | 'pending' | 'ready' | 'error'>('loading')
+  const [pollCount, setPollCount] = useState(0)
 
   useEffect(() => {
     if (!id) return
@@ -145,6 +318,9 @@ export default function ScanResultPage() {
             engines:      data.engines,
             topActions:   data.top_actions,
             quickWins:    data.quick_wins,
+            schemaCheck:  data.schema_check  ?? null,
+            contentGaps:  data.content_gaps  ?? null,
+            gbpSignal:    data.gbp_signal    ?? null,
           })
           setStatus('ready')
         } else {
@@ -202,6 +378,8 @@ export default function ScanResultPage() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <div className="max-w-3xl mx-auto px-4 pt-24 pb-20">
+
+        {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-8 flex-wrap">
           <div>
             <p className="text-sm text-muted mb-1">{report.businessName}</p>
@@ -216,6 +394,7 @@ export default function ScanResultPage() {
           </button>
         </div>
 
+        {/* Overall score */}
         <div className="card p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 mb-6">
           <ScoreRing score={report.overallScore} size={120} strokeWidth={10} />
           <div className="flex flex-col gap-2 text-center md:text-left">
@@ -232,13 +411,39 @@ export default function ScanResultPage() {
           </div>
         </div>
 
+        {/* Engine cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           {report.engines.map((engine) => <EngineCard key={engine.engine} engine={engine} />)}
         </div>
 
-        <ActionPlan actions={report.topActions} quickWins={report.quickWins} />
+        {/* Action plan */}
+        <div className="mb-6">
+          <ActionPlan actions={report.topActions} quickWins={report.quickWins} />
+        </div>
 
-        <div className="mt-8 p-6 bg-surface-2 border border-border rounded-xl flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Schema Checker */}
+        {report.schemaCheck && (
+          <div className="mb-6">
+            <SchemaCheckerSection schema={report.schemaCheck} />
+          </div>
+        )}
+
+        {/* Content Gaps */}
+        {report.contentGaps && report.contentGaps.length > 0 && (
+          <div className="mb-6">
+            <ContentGapsSection gaps={report.contentGaps} />
+          </div>
+        )}
+
+        {/* GBP Signals */}
+        {report.gbpSignal && (
+          <div className="mb-6">
+            <GbpSignalSection gbp={report.gbpSignal} />
+          </div>
+        )}
+
+        {/* Run again CTA */}
+        <div className="mt-2 p-6 bg-surface-2 border border-border rounded-xl flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <p className="font-semibold">Run another scan</p>
             <p className="text-sm text-muted">Track your progress after making improvements.</p>
@@ -250,6 +455,7 @@ export default function ScanResultPage() {
             <RefreshCw className="w-4 h-4" /> New scan
           </button>
         </div>
+
       </div>
     </main>
   )
