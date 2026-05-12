@@ -5,38 +5,45 @@ import { useRouter } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
-import { ArrowRight, ArrowLeft, X, Radar, Monitor, Mail, FileText } from 'lucide-react'
+import {
+  ArrowRight, ArrowLeft, X, Radar, Monitor, Mail,
+  FileText, Sparkles, CheckCircle2, Loader2
+} from 'lucide-react'
 import { clsx } from 'clsx'
 
 const INDUSTRY_SUGGESTIONS: Record<string, string[]> = {
-  'Restaurant':        ['best restaurant near me', 'food delivery', 'date night spots', 'healthy lunch options'],
-  'Law Firm':          ['personal injury lawyer', 'divorce attorney', 'DUI lawyer', 'free legal consultation'],
-  'Real Estate':       ['homes for sale', 'real estate agent near me', 'sell my house fast', 'first time home buyer'],
-  'Medical / Dental':  ['dentist near me', 'teeth whitening', 'family doctor', 'same day appointment'],
-  'Home Services':     ['plumber near me', 'HVAC repair', 'roof replacement cost', 'emergency electrician'],
-  'Fitness / Wellness':['gym near me', 'personal trainer', 'yoga classes', 'weight loss program'],
-  'E-commerce':        ['best price', 'free shipping', 'product reviews', 'buy online'],
-  'SaaS / Tech':       ['best software for', 'alternatives to', 'pricing comparison', 'free trial'],
-  'Other':             [],
+  'Restaurant':         ['best restaurant near me', 'food delivery', 'date night spots', 'healthy lunch options'],
+  'Law Firm':           ['personal injury lawyer', 'divorce attorney', 'DUI lawyer', 'free legal consultation'],
+  'Real Estate':        ['homes for sale', 'real estate agent near me', 'sell my house fast', 'first time home buyer'],
+  'Medical / Dental':   ['dentist near me', 'teeth whitening', 'family doctor', 'same day appointment'],
+  'Home Services':      ['plumber near me', 'HVAC repair', 'roof replacement cost', 'emergency electrician'],
+  'Fitness / Wellness': ['gym near me', 'personal trainer', 'yoga classes', 'weight loss program'],
+  'E-commerce':         ['best price', 'free shipping', 'product reviews', 'buy online'],
+  'SaaS / Tech':        ['best software for', 'alternatives to', 'pricing comparison', 'free trial'],
+  'Other':              [],
 }
-
 const INDUSTRIES = Object.keys(INDUSTRY_SUGGESTIONS)
-
 type Step = 1 | 2 | 3
 
 export default function ScanPage() {
   const router = useRouter()
 
-  const [step,         setStep]         = useState<Step>(1)
-  const [businessName, setBusinessName] = useState('')
-  const [website,      setWebsite]      = useState('')
-  const [industry,     setIndustry]     = useState('')
-  const [topics,       setTopics]       = useState<string[]>([])
-  const [topicInput,   setTopicInput]   = useState('')
-  const [location,     setLocation]     = useState('')
-  const [email,        setEmail]        = useState('')
-  const [loading,      setLoading]      = useState(false)
-  const [error,        setError]        = useState('')
+  const [step,          setStep]          = useState<Step>(1)
+  const [businessName,  setBusinessName]  = useState('')
+  const [website,       setWebsite]       = useState('')
+  const [industry,      setIndustry]      = useState('')
+  const [topics,        setTopics]        = useState<string[]>([])
+  const [topicInput,    setTopicInput]    = useState('')
+  const [location,      setLocation]      = useState('')
+  const [email,         setEmail]         = useState('')
+  const [loading,       setLoading]       = useState(false)
+  const [error,         setError]         = useState('')
+
+  // Autofill state
+  const [autofillUrl,   setAutofillUrl]   = useState('')
+  const [scraping,      setScraping]      = useState(false)
+  const [scrapeError,   setScrapeError]   = useState('')
+  const [autofilled,    setAutofilled]    = useState(false)
 
   const suggestions = INDUSTRY_SUGGESTIONS[industry] ?? []
 
@@ -45,16 +52,53 @@ export default function ScanPage() {
     if (!trimmed || topics.includes(trimmed) || topics.length >= 5) return
     setTopics((prev) => [...prev, trimmed])
   }
-
   function removeTopic(t: string) {
     setTopics((prev) => prev.filter((x) => x !== t))
   }
-
   function handleTopicKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault()
       addTopic(topicInput)
       setTopicInput('')
+    }
+  }
+
+  async function handleAutofill() {
+    if (!autofillUrl.trim()) return
+    setScraping(true)
+    setScrapeError('')
+    setAutofilled(false)
+    try {
+      const res  = await fetch('/api/scrape', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ url: autofillUrl.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        setScrapeError(data.error || 'Could not read that page.')
+        return
+      }
+      if (data.businessName) setBusinessName(data.businessName)
+      if (data.industry && INDUSTRIES.includes(data.industry)) setIndustry(data.industry)
+      if (data.location) setLocation(data.location)
+      // Set website to the entered URL if not already filled
+      if (!website) setWebsite(autofillUrl.trim().replace(/^https?:\/\//, '').replace(/\/$/, ''))
+      // Prefill topics but don’t overwrite ones user already added
+      if (data.topics?.length) {
+        setTopics((prev) => {
+          const merged = [...prev]
+          for (const t of data.topics) {
+            if (!merged.includes(t) && merged.length < 5) merged.push(t)
+          }
+          return merged
+        })
+      }
+      setAutofilled(true)
+    } catch {
+      setScrapeError('Network error — please try again.')
+    } finally {
+      setScraping(false)
     }
   }
 
@@ -107,13 +151,60 @@ export default function ScanPage() {
 
         <div className="card p-8">
 
-          {/* Step 1 */}
+          {/* ── STEP 1 ── */}
           {step === 1 && (
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-6">
               <div>
                 <h1 className="text-2xl font-bold mb-1">Your business</h1>
                 <p className="text-sm text-muted">Tell us who you are so we can run the scan.</p>
               </div>
+
+              {/* Autofill block */}
+              <div className="flex flex-col gap-3 bg-surface-2 border border-border rounded-xl p-4">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-accent" />
+                  <p className="text-sm font-semibold text-foreground">Autofill from your website</p>
+                </div>
+                <p className="text-xs text-muted -mt-1">
+                  Paste your URL and we’ll read your site and pre-fill what we can. You can edit everything after.
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    className="input flex-1"
+                    placeholder="yourbusiness.com"
+                    value={autofillUrl}
+                    onChange={(e) => { setAutofillUrl(e.target.value); setAutofilled(false); setScrapeError('') }}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAutofill()}
+                    disabled={scraping}
+                  />
+                  <button
+                    onClick={handleAutofill}
+                    disabled={!autofillUrl.trim() || scraping}
+                    className={clsx(
+                      'flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all',
+                      'bg-accent text-white hover:bg-accent-hover active:scale-[0.98]',
+                      'disabled:opacity-50 disabled:cursor-not-allowed'
+                    )}
+                  >
+                    {scraping
+                      ? <><Loader2 className="w-4 h-4 animate-spin" /> Reading&hellip;</>
+                      : <><Sparkles className="w-4 h-4" /> Autofill</>
+                    }
+                  </button>
+                </div>
+                {scrapeError && (
+                  <p className="text-xs text-danger flex items-center gap-1.5">
+                    <X className="w-3.5 h-3.5" /> {scrapeError}
+                  </p>
+                )}
+                {autofilled && (
+                  <p className="text-xs text-accent flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5" /> Fields pre-filled — review and edit below before continuing.
+                  </p>
+                )}
+              </div>
+
+              {/* Manual fields */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">Business name <span className="text-danger">*</span></label>
                 <input
@@ -143,23 +234,24 @@ export default function ScanPage() {
                   {INDUSTRIES.map((i) => <option key={i} value={i}>{i}</option>)}
                 </select>
               </div>
+
               <Button
                 variant="primary"
                 disabled={!canStep1}
                 onClick={() => setStep(2)}
-                className="w-full mt-2"
+                className="w-full mt-1"
               >
                 Continue <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           )}
 
-          {/* Step 2 */}
+          {/* ── STEP 2 ── */}
           {step === 2 && (
             <div className="flex flex-col gap-5">
               <div>
                 <h1 className="text-2xl font-bold mb-1">Search topics</h1>
-                <p className="text-sm text-muted">What do people search for when looking for a business like yours? Add up to 5 topics.</p>
+                <p className="text-sm text-muted">What do people search for when looking for a business like yours? Add up to 5.</p>
               </div>
 
               {suggestions.length > 0 && (
@@ -232,7 +324,7 @@ export default function ScanPage() {
             </div>
           )}
 
-          {/* Step 3 */}
+          {/* ── STEP 3 ── */}
           {step === 3 && (
             <div className="flex flex-col gap-5">
               <div>
@@ -264,15 +356,15 @@ export default function ScanPage() {
                 <p className="text-xs font-semibold text-muted uppercase tracking-wide">What happens after you pay</p>
                 <div className="flex items-start gap-3 text-sm">
                   <Monitor className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Report appears on-screen instantly</span> — you&apos;ll be redirected here while we run the scan (~20 sec).</p>
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Report appears on-screen</span> — redirected here while we run the scan (~20 sec).</p>
                 </div>
                 <div className="flex items-start gap-3 text-sm">
                   <Mail className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Email copy sent to you</span> — if you enter your email above, we&apos;ll send a full summary once the scan completes.</p>
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Email copy sent to you</span> — if you enter your email above.</p>
                 </div>
                 <div className="flex items-start gap-3 text-sm">
                   <FileText className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Shareable link</span> — your report has a permanent URL you can bookmark or share with your team.</p>
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Shareable link</span> — permanent URL you can bookmark or share.</p>
                 </div>
               </div>
 
@@ -308,7 +400,7 @@ export default function ScanPage() {
                   onClick={handleSubmit}
                   className="flex-1"
                 >
-                  Pay $1 & Run Scan <Radar className="w-4 h-4" />
+                  Pay $1 &amp; Run Scan <Radar className="w-4 h-4" />
                 </Button>
               </div>
               <p className="text-xs text-center text-muted">Secure payment by Stripe &middot; No subscription &middot; No account required</p>
