@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { supabase } from '@/lib/supabase'
 import { nanoid } from 'nanoid'
-import { FULL_PRICE_CENTS, PROMO_PRICE_CENTS, PROMO_LABEL } from '@/lib/pricing'
+import { SCAN_PRICE_CENTS, PROMO_PRICE_CENTS, PROMO_LABEL } from '@/lib/constants'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
@@ -18,8 +18,10 @@ function getClientIp(req: NextRequest): string {
 
 export async function POST(req: NextRequest) {
   try {
-    const { businessName, website, topics, location, industry, email, competitorUrl, usePromo } =
-      await req.json()
+    const {
+      businessName, website, topics, location,
+      industry, email, competitorUrl, usePromo,
+    } = await req.json()
 
     if (!businessName || !website || !topics?.length) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
@@ -39,7 +41,7 @@ export async function POST(req: NextRequest) {
       promoAllowed = !prior || prior.length === 0
     }
 
-    const chargeAmount = promoAllowed ? PROMO_PRICE_CENTS : FULL_PRICE_CENTS
+    const chargeAmount = promoAllowed ? PROMO_PRICE_CENTS : SCAN_PRICE_CENTS
     const priceLabel   = promoAllowed
       ? `AI Visibility Scan — ${PROMO_LABEL}`
       : 'AI Visibility Scan'

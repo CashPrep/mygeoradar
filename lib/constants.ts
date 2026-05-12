@@ -5,8 +5,13 @@ export const AI_ENGINES = [
   { id: 'claude',     label: 'Claude',     color: '#f59e0b' },
 ] as const
 
-export const SCAN_PRICE_CENTS = 100
-export const SCAN_PRICE_USD   = 1.00
+// Pricing — edit here to update everywhere
+export const SCAN_PRICE_CENTS       = 4999   // $49.99 full price
+export const SCAN_PRICE_USD         = 49.99
+export const PROMO_PRICE_CENTS      = 2500   // $24.99 (50% off first scan)
+export const PROMO_PRICE_USD        = 24.99
+export const PROMO_DISCOUNT_PCT     = 50
+export const PROMO_LABEL            = '50% off — first scan only'
 
 export const SCORE_LABELS = {
   excellent: { label: 'Excellent', color: 'text-success', bg: 'bg-success', hex: '#22c55e' },
