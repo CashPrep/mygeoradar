@@ -34,29 +34,45 @@ export interface SchemaCheckItem {
   type:    SchemaType | string
   found:   boolean
   impact:  'high' | 'medium' | 'low'
-  note:    string   // e.g. "Missing — add LocalBusiness JSON-LD for Gemini visibility"
+  note:    string
 }
 
 export interface SchemaCheck {
-  url:     string
-  checked: SchemaCheckItem[]
-  score:   number   // 0–100 based on how many high-impact schemas are present
+  url:       string
+  checked:   SchemaCheckItem[]
+  score:     number
   fetchedOk: boolean
 }
 
 // --- Content Gap ---
 export interface ContentGapItem {
-  question:   string   // e.g. "What are the best dentists in Boston for teeth whitening?"
-  engine:     string   // which AI engine surfaces this most
-  missing:    string   // what's missing from the site that would answer it
+  question: string
+  engine:   string
+  missing:  string
 }
 
 // --- Google Business Profile Signal ---
 export interface GbpSignal {
-  detected:        boolean   // did we find GBP schema / structured data signals?
-  hasReviewSchema: boolean
-  hasNapConsistency: boolean  // Name/Address/Phone consistent in schema vs page text
-  recommendations: string[]
+  detected:          boolean
+  hasReviewSchema:   boolean
+  hasNapConsistency: boolean
+  recommendations:   string[]
+}
+
+// --- Competitor Gap ---
+export interface CompetitorDetail {
+  name:            string    // e.g. "Bright Now! Dental"
+  domain:          string    // e.g. "brightnow.com"
+  estimatedScore:  number    // 0–100 estimated AI visibility
+  schemaTypes:     string[]  // schemas found on their site
+  advantages:      string[]  // 2–3 things they do better for AI visibility
+}
+
+export interface CompetitorGap {
+  yourScore:    number
+  competitors:  CompetitorDetail[]
+  closingMoves: string[]  // 3 specific actions to close the gap
+  summary:      string    // 1–2 sentence narrative
 }
 
 export interface ScanReport {
@@ -73,10 +89,10 @@ export interface ScanReport {
   topActions:   ActionItem[]
   quickWins:    string[]
   paid:         boolean
-  // Enrichments (may be null if not yet computed)
-  schemaCheck?:  SchemaCheck  | null
-  contentGaps?:  ContentGapItem[] | null
-  gbpSignal?:    GbpSignal    | null
+  schemaCheck?:   SchemaCheck      | null
+  contentGaps?:   ContentGapItem[] | null
+  gbpSignal?:     GbpSignal        | null
+  competitorGap?: CompetitorGap    | null
 }
 
 export interface ScanInput {
