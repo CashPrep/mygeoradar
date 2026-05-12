@@ -35,5 +35,8 @@ export async function GET(
     engines:       data.engines,
     top_actions:   data.top_actions,
     quick_wins:    data.quick_wins,
+    schema_check:  data.schema_check  ?? null,
+    content_gaps:  data.content_gaps  ?? null,
+    gbp_signal:    data.gbp_signal    ?? null,
   })
 }
