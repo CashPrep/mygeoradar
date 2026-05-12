@@ -15,6 +15,31 @@ import {
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
+// ─── Enrichment Skeleton ─────────────────────────────────────────────────────
+// Shown for sections that are still computing after the core scan resolves
+
+function EnrichmentSkeleton({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <div className="card p-5 flex flex-col gap-4 animate-pulse">
+      <div className="flex items-center gap-2">
+        <span className="text-accent opacity-50">{icon}</span>
+        <span className="text-sm font-semibold text-muted">{label}</span>
+        <span className="ml-auto text-xs text-muted">Analyzing…</span>
+      </div>
+      <div className="flex flex-col gap-2">
+        <div className="h-3 bg-surface-2 rounded-full w-full" />
+        <div className="h-3 bg-surface-2 rounded-full w-4/5" />
+        <div className="h-3 bg-surface-2 rounded-full w-3/5" />
+      </div>
+      <div className="flex gap-2">
+        <div className="h-7 bg-surface-2 rounded-lg w-24" />
+        <div className="h-7 bg-surface-2 rounded-lg w-20" />
+        <div className="h-7 bg-surface-2 rounded-lg w-28" />
+      </div>
+    </div>
+  )
+}
+
 // ─── Score Ring ───────────────────────────────────────────────────────────────
 
 function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size?: number; strokeWidth?: number }) {
@@ -141,10 +166,11 @@ interface HistoryPoint {
 }
 
 function ScoreTrendSection({ website, currentId }: { website: string; currentId: string }) {
-  const [history,  setHistory]  = useState<HistoryPoint[]>([])
-  const [loading,  setLoading]  = useState(true)
-  const [tooltip,  setTooltip]  = useState<{ x: number; y: number; point: HistoryPoint } | null>(null)
-  const svgRef = useRef<SVGSVGElement>(null)
+  const [history, setHistory] = useState<HistoryPoint[]>([])
+  const [loading, setLoading] = useState(true)
+  const [tooltip, setTooltip] = useState<{ x: number; y: number; point: HistoryPoint } | null>(null)
+  const svgRef    = useRef<SVGSVGElement>(null)
+  const wrapRef   = useRef<HTMLDivElement>(null)   // FIX: ref on the relative wrapper
 
   useEffect(() => {
     fetch(`/api/scan/history?website=${encodeURIComponent(website)}`)
@@ -154,15 +180,10 @@ function ScoreTrendSection({ website, currentId }: { website: string; currentId:
   }, [website])
 
   if (loading) return null
-  if (history.length < 2) return null  // Need at least 2 points for a trend
+  if (history.length < 2) return null
 
-  // ── SVG chart math ──
-  const W = 560
-  const H = 160
-  const PAD_L = 36
-  const PAD_R = 16
-  const PAD_T = 16
-  const PAD_B = 28
+  const W = 560, H = 160
+  const PAD_L = 36, PAD_R = 16, PAD_T = 16, PAD_B = 28
   const chartW = W - PAD_L - PAD_R
   const chartH = H - PAD_T - PAD_B
 
@@ -170,27 +191,17 @@ function ScoreTrendSection({ website, currentId }: { website: string; currentId:
   const minScore = Math.max(0,   Math.min(...scores) - 10)
   const maxScore = Math.min(100, Math.max(...scores) + 10)
 
-  function toX(i: number) {
-    return PAD_L + (i / (history.length - 1)) * chartW
-  }
-  function toY(score: number) {
-    return PAD_T + chartH - ((score - minScore) / (maxScore - minScore)) * chartH
-  }
+  const toX = (i: number) => PAD_L + (i / (history.length - 1)) * chartW
+  const toY = (s: number) => PAD_T + chartH - ((s - minScore) / (maxScore - minScore)) * chartH
 
   const polyline = history.map((p, i) => `${toX(i)},${toY(p.overall_score)}`).join(' ')
-
-  // Area fill path: line + close down to baseline
-  const firstX = toX(0)
-  const lastX  = toX(history.length - 1)
-  const baseY  = PAD_T + chartH
-  const area   = `M${firstX},${baseY} ` +
+  const baseY    = PAD_T + chartH
+  const area     = `M${toX(0)},${baseY} ` +
     history.map((p, i) => `L${toX(i)},${toY(p.overall_score)}`).join(' ') +
-    ` L${lastX},${baseY} Z`
+    ` L${toX(history.length - 1)},${baseY} Z`
 
-  // Y-axis grid lines at 0, 25, 50, 75, 100 (only those in range)
   const gridLines = [0, 25, 50, 75, 100].filter(v => v >= minScore - 5 && v <= maxScore + 5)
-
-  const delta = scores[scores.length - 1] - scores[0]
+  const delta     = scores[scores.length - 1] - scores[0]
 
   return (
     <div className="card p-5 flex flex-col gap-4">
@@ -200,19 +211,18 @@ function ScoreTrendSection({ website, currentId }: { website: string; currentId:
           <h3 className="font-semibold text-foreground">Score Progress</h3>
           <span className="text-xs text-muted">{history.length} scans</span>
         </div>
-        {/* Delta badge */}
         <span className={clsx(
           'text-xs font-bold px-2.5 py-1 rounded-full border',
-          delta > 0  ? 'bg-success/10 border-success/20 text-success' :
-          delta < 0  ? 'bg-danger/10  border-danger/20  text-danger'  :
-                       'bg-surface-2  border-border      text-muted'
+          delta > 0 ? 'bg-success/10 border-success/20 text-success' :
+          delta < 0 ? 'bg-danger/10  border-danger/20  text-danger'  :
+                      'bg-surface-2  border-border      text-muted'
         )}>
           {delta > 0 ? `+${delta}` : delta} pts since first scan
         </span>
       </div>
 
-      {/* SVG chart */}
-      <div className="w-full overflow-x-auto">
+      {/* FIX: position:relative on this div so tooltip absolute coords are correct */}
+      <div ref={wrapRef} className="w-full overflow-x-auto" style={{ position: 'relative' }}>
         <svg
           ref={svgRef}
           viewBox={`0 0 ${W} ${H}`}
@@ -223,81 +233,68 @@ function ScoreTrendSection({ website, currentId }: { website: string; currentId:
           <defs>
             <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%"   stopColor="#6366f1" stopOpacity="0.25" />
-              <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+              <stop offset="100%" stopColor="#6366f1" stopOpacity="0"   />
             </linearGradient>
           </defs>
 
-          {/* Grid lines */}
           {gridLines.map(v => (
             <g key={v}>
-              <line
-                x1={PAD_L} y1={toY(v)} x2={W - PAD_R} y2={toY(v)}
-                stroke="#27272a" strokeWidth="1" strokeDasharray="3 3"
-              />
+              <line x1={PAD_L} y1={toY(v)} x2={W - PAD_R} y2={toY(v)}
+                stroke="#27272a" strokeWidth="1" strokeDasharray="3 3" />
               <text x={PAD_L - 6} y={toY(v) + 4} fontSize="9" fill="#71717a" textAnchor="end">{v}</text>
             </g>
           ))}
 
-          {/* Area fill */}
           <path d={area} fill="url(#trend-fill)" />
+          <polyline points={polyline} fill="none" stroke="#6366f1" strokeWidth="2"
+            strokeLinejoin="round" strokeLinecap="round" />
 
-          {/* Line */}
-          <polyline
-            points={polyline}
-            fill="none"
-            stroke="#6366f1"
-            strokeWidth="2"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          />
-
-          {/* X-axis date labels — show first, last, and current */}
           {history.map((p, i) => {
             const showLabel = i === 0 || i === history.length - 1 || p.id === currentId
             if (!showLabel) return null
-            const label = new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
             return (
               <text key={p.id} x={toX(i)} y={H - 4} fontSize="9" fill="#71717a" textAnchor="middle">
-                {label}
+                {new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
               </text>
             )
           })}
 
-          {/* Dots — interactive */}
           {history.map((p, i) => {
-            const cx      = toX(i)
-            const cy      = toY(p.overall_score)
+            const cx        = toX(i)
+            const cy        = toY(p.overall_score)
             const isCurrent = p.id === currentId
-            const color   = p.overall_score >= 80 ? '#22c55e' : p.overall_score >= 60 ? '#10b981' : p.overall_score >= 40 ? '#f59e0b' : '#ef4444'
+            const color     = p.overall_score >= 80 ? '#22c55e' : p.overall_score >= 60 ? '#10b981' : p.overall_score >= 40 ? '#f59e0b' : '#ef4444'
             return (
-              <g key={p.id}
-                style={{ cursor: 'pointer' }}
+              <g key={p.id} style={{ cursor: isCurrent ? 'default' : 'pointer' }}
                 onClick={() => { if (!isCurrent) window.location.href = `/scan/${p.id}` }}
-                onMouseEnter={(e) => {
-                  const svg   = svgRef.current
-                  if (!svg) return
-                  const rect  = svg.getBoundingClientRect()
-                  const scaleX = rect.width  / W
-                  const scaleY = rect.height / H
-                  setTooltip({ x: cx * scaleX, y: cy * scaleY, point: p })
+                onMouseEnter={() => {
+                  const svg  = svgRef.current
+                  const wrap = wrapRef.current
+                  if (!svg || !wrap) return
+                  // Scale SVG viewBox coords to actual rendered pixels relative to wrapper
+                  const svgRect  = svg.getBoundingClientRect()
+                  const wrapRect = wrap.getBoundingClientRect()
+                  const scaleX   = svgRect.width  / W
+                  const scaleY   = svgRect.height / H
+                  setTooltip({
+                    x: (svgRect.left - wrapRect.left) + cx * scaleX,
+                    y: (svgRect.top  - wrapRect.top)  + cy * scaleY,
+                    point: p,
+                  })
                 }}
                 onMouseLeave={() => setTooltip(null)}
               >
-                {/* Outer ring for current scan */}
-                {isCurrent && (
-                  <circle cx={cx} cy={cy} r={9} fill="none" stroke="#6366f1" strokeWidth="1.5" opacity="0.4" />
-                )}
+                {isCurrent && <circle cx={cx} cy={cy} r={9} fill="none" stroke="#6366f1" strokeWidth="1.5" opacity="0.4" />}
                 <circle cx={cx} cy={cy} r={isCurrent ? 5 : 4} fill={color} stroke="#09090b" strokeWidth="2" />
               </g>
             )
           })}
         </svg>
 
-        {/* Tooltip */}
         {tooltip && (
           <div
             className="absolute z-10 pointer-events-none px-3 py-2 bg-surface border border-border rounded-xl shadow-lg text-xs flex flex-col gap-0.5"
-            style={{ left: tooltip.x + 12, top: tooltip.y - 8, transform: 'translateY(-100%)' }}
+            style={{ left: tooltip.x + 12, top: tooltip.y, transform: 'translateY(-100%)' }}
           >
             <span className={clsx('font-bold', getScoreColor(tooltip.point.overall_score))}>
               {tooltip.point.overall_score}/100
@@ -305,20 +302,16 @@ function ScoreTrendSection({ website, currentId }: { website: string; currentId:
             <span className="text-muted">
               {new Date(tooltip.point.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </span>
-            {tooltip.point.id !== currentId && (
-              <span className="text-accent">Click to view →</span>
-            )}
+            {tooltip.point.id !== currentId && <span className="text-accent">Click to view →</span>}
           </div>
         )}
       </div>
 
-      {/* Scan history list — compact */}
       <div className="flex flex-col gap-1.5 mt-1">
         {[...history].reverse().map((p) => {
           const isCurrent = p.id === currentId
           return (
-            <div
-              key={p.id}
+            <div key={p.id}
               onClick={() => { if (!isCurrent) window.location.href = `/scan/${p.id}` }}
               className={clsx(
                 'flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors',
@@ -356,9 +349,7 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
         <Swords className="w-4 h-4 text-accent" />
         <h3 className="font-semibold text-foreground">Competitor Gap Analysis</h3>
       </div>
-
       <p className="text-sm text-foreground-dim leading-relaxed">{gap.summary}</p>
-
       {topCompetitor && (
         <div className="p-4 bg-surface-2 border border-border rounded-xl flex flex-col gap-3">
           <p className="text-xs text-muted uppercase tracking-wide font-semibold">AI Visibility Score Comparison</p>
@@ -391,24 +382,16 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
           </div>
           <div className={clsx(
             'self-start flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border',
-            isAhead
-              ? 'bg-success/10 border-success/20 text-success'
-              : 'bg-danger/10  border-danger/20  text-danger'
+            isAhead ? 'bg-success/10 border-success/20 text-success' : 'bg-danger/10 border-danger/20 text-danger'
           )}>
             <TrendingUp className="w-3.5 h-3.5" />
-            {isAhead
-              ? `You're ahead by ${Math.abs(scoreDiff)} points`
-              : `${scoreDiff} point gap vs ${topCompetitor.name}`
-            }
+            {isAhead ? `You're ahead by ${Math.abs(scoreDiff)} points` : `${scoreDiff} point gap vs ${topCompetitor.name}`}
           </div>
         </div>
       )}
-
       {gap.competitors.map((c) => (
         <div key={c.domain} className="flex flex-col gap-2">
-          <p className="text-xs font-semibold text-foreground-dim uppercase tracking-wide">
-            What {c.name} does better
-          </p>
+          <p className="text-xs font-semibold text-foreground-dim uppercase tracking-wide">What {c.name} does better</p>
           {c.advantages.map((adv, i) => (
             <div key={i} className="flex items-start gap-2 text-sm">
               <XCircle className="w-4 h-4 text-danger flex-shrink-0 mt-0.5" />
@@ -424,7 +407,6 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
           )}
         </div>
       ))}
-
       {gap.closingMoves.length > 0 && (
         <div className="flex flex-col gap-2">
           <p className="text-xs font-semibold text-accent uppercase tracking-wide">How to close the gap</p>
@@ -469,7 +451,6 @@ function SchemaCheckerSection({ schema }: { schema: SchemaCheck }) {
           )}
         </div>
       </div>
-
       {missing.length > 0 && (
         <div className="bg-danger/5 border border-danger/20 rounded-xl p-4 flex flex-col gap-2">
           <p className="text-xs font-semibold text-danger uppercase tracking-wide">Critical gaps ({missing.length} missing high-impact schemas)</p>
@@ -484,7 +465,6 @@ function SchemaCheckerSection({ schema }: { schema: SchemaCheck }) {
           ))}
         </div>
       )}
-
       {present.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {present.map((item) => (
@@ -494,7 +474,6 @@ function SchemaCheckerSection({ schema }: { schema: SchemaCheck }) {
           ))}
         </div>
       )}
-
       <button
         onClick={() => setExpanded(e => !e)}
         className="flex items-center gap-1.5 text-xs text-muted hover:text-foreground-dim transition-colors self-start"
@@ -502,7 +481,6 @@ function SchemaCheckerSection({ schema }: { schema: SchemaCheck }) {
         {expanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
         {expanded ? 'Hide' : 'Show'} all {schema.checked.length} schema checks
       </button>
-
       {expanded && (
         <div className="flex flex-col gap-2">
           {schema.checked.map((item) => (
@@ -606,16 +584,20 @@ export default function ScanResultPage() {
   const [report,    setReport]    = useState<ScanReport | null>(null)
   const [status,    setStatus]    = useState<'loading' | 'pending' | 'ready' | 'error'>('loading')
   const [pollCount, setPollCount] = useState(0)
+  // Track whether enrichments have landed — keeps polling alive after core scan is ready
+  const [enrichmentsDone, setEnrichmentsDone] = useState(false)
 
   useEffect(() => {
     if (!id) return
+
     async function fetchReport() {
       try {
         const res  = await fetch(`/api/scan/${id}`)
         const data = await res.json()
         if (!res.ok) { setStatus('error'); return }
+
         if (data.paid && data.overall_score != null) {
-          setReport({
+          const mapped: ScanReport = {
             id:            data.id,
             createdAt:     data.created_at,
             businessName:  data.business_name,
@@ -633,18 +615,29 @@ export default function ScanResultPage() {
             contentGaps:   data.content_gaps   ?? null,
             gbpSignal:     data.gbp_signal     ?? null,
             competitorGap: data.competitor_gap ?? null,
-          })
+          }
+          setReport(mapped)
           setStatus('ready')
+          // All four enrichment fields must be non-null to stop polling
+          if (data.schema_check && data.content_gaps && data.gbp_signal && data.competitor_gap) {
+            setEnrichmentsDone(true)
+          }
         } else {
           setStatus('pending')
-          setPollCount((c) => c + 1)
+          setPollCount(c => c + 1)
         }
       } catch { setStatus('error') }
     }
+
     fetchReport()
-    const interval = setInterval(fetchReport, 3000)
+    const interval = setInterval(() => {
+      // Stop polling only when core scan AND all enrichments are done
+      if (status === 'ready' && enrichmentsDone) return
+      fetchReport()
+    }, 3000)
     return () => clearInterval(interval)
-  }, [id])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, enrichmentsDone])
 
   if (status !== 'ready') {
     const steps = [
@@ -723,7 +716,7 @@ export default function ScanResultPage() {
           </div>
         </div>
 
-        {/* Score trend — shown if ≥2 historical scans exist */}
+        {/* Score trend */}
         <div className="relative mb-6">
           <ScoreTrendSection website={report.website} currentId={report.id} />
         </div>
@@ -738,33 +731,37 @@ export default function ScanResultPage() {
           <ActionPlan actions={report.topActions} quickWins={report.quickWins} />
         </div>
 
-        {/* Competitor Gap */}
-        {report.competitorGap && (
-          <div className="mb-6">
-            <CompetitorGapSection gap={report.competitorGap} businessName={report.businessName} />
-          </div>
-        )}
+        {/* Competitor Gap — skeleton until data lands */}
+        <div className="mb-6">
+          {report.competitorGap
+            ? <CompetitorGapSection gap={report.competitorGap} businessName={report.businessName} />
+            : <EnrichmentSkeleton icon={<Swords className="w-4 h-4" />} label="Competitor Gap Analysis" />
+          }
+        </div>
 
-        {/* Schema Checker */}
-        {report.schemaCheck && (
-          <div className="mb-6">
-            <SchemaCheckerSection schema={report.schemaCheck} />
-          </div>
-        )}
+        {/* Schema Checker — skeleton until data lands */}
+        <div className="mb-6">
+          {report.schemaCheck
+            ? <SchemaCheckerSection schema={report.schemaCheck} />
+            : <EnrichmentSkeleton icon={<Code2 className="w-4 h-4" />} label="Schema / Structured Data" />
+          }
+        </div>
 
-        {/* Content Gaps */}
-        {report.contentGaps && report.contentGaps.length > 0 && (
-          <div className="mb-6">
-            <ContentGapsSection gaps={report.contentGaps} />
-          </div>
-        )}
+        {/* Content Gaps — skeleton until data lands */}
+        <div className="mb-6">
+          {report.contentGaps
+            ? <ContentGapsSection gaps={report.contentGaps} />
+            : <EnrichmentSkeleton icon={<MessageSquareText className="w-4 h-4" />} label="Content Gap Analysis" />
+          }
+        </div>
 
-        {/* GBP Signals */}
-        {report.gbpSignal && (
-          <div className="mb-6">
-            <GbpSignalSection gbp={report.gbpSignal} />
-          </div>
-        )}
+        {/* GBP Signals — skeleton until data lands */}
+        <div className="mb-6">
+          {report.gbpSignal
+            ? <GbpSignalSection gbp={report.gbpSignal} />
+            : <EnrichmentSkeleton icon={<MapPin className="w-4 h-4" />} label="Google Business Profile Signals" />
+          }
+        </div>
 
         {/* Run again CTA */}
         <div className="mt-2 p-6 bg-surface-2 border border-border rounded-xl flex flex-col md:flex-row items-center justify-between gap-4">
