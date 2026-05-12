@@ -3,9 +3,7 @@
 import { Button } from '@/components/ui/Button'
 import { ArrowRight, AlertTriangle, CheckCircle2, Users } from 'lucide-react'
 import { useEffect, useState } from 'react'
-
-const PROMO_PRICE = 24.99
-const FULL_PRICE  = 49.99
+import { PROMO_PRICE_USD, FULL_PRICE_USD } from '@/lib/constants'
 
 const engines = [
   { name: 'ChatGPT',    color: '#10a37f', score: 12 },
@@ -18,7 +16,6 @@ export function HeroSection() {
   const [animated, setAnimated] = useState(false)
 
   useEffect(() => {
-    // Small delay so the animation plays after mount / page paint
     const t = setTimeout(() => setAnimated(true), 300)
     return () => clearTimeout(t)
   }, [])
@@ -38,7 +35,7 @@ export function HeroSection() {
           </span>
         </div>
 
-        {/* Headline — lead with the pain first */}
+        {/* Headline — pain first */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
           You&apos;re invisible<br />
           <span className="text-gradient">to AI search.</span><br />
@@ -56,10 +53,7 @@ export function HeroSection() {
         <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-5 text-left flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <p className="text-xs font-semibold text-muted uppercase tracking-wider">Sample AI Visibility Score</p>
-            {/* Pulsing POOR badge */}
-            <span className="text-xs text-danger font-bold bg-danger/10 px-2 py-0.5 rounded-full animate-pulse">
-              POOR
-            </span>
+            <span className="text-xs text-danger font-bold bg-danger/10 px-2 py-0.5 rounded-full animate-pulse">POOR</span>
           </div>
           <div className="flex items-end gap-3">
             <span className="text-5xl font-bold text-danger">18</span>
@@ -100,12 +94,10 @@ export function HeroSection() {
             <ArrowRight className="w-4 h-4" />
           </Button>
           <p className="text-sm text-muted">
-            <span className="line-through text-muted/60">${FULL_PRICE.toFixed(2)}</span>{' '}
-            <span className="text-green-400 font-semibold">${PROMO_PRICE.toFixed(2)} first scan</span>
+            <span className="line-through text-muted/60">${FULL_PRICE_USD.toFixed(2)}</span>{' '}
+            <span className="text-green-400 font-semibold">${PROMO_PRICE_USD.toFixed(2)} first scan</span>
             {' '}· No account needed · Results in 60s
           </p>
-
-          {/* Social proof counter — between CTA and trust strip */}
           <div className="flex items-center gap-1.5 text-xs text-muted">
             <Users className="w-3.5 h-3.5 text-accent" />
             <span>
