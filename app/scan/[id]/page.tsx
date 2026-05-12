@@ -3,21 +3,25 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
-import type { ScanReport, EngineResult, ActionItem, SchemaCheck, ContentGapItem, GbpSignal } from '@/lib/types'
+import type {
+  ScanReport, EngineResult, ActionItem,
+  SchemaCheck, ContentGapItem, GbpSignal, CompetitorGap
+} from '@/lib/types'
 import { getScoreColor, getScoreHex, formatScore } from '@/lib/utils'
 import {
   Radar, Share2, RefreshCw, Zap, Code2, MessageSquareText,
-  MapPin, CheckCircle2, XCircle, AlertCircle, ChevronDown, ChevronUp
+  MapPin, CheckCircle2, XCircle, AlertCircle, ChevronDown, ChevronUp,
+  Swords, TrendingUp, ArrowRight
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
 // ─── Score Ring ─────────────────────────────────────────────────────────────
 
 function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size?: number; strokeWidth?: number }) {
-  const radius       = (size - strokeWidth) / 2
+  const radius        = (size - strokeWidth) / 2
   const circumference = 2 * Math.PI * radius
-  const offset       = circumference - (score / 100) * circumference
-  const color        = getScoreHex(score)
+  const offset        = circumference - (score / 100) * circumference
+  const color         = getScoreHex(score)
   return (
     <div className="relative flex items-center justify-center flex-shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
@@ -126,6 +130,111 @@ function ActionPlan({ actions, quickWins }: { actions: ActionItem[]; quickWins: 
   )
 }
 
+// ─── Competitor Gap Section ───────────────────────────────────────────────────
+
+function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; businessName: string }) {
+  const topCompetitor = gap.competitors[0]
+  const scoreDiff     = topCompetitor ? topCompetitor.estimatedScore - gap.yourScore : 0
+  const isAhead       = scoreDiff <= 0
+
+  return (
+    <div className="card p-5 flex flex-col gap-5">
+      {/* Header */}
+      <div className="flex items-center gap-2">
+        <Swords className="w-4 h-4 text-accent" />
+        <h3 className="font-semibold text-foreground">Competitor Gap Analysis</h3>
+      </div>
+
+      {/* Summary */}
+      <p className="text-sm text-foreground-dim leading-relaxed">{gap.summary}</p>
+
+      {/* Score comparison bar */}
+      {topCompetitor && (
+        <div className="p-4 bg-surface-2 border border-border rounded-xl flex flex-col gap-3">
+          <p className="text-xs text-muted uppercase tracking-wide font-semibold">AI Visibility Score Comparison</p>
+          <div className="flex flex-col gap-3">
+            {/* Your score */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-medium text-foreground">{businessName}</span>
+                <span className={clsx('text-xs font-bold', getScoreColor(gap.yourScore))}>{gap.yourScore}/100</span>
+              </div>
+              <div className="h-2.5 bg-surface rounded-full overflow-hidden">
+                <div className="h-full rounded-full transition-all"
+                  style={{ width: `${gap.yourScore}%`, background: getScoreHex(gap.yourScore) }} />
+              </div>
+            </div>
+            {/* Competitor scores */}
+            {gap.competitors.map((c) => (
+              <div key={c.domain}>
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-medium text-foreground-dim">{c.name}</span>
+                    <span className="text-xs text-muted">({c.domain})</span>
+                  </div>
+                  <span className={clsx('text-xs font-bold', getScoreColor(c.estimatedScore))}>{c.estimatedScore}/100</span>
+                </div>
+                <div className="h-2.5 bg-surface rounded-full overflow-hidden">
+                  <div className="h-full rounded-full transition-all"
+                    style={{ width: `${c.estimatedScore}%`, background: getScoreHex(c.estimatedScore) }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Gap badge */}
+          <div className={clsx(
+            'self-start flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border',
+            isAhead
+              ? 'bg-success/10 border-success/20 text-success'
+              : 'bg-danger/10  border-danger/20  text-danger'
+          )}>
+            <TrendingUp className="w-3.5 h-3.5" />
+            {isAhead
+              ? `You\'re ahead by ${Math.abs(scoreDiff)} points`
+              : `${scoreDiff} point gap vs ${topCompetitor.name}`
+            }
+          </div>
+        </div>
+      )}
+
+      {/* Competitor advantages */}
+      {gap.competitors.map((c) => (
+        <div key={c.domain} className="flex flex-col gap-2">
+          <p className="text-xs font-semibold text-foreground-dim uppercase tracking-wide">
+            What {c.name} does better
+          </p>
+          {c.advantages.map((adv, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm">
+              <XCircle className="w-4 h-4 text-danger flex-shrink-0 mt-0.5" />
+              <p className="text-foreground-dim">{adv}</p>
+            </div>
+          ))}
+          {c.schemaTypes.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 mt-1">
+              {c.schemaTypes.map(t => (
+                <span key={t} className="text-xs px-2 py-0.5 bg-surface-2 border border-border rounded-md text-muted">{t}</span>
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+
+      {/* Closing moves */}
+      {gap.closingMoves.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <p className="text-xs font-semibold text-accent uppercase tracking-wide">How to close the gap</p>
+          {gap.closingMoves.map((move, i) => (
+            <div key={i} className="flex items-start gap-2 text-sm">
+              <ArrowRight className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+              <p className="text-foreground-dim">{move}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ─── Schema Checker Section ───────────────────────────────────────────────────
 
 const IMPACT_BADGE: Record<string, string> = {
@@ -136,8 +245,8 @@ const IMPACT_BADGE: Record<string, string> = {
 
 function SchemaCheckerSection({ schema }: { schema: SchemaCheck }) {
   const [expanded, setExpanded] = useState(false)
-  const missing  = schema.checked.filter(c => !c.found && c.impact === 'high')
-  const present  = schema.checked.filter(c => c.found)
+  const missing = schema.checked.filter(c => !c.found && c.impact === 'high')
+  const present = schema.checked.filter(c => c.found)
 
   return (
     <div className="card p-5 flex flex-col gap-4">
@@ -195,7 +304,7 @@ function SchemaCheckerSection({ schema }: { schema: SchemaCheck }) {
             <div key={item.type} className="flex items-start gap-3 p-3 bg-surface-2 rounded-lg">
               {item.found
                 ? <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
-                : <XCircle className="w-4 h-4 text-muted flex-shrink-0 mt-0.5" />
+                : <XCircle      className="w-4 h-4 text-muted   flex-shrink-0 mt-0.5" />
               }
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
@@ -226,7 +335,7 @@ function ContentGapsSection({ gaps }: { gaps: ContentGapItem[] }) {
         <h3 className="font-semibold text-foreground">Content Gap Analysis</h3>
       </div>
       <p className="text-sm text-foreground-dim">
-        These are questions AI engines are actively answering about your industry that your site doesn&apos;t adequately cover. Each one is an opportunity to rank.
+        These are questions AI engines are actively answering about your industry that your site doesn&apos;t adequately cover.
       </p>
       <div className="flex flex-col gap-3">
         {gaps.map((gap, i) => (
@@ -252,9 +361,9 @@ function ContentGapsSection({ gaps }: { gaps: ContentGapItem[] }) {
 
 function GbpSignalSection({ gbp }: { gbp: GbpSignal }) {
   const signals = [
-    { label: 'LocalBusiness schema detected',       ok: gbp.detected },
-    { label: 'Review / AggregateRating schema',     ok: gbp.hasReviewSchema },
-    { label: 'Business name consistent in markup',  ok: gbp.hasNapConsistency },
+    { label: 'LocalBusiness schema detected',      ok: gbp.detected },
+    { label: 'Review / AggregateRating schema',    ok: gbp.hasReviewSchema },
+    { label: 'Business name consistent in markup', ok: gbp.hasNapConsistency },
   ]
   return (
     <div className="card p-5 flex flex-col gap-4">
@@ -268,10 +377,7 @@ function GbpSignalSection({ gbp }: { gbp: GbpSignal }) {
             'flex items-center gap-2 p-3 rounded-xl border text-sm',
             s.ok ? 'bg-success/5 border-success/20 text-success' : 'bg-surface-2 border-border text-muted'
           )}>
-            {s.ok
-              ? <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
-              : <XCircle className="w-4 h-4 flex-shrink-0" />
-            }
+            {s.ok ? <CheckCircle2 className="w-4 h-4 flex-shrink-0" /> : <XCircle className="w-4 h-4 flex-shrink-0" />}
             <span className="leading-snug text-xs">{s.label}</span>
           </div>
         ))}
@@ -305,22 +411,23 @@ export default function ScanResultPage() {
         if (!res.ok) { setStatus('error'); return }
         if (data.paid && data.overall_score != null) {
           setReport({
-            id:           data.id,
-            createdAt:    data.created_at,
-            businessName: data.business_name,
-            website:      data.website,
-            topics:       data.topics,
-            location:     data.location,
-            industry:     data.industry,
-            paid:         data.paid,
-            overallScore: data.overall_score,
-            level:        data.level,
-            engines:      data.engines,
-            topActions:   data.top_actions,
-            quickWins:    data.quick_wins,
-            schemaCheck:  data.schema_check  ?? null,
-            contentGaps:  data.content_gaps  ?? null,
-            gbpSignal:    data.gbp_signal    ?? null,
+            id:            data.id,
+            createdAt:     data.created_at,
+            businessName:  data.business_name,
+            website:       data.website,
+            topics:        data.topics,
+            location:      data.location,
+            industry:      data.industry,
+            paid:          data.paid,
+            overallScore:  data.overall_score,
+            level:         data.level,
+            engines:       data.engines,
+            topActions:    data.top_actions,
+            quickWins:     data.quick_wins,
+            schemaCheck:   data.schema_check   ?? null,
+            contentGaps:   data.content_gaps   ?? null,
+            gbpSignal:     data.gbp_signal     ?? null,
+            competitorGap: data.competitor_gap ?? null,
           })
           setStatus('ready')
         } else {
@@ -420,6 +527,13 @@ export default function ScanResultPage() {
         <div className="mb-6">
           <ActionPlan actions={report.topActions} quickWins={report.quickWins} />
         </div>
+
+        {/* Competitor Gap */}
+        {report.competitorGap && (
+          <div className="mb-6">
+            <CompetitorGapSection gap={report.competitorGap} businessName={report.businessName} />
+          </div>
+        )}
 
         {/* Schema Checker */}
         {report.schemaCheck && (
