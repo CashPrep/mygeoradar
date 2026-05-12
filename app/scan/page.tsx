@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import {
   ArrowRight, ArrowLeft, X, Radar, Monitor, Mail,
-  FileText, Sparkles, CheckCircle2, Loader2
+  FileText, Sparkles, CheckCircle2, Loader2, Swords
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -31,6 +31,7 @@ export default function ScanPage() {
   const [step,          setStep]          = useState<Step>(1)
   const [businessName,  setBusinessName]  = useState('')
   const [website,       setWebsite]       = useState('')
+  const [competitorUrl, setCompetitorUrl] = useState('')
   const [industry,      setIndustry]      = useState('')
   const [topics,        setTopics]        = useState<string[]>([])
   const [topicInput,    setTopicInput]    = useState('')
@@ -39,7 +40,6 @@ export default function ScanPage() {
   const [loading,       setLoading]       = useState(false)
   const [error,         setError]         = useState('')
 
-  // Autofill state
   const [autofillUrl,   setAutofillUrl]   = useState('')
   const [scraping,      setScraping]      = useState(false)
   const [scrapeError,   setScrapeError]   = useState('')
@@ -53,6 +53,7 @@ export default function ScanPage() {
     setTopics((prev) => [...prev, trimmed])
   }
   function removeTopic(t: string) {
+    setTopics((prev) => prev.filter((x) => x !== x && x !== t))
     setTopics((prev) => prev.filter((x) => x !== t))
   }
   function handleTopicKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -82,9 +83,7 @@ export default function ScanPage() {
       if (data.businessName) setBusinessName(data.businessName)
       if (data.industry && INDUSTRIES.includes(data.industry)) setIndustry(data.industry)
       if (data.location) setLocation(data.location)
-      // Set website to the entered URL if not already filled
       if (!website) setWebsite(autofillUrl.trim().replace(/^https?:\/\//, '').replace(/\/$/, ''))
-      // Prefill topics but don’t overwrite ones user already added
       if (data.topics?.length) {
         setTopics((prev) => {
           const merged = [...prev]
@@ -113,7 +112,7 @@ export default function ScanPage() {
       const res  = await fetch('/api/scan/create', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ businessName, website, topics, location, industry, email }),
+        body:    JSON.stringify({ businessName, website, topics, location, industry, email, competitorUrl: competitorUrl.trim() || null }),
       })
       const data = await res.json()
       if (data.url) {
@@ -166,7 +165,7 @@ export default function ScanPage() {
                   <p className="text-sm font-semibold text-foreground">Autofill from your website</p>
                 </div>
                 <p className="text-xs text-muted -mt-1">
-                  Paste your URL and we’ll read your site and pre-fill what we can. You can edit everything after.
+                  Paste your URL and we&apos;ll read your site and pre-fill what we can. You can edit everything after.
                 </p>
                 <div className="flex gap-2">
                   <input
@@ -215,7 +214,7 @@ export default function ScanPage() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium">Website <span className="text-danger">*</span></label>
+                <label className="text-sm font-medium">Your website <span className="text-danger">*</span></label>
                 <input
                   className="input"
                   placeholder="e.g. sunrisedental.com"
@@ -223,6 +222,22 @@ export default function ScanPage() {
                   onChange={(e) => setWebsite(e.target.value)}
                 />
               </div>
+
+              {/* Competitor URL */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <Swords className="w-3.5 h-3.5 text-accent" />
+                  Competitor&apos;s website <span className="text-muted text-xs">(optional — see a side-by-side)</span>
+                </label>
+                <input
+                  className="input"
+                  placeholder="e.g. competitordental.com"
+                  value={competitorUrl}
+                  onChange={(e) => setCompetitorUrl(e.target.value)}
+                />
+                <p className="text-xs text-muted">We&apos;ll show you exactly where they beat you — and how to close the gap.</p>
+              </div>
+
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">Industry</label>
                 <select
@@ -329,7 +344,7 @@ export default function ScanPage() {
             <div className="flex flex-col gap-5">
               <div>
                 <h1 className="text-2xl font-bold mb-1">Almost there</h1>
-                <p className="text-sm text-muted">Optional details to improve accuracy, plus where to send your report.</p>
+                <p className="text-sm text-muted">One last step before your AI audit.</p>
               </div>
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium">City / Region <span className="text-muted text-xs">(optional)</span></label>
@@ -340,38 +355,51 @@ export default function ScanPage() {
                   onChange={(e) => setLocation(e.target.value)}
                 />
               </div>
+
+              {/* Email — more compelling copy */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-sm font-medium">Email <span className="text-muted text-xs">(optional — get your report by email too)</span></label>
+                <label className="text-sm font-medium flex items-center gap-1.5">
+                  <Mail className="w-3.5 h-3.5 text-accent" />
+                  Your email <span className="text-muted text-xs">(optional)</span>
+                </label>
                 <input
                   className="input"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="you@yourbusiness.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                <p className="text-xs text-muted">We&apos;ll send your receipt + a permanent backup link to your report. We won&apos;t spam you.</p>
               </div>
 
               {/* What you get */}
               <div className="bg-surface-2 border border-border rounded-xl p-4 flex flex-col gap-3">
-                <p className="text-xs font-semibold text-muted uppercase tracking-wide">What happens after you pay</p>
+                <p className="text-xs font-semibold text-muted uppercase tracking-wide">What you get after paying</p>
                 <div className="flex items-start gap-3 text-sm">
                   <Monitor className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Report appears on-screen</span> — redirected here while we run the scan (~20 sec).</p>
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Instant report on-screen</span> — redirected while we run the scan (~20 sec).</p>
                 </div>
                 <div className="flex items-start gap-3 text-sm">
                   <Mail className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Email copy sent to you</span> — if you enter your email above.</p>
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Receipt + backup link emailed</span> — if you enter your email above.</p>
                 </div>
                 <div className="flex items-start gap-3 text-sm">
                   <FileText className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Shareable link</span> — permanent URL you can bookmark or share.</p>
+                  <p className="text-foreground-dim"><span className="text-foreground font-medium">Permanent shareable link</span> — bookmark or share with your team.</p>
                 </div>
+                {competitorUrl && (
+                  <div className="flex items-start gap-3 text-sm">
+                    <Swords className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                    <p className="text-foreground-dim"><span className="text-foreground font-medium">Competitor side-by-side</span> — vs. {competitorUrl.replace(/^https?:\/\//, '')}.</p>
+                  </div>
+                )}
               </div>
 
               {/* Summary */}
               <div className="bg-surface-2 border border-border rounded-xl p-4 flex flex-col gap-2 text-sm">
                 <p className="font-semibold text-foreground">Scan summary</p>
                 <p className="text-muted">{businessName} &middot; {website}</p>
+                {competitorUrl && <p className="text-xs text-accent">vs. {competitorUrl.replace(/^https?:\/\//, '')}</p>}
                 <div className="flex flex-wrap gap-1.5 mt-1">
                   {topics.map((t) => (
                     <Badge key={t} variant="accent" className="text-xs">{t}</Badge>

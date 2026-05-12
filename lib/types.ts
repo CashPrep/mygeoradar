@@ -61,34 +61,35 @@ export interface GbpSignal {
 
 // --- Competitor Gap ---
 export interface CompetitorDetail {
-  name:            string    // e.g. "Bright Now! Dental"
-  domain:          string    // e.g. "brightnow.com"
-  estimatedScore:  number    // 0–100 estimated AI visibility
-  schemaTypes:     string[]  // schemas found on their site
-  advantages:      string[]  // 2–3 things they do better for AI visibility
+  name:            string
+  domain:          string
+  estimatedScore:  number
+  schemaTypes:     string[]
+  advantages:      string[]
 }
 
 export interface CompetitorGap {
   yourScore:    number
   competitors:  CompetitorDetail[]
-  closingMoves: string[]  // 3 specific actions to close the gap
-  summary:      string    // 1–2 sentence narrative
+  closingMoves: string[]
+  summary:      string
 }
 
 export interface ScanReport {
-  id:           string
-  createdAt:    string
-  businessName: string
-  website:      string
-  topics:       string[]
-  location?:    string
-  industry?:    string
-  engines:      EngineResult[]
-  overallScore: number
-  level:        VisibilityLevel
-  topActions:   ActionItem[]
-  quickWins:    string[]
-  paid:         boolean
+  id:            string
+  createdAt:     string
+  businessName:  string
+  website:       string
+  topics:        string[]
+  location?:     string
+  industry?:     string
+  competitorUrl?: string | null
+  engines:       EngineResult[]
+  overallScore:  number
+  level:         VisibilityLevel
+  topActions:    ActionItem[]
+  quickWins:     string[]
+  paid:          boolean
   schemaCheck?:   SchemaCheck      | null
   contentGaps?:   ContentGapItem[] | null
   gbpSignal?:     GbpSignal        | null
@@ -96,9 +97,10 @@ export interface ScanReport {
 }
 
 export interface ScanInput {
-  businessName: string
-  website:      string
-  topics:       string[]
-  location?:    string
-  industry?:    string
+  businessName:  string
+  website:       string
+  topics:        string[]
+  location?:     string
+  industry?:     string
+  competitorUrl?: string | null
 }

@@ -9,7 +9,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(req: NextRequest) {
   try {
-    const { businessName, website, topics, location, industry, email } = await req.json()
+    const { businessName, website, topics, location, industry, email, competitorUrl } = await req.json()
 
     if (!businessName || !website || !topics?.length) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
@@ -18,14 +18,15 @@ export async function POST(req: NextRequest) {
     const scanId = nanoid(10)
 
     const { error: dbError } = await supabase.from('scan_reports').insert([{
-      id:            scanId,
-      business_name: businessName,
+      id:             scanId,
+      business_name:  businessName,
       website,
       topics,
-      location:      location || null,
-      industry:      industry || null,
-      email:         email    || null,
-      paid:          false,
+      location:       location      || null,
+      industry:       industry      || null,
+      email:          email         || null,
+      competitor_url: competitorUrl || null,
+      paid:           false,
     }])
 
     if (dbError) {
@@ -49,6 +50,7 @@ export async function POST(req: NextRequest) {
         quantity: 1,
       }],
       mode: 'payment',
+      customer_email: email || undefined,
       success_url: `${appUrl}/scan/${scanId}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${appUrl}/scan`,
       metadata: { scanId, businessName, website },

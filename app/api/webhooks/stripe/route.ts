@@ -39,12 +39,10 @@ export async function POST(req: NextRequest) {
 
     if (!scan) return NextResponse.json({ ok: true })
 
-    // Mark paid immediately so the report page stops polling for payment
+    // Mark paid immediately so report page stops polling
     await supabase.from('scan_reports').update({ paid: true }).eq('id', scanId)
 
-    // Run geo scan first so we have the real score for competitor comparison
     runGeoScan(scan).then(async (result) => {
-      // Save core scan results immediately so report appears fast
       await supabase.from('scan_reports').update({
         overall_score: result.overallScore,
         level:         result.level,
@@ -53,13 +51,12 @@ export async function POST(req: NextRequest) {
         quick_wins:    result.quickWins,
       }).eq('id', scanId)
 
-      // Run all enrichments in parallel using the real score
       const enrichments = await runEnrichments({
         ...scan,
-        overall_score: result.overallScore,
+        overall_score:  result.overallScore,
+        competitor_url: scan.competitor_url ?? null,
       })
 
-      // Save enrichments
       await supabase.from('scan_reports').update({
         schema_check:   enrichments.schemaCheck,
         content_gaps:   enrichments.contentGaps,
@@ -67,7 +64,7 @@ export async function POST(req: NextRequest) {
         competitor_gap: enrichments.competitorGap,
       }).eq('id', scanId)
 
-      // Send email if address available
+      // Send email — prefer user-supplied email, fallback to Stripe customer email
       const email = scan.email || session.customer_details?.email
       if (email) {
         const fullReport: ScanReport = {
@@ -78,6 +75,7 @@ export async function POST(req: NextRequest) {
           topics:        scan.topics,
           location:      scan.location,
           industry:      scan.industry,
+          competitorUrl: scan.competitor_url ?? null,
           paid:          true,
           schemaCheck:   enrichments.schemaCheck,
           contentGaps:   enrichments.contentGaps,
@@ -88,6 +86,29 @@ export async function POST(req: NextRequest) {
         await sendScanReport(email, fullReport).catch(console.error)
       }
     }).catch(console.error)
+  }
+
+  // Handle subscription payments (monthly tracking)
+  if (event.type === 'invoice.payment_succeeded') {
+    const invoice = event.data.object as Stripe.Invoice
+    const customerId = invoice.customer as string
+    if (!customerId) return NextResponse.json({ ok: true })
+
+    // Mark subscription active in DB
+    await supabase
+      .from('subscriptions')
+      .upsert({ stripe_customer_id: customerId, status: 'active', updated_at: new Date().toISOString() }, { onConflict: 'stripe_customer_id' })
+      .catch(console.error)
+  }
+
+  if (event.type === 'customer.subscription.deleted') {
+    const sub = event.data.object as Stripe.Subscription
+    const customerId = sub.customer as string
+    await supabase
+      .from('subscriptions')
+      .update({ status: 'canceled', updated_at: new Date().toISOString() })
+      .eq('stripe_customer_id', customerId)
+      .catch(console.error)
   }
 
   return NextResponse.json({ ok: true })

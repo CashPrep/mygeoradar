@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
 import type {
   ScanReport, EngineResult, ActionItem,
@@ -11,12 +11,12 @@ import { getScoreColor, getScoreHex, formatScore } from '@/lib/utils'
 import {
   Radar, Share2, RefreshCw, Zap, Code2, MessageSquareText,
   MapPin, CheckCircle2, XCircle, AlertCircle, ChevronDown, ChevronUp,
-  Swords, TrendingUp, ArrowRight, LineChart
+  Swords, TrendingUp, ArrowRight, LineChart, Wrench, CalendarClock,
+  Mail, Loader2
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
 // ─── Enrichment Skeleton ─────────────────────────────────────────────────────
-// Shown for sections that are still computing after the core scan resolves
 
 function EnrichmentSkeleton({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
@@ -155,6 +155,135 @@ function ActionPlan({ actions, quickWins }: { actions: ActionItem[]; quickWins: 
   )
 }
 
+// ─── Done-For-You Upsell ──────────────────────────────────────────────────────
+
+function DfyUpsell() {
+  return (
+    <div className="card p-6 border-accent/30 bg-gradient-to-br from-accent/5 to-transparent flex flex-col gap-4">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-xl bg-accent/15 border border-accent/25 flex items-center justify-center flex-shrink-0">
+          <Wrench className="w-5 h-5 text-accent" />
+        </div>
+        <div>
+          <h3 className="font-bold text-foreground">Don&apos;t want to do this yourself?</h3>
+          <p className="text-sm text-foreground-dim mt-1 leading-relaxed">
+            We&apos;ll implement every fix in your action plan — Schema markup, content pages, GBP optimization — directly on your website. No tech skills needed.
+          </p>
+        </div>
+      </div>
+      <ul className="flex flex-col gap-1.5 text-sm text-foreground-dim">
+        <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Schema markup installed & validated</li>
+        <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Content gap pages written & published</li>
+        <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Google Business Profile signals fixed</li>
+        <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Re-scan after 30 days to confirm improvement</li>
+      </ul>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <p className="text-2xl font-bold text-foreground">$199 <span className="text-sm font-normal text-muted">one-time</span></p>
+          <p className="text-xs text-muted">Flat rate — no hourly billing, no surprises</p>
+        </div>
+        <a
+          href="mailto:andrew@mygeoradar.com?subject=Done-For-You%20GEO%20Implementation&body=Hi%20Andrew%2C%20I%20just%20ran%20a%20scan%20and%20I%27d%20like%20help%20implementing%20the%20fixes."
+          className="flex items-center gap-2 px-5 py-2.5 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl transition-colors text-sm"
+        >
+          <Mail className="w-4 h-4" /> Get it done for me
+        </a>
+      </div>
+    </div>
+  )
+}
+
+// ─── Monthly Tracking Upsell ──────────────────────────────────────────────────
+
+function MonthlyTrackingUpsell({ scanId, reportEmail }: { scanId: string; reportEmail?: string }) {
+  const searchParams = useSearchParams()
+  const alreadySubscribed = searchParams.get('subscribed') === '1'
+
+  const [email,   setEmail]   = useState(reportEmail ?? '')
+  const [loading, setLoading] = useState(false)
+  const [error,   setError]   = useState('')
+
+  if (alreadySubscribed) {
+    return (
+      <div className="card p-6 flex items-start gap-3">
+        <CalendarClock className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+        <div>
+          <p className="font-bold text-foreground">You&apos;re subscribed to monthly tracking!</p>
+          <p className="text-sm text-foreground-dim mt-1">We&apos;ll automatically re-scan your business every month and email you the results so you can see your score improve over time.</p>
+        </div>
+      </div>
+    )
+  }
+
+  async function handleSubscribe() {
+    if (!email.trim()) { setError('Please enter your email.'); return }
+    setLoading(true)
+    setError('')
+    try {
+      const res  = await fetch('/api/subscribe', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email, website: '', scanId }),
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setError(data.error || 'Something went wrong.')
+        setLoading(false)
+      }
+    } catch {
+      setError('Network error. Please try again.')
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="card p-6 flex flex-col gap-4">
+      <div className="flex items-start gap-3">
+        <div className="w-10 h-10 rounded-xl bg-accent/15 border border-accent/25 flex items-center justify-center flex-shrink-0">
+          <CalendarClock className="w-5 h-5 text-accent" />
+        </div>
+        <div>
+          <h3 className="font-bold text-foreground">Track your score every month</h3>
+          <p className="text-sm text-foreground-dim mt-1 leading-relaxed">
+            We&apos;ll automatically run this scan every 30 days and email you the results. See exactly whether your AI visibility is improving — or if a competitor is closing in.
+          </p>
+        </div>
+      </div>
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium">Your email</label>
+        <div className="flex gap-2">
+          <input
+            className="input flex-1"
+            type="email"
+            placeholder="you@yourbusiness.com"
+            value={email}
+            onChange={(e) => { setEmail(e.target.value); setError('') }}
+            disabled={loading}
+          />
+          <button
+            onClick={handleSubscribe}
+            disabled={loading || !email.trim()}
+            className={clsx(
+              'flex items-center gap-1.5 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all',
+              'bg-accent text-white hover:bg-accent-hover active:scale-[0.98]',
+              'disabled:opacity-50 disabled:cursor-not-allowed'
+            )}
+          >
+            {loading
+              ? <><Loader2 className="w-4 h-4 animate-spin" /> Starting&hellip;</>
+              : <>Subscribe — $5/mo</>
+            }
+          </button>
+        </div>
+        {error && <p className="text-xs text-danger">{error}</p>}
+      </div>
+      <p className="text-xs text-muted">Cancel anytime &middot; No long-term commitment &middot; Powered by Stripe</p>
+    </div>
+  )
+}
+
 // ─── Score Trend Section ──────────────────────────────────────────────────────
 
 interface HistoryPoint {
@@ -170,7 +299,7 @@ function ScoreTrendSection({ website, currentId }: { website: string; currentId:
   const [loading, setLoading] = useState(true)
   const [tooltip, setTooltip] = useState<{ x: number; y: number; point: HistoryPoint } | null>(null)
   const svgRef    = useRef<SVGSVGElement>(null)
-  const wrapRef   = useRef<HTMLDivElement>(null)   // FIX: ref on the relative wrapper
+  const wrapRef   = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     fetch(`/api/scan/history?website=${encodeURIComponent(website)}`)
@@ -221,7 +350,6 @@ function ScoreTrendSection({ website, currentId }: { website: string; currentId:
         </span>
       </div>
 
-      {/* FIX: position:relative on this div so tooltip absolute coords are correct */}
       <div ref={wrapRef} className="w-full overflow-x-auto" style={{ position: 'relative' }}>
         <svg
           ref={svgRef}
@@ -271,7 +399,6 @@ function ScoreTrendSection({ website, currentId }: { website: string; currentId:
                   const svg  = svgRef.current
                   const wrap = wrapRef.current
                   if (!svg || !wrap) return
-                  // Scale SVG viewBox coords to actual rendered pixels relative to wrapper
                   const svgRect  = svg.getBoundingClientRect()
                   const wrapRect = wrap.getBoundingClientRect()
                   const scaleX   = svgRect.width  / W
@@ -584,8 +711,9 @@ export default function ScanResultPage() {
   const [report,    setReport]    = useState<ScanReport | null>(null)
   const [status,    setStatus]    = useState<'loading' | 'pending' | 'ready' | 'error'>('loading')
   const [pollCount, setPollCount] = useState(0)
-  // Track whether enrichments have landed — keeps polling alive after core scan is ready
   const [enrichmentsDone, setEnrichmentsDone] = useState(false)
+  // Store email from the DB row so we can pre-fill subscribe form
+  const [reportEmail, setReportEmail] = useState<string | undefined>(undefined)
 
   useEffect(() => {
     if (!id) return
@@ -605,6 +733,7 @@ export default function ScanResultPage() {
             topics:        data.topics,
             location:      data.location,
             industry:      data.industry,
+            competitorUrl: data.competitor_url ?? null,
             paid:          data.paid,
             overallScore:  data.overall_score,
             level:         data.level,
@@ -618,7 +747,7 @@ export default function ScanResultPage() {
           }
           setReport(mapped)
           setStatus('ready')
-          // All four enrichment fields must be non-null to stop polling
+          if (data.email) setReportEmail(data.email)
           if (data.schema_check && data.content_gaps && data.gbp_signal && data.competitor_gap) {
             setEnrichmentsDone(true)
           }
@@ -631,7 +760,6 @@ export default function ScanResultPage() {
 
     fetchReport()
     const interval = setInterval(() => {
-      // Stop polling only when core scan AND all enrichments are done
       if (status === 'ready' && enrichmentsDone) return
       fetchReport()
     }, 3000)
@@ -731,7 +859,12 @@ export default function ScanResultPage() {
           <ActionPlan actions={report.topActions} quickWins={report.quickWins} />
         </div>
 
-        {/* Competitor Gap — skeleton until data lands */}
+        {/* ── D. Done-For-You Upsell ── */}
+        <div className="mb-6">
+          <DfyUpsell />
+        </div>
+
+        {/* Competitor Gap */}
         <div className="mb-6">
           {report.competitorGap
             ? <CompetitorGapSection gap={report.competitorGap} businessName={report.businessName} />
@@ -739,7 +872,7 @@ export default function ScanResultPage() {
           }
         </div>
 
-        {/* Schema Checker — skeleton until data lands */}
+        {/* Schema Checker */}
         <div className="mb-6">
           {report.schemaCheck
             ? <SchemaCheckerSection schema={report.schemaCheck} />
@@ -747,7 +880,7 @@ export default function ScanResultPage() {
           }
         </div>
 
-        {/* Content Gaps — skeleton until data lands */}
+        {/* Content Gaps */}
         <div className="mb-6">
           {report.contentGaps
             ? <ContentGapsSection gaps={report.contentGaps} />
@@ -755,12 +888,17 @@ export default function ScanResultPage() {
           }
         </div>
 
-        {/* GBP Signals — skeleton until data lands */}
+        {/* GBP Signals */}
         <div className="mb-6">
           {report.gbpSignal
             ? <GbpSignalSection gbp={report.gbpSignal} />
             : <EnrichmentSkeleton icon={<MapPin className="w-4 h-4" />} label="Google Business Profile Signals" />
           }
+        </div>
+
+        {/* ── E. Monthly Tracking Subscription ── */}
+        <div className="mb-6">
+          <MonthlyTrackingUpsell scanId={report.id} reportEmail={reportEmail} />
         </div>
 
         {/* Run again CTA */}
