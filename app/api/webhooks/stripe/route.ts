@@ -39,41 +39,50 @@ export async function POST(req: NextRequest) {
 
     if (!scan) return NextResponse.json({ ok: true })
 
-    // Mark paid immediately so report page stops showing "waiting for payment"
+    // Mark paid immediately so the report page stops polling for payment
     await supabase.from('scan_reports').update({ paid: true }).eq('id', scanId)
 
-    // Run GEO scan + enrichments in parallel
-    Promise.all([
-      runGeoScan(scan),
-      runEnrichments(scan),
-    ]).then(async ([result, enrichments]) => {
-
+    // Run geo scan first so we have the real score for competitor comparison
+    runGeoScan(scan).then(async (result) => {
+      // Save core scan results immediately so report appears fast
       await supabase.from('scan_reports').update({
         overall_score: result.overallScore,
         level:         result.level,
         engines:       result.engines,
         top_actions:   result.topActions,
         quick_wins:    result.quickWins,
-        schema_check:  enrichments.schemaCheck,
-        content_gaps:  enrichments.contentGaps,
-        gbp_signal:    enrichments.gbpSignal,
+      }).eq('id', scanId)
+
+      // Run all enrichments in parallel using the real score
+      const enrichments = await runEnrichments({
+        ...scan,
+        overall_score: result.overallScore,
+      })
+
+      // Save enrichments
+      await supabase.from('scan_reports').update({
+        schema_check:   enrichments.schemaCheck,
+        content_gaps:   enrichments.contentGaps,
+        gbp_signal:     enrichments.gbpSignal,
+        competitor_gap: enrichments.competitorGap,
       }).eq('id', scanId)
 
       // Send email if address available
       const email = scan.email || session.customer_details?.email
       if (email) {
         const fullReport: ScanReport = {
-          id:           scanId,
-          createdAt:    scan.created_at,
-          businessName: scan.business_name,
-          website:      scan.website,
-          topics:       scan.topics,
-          location:     scan.location,
-          industry:     scan.industry,
-          paid:         true,
-          schemaCheck:  enrichments.schemaCheck,
-          contentGaps:  enrichments.contentGaps,
-          gbpSignal:    enrichments.gbpSignal,
+          id:            scanId,
+          createdAt:     scan.created_at,
+          businessName:  scan.business_name,
+          website:       scan.website,
+          topics:        scan.topics,
+          location:      scan.location,
+          industry:      scan.industry,
+          paid:          true,
+          schemaCheck:   enrichments.schemaCheck,
+          contentGaps:   enrichments.contentGaps,
+          gbpSignal:     enrichments.gbpSignal,
+          competitorGap: enrichments.competitorGap,
           ...result,
         }
         await sendScanReport(email, fullReport).catch(console.error)
