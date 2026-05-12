@@ -7,15 +7,47 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
 })
 
+// Pricing constants — change here to update everywhere
+export const FULL_PRICE_CENTS  = 4999   // $49.99
+export const PROMO_PRICE_CENTS = 2500   // $24.99  (50% off)
+export const PROMO_LABEL       = '50% off — first scan only'
+
+function getClientIp(req: NextRequest): string {
+  return (
+    req.headers.get('x-forwarded-for')?.split(',')[0].trim() ??
+    req.headers.get('x-real-ip') ??
+    'unknown'
+  )
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const { businessName, website, topics, location, industry, email, competitorUrl } = await req.json()
+    const { businessName, website, topics, location, industry, email, competitorUrl, usePromo } =
+      await req.json()
 
     if (!businessName || !website || !topics?.length) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
     }
 
+    const ip     = getClientIp(req)
     const scanId = nanoid(10)
+
+    // Determine whether the promo is actually valid for this IP
+    let promoAllowed = false
+    if (usePromo && ip !== 'unknown') {
+      const { data: prior } = await supabase
+        .from('scan_reports')
+        .select('id')
+        .eq('ip_address', ip)
+        .eq('paid', true)
+        .limit(1)
+      promoAllowed = !prior || prior.length === 0
+    }
+
+    const chargeAmount = promoAllowed ? PROMO_PRICE_CENTS : FULL_PRICE_CENTS
+    const priceLabel   = promoAllowed
+      ? `AI Visibility Scan — ${PROMO_LABEL}`
+      : 'AI Visibility Scan'
 
     const { error: dbError } = await supabase.from('scan_reports').insert([{
       id:             scanId,
@@ -26,6 +58,7 @@ export async function POST(req: NextRequest) {
       industry:       industry      || null,
       email:          email         || null,
       competitor_url: competitorUrl || null,
+      ip_address:     ip,
       paid:           false,
     }])
 
@@ -41,9 +74,9 @@ export async function POST(req: NextRequest) {
       line_items: [{
         price_data: {
           currency:     'usd',
-          unit_amount:  100,
+          unit_amount:  chargeAmount,
           product_data: {
-            name:        'AI Visibility Scan',
+            name:        priceLabel,
             description: 'One-time GEO scan across ChatGPT, Perplexity, Gemini & Claude',
           },
         },
@@ -53,7 +86,7 @@ export async function POST(req: NextRequest) {
       customer_email: email || undefined,
       success_url: `${appUrl}/scan/${scanId}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${appUrl}/scan`,
-      metadata: { scanId, businessName, website },
+      metadata: { scanId, businessName, website, promoUsed: promoAllowed ? 'true' : 'false' },
     })
 
     return NextResponse.json({ url: session.url })

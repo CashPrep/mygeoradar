@@ -1,15 +1,19 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import {
   ArrowRight, ArrowLeft, X, Radar, Monitor, Mail,
-  FileText, Sparkles, CheckCircle2, Loader2, Swords
+  FileText, Sparkles, CheckCircle2, Loader2, Swords, Tag
 } from 'lucide-react'
 import { clsx } from 'clsx'
+
+const FULL_PRICE   = 49.99
+const PROMO_PRICE  = 24.99
+const PROMO_PCT    = 50
 
 const INDUSTRY_SUGGESTIONS: Record<string, string[]> = {
   'Restaurant':         ['best restaurant near me', 'food delivery', 'date night spots', 'healthy lunch options'],
@@ -45,6 +49,20 @@ export default function ScanPage() {
   const [scrapeError,   setScrapeError]   = useState('')
   const [autofilled,    setAutofilled]    = useState(false)
 
+  // Promo eligibility — fetched once on mount via IP check
+  const [promoEligible, setPromoEligible] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    fetch('/api/scan/promo-check')
+      .then((r) => r.json())
+      .then((d) => setPromoEligible(d.eligible === true))
+      .catch(() => setPromoEligible(true)) // fail open — show promo on error
+  }, [])
+
+  const showPromo   = promoEligible === true
+  const displayPrice = showPromo ? PROMO_PRICE : FULL_PRICE
+  const priceLabel   = `$${displayPrice.toFixed(2)}`
+
   const suggestions = INDUSTRY_SUGGESTIONS[industry] ?? []
 
   function addTopic(t: string) {
@@ -53,7 +71,6 @@ export default function ScanPage() {
     setTopics((prev) => [...prev, trimmed])
   }
   function removeTopic(t: string) {
-    setTopics((prev) => prev.filter((x) => x !== x && x !== t))
     setTopics((prev) => prev.filter((x) => x !== t))
   }
   function handleTopicKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
@@ -112,7 +129,16 @@ export default function ScanPage() {
       const res  = await fetch('/api/scan/create', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ businessName, website, topics, location, industry, email, competitorUrl: competitorUrl.trim() || null }),
+        body:    JSON.stringify({
+          businessName,
+          website,
+          topics,
+          location,
+          industry,
+          email,
+          competitorUrl: competitorUrl.trim() || null,
+          usePromo: showPromo,
+        }),
       })
       const data = await res.json()
       if (data.url) {
@@ -147,6 +173,22 @@ export default function ScanPage() {
             </div>
           ))}
         </div>
+
+        {/* ── PROMO BANNER — only shown when eligible, hidden for returning IPs ── */}
+        {showPromo && (
+          <div className="mb-6 flex items-center gap-3 px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-xl">
+            <Tag className="w-4 h-4 text-green-400 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold text-green-400">
+                🎉 {PROMO_PCT}% off — First scan only!
+              </p>
+              <p className="text-xs text-muted">
+                Your first scan is <span className="line-through text-muted">${FULL_PRICE.toFixed(2)}</span>{' '}
+                <span className="font-bold text-green-400">${PROMO_PRICE.toFixed(2)}</span>. Applied automatically at checkout.
+              </p>
+            </div>
+          </div>
+        )}
 
         <div className="card p-8">
 
@@ -356,7 +398,6 @@ export default function ScanPage() {
                 />
               </div>
 
-              {/* Email — more compelling copy */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium flex items-center gap-1.5">
                   <Mail className="w-3.5 h-3.5 text-accent" />
@@ -407,13 +448,34 @@ export default function ScanPage() {
                 </div>
               </div>
 
-              {/* Price */}
-              <div className="flex items-center justify-between px-4 py-3 bg-accent/10 border border-accent/20 rounded-xl">
+              {/* ── PRICE BOX ── */}
+              <div className={clsx(
+                'flex items-center justify-between px-4 py-3 rounded-xl border',
+                showPromo
+                  ? 'bg-green-500/10 border-green-500/30'
+                  : 'bg-accent/10 border-accent/20'
+              )}>
                 <div>
                   <p className="font-semibold text-foreground">AI Visibility Scan</p>
-                  <p className="text-xs text-muted">One-time payment &middot; Report ready in ~20 seconds</p>
+                  {showPromo ? (
+                    <p className="text-xs text-green-400 font-medium flex items-center gap-1">
+                      <Tag className="w-3 h-3" /> {PROMO_PCT}% first-scan promo applied
+                    </p>
+                  ) : (
+                    <p className="text-xs text-muted">One-time payment &middot; Report ready in ~20 seconds</p>
+                  )}
                 </div>
-                <p className="text-2xl font-bold text-accent">$1</p>
+                <div className="text-right">
+                  {showPromo && (
+                    <p className="text-sm line-through text-muted">${FULL_PRICE.toFixed(2)}</p>
+                  )}
+                  <p className={clsx(
+                    'text-2xl font-bold',
+                    showPromo ? 'text-green-400' : 'text-accent'
+                  )}>
+                    {priceLabel}
+                  </p>
+                </div>
               </div>
 
               {error && <p className="text-sm text-danger">{error}</p>}
@@ -428,7 +490,7 @@ export default function ScanPage() {
                   onClick={handleSubmit}
                   className="flex-1"
                 >
-                  Pay $1 &amp; Run Scan <Radar className="w-4 h-4" />
+                  Pay {priceLabel} &amp; Run Scan <Radar className="w-4 h-4" />
                 </Button>
               </div>
               <p className="text-xs text-center text-muted">Secure payment by Stripe &middot; No subscription &middot; No account required</p>
