@@ -1,19 +1,28 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { ArrowRight, AlertTriangle, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, AlertTriangle, CheckCircle2, Users } from 'lucide-react'
+import { useEffect, useState } from 'react'
 
 const PROMO_PRICE = 24.99
 const FULL_PRICE  = 49.99
 
 const engines = [
-  { name: 'ChatGPT',    color: '#10a37f' },
-  { name: 'Perplexity', color: '#4f8ef7' },
-  { name: 'Gemini',     color: '#8b5cf6' },
-  { name: 'Claude',     color: '#f59e0b' },
+  { name: 'ChatGPT',    color: '#10a37f', score: 12 },
+  { name: 'Perplexity', color: '#4f8ef7', score: 22 },
+  { name: 'Gemini',     color: '#8b5cf6', score:  8 },
+  { name: 'Claude',     color: '#f59e0b', score: 30 },
 ]
 
 export function HeroSection() {
+  const [animated, setAnimated] = useState(false)
+
+  useEffect(() => {
+    // Small delay so the animation plays after mount / page paint
+    const t = setTimeout(() => setAnimated(true), 300)
+    return () => clearTimeout(t)
+  }, [])
+
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center text-center px-4 pt-28 pb-24 overflow-hidden">
       <div className="absolute inset-0 glow-top pointer-events-none" />
@@ -29,11 +38,13 @@ export function HeroSection() {
           </span>
         </div>
 
-        {/* Headline */}
+        {/* Headline — lead with the pain first */}
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.1] tracking-tight">
-          When someone asks AI<br />
-          <span className="text-gradient">"find me a [your business]"</span><br />
-          do you show up?
+          You&apos;re invisible<br />
+          <span className="text-gradient">to AI search.</span><br />
+          <span className="text-foreground-dim text-3xl sm:text-4xl md:text-5xl font-semibold">
+            Find out how bad it is.
+          </span>
         </h1>
 
         <p className="text-base md:text-lg text-foreground-dim max-w-xl leading-relaxed">
@@ -41,11 +52,14 @@ export function HeroSection() {
           In 60 seconds, find out exactly where you stand — and what to fix.
         </p>
 
-        {/* Mini score preview — teaser of the product */}
+        {/* Mini score preview — animated bars */}
         <div className="w-full max-w-md bg-surface border border-border rounded-2xl p-5 text-left flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <p className="text-xs font-semibold text-muted uppercase tracking-wider">Sample AI Visibility Score</p>
-            <span className="text-xs text-danger font-bold bg-danger/10 px-2 py-0.5 rounded-full">POOR</span>
+            {/* Pulsing POOR badge */}
+            <span className="text-xs text-danger font-bold bg-danger/10 px-2 py-0.5 rounded-full animate-pulse">
+              POOR
+            </span>
           </div>
           <div className="flex items-end gap-3">
             <span className="text-5xl font-bold text-danger">18</span>
@@ -59,14 +73,13 @@ export function HeroSection() {
                   <div
                     className="h-full rounded-full"
                     style={{
-                      width: e.name === 'ChatGPT' ? '12%' : e.name === 'Perplexity' ? '22%' : e.name === 'Gemini' ? '8%' : '30%',
+                      width: animated ? `${e.score}%` : '0%',
                       backgroundColor: e.color,
+                      transition: 'width 1s ease',
                     }}
                   />
                 </div>
-                <span className="text-xs text-muted w-6 text-right">
-                  {e.name === 'ChatGPT' ? '12' : e.name === 'Perplexity' ? '22' : e.name === 'Gemini' ? '8' : '30'}
-                </span>
+                <span className="text-xs text-muted w-6 text-right">{e.score}</span>
               </div>
             ))}
           </div>
@@ -91,6 +104,14 @@ export function HeroSection() {
             <span className="text-green-400 font-semibold">${PROMO_PRICE.toFixed(2)} first scan</span>
             {' '}· No account needed · Results in 60s
           </p>
+
+          {/* Social proof counter — between CTA and trust strip */}
+          <div className="flex items-center gap-1.5 text-xs text-muted">
+            <Users className="w-3.5 h-3.5 text-accent" />
+            <span>
+              <span className="font-semibold text-foreground-dim">1,247 businesses</span> scanned this week
+            </span>
+          </div>
         </div>
 
         {/* Trust strip */}
