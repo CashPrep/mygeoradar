@@ -17,14 +17,13 @@ export async function POST(req: NextRequest) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
     // Get or create Stripe price for $5/month tracking
-    // We use a lookup_key so we only create once and reuse across calls
     const prices = await stripe.prices.list({ lookup_keys: ['monthly_tracking'], expand: ['data.product'] })
     let priceId = prices.data[0]?.id
 
     if (!priceId) {
       const product = await stripe.products.create({
-        name: 'Monthly AI Visibility Tracking',
-        description: 'Automatic monthly scan + email report for your business\'s AI visibility score.',
+        name:        'Monthly AI Visibility Tracking',
+        description: "Automatic monthly scan + email report for your business's AI visibility score.",
       })
       const price = await stripe.prices.create({
         product:     product.id,
@@ -38,24 +37,28 @@ export async function POST(req: NextRequest) {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      mode: 'subscription',
+      mode:           'subscription',
       customer_email: email,
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${appUrl}/scan/${scanId}?subscribed=1`,
-      cancel_url:  `${appUrl}/scan/${scanId}`,
-      metadata: { scanId, website, email },
+      line_items:     [{ price: priceId, quantity: 1 }],
+      success_url:    `${appUrl}/scan/${scanId}?subscribed=1`,
+      cancel_url:     `${appUrl}/scan/${scanId}`,
+      metadata:       { scanId, website, email },
     })
 
-    // Pre-insert a pending subscription row so we can track it
-    await supabase.from('subscriptions').upsert({
-      email,
-      website,
-      scan_id:           scanId || null,
-      status:            'pending',
-      stripe_session_id: session.id,
-      created_at:        new Date().toISOString(),
-      updated_at:        new Date().toISOString(),
-    }, { onConflict: 'email' }).catch(console.error)
+    // Pre-insert a pending subscription row — best-effort, never block the response
+    try {
+      await supabase.from('subscriptions').upsert({
+        email,
+        website,
+        scan_id:           scanId || null,
+        status:            'pending',
+        stripe_session_id: session.id,
+        created_at:        new Date().toISOString(),
+        updated_at:        new Date().toISOString(),
+      }, { onConflict: 'email' })
+    } catch (dbErr) {
+      console.error('Subscription DB upsert error:', dbErr)
+    }
 
     return NextResponse.json({ url: session.url })
   } catch (err) {
