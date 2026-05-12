@@ -37,10 +37,19 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
   const [location, setLocation]         = useState('')
   const [geoLoading, setGeoLoading]     = useState(false)
 
+  // Sync pre-fill values when search params hydrate after mount
+  useEffect(() => {
+    if (initialName && !businessName) setBusinessName(initialName)
+  }, [initialName]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (initialUrl && !website) setWebsite(initialUrl)
+  }, [initialUrl]) // eslint-disable-line react-hooks/exhaustive-deps
+
   // Auto-fill location on step 3 mount via browser geolocation
   useEffect(() => {
     if (step !== 3 || location) return
-    if (!navigator.geolocation) return
+    if (!navigator.geolocation)  return
     setGeoLoading(true)
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
@@ -120,16 +129,26 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       </div>
       <p className="text-xs text-muted -mt-3">Step {step} of 3</p>
 
-      {/* Step 1 */}
+      {/* ── Step 1 ── */}
       {step === 1 && (
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">Your business</h2>
-          <Input label="Business name *" placeholder="Blue Ridge Roofing" value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
-          <Input label="Website *" placeholder="blueridgeroofing.com" value={website} onChange={(e) => setWebsite(e.target.value)} />
+          <Input
+            label="Business name *"
+            placeholder="Blue Ridge Roofing"
+            value={businessName}
+            onChange={(e) => setBusinessName(e.target.value)}
+          />
+          <Input
+            label="Website *"
+            placeholder="blueridgeroofing.com"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
         </div>
       )}
 
-      {/* Step 2 */}
+      {/* ── Step 2 ── */}
       {step === 2 && (
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">Topics to scan</h2>
@@ -140,7 +159,9 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
               {INDUSTRIES.map((ind) => (
                 <button key={ind} type="button" onClick={() => setIndustry(ind === industry ? '' : ind)}
                   className={clsx('px-3 py-1.5 rounded-lg text-sm border transition-all',
-                    industry === ind ? 'bg-accent/10 border-accent/40 text-accent' : 'bg-surface-2 border-border text-foreground-dim hover:border-border-bright'
+                    industry === ind
+                      ? 'bg-accent/10 border-accent/40 text-accent'
+                      : 'bg-surface-2 border-border text-foreground-dim hover:border-border-bright'
                   )}>
                   {ind}
                 </button>
@@ -154,7 +175,8 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
                 {suggestions.map((s) => (
                   <button key={s} type="button" disabled={topics.includes(s) || topics.length >= 5} onClick={() => addTopic(s)}
                     className={clsx('px-3 py-1.5 rounded-lg text-xs border transition-all',
-                      topics.includes(s) ? 'bg-success/10 border-success/30 text-success cursor-default'
+                      topics.includes(s)
+                        ? 'bg-success/10 border-success/30 text-success cursor-default'
                         : 'bg-surface-2 border-border text-foreground-dim hover:border-accent/40 hover:text-accent disabled:opacity-40'
                     )}>
                     {s}
@@ -164,8 +186,13 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             </div>
           )}
           <div className="flex gap-2">
-            <Input placeholder="Type a custom topic..." value={topicInput} onChange={(e) => setTopicInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && addTopic(topicInput)} className="flex-1" />
+            <Input
+              placeholder="Type a custom topic..."
+              value={topicInput}
+              onChange={(e) => setTopicInput(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && addTopic(topicInput)}
+              className="flex-1"
+            />
             <button type="button" onClick={() => addTopic(topicInput)} disabled={topics.length >= 5}
               className="px-3 py-2 rounded-lg bg-accent/10 border border-accent/20 text-accent hover:bg-accent/20 transition-all disabled:opacity-40">
               <Plus className="w-4 h-4" />
@@ -176,7 +203,9 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
               {topics.map((t) => (
                 <span key={t} className="flex items-center gap-1.5 px-3 py-1.5 bg-accent/10 border border-accent/20 text-accent text-sm rounded-lg">
                   {t}
-                  <button type="button" onClick={() => removeTopic(t)} className="hover:text-white transition-colors"><X className="w-3 h-3" /></button>
+                  <button type="button" onClick={() => removeTopic(t)} className="hover:text-white transition-colors">
+                    <X className="w-3 h-3" />
+                  </button>
                 </span>
               ))}
             </div>
@@ -185,7 +214,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         </div>
       )}
 
-      {/* Step 3 */}
+      {/* ── Step 3 ── */}
       {step === 3 && (
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">Final details</h2>
@@ -262,7 +291,9 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           </button>
         ) : <div />}
         {step < 3 ? (
-          <Button variant="primary" onClick={nextStep}>Continue <ArrowRight className="w-4 h-4" /></Button>
+          <Button variant="primary" onClick={nextStep}>
+            Continue <ArrowRight className="w-4 h-4" />
+          </Button>
         ) : (
           <Button variant="primary" loading={loading} onClick={handleSubmit}>
             Pay ${PROMO_PRICE_USD.toFixed(2)} &amp; run scan <ArrowRight className="w-4 h-4" />
