@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
 import type {
@@ -11,11 +11,11 @@ import { getScoreColor, getScoreHex, formatScore } from '@/lib/utils'
 import {
   Radar, Share2, RefreshCw, Zap, Code2, MessageSquareText,
   MapPin, CheckCircle2, XCircle, AlertCircle, ChevronDown, ChevronUp,
-  Swords, TrendingUp, ArrowRight
+  Swords, TrendingUp, ArrowRight, LineChart
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
-// ─── Score Ring ─────────────────────────────────────────────────────────────
+// ─── Score Ring ───────────────────────────────────────────────────────────────
 
 function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size?: number; strokeWidth?: number }) {
   const radius        = (size - strokeWidth) / 2
@@ -38,7 +38,7 @@ function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size
   )
 }
 
-// ─── Engine Card ─────────────────────────────────────────────────────────────
+// ─── Engine Card ──────────────────────────────────────────────────────────────
 
 const ENGINE_ICONS: Record<string, string> = { chatgpt: '🤖', perplexity: '🔍', gemini: '✨', claude: '🧠' }
 
@@ -74,7 +74,7 @@ function EngineCard({ engine }: { engine: EngineResult }) {
   )
 }
 
-// ─── Action Plan ─────────────────────────────────────────────────────────────
+// ─── Action Plan ──────────────────────────────────────────────────────────────
 
 const EFFORT_COLORS: Record<string, string> = {
   easy:   'text-success border-success/30 bg-success/10',
@@ -130,6 +130,219 @@ function ActionPlan({ actions, quickWins }: { actions: ActionItem[]; quickWins: 
   )
 }
 
+// ─── Score Trend Section ──────────────────────────────────────────────────────
+
+interface HistoryPoint {
+  id:            string
+  created_at:    string
+  overall_score: number
+  level:         string
+  business_name: string
+}
+
+function ScoreTrendSection({ website, currentId }: { website: string; currentId: string }) {
+  const [history,  setHistory]  = useState<HistoryPoint[]>([])
+  const [loading,  setLoading]  = useState(true)
+  const [tooltip,  setTooltip]  = useState<{ x: number; y: number; point: HistoryPoint } | null>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
+
+  useEffect(() => {
+    fetch(`/api/scan/history?website=${encodeURIComponent(website)}`)
+      .then(r => r.json())
+      .then(d => { setHistory(d.history ?? []); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [website])
+
+  if (loading) return null
+  if (history.length < 2) return null  // Need at least 2 points for a trend
+
+  // ── SVG chart math ──
+  const W = 560
+  const H = 160
+  const PAD_L = 36
+  const PAD_R = 16
+  const PAD_T = 16
+  const PAD_B = 28
+  const chartW = W - PAD_L - PAD_R
+  const chartH = H - PAD_T - PAD_B
+
+  const scores   = history.map(p => p.overall_score)
+  const minScore = Math.max(0,   Math.min(...scores) - 10)
+  const maxScore = Math.min(100, Math.max(...scores) + 10)
+
+  function toX(i: number) {
+    return PAD_L + (i / (history.length - 1)) * chartW
+  }
+  function toY(score: number) {
+    return PAD_T + chartH - ((score - minScore) / (maxScore - minScore)) * chartH
+  }
+
+  const polyline = history.map((p, i) => `${toX(i)},${toY(p.overall_score)}`).join(' ')
+
+  // Area fill path: line + close down to baseline
+  const firstX = toX(0)
+  const lastX  = toX(history.length - 1)
+  const baseY  = PAD_T + chartH
+  const area   = `M${firstX},${baseY} ` +
+    history.map((p, i) => `L${toX(i)},${toY(p.overall_score)}`).join(' ') +
+    ` L${lastX},${baseY} Z`
+
+  // Y-axis grid lines at 0, 25, 50, 75, 100 (only those in range)
+  const gridLines = [0, 25, 50, 75, 100].filter(v => v >= minScore - 5 && v <= maxScore + 5)
+
+  const delta = scores[scores.length - 1] - scores[0]
+
+  return (
+    <div className="card p-5 flex flex-col gap-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <LineChart className="w-4 h-4 text-accent" />
+          <h3 className="font-semibold text-foreground">Score Progress</h3>
+          <span className="text-xs text-muted">{history.length} scans</span>
+        </div>
+        {/* Delta badge */}
+        <span className={clsx(
+          'text-xs font-bold px-2.5 py-1 rounded-full border',
+          delta > 0  ? 'bg-success/10 border-success/20 text-success' :
+          delta < 0  ? 'bg-danger/10  border-danger/20  text-danger'  :
+                       'bg-surface-2  border-border      text-muted'
+        )}>
+          {delta > 0 ? `+${delta}` : delta} pts since first scan
+        </span>
+      </div>
+
+      {/* SVG chart */}
+      <div className="w-full overflow-x-auto">
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${W} ${H}`}
+          className="w-full"
+          style={{ minWidth: 280, maxHeight: 180 }}
+          onMouseLeave={() => setTooltip(null)}
+        >
+          <defs>
+            <linearGradient id="trend-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stopColor="#6366f1" stopOpacity="0.25" />
+              <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+            </linearGradient>
+          </defs>
+
+          {/* Grid lines */}
+          {gridLines.map(v => (
+            <g key={v}>
+              <line
+                x1={PAD_L} y1={toY(v)} x2={W - PAD_R} y2={toY(v)}
+                stroke="#27272a" strokeWidth="1" strokeDasharray="3 3"
+              />
+              <text x={PAD_L - 6} y={toY(v) + 4} fontSize="9" fill="#71717a" textAnchor="end">{v}</text>
+            </g>
+          ))}
+
+          {/* Area fill */}
+          <path d={area} fill="url(#trend-fill)" />
+
+          {/* Line */}
+          <polyline
+            points={polyline}
+            fill="none"
+            stroke="#6366f1"
+            strokeWidth="2"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          />
+
+          {/* X-axis date labels — show first, last, and current */}
+          {history.map((p, i) => {
+            const showLabel = i === 0 || i === history.length - 1 || p.id === currentId
+            if (!showLabel) return null
+            const label = new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+            return (
+              <text key={p.id} x={toX(i)} y={H - 4} fontSize="9" fill="#71717a" textAnchor="middle">
+                {label}
+              </text>
+            )
+          })}
+
+          {/* Dots — interactive */}
+          {history.map((p, i) => {
+            const cx      = toX(i)
+            const cy      = toY(p.overall_score)
+            const isCurrent = p.id === currentId
+            const color   = p.overall_score >= 80 ? '#22c55e' : p.overall_score >= 60 ? '#10b981' : p.overall_score >= 40 ? '#f59e0b' : '#ef4444'
+            return (
+              <g key={p.id}
+                style={{ cursor: 'pointer' }}
+                onClick={() => { if (!isCurrent) window.location.href = `/scan/${p.id}` }}
+                onMouseEnter={(e) => {
+                  const svg   = svgRef.current
+                  if (!svg) return
+                  const rect  = svg.getBoundingClientRect()
+                  const scaleX = rect.width  / W
+                  const scaleY = rect.height / H
+                  setTooltip({ x: cx * scaleX, y: cy * scaleY, point: p })
+                }}
+                onMouseLeave={() => setTooltip(null)}
+              >
+                {/* Outer ring for current scan */}
+                {isCurrent && (
+                  <circle cx={cx} cy={cy} r={9} fill="none" stroke="#6366f1" strokeWidth="1.5" opacity="0.4" />
+                )}
+                <circle cx={cx} cy={cy} r={isCurrent ? 5 : 4} fill={color} stroke="#09090b" strokeWidth="2" />
+              </g>
+            )
+          })}
+        </svg>
+
+        {/* Tooltip */}
+        {tooltip && (
+          <div
+            className="absolute z-10 pointer-events-none px-3 py-2 bg-surface border border-border rounded-xl shadow-lg text-xs flex flex-col gap-0.5"
+            style={{ left: tooltip.x + 12, top: tooltip.y - 8, transform: 'translateY(-100%)' }}
+          >
+            <span className={clsx('font-bold', getScoreColor(tooltip.point.overall_score))}>
+              {tooltip.point.overall_score}/100
+            </span>
+            <span className="text-muted">
+              {new Date(tooltip.point.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+            </span>
+            {tooltip.point.id !== currentId && (
+              <span className="text-accent">Click to view →</span>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Scan history list — compact */}
+      <div className="flex flex-col gap-1.5 mt-1">
+        {[...history].reverse().map((p) => {
+          const isCurrent = p.id === currentId
+          return (
+            <div
+              key={p.id}
+              onClick={() => { if (!isCurrent) window.location.href = `/scan/${p.id}` }}
+              className={clsx(
+                'flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-colors',
+                isCurrent
+                  ? 'bg-accent/10 border border-accent/20 cursor-default'
+                  : 'bg-surface-2 border border-border hover:border-accent/40 cursor-pointer'
+              )}
+            >
+              <div className="flex items-center gap-2">
+                {isCurrent && <span className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0" />}
+                <span className="text-muted">
+                  {new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                </span>
+                {isCurrent && <span className="text-accent font-medium">current</span>}
+              </div>
+              <span className={clsx('font-bold', getScoreColor(p.overall_score))}>{p.overall_score}/100</span>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
 // ─── Competitor Gap Section ───────────────────────────────────────────────────
 
 function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; businessName: string }) {
@@ -139,21 +352,17 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
 
   return (
     <div className="card p-5 flex flex-col gap-5">
-      {/* Header */}
       <div className="flex items-center gap-2">
         <Swords className="w-4 h-4 text-accent" />
         <h3 className="font-semibold text-foreground">Competitor Gap Analysis</h3>
       </div>
 
-      {/* Summary */}
       <p className="text-sm text-foreground-dim leading-relaxed">{gap.summary}</p>
 
-      {/* Score comparison bar */}
       {topCompetitor && (
         <div className="p-4 bg-surface-2 border border-border rounded-xl flex flex-col gap-3">
           <p className="text-xs text-muted uppercase tracking-wide font-semibold">AI Visibility Score Comparison</p>
           <div className="flex flex-col gap-3">
-            {/* Your score */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-xs font-medium text-foreground">{businessName}</span>
@@ -164,7 +373,6 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
                   style={{ width: `${gap.yourScore}%`, background: getScoreHex(gap.yourScore) }} />
               </div>
             </div>
-            {/* Competitor scores */}
             {gap.competitors.map((c) => (
               <div key={c.domain}>
                 <div className="flex items-center justify-between mb-1.5">
@@ -181,7 +389,6 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
               </div>
             ))}
           </div>
-          {/* Gap badge */}
           <div className={clsx(
             'self-start flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border',
             isAhead
@@ -190,14 +397,13 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
           )}>
             <TrendingUp className="w-3.5 h-3.5" />
             {isAhead
-              ? `You\'re ahead by ${Math.abs(scoreDiff)} points`
+              ? `You're ahead by ${Math.abs(scoreDiff)} points`
               : `${scoreDiff} point gap vs ${topCompetitor.name}`
             }
           </div>
         </div>
       )}
 
-      {/* Competitor advantages */}
       {gap.competitors.map((c) => (
         <div key={c.domain} className="flex flex-col gap-2">
           <p className="text-xs font-semibold text-foreground-dim uppercase tracking-wide">
@@ -219,7 +425,6 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
         </div>
       ))}
 
-      {/* Closing moves */}
       {gap.closingMoves.length > 0 && (
         <div className="flex flex-col gap-2">
           <p className="text-xs font-semibold text-accent uppercase tracking-wide">How to close the gap</p>
@@ -357,7 +562,7 @@ function ContentGapsSection({ gaps }: { gaps: ContentGapItem[] }) {
   )
 }
 
-// ─── GBP Signal Section ─────────────────────────────────────────────────────────
+// ─── GBP Signal Section ───────────────────────────────────────────────────────
 
 function GbpSignalSection({ gbp }: { gbp: GbpSignal }) {
   const signals = [
@@ -394,7 +599,7 @@ function GbpSignalSection({ gbp }: { gbp: GbpSignal }) {
   )
 }
 
-// ─── Main Page ─────────────────────────────────────────────────────────────
+// ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ScanResultPage() {
   const { id }                    = useParams<{ id: string }>()
@@ -516,6 +721,11 @@ export default function ScanResultPage() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Score trend — shown if ≥2 historical scans exist */}
+        <div className="relative mb-6">
+          <ScoreTrendSection website={report.website} currentId={report.id} />
         </div>
 
         {/* Engine cards */}
