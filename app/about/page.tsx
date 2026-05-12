@@ -53,11 +53,11 @@ export default function AboutPage() {
               </p>
 
               <p className="text-foreground-dim leading-relaxed text-sm">
-                I&apos;m a self-taught developer and entrepreneur with a focus on AI, search, and the web. I&apos;ll be attending Elon University as an incoming <strong className="text-foreground">Artificial Intelligence Scholar</strong> — one of a select group of students chosen for deep study at the intersection of AI, ethics, and real-world application.
+                I&apos;m a self-taught developer and entrepreneur. I&apos;ll be attending Elon University as an incoming <strong className="text-foreground">Artificial Intelligence Scholar</strong> — one of a select group of students chosen for deep study at the intersection of AI, ethics, and real-world application.
               </p>
 
               <p className="text-foreground-dim leading-relaxed text-sm">
-                I built this tool because I believe small businesses deserve to understand how the next generation of search works — not just how Google works. AI search is already here. MyGeoRadar helps you see where you stand.
+                I believe small businesses deserve to understand how the next generation of search works. AI search is already here. MyGeoRadar helps you see where you stand.
               </p>
 
               {/* Credential badges */}
@@ -76,22 +76,6 @@ export default function AboutPage() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Why I built this */}
-        <div className="mt-14">
-          <h2 className="text-2xl font-bold tracking-tight mb-6">Why I built this</h2>
-          <div className="flex flex-col gap-5 text-sm text-foreground-dim leading-relaxed">
-            <p>
-              Traditional SEO tools are built around Google. But in 2025, millions of people stopped Googling and started asking. They ask ChatGPT which dentist to visit. They ask Perplexity which contractor to hire. They ask Gemini what the best local gym is. And most businesses have absolutely no idea whether they show up in those answers.
-            </p>
-            <p>
-              I got obsessed with that gap. As someone who has spent years building web products and studying how search actually works, I saw the shift happening faster than the industry was acknowledging. GEO — Generative Engine Optimization — is the new SEO, and almost nobody has tools for it yet.
-            </p>
-            <p>
-              MyGeoRadar is my answer to that. A $1 scan that tells you exactly where you stand across the four biggest AI engines, with a real action plan to improve. No fluff. No subscriptions. Just signal.
-            </p>
           </div>
         </div>
 
