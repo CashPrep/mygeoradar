@@ -90,25 +90,34 @@ export async function POST(req: NextRequest) {
 
   // Handle subscription payments (monthly tracking)
   if (event.type === 'invoice.payment_succeeded') {
-    const invoice = event.data.object as Stripe.Invoice
+    const invoice    = event.data.object as Stripe.Invoice
     const customerId = invoice.customer as string
     if (!customerId) return NextResponse.json({ ok: true })
 
-    // Mark subscription active in DB
-    await supabase
-      .from('subscriptions')
-      .upsert({ stripe_customer_id: customerId, status: 'active', updated_at: new Date().toISOString() }, { onConflict: 'stripe_customer_id' })
-      .catch(console.error)
+    try {
+      await supabase
+        .from('subscriptions')
+        .upsert(
+          { stripe_customer_id: customerId, status: 'active', updated_at: new Date().toISOString() },
+          { onConflict: 'stripe_customer_id' }
+        )
+    } catch (dbErr) {
+      console.error('Subscription upsert error:', dbErr)
+    }
   }
 
   if (event.type === 'customer.subscription.deleted') {
-    const sub = event.data.object as Stripe.Subscription
+    const sub        = event.data.object as Stripe.Subscription
     const customerId = sub.customer as string
-    await supabase
-      .from('subscriptions')
-      .update({ status: 'canceled', updated_at: new Date().toISOString() })
-      .eq('stripe_customer_id', customerId)
-      .catch(console.error)
+
+    try {
+      await supabase
+        .from('subscriptions')
+        .update({ status: 'canceled', updated_at: new Date().toISOString() })
+        .eq('stripe_customer_id', customerId)
+    } catch (dbErr) {
+      console.error('Subscription cancel error:', dbErr)
+    }
   }
 
   return NextResponse.json({ ok: true })
