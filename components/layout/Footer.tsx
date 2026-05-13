@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Radar } from 'lucide-react'
+import { GeoRadarLogo } from '@/components/ui/GeoRadarLogo'
 
 const footerLinks = {
   Product: [
@@ -28,7 +28,7 @@ export function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <Radar className="w-5 h-5 text-accent" />
+              <GeoRadarLogo size={20} color="#7c3aed" />
               <span className="font-bold">my<span className="text-accent">geo</span>radar</span>
             </Link>
             <p className="text-sm text-muted leading-relaxed">
