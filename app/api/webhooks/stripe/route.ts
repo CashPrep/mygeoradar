@@ -3,12 +3,43 @@ import Stripe from 'stripe'
 import { supabase } from '@/lib/supabase'
 import { runGeoScan } from '@/lib/geo'
 import { runEnrichments } from '@/lib/enrichments'
-import { sendScanReport } from '@/lib/email'
+import { sendScanReport, sendWelcomeEmail } from '@/lib/email'
 import type { ScanReport } from '@/lib/types'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
 })
+
+function scheduleFollowUp(email: string, scanId: string, businessName: string, topAction?: string) {
+  const now = new Date()
+
+  const day3 = new Date(now)
+  day3.setDate(day3.getDate() + 3)
+
+  const day7 = new Date(now)
+  day7.setDate(day7.getDate() + 7)
+
+  return supabase.from('scheduled_emails').insert([
+    {
+      email,
+      type:          'day3_tip',
+      scan_id:       scanId,
+      business_name: businessName,
+      top_action:    topAction || null,
+      send_at:       day3.toISOString(),
+      sent:          false,
+    },
+    {
+      email,
+      type:          'day7_review',
+      scan_id:       scanId,
+      business_name: businessName,
+      top_action:    null,
+      send_at:       day7.toISOString(),
+      sent:          false,
+    },
+  ])
+}
 
 export async function POST(req: NextRequest) {
   const body      = await req.text()
@@ -82,7 +113,6 @@ export async function POST(req: NextRequest) {
         competitor_gap: enrichments.competitorGap,
       }).eq('id', scanId)
 
-      // Send email — prefer user-supplied email, fallback to Stripe customer email
       const email = scan.email || session.customer_details?.email
       if (email) {
         const fullReport: ScanReport = {
@@ -101,17 +131,29 @@ export async function POST(req: NextRequest) {
           competitorGap: enrichments.competitorGap,
           ...result,
         }
+
+        // 1. Send the full report email
         await sendScanReport(email, fullReport).catch(console.error)
+
+        // 2. Send the welcome / onboarding email immediately
+        await sendWelcomeEmail({
+          email,
+          businessName: scan.business_name,
+          scanId,
+          score: result.overallScore,
+        }).catch(console.error)
+
+        // 3. Schedule day-3 and day-7 follow-ups
+        const topAction = result.topActions?.[0]?.description
+        await scheduleFollowUp(email, scanId, scan.business_name, topAction).catch(console.error)
       }
     }).catch(console.error)
   }
 
-  // Handle subscription payments (monthly tracking)
   if (event.type === 'invoice.payment_succeeded') {
     const invoice    = event.data.object as Stripe.Invoice
     const customerId = invoice.customer as string
     if (!customerId) return NextResponse.json({ ok: true })
-
     try {
       await supabase
         .from('subscriptions')
@@ -127,7 +169,6 @@ export async function POST(req: NextRequest) {
   if (event.type === 'customer.subscription.deleted') {
     const sub        = event.data.object as Stripe.Subscription
     const customerId = sub.customer as string
-
     try {
       await supabase
         .from('subscriptions')
