@@ -35,7 +35,7 @@ export default function WhatIsGeoPage() {
             For 20 years, the game was simple: rank on Google, get traffic. Businesses spent billions optimizing title tags, building backlinks, and chasing algorithm updates. It worked.
           </p>
           <p>
-            Then ChatGPT launched. Then Perplexity. Then Google’s AI Overviews. Suddenly, millions of people stopped clicking search results and started reading AI-generated answers instead. And those answers don’t always mention the businesses that rank #1 on Google.
+            Then ChatGPT launched. Then Perplexity. Then Google&apos;s AI Overviews. Suddenly, millions of people stopped clicking search results and started reading AI-generated answers instead. And those answers don&apos;t always mention the businesses that rank #1 on Google.
           </p>
 
           <h2 className="text-xl font-bold text-foreground mt-4">So what is GEO?</h2>
@@ -43,7 +43,7 @@ export default function WhatIsGeoPage() {
             Generative Engine Optimization (GEO) is the practice of making your business more likely to be mentioned, cited, or recommended by AI-powered search engines like ChatGPT, Perplexity, Gemini, and Claude.
           </p>
           <p>
-            Instead of optimizing for a ranking position, you’re optimizing to be part of the answer. When someone asks &ldquo;best personal injury lawyer in Boston&rdquo; or &ldquo;what’s a good yoga studio near me,&rdquo; you want your business to appear in what the AI says back.
+            Instead of optimizing for a ranking position, you&apos;re optimizing to be part of the answer. When someone asks &ldquo;best personal injury lawyer in Boston&rdquo; or &ldquo;what&apos;s a good yoga studio near me,&rdquo; you want your business to appear in what the AI says back.
           </p>
 
           <h2 className="text-xl font-bold text-foreground mt-4">How is GEO different from SEO?</h2>
@@ -77,8 +77,8 @@ export default function WhatIsGeoPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">The 4 pillars of GEO</h2>
           {[
             { title: '1. Entity clarity', body: 'AI engines build a model of who you are. Your business name, location, services, and category need to be crystal clear and consistent across your website, Google Business Profile, and third-party directories.' },
-            { title: '2. Structured data', body: 'Schema markup (JSON-LD) tells AI crawlers exactly what type of business you are, what services you offer, your hours, reviews, and more. Without it, AI engines have to guess — and they often guess wrong.' },
-            { title: '3. Authoritative content', body: 'AI engines favor businesses that have published helpful, specific, original content about their industry. FAQs, how-to guides, case studies, and local content all signal that you’re a real expert.' },
+            { title: '2. Structured data', body: 'Schema markup (JSON-LD) tells AI crawlers exactly what type of business you are, what services you offer, your hours, reviews, and more. Without it, AI engines have to guess &mdash; and they often guess wrong.' },
+            { title: '3. Authoritative content', body: 'AI engines favor businesses that have published helpful, specific, original content about their industry. FAQs, how-to guides, case studies, and local content all signal that you&apos;re a real expert.' },
             { title: '4. Third-party mentions', body: 'Just like backlinks for SEO, AI engines weight citations from review sites, news articles, local directories, and industry publications. The more credible sources mention you, the more trustworthy you appear to AI.' },
           ].map((p) => (
             <div key={p.title}>
@@ -89,18 +89,18 @@ export default function WhatIsGeoPage() {
 
           <h2 className="text-xl font-bold text-foreground mt-4">How do I know where I stand?</h2>
           <p>
-            The fastest way is to run a scan with MyGeoRadar. In under 60 seconds you’ll see exactly how ChatGPT, Perplexity, Gemini and Claude currently talk about your business — and get a prioritized list of fixes.
+            The fastest way is to run a scan with MyGeoRadar. In under 60 seconds you&apos;ll see exactly how ChatGPT, Perplexity, Gemini and Claude currently talk about your business &mdash; and get a prioritized list of fixes.
           </p>
         </div>
 
         <div className="mt-10 p-6 bg-surface-2 border border-border rounded-xl flex flex-col gap-4">
-          <p className="font-semibold text-foreground">Ready to see your AI visibility score?</p>
-          <p className="text-sm text-foreground-dim">Run a $1 scan and get your full report in under 60 seconds.</p>
+          <p className="font-semibold text-foreground">Get your free AI visibility score</p>
+          <p className="text-sm text-foreground-dim">Free score in 5 seconds. Full report $24.99 (50% off your first scan).</p>
           <Link
             href="/scan"
             className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors w-fit"
           >
-            Run my scan <ArrowRight className="w-4 h-4" />
+            Run my free scan <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 

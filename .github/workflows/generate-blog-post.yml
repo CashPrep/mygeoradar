@@ -1,0 +1,56 @@
+name: Generate Blog Post
+
+on:
+  schedule:
+    # Runs Mon, Wed, Fri at 8:00 AM EST (13:00 UTC)
+    - cron: '0 13 * * 1,3,5'
+  workflow_dispatch:
+    inputs:
+      topic_index:
+        description: 'Force a specific topic index (0-based). Leave blank to auto-pick next unwritten topic.'
+        required: false
+        default: ''
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install @anthropic-ai/sdk
+
+      - name: Generate blog post
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          FORCE_TOPIC_INDEX: ${{ github.event.inputs.topic_index }}
+        run: node scripts/generate-post.mjs
+
+      - name: Check for new post
+        id: check
+        run: |
+          if git diff --quiet HEAD; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and push new post
+        if: steps.check.outputs.changed == 'true'
+        run: |
+          git config user.name "GeoRadar Bot"
+          git config user.email "bot@mygeoradar.com"
+          git add -A
+          git commit -m "content: auto-generate blog post via AI [skip ci]"
+          git push
