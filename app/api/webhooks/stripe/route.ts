@@ -39,6 +39,24 @@ export async function POST(req: NextRequest) {
 
     if (!scan) return NextResponse.json({ ok: true })
 
+    // If scan has no user_id yet, try to match via email
+    if (!scan.user_id) {
+      const customerEmail = scan.email || session.customer_details?.email
+      if (customerEmail) {
+        const { data: authUsers } = await supabase
+          .from('auth.users')
+          .select('id')
+          .eq('email', customerEmail)
+          .limit(1)
+        if (authUsers && authUsers.length > 0) {
+          await supabase
+            .from('scan_reports')
+            .update({ user_id: authUsers[0].id })
+            .eq('id', scanId)
+        }
+      }
+    }
+
     // Mark paid immediately so report page stops polling
     await supabase.from('scan_reports').update({ paid: true }).eq('id', scanId)
 

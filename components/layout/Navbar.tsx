@@ -2,9 +2,12 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Menu, X, Radar } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { Menu, X, Radar, User, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { createSupabaseBrowser } from '@/lib/supabase-browser'
 import { clsx } from 'clsx'
+import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 const navLinks = [
   { href: '/#how-it-works', label: 'How it works' },
@@ -14,14 +17,31 @@ const navLinks = [
 ]
 
 export function Navbar() {
+  const router                  = useRouter()
   const [open, setOpen]         = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [user, setUser]         = useState<SupabaseUser | null>(null)
+
+  const supabase = createSupabaseBrowser()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [supabase.auth])
+
+  async function handleSignOut() {
+    await supabase.auth.signOut()
+    router.refresh()
+  }
 
   return (
     <header className={clsx(
@@ -56,6 +76,31 @@ export function Navbar() {
 
         {/* CTA */}
         <div className="hidden md:flex items-center gap-3">
+          {user ? (
+            <>
+              <Link
+                href="/account"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
+              >
+                <User className="w-4 h-4" />
+                My scans
+              </Link>
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign out
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
+            >
+              Sign in
+            </Link>
+          )}
           <Button variant="primary" size="sm" onClick={() => window.location.href = '/scan'}>
             Run a scan
           </Button>
@@ -84,6 +129,31 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
+          {user ? (
+            <>
+              <Link
+                href="/account"
+                onClick={() => setOpen(false)}
+                className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 flex items-center gap-2"
+              >
+                <User className="w-4 h-4" /> My scans
+              </Link>
+              <button
+                onClick={() => { setOpen(false); handleSignOut() }}
+                className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 flex items-center gap-2 text-left"
+              >
+                <LogOut className="w-4 h-4" /> Sign out
+              </button>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2"
+            >
+              Sign in
+            </Link>
+          )}
           <Button
             variant="primary" size="sm" className="mt-2"
             onClick={() => { setOpen(false); window.location.href = '/scan' }}

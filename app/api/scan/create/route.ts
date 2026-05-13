@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { supabase } from '@/lib/supabase'
+import { createSupabaseServer } from '@/lib/supabase-server'
 import { nanoid } from 'nanoid'
 import { SCAN_PRICE_CENTS, PROMO_PRICE_CENTS, PROMO_LABEL } from '@/lib/constants'
 
@@ -26,6 +27,10 @@ export async function POST(req: NextRequest) {
     if (!businessName || !website || !topics?.length) {
       return NextResponse.json({ error: 'Missing required fields.' }, { status: 400 })
     }
+
+    // Get logged-in user if present
+    const serverSupabase = await createSupabaseServer()
+    const { data: { user } } = await serverSupabase.auth.getUser()
 
     const ip     = getClientIp(req)
     const scanId = nanoid(10)
@@ -57,6 +62,7 @@ export async function POST(req: NextRequest) {
       competitor_url: competitorUrl || null,
       ip_address:     ip,
       paid:           false,
+      user_id:        user?.id      || null,
     }])
 
     if (dbError) {
@@ -80,7 +86,7 @@ export async function POST(req: NextRequest) {
         quantity: 1,
       }],
       mode: 'payment',
-      customer_email: email || undefined,
+      customer_email: user?.email || email || undefined,
       success_url: `${appUrl}/scan/${scanId}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${appUrl}/scan`,
       metadata: { scanId, businessName, website, promoUsed: promoAllowed ? 'true' : 'false' },
