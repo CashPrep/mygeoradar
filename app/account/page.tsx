@@ -3,8 +3,8 @@ import { createSupabaseServer } from '@/lib/supabase-server'
 import { AccountClient } from '@/components/account/AccountClient'
 
 export const metadata = {
-  title: 'My Account | MyGeoRadar',
-  description: 'View your AI visibility scan history.',
+  title: 'My Dashboard | MyGeoRadar',
+  description: 'View your AI visibility scan history and track your progress.',
 }
 
 export default async function AccountPage() {
@@ -21,5 +21,14 @@ export default async function AccountPage() {
     .order('created_at', { ascending: false })
     .limit(50)
 
-  return <AccountClient user={user} scans={scans ?? []} />
+  // email_confirmed_at is null when unverified
+  const emailVerified = !!user.email_confirmed_at
+
+  return (
+    <AccountClient
+      user={user}
+      scans={scans ?? []}
+      emailVerified={emailVerified}
+    />
+  )
 }
