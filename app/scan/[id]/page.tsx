@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
+import { OnboardingChecklist } from '@/components/scan/OnboardingChecklist'
+import { createSupabaseBrowser } from '@/lib/supabase-browser'
 import type {
   ScanReport, EngineResult, ActionItem,
   SchemaCheck, ContentGapItem, GbpSignal, CompetitorGap
@@ -712,8 +714,14 @@ export default function ScanResultPage() {
   const [status,    setStatus]    = useState<'loading' | 'pending' | 'ready' | 'error'>('loading')
   const [pollCount, setPollCount] = useState(0)
   const [enrichmentsDone, setEnrichmentsDone] = useState(false)
-  // Store email from the DB row so we can pre-fill subscribe form
   const [reportEmail, setReportEmail] = useState<string | undefined>(undefined)
+  const [hasAccount,  setHasAccount]  = useState(false)
+
+  // Check if user is logged in (for checklist)
+  useEffect(() => {
+    const sb = createSupabaseBrowser()
+    sb.auth.getUser().then(({ data }) => setHasAccount(!!data.user))
+  }, [])
 
   useEffect(() => {
     if (!id) return
@@ -844,6 +852,11 @@ export default function ScanResultPage() {
           </div>
         </div>
 
+        {/* ── Onboarding Checklist ── */}
+        <div className="mb-6">
+          <OnboardingChecklist scanId={report.id} hasAccount={hasAccount} />
+        </div>
+
         {/* Score trend */}
         <div className="relative mb-6">
           <ScoreTrendSection website={report.website} currentId={report.id} />
@@ -859,7 +872,7 @@ export default function ScanResultPage() {
           <ActionPlan actions={report.topActions} quickWins={report.quickWins} />
         </div>
 
-        {/* ── D. Done-For-You Upsell ── */}
+        {/* Done-For-You Upsell */}
         <div className="mb-6">
           <DfyUpsell />
         </div>
@@ -896,7 +909,7 @@ export default function ScanResultPage() {
           }
         </div>
 
-        {/* ── E. Monthly Tracking Subscription ── */}
+        {/* Monthly Tracking Subscription */}
         <div className="mb-6">
           <MonthlyTrackingUpsell scanId={report.id} reportEmail={reportEmail} />
         </div>
