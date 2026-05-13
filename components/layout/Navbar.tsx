@@ -2,9 +2,8 @@
 
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Radar } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
-import { GeoRadarLogo } from '@/components/ui/GeoRadarLogo'
 import { clsx } from 'clsx'
 
 const navLinks = [
@@ -33,7 +32,10 @@ export function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group">
-          <GeoRadarLogo size={22} color="#7c3aed" />
+          <div className="relative">
+            <Radar className="w-5 h-5 text-accent" />
+            <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+          </div>
           <span className="font-bold text-base tracking-tight">
             my<span className="text-accent">geo</span>radar
           </span>
