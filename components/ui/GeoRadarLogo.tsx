@@ -5,101 +5,108 @@ interface GeoRadarLogoProps {
 }
 
 /**
- * Accurate recreation of the MyGeoRadar brand mark:
- * - A bold capital G formed by two concentric circles (thick ring) + horizontal crossbar
- * - Inside the G curve: 3 concentric arc rings + center dot (all in the same color)
- * - Transparent background, single color, scalable SVG
+ * Pixel-accurate recreation of the MyGeoRadar brand mark.
+ * Structure (from the reference image):
+ *  - Thick outer C/G ring: open gap at top-right (~45deg notch cut diagonally)
+ *  - Right crossbar: solid rectangle extending from ~center to right edge
+ *  - 3 concentric arcs inside the hollow, each a ~270deg arc opening to top-right
+ *  - Small circle dot at center
  */
 export function GeoRadarLogo({ className, size = 20, color = '#7c3aed' }: GeoRadarLogoProps) {
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 100 100"
-      fill="none"
+      viewBox="0 0 200 200"
+      fill={color}
       xmlns="http://www.w3.org/2000/svg"
       className={className}
       aria-label="MyGeoRadar logo"
     >
       {/*
-        The G shape:
-        Strategy — use fill-rule="evenodd" so the inner circle punches out the donut,
-        then add back the crossbar as a separate rect.
-        Outer circle r=47, inner circle r=30 → thick ring.
-        The ring is clipped to a 270° arc (open on top-right, matching the G gap).
-        Crossbar: horizontal bar on the right half at middle height.
+        All math on a 200x200 canvas, center = (100,100).
+
+        OUTER RING (G body):
+          outer radius = 90, inner radius = 60 => stroke thickness = 30
+          Gap is a diagonal cut from top-right — the ring runs from
+          ~120deg to ~30deg going clockwise (i.e. 270deg of arc).
+          In SVG (0=right, angles go clockwise):
+            start = 120deg => x=100+90*cos(120)=100-45=55,   y=100+90*sin(120)=100+77.9=177.9
+            end   =  30deg => x=100+90*cos(30)=100+77.9=177.9, y=100+90*sin(30)=100+45=145  -- no
+
+          Actually looking at the logo: gap is at TOP-RIGHT, diagonal slice ~45deg.
+          The arc starts just below the gap (top-right) and sweeps almost all the way around.
+          Let gap center = 45deg (top-right diagonal).
+          Gap half-width = ~20deg, so:
+            arc from 65deg to 25deg going clockwise = 320deg of arc.
+
+          65deg: x=100+90*cos(65deg)=100+38.0=138.0, y=100+90*sin(65deg)=100+81.6=181.6  -- bottom right area
+          Hmm let me use standard math angles then convert.
+          Standard: 0=right, 90=up, going counterclockwise.
+          SVG: 0=right, 90=DOWN, going clockwise.
+
+          In the logo, gap is at roughly 1-2 o'clock position (top right, tilted).
+          1 o'clock = 60deg from top = -30deg standard = 330deg SVG... let me just use visual estimates.
+
+          I'll define:
+            gapStart = 315deg SVG (top-right, ~10:30 direction)
+            gapEnd   =  45deg SVG (going clockwise from gapStart skipping ~90deg gap)
+          So the G arc goes from 45deg to 315deg clockwise = 270deg.
+
+          45deg SVG:  x=100+90*cos(45)=100+63.6=163.6,  y=100+90*sin(45)=100+63.6=163.6
+          315deg SVG: x=100+90*cos(315)=100+63.6=163.6, y=100+90*sin(315)=100-63.6=36.4
+
+          inner radius 60:
+          45deg:  x=100+60*cos(45)=100+42.4=142.4,  y=100+60*sin(45)=100+42.4=142.4
+          315deg: x=100+60*cos(315)=100+42.4=142.4,  y=100+60*sin(315)=100-42.4=57.6
+
+          Path: move to outer-start(45deg), arc clockwise 270deg to outer-end(315deg),
+                line to inner-end(315deg), arc counter-clockwise 270deg back to inner-start(45deg),
+                close.
       */}
 
-      {/* ── Outer G ring (donut arc, open at ~30°–90° = top-right gap) ── */}
-      {/*
-        We draw the G as:
-        1. A filled donut (evenodd) clipped to 270° using a clipPath
-        2. Plus a filled crossbar rect
-      */}
+      {/* OUTER G RING - 270deg donut arc */}
+      <path d="
+        M 163.6 163.6
+        A 90 90 0 1 1 163.6 36.4
+        L 142.4 57.6
+        A 60 60 0 1 0 142.4 142.4
+        Z
+      " />
 
-      <defs>
-        {/* Clip to bottom-left 270° sector — removes top-right 90° to create the G opening */}
-        <clipPath id="gClip">
-          {/*
-            Sector from 80° to 360° (280° sweep) — slightly past top going clockwise,
-            leaving a gap at top-right. Drawn as a polygon fan from center.
-            Using degrees: start=75deg, end=360deg (going clockwise).
-            In SVG arc terms (x-axis=right, y-axis=down):
-              0° = right, 90° = bottom, 180° = left, 270° = top
-            G opening is at top-right (~330°–30° i.e. a 60° gap).
-            We clip FROM 30° TO 330° (300° arc, clockwise).
-          */}
-          <path d="
-            M 50 50
-            L 93.3 75
-            A 50 50 0 1 0 75 6.7
-            Z
-          " />
-        </clipPath>
-      </defs>
+      {/* CROSSBAR - horizontal bar on right side, vertically centered */}
+      {/* Sits between x=100 and x=190, vertically from y=86 to y=114 (28px tall) */}
+      <rect x="100" y="86" width="88" height="28" rx="4" />
 
-      {/* Donut ring clipped to G arc shape */}
-      <g clipPath="url(#gClip)">
-        <path
-          fillRule="evenodd"
-          fill={color}
-          d="
-            M 50 3 A 47 47 0 1 1 49.999 3 Z
-            M 50 27 A 23 23 0 1 0 50.001 27 Z
-          "
-        />
-      </g>
-
-      {/* Crossbar — horizontal bar on right side of G, vertically centered */}
-      <rect x="52" y="44" width="41" height="13" rx="2" fill={color} />
-
-      {/* ── Radar rings inside the G curve (left/inner half) ── */}
-      {/* Ring 3 — outermost inner ring */}
+      {/* RADAR ARC 1 - outermost inner arc, r=52, same gap direction */}
       <path
-        d="M 50 31 A 19 19 0 0 0 31 50 A 19 19 0 0 0 50 69 A 19 19 0 0 0 69 50"
-        stroke={color}
-        strokeWidth="4.5"
+        d="M 136.8 136.8 A 52 52 0 1 1 136.8 63.2"
         fill="none"
+        stroke={color}
+        strokeWidth="11"
         strokeLinecap="round"
       />
-      {/* Ring 2 */}
+
+      {/* RADAR ARC 2 - middle arc, r=36 */}
       <path
-        d="M 50 38 A 12 12 0 0 0 38 50 A 12 12 0 0 0 50 62 A 12 12 0 0 0 62 50"
-        stroke={color}
-        strokeWidth="3.5"
+        d="M 125.5 125.5 A 36 36 0 1 1 125.5 74.5"
         fill="none"
+        stroke={color}
+        strokeWidth="9"
         strokeLinecap="round"
       />
-      {/* Ring 1 — innermost */}
+
+      {/* RADAR ARC 3 - innermost arc, r=20 */}
       <path
-        d="M 50 43.5 A 6.5 6.5 0 0 0 43.5 50 A 6.5 6.5 0 0 0 50 56.5 A 6.5 6.5 0 0 0 56.5 50"
-        stroke={color}
-        strokeWidth="2.5"
+        d="M 114.1 114.1 A 20 20 0 1 1 114.1 85.9"
         fill="none"
+        stroke={color}
+        strokeWidth="7"
         strokeLinecap="round"
       />
-      {/* Center dot */}
-      <circle cx="50" cy="50" r="2.5" fill={color} />
+
+      {/* CENTER DOT */}
+      <circle cx="100" cy="100" r="7" />
     </svg>
   )
 }
