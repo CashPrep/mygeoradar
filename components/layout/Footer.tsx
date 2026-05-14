@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Radar } from 'lucide-react'
 
 const footerLinks = {
@@ -55,9 +56,25 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-3">
-          <p className="text-xs text-muted">&copy; {new Date().getFullYear()} MyGeoRadar. All rights reserved.</p>
-          <p className="text-xs text-muted">Built by Andrew Garber &mdash; Elon University AI Scholar.</p>
+        <div className="mt-10 pt-6 border-t border-border flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col md:flex-row items-center gap-3">
+            <p className="text-xs text-muted">&copy; {new Date().getFullYear()} MyGeoRadar. All rights reserved.</p>
+            <p className="text-xs text-muted hidden md:block">&mdash;</p>
+            <p className="text-xs text-muted">Built by Andrew Garber &mdash; Elon University AI Scholar.</p>
+          </div>
+          <a
+            href="https://launchboosts.com/project/my-geo-radar"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              src="https://launchboosts.com/badges/featured-dark.svg"
+              alt="Featured on LaunchBoosts"
+              width={180}
+              height={54}
+              unoptimized
+            />
+          </a>
         </div>
       </div>
     </footer>
