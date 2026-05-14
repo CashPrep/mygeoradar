@@ -12,9 +12,9 @@ const features = [
     icon:    Radar,
     accent:  '#4f8ef7',
     tag:     'Core Engine',
-    title:   'Know exactly which AI is sending you customers — and which isn\'t',
-    value:   '34% of all online searches now happen inside AI tools. When someone asks ChatGPT, Perplexity, or Gemini "best [your service] near me" — are you the answer? GeoRadar simulates that query for your business across all four major engines and gives you a score for each.',
-    outcome: 'Businesses that appear in AI answers see 2–3x more inbound inquiries than those that don\'t.',
+    title:   'Your score across all 4 AI engines',
+    value:   'See whether ChatGPT, Perplexity, Gemini, and Claude mention your business when customers ask — and exactly how well you rank on each one.',
+    outcome: 'Businesses that appear in AI answers see 2–3x more inbound inquiries.',
     mockup: (
       <div className="flex flex-col gap-2.5">
         {[
@@ -38,15 +38,15 @@ const features = [
     icon:    ListChecks,
     accent:  '#22c55e',
     tag:     'Action Plan',
-    title:   'A prioritized fix list — not a 40-page PDF nobody reads',
-    value:   'Most SEO audits dump hundreds of issues on you with no guidance on what to do first. GeoRadar gives you exactly 5 actions, ordered high → medium → low, each with the specific steps to take. Every recommendation is tied directly to how AI engines decide who to cite.',
-    outcome: 'Users who implement the top 3 actions see an average score increase of +18 points within 30 days.',
+    title:   'Exactly what to fix, in order',
+    value:   '5 prioritized actions — high to low — each with specific steps. No 40-page PDF. No guesswork.',
+    outcome: 'Users who act on the top 3 fixes see an average +18 point score increase within 30 days.',
     mockup: (
       <div className="flex flex-col gap-2">
         {[
           { priority: 'high',   effort: 'easy',   title: 'Add LocalBusiness JSON-LD to homepage' },
-          { priority: 'high',   effort: 'medium', title: 'Create an authoritative About page with E-E-A-T signals' },
-          { priority: 'medium', effort: 'easy',   title: 'Add FAQ schema to your top service pages' },
+          { priority: 'high',   effort: 'medium', title: 'Create an About page with E-E-A-T signals' },
+          { priority: 'medium', effort: 'easy',   title: 'Add FAQ schema to your service pages' },
         ].map((a, i) => (
           <div key={i} className="flex items-start gap-3 p-2.5 bg-surface-2 rounded-lg">
             <span className={clsx(
@@ -67,8 +67,8 @@ const features = [
     icon:    Code2,
     accent:  '#f59e0b',
     tag:     'Schema Checker',
-    title:   'AI engines can\'t recommend a business they don\'t understand',
-    value:   'ChatGPT and Gemini rely on structured data (JSON-LD schema) to understand what your business does, where you are, and how customers rate you. GeoRadar fetches your live site, parses every schema block, and scores your markup — flagging exactly which types are missing and why they matter.',
+    title:   'Find out why AI engines skip your site',
+    value:   'AI engines rely on structured data to understand your business. We scan your live site and flag exactly what\u2019s missing.',
     outcome: 'Adding LocalBusiness + Review schema can improve AI citation probability by up to 40%.',
     mockup: (
       <div className="flex flex-col gap-2">
@@ -103,9 +103,9 @@ const features = [
     icon:    TrendingUp,
     accent:  '#ef4444',
     tag:     'Content Gaps',
-    title:   'Your competitors are answering the questions your customers are asking AI',
-    value:   'AI engines surface businesses that answer the exact questions being asked. GeoRadar identifies the top 5 questions AI is actively answering in your industry — questions your site currently doesn\'t cover. Each one is a content opportunity that, when filled, directly increases your citation probability.',
-    outcome: 'Each new content page targeting an AI-answer gap increases citation probability by ~12%.',
+    title:   'Questions your customers ask AI — that your site doesn\u2019t answer',
+    value:   'We surface the top questions AI is answering in your industry right now. Each one is a content opportunity you\u2019re missing.',
+    outcome: 'Each new page targeting an AI-answer gap increases citation probability by ~12%.',
     mockup: (
       <div className="flex flex-col gap-2">
         {[
@@ -127,9 +127,9 @@ const features = [
     icon:    Swords,
     accent:  '#8b5cf6',
     tag:     'Competitor Gap',
-    title:   'See exactly why your competitors get cited and you don\'t',
-    value:   'GeoRadar uses AI to identify your top 2 competitors, scrapes their schema and content, and generates a side-by-side AI visibility score comparison. You get a list of the exact advantages they hold — and the specific steps to close the gap.',
-    outcome: 'Knowing what competitors do better cuts optimization time by 60% — you fix what matters, not what\'s easy.',
+    title:   'See why your competitors get cited and you don\u2019t',
+    value:   'Side-by-side AI visibility scores against your top 2 competitors — plus the exact steps to close the gap.',
+    outcome: 'Knowing what competitors do better cuts optimization time by 60%.',
     mockup: (
       <div className="flex flex-col gap-3">
         {[
@@ -155,9 +155,9 @@ const features = [
     icon:    MapPin,
     accent:  '#10b981',
     tag:     'GBP Signals',
-    title:   'Gemini runs on Google data — and most local businesses are invisible to it',
-    value:   'Gemini is tightly integrated with Google\'s ecosystem. If your Google Business Profile signals are weak — no LocalBusiness schema, no review markup, inconsistent NAP — Gemini will skip you entirely. GeoRadar audits these signals from your live site and gives you specific fixes.',
-    outcome: 'Fixing GBP schema signals is the single highest-ROI action for improving Gemini citation rates.',
+    title:   'Fix the signals Gemini runs on',
+    value:   'Gemini pulls from Google\u2019s ecosystem. We audit your site\u2019s Google signals and tell you exactly what to fix.',
+    outcome: 'Fixing GBP schema is the single highest-ROI action for improving Gemini citation rates.',
     mockup: (
       <div className="flex flex-col gap-2">
         {[
@@ -183,8 +183,8 @@ const features = [
     icon:    RefreshCw,
     accent:  '#10a37f',
     tag:     'Score Trend',
-    title:   'Track your progress month over month — see what\'s actually working',
-    value:   'Every scan you run is saved to your history. The report page shows an interactive trend chart of all your past scores with a delta badge so you can instantly see if you\'re improving. Click any past scan to compare the full report at that point in time.',
+    title:   'Track your progress over time',
+    value:   'Every scan is saved. See your score history, compare reports, and confirm that your fixes are actually working.',
     outcome: 'Customers who run 3+ scans improve their score by an average of +31 points over 90 days.',
     mockup: (
       <div className="flex flex-col gap-3">
@@ -244,16 +244,13 @@ export function FeaturesGrid() {
     <section className="section">
       <div className="text-center mb-12">
         <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">What you get</p>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-          Every tool you need to win AI search
-        </h2>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Everything in one scan</h2>
         <p className="mt-4 text-foreground-dim max-w-xl mx-auto">
-          One scan. Seven reports. Zero guesswork about why you\'re invisible to AI.
+          One payment. Seven reports. No subscriptions.
         </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 max-w-5xl mx-auto">
-        {/* Feature nav */}
         <div className="flex flex-col gap-1">
           {features.map((feat, i) => {
             const FIcon = feat.icon
@@ -276,7 +273,6 @@ export function FeaturesGrid() {
           })}
         </div>
 
-        {/* Feature detail */}
         <div className="card p-6 flex flex-col gap-5">
           <div className="flex items-center gap-3">
             <div
@@ -293,13 +289,11 @@ export function FeaturesGrid() {
 
           <p className="text-sm text-foreground-dim leading-relaxed">{f.value}</p>
 
-          {/* Outcome callout */}
           <div className="flex items-start gap-3 p-3.5 rounded-xl border border-success/20 bg-success/5">
             <span className="text-success text-base shrink-0">📈</span>
             <p className="text-sm text-success font-medium leading-snug">{f.outcome}</p>
           </div>
 
-          {/* Live mockup */}
           <div>
             <p className="text-xs text-muted uppercase tracking-wider font-semibold mb-3">Live preview</p>
             <div className="p-4 bg-surface-2 border border-border rounded-xl">

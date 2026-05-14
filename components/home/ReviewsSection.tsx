@@ -40,9 +40,9 @@ function ReviewModal({ onClose }: { onClose: () => void }) {
     review_text: '',
     website: '',
   })
-  const [loading, setLoading]   = useState(false)
+  const [loading, setLoading]     = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const [error, setError]       = useState('')
+  const [error, setError]         = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -70,15 +70,12 @@ function ReviewModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={onClose} />
-
-      {/* Modal */}
       <div className="relative z-10 w-full max-w-lg bg-surface border border-border rounded-2xl p-6 flex flex-col gap-5 shadow-glow-md">
         <div className="flex items-center justify-between">
           <div>
             <h3 className="font-bold text-lg">Leave a review</h3>
-            <p className="text-sm text-muted mt-0.5">Your review helps other businesses discover MyGeoRadar.</p>
+            <p className="text-sm text-muted mt-0.5">Help other businesses discover MyGeoRadar.</p>
           </div>
           <button onClick={onClose} className="p-2 rounded-lg hover:bg-surface-2 text-muted hover:text-foreground transition-colors">
             <X className="w-4 h-4" />
@@ -90,7 +87,7 @@ function ReviewModal({ onClose }: { onClose: () => void }) {
             <CheckCircle2 className="w-12 h-12 text-success" />
             <div>
               <p className="font-semibold text-foreground text-lg">Thank you!</p>
-              <p className="text-sm text-muted mt-1">Your review has been submitted and will appear once approved.</p>
+              <p className="text-sm text-muted mt-1">Your review will appear once approved.</p>
             </div>
             <Button variant="secondary" onClick={onClose}>Close</Button>
           </div>
@@ -161,11 +158,10 @@ export function ReviewsSection() {
         <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Reviews</p>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight">What users say</h2>
         <p className="mt-4 text-foreground-dim max-w-xl mx-auto">
-          We\'re new — be one of the first to share your experience and help other businesses find us.
+          Be one of the first to share your experience.
         </p>
       </div>
 
-      {/* Empty state / first review CTA */}
       <div className="max-w-md mx-auto">
         <div className="card p-8 flex flex-col items-center text-center gap-5">
           <div className="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center">
@@ -173,10 +169,7 @@ export function ReviewsSection() {
           </div>
           <div>
             <p className="font-semibold text-foreground text-lg">No reviews yet</p>
-            <p className="text-sm text-muted mt-2 leading-relaxed">
-              Run a scan and let others know how it helped your business.
-              Your review will appear here once approved.
-            </p>
+            <p className="text-sm text-muted mt-2">Run a scan and let others know how it helped.</p>
           </div>
           <div className="flex items-center gap-1">
             {[1,2,3,4,5].map((s) => (
@@ -187,9 +180,7 @@ export function ReviewsSection() {
             <MessageSquarePlus className="w-4 h-4" />
             Write a review
           </Button>
-          <Badge variant="neutral" className="text-xs">
-            Reviews are moderated before publishing
-          </Badge>
+          <Badge variant="neutral" className="text-xs">Moderated before publishing</Badge>
         </div>
       </div>
 

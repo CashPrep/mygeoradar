@@ -4,20 +4,20 @@ const steps = [
   {
     icon: ClipboardList,
     number: '01',
-    title: 'Tell us your business',
-    description: 'Enter your name, website, and up to 5 search topics. We can autofill most of it from your URL. Takes under 60 seconds.',
+    title: 'Enter your business',
+    description: 'Name and website. That\u2019s it. Takes 30 seconds.',
   },
   {
     icon: ScanLine,
     number: '02',
-    title: 'We hit all 4 AI engines',
-    description: 'We query ChatGPT, Perplexity, Gemini, and Claude with your exact topics — the same way a real customer would ask.',
+    title: 'We scan all 4 AI engines',
+    description: 'ChatGPT, Perplexity, Gemini, and Claude — all at once.',
   },
   {
     icon: Lightbulb,
     number: '03',
-    title: 'You get a real action plan',
-    description: 'Not just a score. A ranked list of exactly what to fix — schema, content gaps, entity signals — so you can act today.',
+    title: 'You get a fix plan',
+    description: 'A ranked list of exactly what to fix. No fluff.',
   },
 ]
 
@@ -26,12 +26,7 @@ export function HowItWorks() {
     <section id="how-it-works" className="section">
       <div className="text-center mb-14">
         <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">How it works</p>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
-          Your score in 3 steps, under 60 seconds
-        </h2>
-        <p className="mt-4 text-foreground-dim max-w-xl mx-auto">
-          No setup. No account. Just answers.
-        </p>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Three steps. Under 60 seconds.</h2>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
