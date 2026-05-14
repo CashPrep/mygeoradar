@@ -248,7 +248,7 @@ export function FeaturesGrid() {
           Every tool you need to win AI search
         </h2>
         <p className="mt-4 text-foreground-dim max-w-xl mx-auto">
-          One $1 scan. Seven reports. Zero guesswork about why you\'re invisible to AI.
+          One scan. Seven reports. Zero guesswork about why you\'re invisible to AI.
         </p>
       </div>
 
