@@ -19,26 +19,28 @@ function scheduleFollowUp(email: string, scanId: string, businessName: string, t
   const day7 = new Date(now)
   day7.setDate(day7.getDate() + 7)
 
-  return supabase.from('scheduled_emails').insert([
-    {
-      email,
-      type:          'day3_tip',
-      scan_id:       scanId,
-      business_name: businessName,
-      top_action:    topAction || null,
-      send_at:       day3.toISOString(),
-      sent:          false,
-    },
-    {
-      email,
-      type:          'day7_review',
-      scan_id:       scanId,
-      business_name: businessName,
-      top_action:    null,
-      send_at:       day7.toISOString(),
-      sent:          false,
-    },
-  ])
+  return Promise.resolve(
+    supabase.from('scheduled_emails').insert([
+      {
+        email,
+        type:          'day3_tip',
+        scan_id:       scanId,
+        business_name: businessName,
+        top_action:    topAction || null,
+        send_at:       day3.toISOString(),
+        sent:          false,
+      },
+      {
+        email,
+        type:          'day7_review',
+        scan_id:       scanId,
+        business_name: businessName,
+        top_action:    null,
+        send_at:       day7.toISOString(),
+        sent:          false,
+      },
+    ])
+  )
 }
 
 export async function POST(req: NextRequest) {
