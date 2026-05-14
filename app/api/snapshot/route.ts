@@ -15,7 +15,7 @@ function getClientIp(req: NextRequest): string {
 }
 
 async function checkRateLimit(ip: string): Promise<boolean> {
-  if (ip === 'unknown') return true // can't reliably rate limit
+  if (ip === 'unknown') return true
 
   const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
 
@@ -26,15 +26,19 @@ async function checkRateLimit(ip: string): Promise<boolean> {
     .gte('created_at', dayAgo)
 
   if (error) {
-    // If table doesn't exist yet, fail open so users aren't blocked
     console.error('Rate limit check error:', error)
-    return true
+    return true // fail open if table missing
   }
 
   if ((count ?? 0) >= MAX_PER_DAY) return false
 
-  // Record this attempt
-  await supabase.from('snapshot_rate_limits').insert({ ip_address: ip }).catch(console.error)
+  // Record this attempt — Supabase builder is not a native Promise, use try/catch
+  try {
+    await supabase.from('snapshot_rate_limits').insert({ ip_address: ip })
+  } catch (err) {
+    console.error('Rate limit insert error:', err)
+  }
+
   return true
 }
 
@@ -49,7 +53,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const ip = getClientIp(req)
+    const ip      = getClientIp(req)
     const allowed = await checkRateLimit(ip)
     if (!allowed) {
       return NextResponse.json(
