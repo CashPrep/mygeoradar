@@ -1,10 +1,10 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
-import { X, Plus, ArrowRight, ArrowLeft, Lock, Zap, Clock } from 'lucide-react'
+import { X, Plus, ArrowRight, ArrowLeft, Lock, Zap, Clock, Loader2, CheckCircle2, AlertCircle } from 'lucide-react'
 import { clsx } from 'clsx'
 import { PROMO_PRICE_USD, FULL_PRICE_USD } from '@/lib/constants'
 
@@ -18,6 +18,8 @@ const SUGGESTED_TOPICS: Record<string, string[]> = {
 }
 
 const INDUSTRIES = Object.keys(SUGGESTED_TOPICS)
+
+type CrawlStatus = 'idle' | 'crawling' | 'success' | 'failed'
 
 interface ScanFormProps {
   initialName?: string
@@ -36,6 +38,11 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
   const [industry, setIndustry]         = useState('')
   const [location, setLocation]         = useState('')
   const [geoLoading, setGeoLoading]     = useState(false)
+
+  // Crawl state
+  const [crawlStatus, setCrawlStatus]   = useState<CrawlStatus>('idle')
+  const [crawlMessage, setCrawlMessage] = useState('')
+  const lastCrawledUrl = useRef('')
 
   // Sync pre-fill values when search params hydrate after mount
   useEffect(() => {
@@ -68,6 +75,65 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
     )
   }, [step]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  async function crawlWebsite(url: string) {
+    const normalized = url.trim().replace(/\/$/, '')
+    if (!normalized || normalized === lastCrawledUrl.current) return
+    lastCrawledUrl.current = normalized
+
+    setCrawlStatus('crawling')
+    setCrawlMessage('Scanning your website…')
+    setError('')
+
+    try {
+      const res  = await fetch('/api/scrape', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ url: normalized }),
+      })
+      const data = await res.json()
+
+      if (!res.ok || data.error) {
+        setCrawlStatus('failed')
+        setCrawlMessage('Could not auto-detect topics. Add them manually below.')
+        return
+      }
+
+      let filled = 0
+
+      if (data.businessName && !businessName) {
+        setBusinessName(data.businessName)
+        filled++
+      }
+      if (data.industry && INDUSTRIES.includes(data.industry)) {
+        setIndustry(data.industry)
+        filled++
+      }
+      if (data.location && !location) {
+        setLocation(data.location)
+        filled++
+      }
+      if (Array.isArray(data.topics) && data.topics.length > 0) {
+        setTopics(data.topics.slice(0, 5))
+        filled++
+      }
+
+      if (filled > 0) {
+        setCrawlStatus('success')
+        setCrawlMessage(
+          data.topics?.length > 0
+            ? `Found ${data.topics.length} topics from your site — review and edit below.`
+            : 'Website scanned — topics not detected, add them manually.'
+        )
+      } else {
+        setCrawlStatus('failed')
+        setCrawlMessage('Could not extract enough info. Please fill in manually.')
+      }
+    } catch {
+      setCrawlStatus('failed')
+      setCrawlMessage('Network error while scanning. Please fill in manually.')
+    }
+  }
+
   function addTopic(t: string) {
     const clean = t.trim()
     if (!clean || topics.includes(clean) || topics.length >= 5) return
@@ -79,10 +145,15 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
     setTopics(topics.filter((x) => x !== t))
   }
 
-  function nextStep() {
+  async function nextStep() {
     if (step === 1) {
       if (!businessName.trim()) return setError('Enter your business name.')
       if (!website.trim())      return setError('Enter your website URL.')
+      setError('')
+      // Crawl first, then advance
+      await crawlWebsite(website)
+      setStep(2)
+      return
     }
     if (step === 2) {
       if (topics.length === 0) return setError('Add at least one topic.')
@@ -113,7 +184,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
     }
   }
 
-  const suggestions = industry ? SUGGESTED_TOPICS[industry] ?? [] : []
+  const suggestions = industry ? (SUGGESTED_TOPICS[industry] ?? []).filter(s => !topics.includes(s)) : []
 
   return (
     <div className="card p-6 flex flex-col gap-6">
@@ -143,8 +214,18 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             label="Website *"
             placeholder="blueridgeroofing.com"
             value={website}
-            onChange={(e) => setWebsite(e.target.value)}
+            onChange={(e) => {
+              setWebsite(e.target.value)
+              // Reset crawl state when URL changes so we re-crawl
+              if (crawlStatus !== 'idle') {
+                setCrawlStatus('idle')
+                lastCrawledUrl.current = ''
+              }
+            }}
           />
+          <p className="text-xs text-muted -mt-1">
+            We'll scan your website to auto-detect your topics.
+          </p>
         </div>
       )}
 
@@ -152,9 +233,32 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       {step === 2 && (
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">Topics to scan</h2>
-          <p className="text-sm text-muted -mt-2">Add 1–5 search queries your customers use to find businesses like yours.</p>
+
+          {/* Crawl status banner */}
+          {crawlStatus === 'crawling' && (
+            <div className="flex items-center gap-2.5 bg-accent/5 border border-accent/20 rounded-xl px-4 py-3">
+              <Loader2 className="w-4 h-4 text-accent animate-spin shrink-0" />
+              <p className="text-sm text-accent">{crawlMessage}</p>
+            </div>
+          )}
+          {crawlStatus === 'success' && (
+            <div className="flex items-center gap-2.5 bg-success/5 border border-success/20 rounded-xl px-4 py-3">
+              <CheckCircle2 className="w-4 h-4 text-success shrink-0" />
+              <p className="text-sm text-success">{crawlMessage}</p>
+            </div>
+          )}
+          {crawlStatus === 'failed' && (
+            <div className="flex items-center gap-2.5 bg-warning/5 border border-warning/20 rounded-xl px-4 py-3">
+              <AlertCircle className="w-4 h-4 text-warning shrink-0" />
+              <p className="text-sm text-warning">{crawlMessage}</p>
+            </div>
+          )}
+
+          <p className="text-sm text-muted -mt-2">Review auto-detected topics below. Add or remove to get 1–5 total.</p>
+
+          {/* Industry picker */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-foreground-dim">Your industry (for suggestions)</label>
+            <label className="text-sm font-medium text-foreground-dim">Industry</label>
             <div className="flex flex-wrap gap-2">
               {INDUSTRIES.map((ind) => (
                 <button key={ind} type="button" onClick={() => setIndustry(ind === industry ? '' : ind)}
@@ -168,26 +272,26 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
               ))}
             </div>
           </div>
+
+          {/* Suggestions only if there are un-added ones */}
           {suggestions.length > 0 && (
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-foreground-dim">Suggestions — click to add</label>
               <div className="flex flex-wrap gap-2">
                 {suggestions.map((s) => (
-                  <button key={s} type="button" disabled={topics.includes(s) || topics.length >= 5} onClick={() => addTopic(s)}
-                    className={clsx('px-3 py-1.5 rounded-lg text-xs border transition-all',
-                      topics.includes(s)
-                        ? 'bg-success/10 border-success/30 text-success cursor-default'
-                        : 'bg-surface-2 border-border text-foreground-dim hover:border-accent/40 hover:text-accent disabled:opacity-40'
-                    )}>
+                  <button key={s} type="button" disabled={topics.length >= 5} onClick={() => addTopic(s)}
+                    className="px-3 py-1.5 rounded-lg text-xs border transition-all bg-surface-2 border-border text-foreground-dim hover:border-accent/40 hover:text-accent disabled:opacity-40">
                     {s}
                   </button>
                 ))}
               </div>
             </div>
           )}
+
+          {/* Manual input */}
           <div className="flex gap-2">
             <Input
-              placeholder="Type a custom topic..."
+              placeholder="Add a custom topic…"
               value={topicInput}
               onChange={(e) => setTopicInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && addTopic(topicInput)}
@@ -198,6 +302,8 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
               <Plus className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Current topics */}
           {topics.length > 0 && (
             <div className="flex flex-wrap gap-2">
               {topics.map((t) => (
@@ -239,6 +345,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             <p className="text-sm"><span className="text-muted">Business:</span> {businessName}</p>
             <p className="text-sm"><span className="text-muted">Website:</span> {website}</p>
             <p className="text-sm"><span className="text-muted">Topics:</span> {topics.join(', ')}</p>
+            {location && <p className="text-sm"><span className="text-muted">Location:</span> {location}</p>}
             <div className="flex flex-wrap gap-1 mt-1">
               {['ChatGPT', 'Perplexity', 'Gemini', 'Claude'].map((e) => (
                 <Badge key={e} variant="neutral" className="text-xs">{e}</Badge>
@@ -291,8 +398,8 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           </button>
         ) : <div />}
         {step < 3 ? (
-          <Button variant="primary" onClick={nextStep}>
-            Continue <ArrowRight className="w-4 h-4" />
+          <Button variant="primary" onClick={nextStep} loading={crawlStatus === 'crawling'}>
+            {step === 1 && crawlStatus === 'crawling' ? 'Scanning site…' : 'Continue'} <ArrowRight className="w-4 h-4" />
           </Button>
         ) : (
           <Button variant="primary" loading={loading} onClick={handleSubmit}>
