@@ -62,19 +62,34 @@ export function Footer() {
             <p className="text-xs text-muted hidden md:block">&mdash;</p>
             <p className="text-xs text-muted">Built by Andrew Garber &mdash; Incoming Elon University AI Scholar.</p>
           </div>
-          <a
-            href="https://launchboosts.com/project/my-geo-radar"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="https://launchboosts.com/badges/featured-dark.svg"
-              alt="Featured on LaunchBoosts"
-              width={180}
-              height={54}
-              unoptimized
-            />
-          </a>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://launchboosts.com/project/my-geo-radar"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="https://launchboosts.com/badges/featured-dark.svg"
+                alt="Featured on LaunchBoosts"
+                width={120}
+                height={36}
+                unoptimized
+              />
+            </a>
+            <a
+              href="https://dang.ai/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png"
+                alt="Dang.ai"
+                width={120}
+                height={36}
+                unoptimized
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
