@@ -14,22 +14,22 @@
   }
 
   body {
-    background-color: #09090b;
-    color: #fafafa;
+    background-color: #ffffff;
+    color: #09090b;
   }
 
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #52525b; }
-  ::selection { background: #7c3aed30; color: #fafafa; }
+  ::-webkit-scrollbar-thumb { background: #c4c4cc; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
+  ::selection { background: #6d28d925; color: #09090b; }
 }
 
 @layer components {
 
   /* Subtle noise texture overlay */
   .bg-noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 128px 128px;
   }
@@ -37,20 +37,20 @@
   /* Very faint grid */
   .bg-grid {
     background-image:
-      linear-gradient(#27272a 1px, transparent 1px),
-      linear-gradient(90deg, #27272a 1px, transparent 1px);
+      linear-gradient(#e4e4e7 1px, transparent 1px),
+      linear-gradient(90deg, #e4e4e7 1px, transparent 1px);
     background-size: 48px 48px;
-    opacity: 0.3;
+    opacity: 0.5;
   }
 
   /* Top radial glow — purple tint */
   .glow-top {
-    background: radial-gradient(ellipse 70% 40% at 50% -5%, #7c3aed12, transparent 70%);
+    background: radial-gradient(ellipse 70% 40% at 50% -5%, #6d28d910, transparent 70%);
   }
 
   /* Bottom fade for sections */
   .glow-bottom {
-    background: radial-gradient(ellipse 60% 40% at 50% 110%, #7c3aed0a, transparent 70%);
+    background: radial-gradient(ellipse 60% 40% at 50% 110%, #6d28d908, transparent 70%);
   }
 
   /* Cards */
@@ -79,12 +79,12 @@
            px-5 py-2.5 rounded-lg transition-all duration-150 active:scale-[0.98];
   }
 
-  /* Input — used everywhere. .input-base is the same, kept as alias */
+  /* Input */
   .input,
   .input-base {
     @apply w-full bg-surface-2 border border-border rounded-lg px-4 py-3
            text-foreground placeholder:text-muted text-sm
-           focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent
+           focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent
            transition-all duration-150 hover:border-border-bright;
   }
 
@@ -95,7 +95,7 @@
 
   /* Shimmer skeleton */
   .shimmer {
-    background: linear-gradient(90deg, #111113 25%, #18181b 50%, #111113 75%);
+    background: linear-gradient(90deg, #f3f3f7 25%, #e9e9ef 50%, #f3f3f7 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -113,13 +113,13 @@
 
 @layer utilities {
   .text-gradient {
-    background: linear-gradient(135deg, #fafafa 0%, #7c3aed 60%, #9333ea 100%);
+    background: linear-gradient(135deg, #09090b 0%, #6d28d9 60%, #7c3aed 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-gradient-subtle {
-    background: linear-gradient(135deg, #fafafa 70%, #7c3aed 100%);
+    background: linear-gradient(135deg, #09090b 70%, #6d28d9 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
