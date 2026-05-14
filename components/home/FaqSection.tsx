@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
 import { clsx } from 'clsx'
+import { PROMO_PRICE_USD, SCAN_PRICE_USD } from '@/lib/constants'
 
 const faqs = [
   {
@@ -27,15 +28,15 @@ const faqs = [
   },
   {
     q: 'Do I need an account to get my report?',
-    a: 'No. You enter your business details, pay $1, and your full report loads on-screen within ~20 seconds. Your report has a permanent shareable URL you can bookmark or forward — no login required.',
+    a: `No. You enter your business details, pay $${PROMO_PRICE_USD.toFixed(2)} for your first scan, and your full report loads on-screen within ~60 seconds. Your report has a permanent shareable URL you can bookmark or forward — no login required.`,
   },
   {
     q: 'Can I rescan after making improvements?',
-    a: 'Yes — and we encourage it. Each scan is a new $1 purchase. Once you\'ve acted on your report (updating your website, building citations, improving reviews), run a fresh scan to see how your scores change. It\'s the fastest way to measure GEO progress.',
+    a: `Yes — and we encourage it. Your first scan is $${PROMO_PRICE_USD.toFixed(2)}; additional scans are $${SCAN_PRICE_USD.toFixed(2)} each. Once you've acted on your report (updating your website, building citations, improving reviews), run a fresh scan to see how your scores change. It's the fastest way to measure GEO progress.`,
   },
   {
-    q: 'Why is it only $1?',
-    a: 'We priced it to remove every possible barrier to trying it. At $1 there\'s no reason not to — and we\'d rather have you see the value firsthand than convince you with a sales page. If it helps your business, run another scan after you\'ve made improvements.',
+    q: 'Why is the first scan discounted?',
+    a: `We offer 50% off your first scan — $${PROMO_PRICE_USD.toFixed(2)} instead of $${SCAN_PRICE_USD.toFixed(2)} — because we'd rather have you see the value firsthand than convince you with a sales page. If it helps your business, run another scan after you've made improvements.`,
   },
 ]
 
