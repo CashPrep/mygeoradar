@@ -65,7 +65,7 @@ Website URL: ${base}
 Combined page content (homepage, about, services, faq):
 ${combinedText}
 
-Your job: deeply understand what this business does, who their customers are, and generate 25-30 highly specific, realistic search queries that potential customers would type to find this business or a business like it.
+Your job: deeply understand what this business does, who their customers are, and generate 40-50 highly specific, realistic search queries that potential customers would type to find this business or a business like it.
 
 Return ONLY valid JSON with this exact structure:
 {
@@ -73,21 +73,22 @@ Return ONLY valid JSON with this exact structure:
   "industry": "Exactly one of: Restaurant, Legal, Home Services, Health, Fitness, Real Estate, SaaS / Tech, E-commerce, Other",
   "location": "City and state if the business is local (e.g. 'Austin, TX'), or null for online businesses",
   "topics": [
-    "...25-30 search queries here..."
+    "...40-50 search queries here..."
   ]
 }
 
 Rules for generating topics (CRITICAL):
-- Generate EXACTLY 25-30 queries. More is better as long as they are distinct and realistic.
+- Generate EXACTLY 40-50 queries. More is better as long as they are distinct and realistic.
 - Each query must be 4-10 words, phrased as a natural search question or phrase
-- Cover ALL of these intent categories (at least 4 queries per category):
+- Cover ALL of these intent categories (at least 6 queries per category):
   1. TRANSACTIONAL: 'best [service] near me', 'hire a [role] in [city]', '[service] cost', 'affordable [service]'
   2. INFORMATIONAL: 'how to find a good [service]', 'what does [service] include', 'signs you need [service]', 'how much does [service] cost'
   3. COMPARISON: 'best [service] options in [city]', '[type A] vs [type B]', 'top rated [service] [city]'
   4. PROBLEM-AWARE: describe the customer's problem, not the solution ('roof is leaking who to call', 'tooth pain no insurance dentist')
   5. BRAND-ADJACENT: queries about this type of business that a competitor might rank for
   6. LONG-TAIL SPECIFIC: highly specific queries combining service + location + qualifier ('24 hour emergency [service] [city] [state]')
-- If the business is local (has a city/state), include the location in at least 6 queries
+  7. QUESTION-BASED: full questions a user might ask ChatGPT ('who is the best [service] in [city]', 'what should I look for in a [service provider]')
+- If the business is local (has a city/state), include the location in at least 8 queries
 - Queries must be specific to what THIS business actually does — not generic industry phrases
 - Do NOT use marketing language, taglines, or brand names in the topics
 - Do NOT repeat the same concept twice
@@ -98,7 +99,7 @@ Rules for generating topics (CRITICAL):
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.2,
       response_format: { type: 'json_object' },
-      max_tokens: 1800,
+      max_tokens: 2800,
     })
 
     const extracted = JSON.parse(completion.choices[0].message.content!)
@@ -107,7 +108,7 @@ Rules for generating topics (CRITICAL):
       businessName: extracted.businessName || null,
       industry:     extracted.industry     || null,
       location:     extracted.location     || null,
-      topics:       Array.isArray(extracted.topics) ? extracted.topics.slice(0, 30) : [],
+      topics:       Array.isArray(extracted.topics) ? extracted.topics.slice(0, 50) : [],
     })
   } catch (err) {
     console.error('Scrape error:', err)

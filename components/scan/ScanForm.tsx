@@ -18,7 +18,7 @@ const SUGGESTED_TOPICS: Record<string, string[]> = {
 }
 
 const INDUSTRIES = Object.keys(SUGGESTED_TOPICS)
-const MAX_TOPICS = 30
+const MAX_TOPICS = 50
 
 type CrawlStatus = 'idle' | 'crawling' | 'success' | 'failed'
 
@@ -211,7 +211,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             }}
           />
           <p className="text-xs text-muted -mt-1">
-            We&apos;ll scan your website to auto-detect up to 30 topics.
+            We&apos;ll scan your website to auto-detect up to 50 topics.
           </p>
         </div>
       )}
@@ -224,7 +224,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             <p className="text-sm text-muted mt-1">These are the queries we&apos;ll check across ChatGPT, Perplexity, Gemini &amp; Claude.</p>
           </div>
 
-          {/* Crawl status */}
           {crawlStatus === 'crawling' && (
             <div className="flex items-center gap-2.5 bg-accent/5 border border-accent/20 rounded-xl px-4 py-3">
               <Loader2 className="w-4 h-4 text-accent animate-spin shrink-0" />
@@ -244,7 +243,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             </div>
           )}
 
-          {/* Current topics */}
           {topics.length > 0 && (
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
@@ -269,7 +267,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             </div>
           )}
 
-          {/* Industry picker */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-foreground-dim">Industry (for extra suggestions)</label>
             <div className="flex flex-wrap gap-2">
@@ -286,7 +283,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             </div>
           </div>
 
-          {/* Industry suggestions */}
           {suggestions.length > 0 && (
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium text-foreground-dim">Suggestions — click to add</label>
@@ -301,7 +297,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             </div>
           )}
 
-          {/* Manual input */}
           {topics.length < MAX_TOPICS && (
             <div className="flex gap-2">
               <Input
