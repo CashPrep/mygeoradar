@@ -60,7 +60,7 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center gap-3">
             <p className="text-xs text-muted">&copy; {new Date().getFullYear()} MyGeoRadar. All rights reserved.</p>
             <p className="text-xs text-muted hidden md:block">&mdash;</p>
-            <p className="text-xs text-muted">Built by Andrew Garber &mdash; Elon University AI Scholar.</p>
+            <p className="text-xs text-muted">Built by Andrew Garber &mdash; Incoming Elon University AI Scholar.</p>
           </div>
           <a
             href="https://launchboosts.com/project/my-geo-radar"
