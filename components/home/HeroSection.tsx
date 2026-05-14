@@ -17,7 +17,7 @@ export function HeroSection() {
         <div className="flex items-center gap-2 bg-danger/10 border border-danger/30 rounded-full px-4 py-1.5">
           <AlertTriangle className="w-3.5 h-3.5 text-danger" />
           <span className="text-xs font-semibold text-danger tracking-wide">
-            92% of local businesses score under 30/100 on AI search
+            In our scans, most local businesses score under 30/100 on AI search
           </span>
         </div>
 
