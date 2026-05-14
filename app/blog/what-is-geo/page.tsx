@@ -1,12 +1,30 @@
+import type { Metadata } from 'next'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'What is GEO? The Beginner\'s Guide to Generative Engine Optimization',
   description: 'Traditional SEO gets you on Google. GEO gets you cited in AI answers. Here\'s what it is, why it matters, and how to start.',
+  openGraph: {
+    type: 'article',
+    title: 'What is GEO? The Beginner\'s Guide to Generative Engine Optimization',
+    description: 'Traditional SEO gets you on Google. GEO gets you cited in AI answers. Here\'s what it is, why it matters, and how to start.',
+    url: 'https://mygeoradar.com/blog/what-is-geo',
+    publishedTime: '2026-05-10T00:00:00Z',
+    authors: ['Andrew Garber'],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'What is GEO?' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'What is GEO? The Beginner\'s Guide to Generative Engine Optimization',
+    description: 'Traditional SEO gets you on Google. GEO gets you cited in AI answers.',
+    images: ['/og-image.png'],
+  },
 }
 
 export default function WhatIsGeoPage() {

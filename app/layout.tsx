@@ -29,11 +29,26 @@ export const metadata: Metadata = {
     title: 'MyGeoRadar — AI Search Visibility for Your Business',
     description: 'See exactly how AI answers talk about your business and get a clear action plan to show up more.',
     siteName: 'MyGeoRadar',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'MyGeoRadar — AI Search Visibility for Your Business',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
     title: 'MyGeoRadar — AI Search Visibility',
     description: 'See how AI answers see your business. Fix it in minutes.',
+    images: ['/og-image.png'],
+  },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
   robots: { index: true, follow: true },
 }

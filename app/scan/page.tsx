@@ -1,11 +1,26 @@
+import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { Navbar }   from '@/components/layout/Navbar'
 import { Footer }   from '@/components/layout/Footer'
 import { ScanPageClient } from './ScanPageClient'
 
-export const metadata = {
-  title:       'Scan Your Business | MyGeoRadar',
-  description: 'Run a full AI visibility scan across ChatGPT, Perplexity, Gemini & Claude.',
+export const metadata: Metadata = {
+  title: 'Scan Your Business',
+  description: 'Run a full AI visibility scan across ChatGPT, Perplexity, Gemini & Claude. See exactly where your business stands in AI-generated answers.',
+  openGraph: {
+    title: 'Scan Your Business | MyGeoRadar',
+    description: 'Run a full AI visibility scan across ChatGPT, Perplexity, Gemini & Claude.',
+    url: 'https://mygeoradar.com/scan',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar AI Scan' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'Scan Your Business | MyGeoRadar',
+    description: 'Run a full AI visibility scan across ChatGPT, Perplexity, Gemini & Claude.',
+    images: ['/og-image.png'],
+  },
 }
 
 export default function ScanPage() {

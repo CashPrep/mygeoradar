@@ -1,11 +1,26 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, GraduationCap, Lightbulb, Radar } from 'lucide-react'
 import Navbar from '@/components/layout/Navbar'
 
-export const metadata = {
-  title: 'About the Founder | MyGeoRadar',
+export const metadata: Metadata = {
+  title: 'About the Founder',
   description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
+  openGraph: {
+    title: 'About the Founder | MyGeoRadar',
+    description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
+    url: 'https://mygeoradar.com/about',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'About MyGeoRadar' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'About the Founder | MyGeoRadar',
+    description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
+    images: ['/og-image.png'],
+  },
 }
 
 export default function AboutPage() {

@@ -1,9 +1,11 @@
+import type { Metadata } from 'next'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'MyGeoRadar terms of service.',
+  description: 'MyGeoRadar terms of service — conditions for using our AI visibility scanning platform.',
+  robots: { index: false, follow: false },
 }
 
 export default function TermsPage() {
@@ -21,7 +23,7 @@ export default function TermsPage() {
             { title: '3. Accuracy', body: 'Scan reports are generated using GPT-4o and simulate AI engine behavior. Results are approximations and may not perfectly reflect how any specific AI engine actually responds at any given moment. We make no guarantees about specific business outcomes from implementing our recommendations.' },
             { title: '4. Acceptable use', body: 'You may not use MyGeoRadar to scan businesses you do not own or represent, to generate competitive intelligence at scale, or for any illegal purpose.' },
             { title: '5. Intellectual property', body: 'Scan reports generated for your business are yours to use. The MyGeoRadar platform, design, and underlying technology remain our intellectual property.' },
-            { title: '6. Limitation of liability', body: 'MyGeoRadar is provided “as is.” We are not liable for any business decisions made based on scan reports. Our total liability for any claim is limited to the amount paid for the scan in question ($1.00).' },
+            { title: '6. Limitation of liability', body: 'MyGeoRadar is provided "as is." We are not liable for any business decisions made based on scan reports. Our total liability for any claim is limited to the amount paid for the scan in question ($1.00).' },
             { title: '7. Contact', body: 'For questions: hello@mygeoradar.com' },
           ].map((s) => (
             <div key={s.title}>

@@ -1,12 +1,27 @@
+import type { Metadata } from 'next'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/Badge'
 import { ArrowRight } from 'lucide-react'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Blog — GEO & AI Search Visibility',
   description: 'Learn how to show up in ChatGPT, Perplexity, Gemini and Claude answers. Guides on GEO, AI search, and visibility for local businesses.',
+  openGraph: {
+    title: 'Blog — GEO & AI Search Visibility | MyGeoRadar',
+    description: 'Learn how to show up in ChatGPT, Perplexity, Gemini and Claude answers. Guides on GEO, AI search, and visibility for local businesses.',
+    url: 'https://mygeoradar.com/blog',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar Blog' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'Blog — GEO & AI Search Visibility | MyGeoRadar',
+    description: 'Learn how to show up in ChatGPT, Perplexity, Gemini and Claude answers.',
+    images: ['/og-image.png'],
+  },
 }
 
 const posts = [

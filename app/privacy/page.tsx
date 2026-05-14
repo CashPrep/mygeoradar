@@ -1,9 +1,11 @@
+import type { Metadata } from 'next'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: 'MyGeoRadar privacy policy.',
+  description: 'MyGeoRadar privacy policy — how we collect, use, and protect your data.',
+  robots: { index: false, follow: false },
 }
 
 export default function PrivacyPage() {
