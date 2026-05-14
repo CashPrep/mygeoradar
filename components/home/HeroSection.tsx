@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { ArrowRight, AlertTriangle, CheckCircle2, Users } from 'lucide-react'
+import { ArrowRight, AlertTriangle, CheckCircle2 } from 'lucide-react'
 import { PROMO_PRICE_USD, FULL_PRICE_USD } from '@/lib/constants'
 import { SnapshotWidget } from './SnapshotWidget'
 
@@ -51,26 +51,18 @@ export function HeroSection() {
           </Button>
         </div>
 
-        {/* Social proof + trust strip */}
-        <div className="flex flex-col items-center gap-3">
-          <div className="flex items-center gap-1.5 text-xs text-muted">
-            <Users className="w-3.5 h-3.5 text-accent" />
-            <span>
-              <span className="font-semibold text-foreground-dim">1,247 businesses</span> scanned this week
-            </span>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            {[
-              'Free score, no account needed',
-              'Full scan across 4 AI engines',
-              'Secure checkout via Stripe',
-            ].map((item) => (
-              <div key={item} className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" />
-                <span className="text-xs text-muted">{item}</span>
-              </div>
-            ))}
-          </div>
+        {/* Trust strip */}
+        <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+          {[
+            'Free score, no account needed',
+            'Full scan across 4 AI engines',
+            'Secure checkout via Stripe',
+          ].map((item) => (
+            <div key={item} className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+              <span className="text-xs text-muted">{item}</span>
+            </div>
+          ))}
         </div>
 
       </div>

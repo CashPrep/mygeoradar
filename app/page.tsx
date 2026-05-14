@@ -5,7 +5,6 @@ import { EngineBar } from '@/components/home/EngineBar'
 import { FeaturesGrid } from '@/components/home/FeaturesGrid'
 import { HowItWorks } from '@/components/home/HowItWorks'
 import { SampleResult } from '@/components/home/SampleResult'
-import { ReviewsSection } from '@/components/home/ReviewsSection'
 import { PricingSection } from '@/components/home/PricingSection'
 import { FaqSection } from '@/components/home/FaqSection'
 import { CtaBanner } from '@/components/home/CtaBanner'
@@ -19,7 +18,6 @@ export default function HomePage() {
       <FeaturesGrid />
       <HowItWorks />
       <SampleResult />
-      <ReviewsSection />
       <PricingSection />
       <FaqSection />
       <CtaBanner />
