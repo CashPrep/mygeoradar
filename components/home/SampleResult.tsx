@@ -307,7 +307,7 @@ export function SampleResult() {
         <div className="mt-8 p-6 rounded-2xl border border-accent/20 bg-accent/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <p className="font-bold text-foreground text-lg">Ready to see your real scores?</p>
-            <p className="text-sm text-muted mt-1">Get your full report — all 5 sections — for $1. Takes 30 seconds.</p>
+            <p className="text-sm text-muted mt-1">Get your full report — all 7 sections — for $24.99. Takes 30 seconds.</p>
           </div>
           <Button variant="primary" size="lg" onClick={() => window.location.href = '/scan'}>
             Scan my business
