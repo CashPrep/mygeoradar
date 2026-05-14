@@ -18,7 +18,7 @@ const SUGGESTED_TOPICS: Record<string, string[]> = {
 }
 
 const INDUSTRIES = Object.keys(SUGGESTED_TOPICS)
-const MAX_TOPICS = 20
+const MAX_TOPICS = 30
 
 type CrawlStatus = 'idle' | 'crawling' | 'success' | 'failed'
 
@@ -79,7 +79,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
     lastCrawledUrl.current = normalized
 
     setCrawlStatus('crawling')
-    setCrawlMessage('Scanning your website\u2026')
+    setCrawlMessage('Scanning your website…')
     setError('')
 
     try {
@@ -107,10 +107,10 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
 
       if (filled > 0 && data.topics?.length > 0) {
         setCrawlStatus('success')
-        setCrawlMessage(`Detected ${data.topics.length} topics from your site \u2014 review, remove, or add more below.`)
+        setCrawlMessage(`Detected ${data.topics.length} topics from your site — review, remove, or add more below.`)
       } else if (filled > 0) {
         setCrawlStatus('success')
-        setCrawlMessage('Website scanned \u2014 no topics detected, please add them manually.')
+        setCrawlMessage('Website scanned — no topics detected, please add them manually.')
       } else {
         setCrawlStatus('failed')
         setCrawlMessage('Could not extract enough info. Please fill in manually.')
@@ -211,7 +211,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             }}
           />
           <p className="text-xs text-muted -mt-1">
-            We\'ll scan your website to auto-detect your topics.
+            We&apos;ll scan your website to auto-detect up to 30 topics.
           </p>
         </div>
       )}
@@ -221,7 +221,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         <div className="flex flex-col gap-5">
           <div>
             <h2 className="font-semibold text-lg">Topics to scan</h2>
-            <p className="text-sm text-muted mt-1">These are the queries we\'ll check across ChatGPT, Perplexity, Gemini &amp; Claude.</p>
+            <p className="text-sm text-muted mt-1">These are the queries we&apos;ll check across ChatGPT, Perplexity, Gemini &amp; Claude.</p>
           </div>
 
           {/* Crawl status */}
@@ -244,14 +244,14 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             </div>
           )}
 
-          {/* Current topics — scrollable chip list */}
+          {/* Current topics */}
           {topics.length > 0 && (
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <label className="text-sm font-medium text-foreground-dim">Detected topics</label>
                 <span className="text-xs text-muted">{topics.length}/{MAX_TOPICS}</span>
               </div>
-              <div className="max-h-52 overflow-y-auto flex flex-col gap-1.5 pr-1">
+              <div className="max-h-64 overflow-y-auto flex flex-col gap-1.5 pr-1">
                 {topics.map((t, i) => (
                   <div key={t} className="flex items-center gap-2 px-3 py-2 bg-surface-2 border border-border rounded-lg group">
                     <span className="text-xs text-muted w-5 shrink-0">{i + 1}.</span>
@@ -289,7 +289,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           {/* Industry suggestions */}
           {suggestions.length > 0 && (
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-foreground-dim">Suggestions \u2014 click to add</label>
+              <label className="text-sm font-medium text-foreground-dim">Suggestions — click to add</label>
               <div className="flex flex-wrap gap-2">
                 {suggestions.map((s) => (
                   <button key={s} type="button" disabled={topics.length >= MAX_TOPICS} onClick={() => addTopic(s)}
@@ -305,7 +305,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           {topics.length < MAX_TOPICS && (
             <div className="flex gap-2">
               <Input
-                placeholder="Add a custom topic\u2026"
+                placeholder="Add a custom topic…"
                 value={topicInput}
                 onChange={(e) => setTopicInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && addTopic(topicInput)}
@@ -319,7 +319,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           )}
 
           {topics.length === 0 && crawlStatus !== 'crawling' && (
-            <p className="text-xs text-warning">No topics yet \u2014 type one above or select an industry for suggestions.</p>
+            <p className="text-xs text-warning">No topics yet — type one above or select an industry for suggestions.</p>
           )}
         </div>
       )}
@@ -328,7 +328,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       {step === 3 && (
         <div className="flex flex-col gap-4">
           <h2 className="font-semibold text-lg">Final details</h2>
-          <p className="text-sm text-muted -mt-2">Optional \u2014 helps us write more accurate scan queries.</p>
+          <p className="text-sm text-muted -mt-2">Optional — helps us write more accurate scan queries.</p>
           <div className="relative">
             <Input
               label="City / State"
@@ -340,7 +340,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             {geoLoading && (
               <p className="text-xs text-accent mt-1 flex items-center gap-1">
                 <span className="inline-block w-2 h-2 rounded-full bg-accent animate-pulse" />
-                Auto-detecting your location\u2026
+                Auto-detecting your location…
               </p>
             )}
           </div>
@@ -359,8 +359,8 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           <div className="flex items-center gap-2.5 bg-surface-2 border border-border rounded-xl px-4 py-3">
             <Clock className="w-4 h-4 text-accent shrink-0" />
             <p className="text-sm text-foreground-dim">
-              \ud83d\udd0d Scanning 4 AI engines \u2014{' '}
-              <span className="font-semibold text-foreground">typically 45\u201390 seconds.</span>
+              🔍 Scanning 4 AI engines —{' '}
+              <span className="font-semibold text-foreground">typically 45–90 seconds.</span>
             </p>
           </div>
           <div className="bg-accent/5 border border-accent/20 rounded-xl p-4 flex flex-col gap-3">
@@ -374,18 +374,18 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             <div className="flex flex-col gap-1.5 pt-1 border-t border-accent/10">
               <div className="flex items-center gap-2 text-xs text-foreground-dim">
                 <Lock className="w-3.5 h-3.5 text-success shrink-0" />
-                <span>256-bit SSL encryption \u2014 your data is fully secured</span>
+                <span>256-bit SSL encryption — your data is fully secured</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-foreground-dim">
                 <svg className="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none">
                   <rect width="24" height="24" rx="4" fill="#635BFF" />
                   <path d="M12 6.5c-2 0-3.5 1-3.5 2.8 0 3.2 4.5 2.8 4.5 4.5 0 .8-.7 1.2-1.8 1.2-1.6 0-2.8-.6-2.8-.6v2s1.2.5 2.9.5c2.2 0 3.7-1 3.7-2.9 0-3.1-4.5-2.9-4.5-4.4 0-.7.6-1.1 1.6-1.1 1.4 0 2.5.5 2.5.5V7s-1-.5-2.6-.5z" fill="white" />
                 </svg>
-                <span>Powered by Stripe \u2014 PCI-compliant, trusted by millions</span>
+                <span>Powered by Stripe — PCI-compliant, trusted by millions</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-foreground-dim">
                 <Zap className="w-3.5 h-3.5 text-warning shrink-0" />
-                <span>Instant results \u2014 your report is ready the moment the scan finishes</span>
+                <span>Instant results — your report is ready the moment the scan finishes</span>
               </div>
             </div>
           </div>
@@ -403,7 +403,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         ) : <div />}
         {step < 3 ? (
           <Button variant="primary" onClick={nextStep} loading={crawlStatus === 'crawling'}>
-            {step === 1 && crawlStatus === 'crawling' ? 'Scanning site\u2026' : 'Continue'} <ArrowRight className="w-4 h-4" />
+            {step === 1 && crawlStatus === 'crawling' ? 'Scanning site…' : 'Continue'} <ArrowRight className="w-4 h-4" />
           </Button>
         ) : (
           <Button variant="primary" loading={loading} onClick={handleSubmit}>
