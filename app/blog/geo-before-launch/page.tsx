@@ -7,6 +7,24 @@ import Link from 'next/link'
 export const metadata = {
   title: 'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
   description: 'Most new businesses lose their first 90 days of AI visibility by doing nothing. Here\'s how to build your GEO foundation before you open — so you show up from day one.',
+  openGraph: {
+    title: 'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
+    description: 'Most new businesses lose their first 90 days of AI visibility by doing nothing. Here\'s how to build your GEO foundation before you open — so you show up from day one.',
+    url: 'https://mygeoradar.com/blog/geo-before-launch',
+    siteName: 'MyGeoRadar',
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    type: 'article',
+    publishedTime: '2026-05-09T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
+    description: 'Most new businesses lose their first 90 days of AI visibility by doing nothing. Here\'s how to build your GEO foundation before you open.',
+    images: ['https://mygeoradar.com/og-image.png'],
+  },
 }
 
 export default function GeoBeforeLaunchPage() {
@@ -46,10 +64,10 @@ export default function GeoBeforeLaunchPage() {
               phase: 'Phase 1: Before launch (2&ndash;4 weeks out)',
               items: [
                 'Claim and fully complete your Google Business Profile &mdash; you can add your opening date and set status to &lsquo;opening soon&rsquo;',
-                'Register your business on Bing Places for Business (this directly feeds ChatGPT&apos;s local knowledge)',
+                'Register your business on Bing Places for Business (this directly feeds ChatGPT\'s local knowledge)',
                 'Create profiles on Yelp, Apple Maps, and Facebook Business even before you have reviews',
                 'Choose your business name, address, and phone number format and commit to it &mdash; never change this across platforms',
-                'Set up Wikidata entry if your category warrants it (service businesses usually don&apos;t; notable brands do)',
+                'Set up Wikidata entry if your category warrants it (service businesses usually don\'t; notable brands do)',
               ],
             },
             {

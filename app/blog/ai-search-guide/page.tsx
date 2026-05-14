@@ -7,6 +7,24 @@ import Link from 'next/link'
 export const metadata = {
   title: 'How AI Search Engines Decide Which Businesses to Mention',
   description: 'ChatGPT, Perplexity and Gemini don\'t rank websites — they generate answers. Here\'s exactly how they decide who gets cited.',
+  openGraph: {
+    title: 'How AI Search Engines Decide Which Businesses to Mention',
+    description: 'ChatGPT, Perplexity and Gemini don\'t rank websites — they generate answers. Here\'s exactly how they decide who gets cited.',
+    url: 'https://mygeoradar.com/blog/ai-search-guide',
+    siteName: 'MyGeoRadar',
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    type: 'article',
+    publishedTime: '2026-05-12T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'How AI Search Engines Decide Which Businesses to Mention',
+    description: 'ChatGPT, Perplexity and Gemini don\'t rank websites — they generate answers. Here\'s exactly how they decide who gets cited.',
+    images: ['https://mygeoradar.com/og-image.png'],
+  },
 }
 
 export default function AiSearchGuidePage() {

@@ -7,6 +7,24 @@ import Link from 'next/link'
 export const metadata = {
   title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations About Your Company',
   description: 'AI engines sometimes generate confidently wrong information about businesses — wrong hours, wrong address, wrong services. Here\'s how to find it and fix it before it costs you customers.',
+  openGraph: {
+    title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations About Your Company',
+    description: 'AI engines sometimes generate confidently wrong information about businesses — wrong hours, wrong address, wrong services. Here\'s how to find it and fix it.',
+    url: 'https://mygeoradar.com/blog/ai-hallucination-fix',
+    siteName: 'MyGeoRadar',
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    type: 'article',
+    publishedTime: '2026-05-05T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
+    description: 'AI engines sometimes generate confidently wrong info about businesses — wrong hours, wrong address. Here\'s how to find it and fix it.',
+    images: ['https://mygeoradar.com/og-image.png'],
+  },
 }
 
 export default function AiHallucinationFixPage() {

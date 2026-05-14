@@ -7,6 +7,24 @@ import Link from 'next/link'
 export const metadata = {
   title: 'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
   description: 'AI search doesn\'t send clicks — it gives answers. If your business isn\'t mentioned in those answers, you\'re invisible. Here\'s what zero-click AI means for your growth strategy.',
+  openGraph: {
+    title: 'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
+    description: 'AI search doesn\'t send clicks — it gives answers. If your business isn\'t mentioned in those answers, you\'re invisible. Here\'s what zero-click AI means for your growth strategy.',
+    url: 'https://mygeoradar.com/blog/ai-search-zero-click',
+    siteName: 'MyGeoRadar',
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    type: 'article',
+    publishedTime: '2026-05-11T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
+    description: 'AI search doesn\'t send clicks — it gives answers. If your business isn\'t mentioned in those answers, you\'re invisible.',
+    images: ['https://mygeoradar.com/og-image.png'],
+  },
 }
 
 export default function AiSearchZeroClickPage() {

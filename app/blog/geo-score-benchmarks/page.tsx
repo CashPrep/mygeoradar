@@ -7,6 +7,24 @@ import Link from 'next/link'
 export const metadata = {
   title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
   description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries — and what score you actually need to compete.',
+  openGraph: {
+    title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
+    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries — and what score you actually need to compete.',
+    url: 'https://mygeoradar.com/blog/geo-score-benchmarks',
+    siteName: 'MyGeoRadar',
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    type: 'article',
+    publishedTime: '2026-05-13T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    creator: '@MyGEORadar',
+    title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
+    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries — and what score you actually need to compete.',
+    images: ['https://mygeoradar.com/og-image.png'],
+  },
 }
 
 export default function GeoScoreBenchmarksPage() {
