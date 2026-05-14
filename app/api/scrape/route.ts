@@ -38,12 +38,14 @@ export async function POST(req: NextRequest) {
 
     const base = url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
 
-    // Crawl homepage + /about + /services in parallel for maximum data
+    // Crawl homepage + key sub-pages in parallel
     const pagesToTry = [
       base,
       `${base}/about`,
       `${base}/about-us`,
       `${base}/services`,
+      `${base}/products`,
+      `${base}/faq`,
     ]
 
     const results = await Promise.allSettled(pagesToTry.map(fetchPage))
@@ -52,46 +54,51 @@ export async function POST(req: NextRequest) {
       .filter((r): r is PromiseFulfilledResult<string> => r.status === 'fulfilled')
       .map(r => r.value)
       .join('\n\n---\n\n')
-      .slice(0, 12000) // ~3k tokens of clean text across all pages
+      .slice(0, 16000)
 
     if (!combinedText.trim()) {
       return NextResponse.json({ error: 'Could not fetch that website. Please check the URL.' }, { status: 422 })
     }
 
-    const prompt = `You are an expert at extracting precise business information from website content to power AI visibility scans.
+    const prompt = `You are an expert at understanding businesses and generating the exact search queries real customers type into AI engines like ChatGPT, Perplexity, Google, and Claude.
 
 Website URL: ${base}
-Combined page text (homepage + about + services):
+Combined page content (homepage, about, services, faq):
 ${combinedText}
 
-Your task: extract the most accurate possible information and generate search topics that real customers would type into ChatGPT, Perplexity, or Google to find this exact business.
+Your job: deeply understand what this business does, who their customers are, and generate 15-20 highly specific, realistic search queries that potential customers would type to find this business or a business like it.
 
 Return ONLY valid JSON with this exact structure:
 {
-  "businessName": "The exact brand name (string, or null if unclear)",
+  "businessName": "The exact brand/company name",
   "industry": "Exactly one of: Restaurant, Legal, Home Services, Health, Fitness, Real Estate, SaaS / Tech, E-commerce, Other",
-  "location": "City and state/country if mentioned (e.g. 'Boston, MA'), or null",
+  "location": "City and state if the business is local (e.g. 'Austin, TX'), or null for online businesses",
   "topics": [
-    "3-5 search queries (5-8 words each) that potential customers type into AI search engines to find this type of business"
+    "...15-20 search queries here..."
   ]
 }
 
-Rules for topics (CRITICAL — this is the most important output):
-- Topics must be natural language queries, NOT keywords or marketing copy
-- Include location in 1-2 topics if the business is local (e.g. 'best dentist in Austin TX')
-- Topics should reflect what the business ACTUALLY does, not generic industry phrases
-- Good example: 'emergency plumber available 24 hours Boston'
-- Bad example: 'plumbing services' (too short, not a real query)
-- Vary the query intent: some informational ('how to find a good...'), some transactional ('best X near me'), some comparison ('X vs Y')
-- If you cannot determine something confidently, use null
+Rules for generating topics (CRITICAL):
+- Generate EXACTLY 15-20 queries. More is better as long as they are distinct and realistic.
+- Each query must be 4-10 words, phrased as a natural search question or phrase
+- Cover ALL of these intent categories (at least 2 queries per category):
+  1. TRANSACTIONAL: 'best [service] near me', 'hire a [role] in [city]', '[service] cost'
+  2. INFORMATIONAL: 'how to find a good [service]', 'what does [service] include', 'signs you need [service]'
+  3. COMPARISON: 'best [service] options in [city]', '[type A] vs [type B]'
+  4. PROBLEM-AWARE: describe the customer\'s problem, not the solution ('roof is leaking who to call', 'tooth pain no insurance dentist')
+  5. BRAND-ADJACENT: queries about this type of business that a competitor might rank for
+- If the business is local (has a city/state), include the location in at least 4 queries
+- Queries must be specific to what THIS business actually does — not generic industry phrases
+- Do NOT use marketing language, taglines, or brand names in the topics
+- Do NOT repeat the same concept twice
 - Return exactly the JSON object, nothing else`
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
-      temperature: 0.1,
+      temperature: 0.2,
       response_format: { type: 'json_object' },
-      max_tokens: 600,
+      max_tokens: 1200,
     })
 
     const extracted = JSON.parse(completion.choices[0].message.content!)
@@ -100,7 +107,7 @@ Rules for topics (CRITICAL — this is the most important output):
       businessName: extracted.businessName || null,
       industry:     extracted.industry     || null,
       location:     extracted.location     || null,
-      topics:       Array.isArray(extracted.topics) ? extracted.topics.slice(0, 5) : [],
+      topics:       Array.isArray(extracted.topics) ? extracted.topics.slice(0, 20) : [],
     })
   } catch (err) {
     console.error('Scrape error:', err)
