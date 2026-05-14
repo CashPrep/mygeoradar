@@ -3,32 +3,64 @@ import OpenAI from 'openai'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-function stripHtml(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?<\/script>/gi, '')
-    .replace(/<style[\s\S]*?<\/style>/gi, '')
-    .replace(/<noscript[\s\S]*?<\/noscript>/gi, '')
-    .replace(/<nav[\s\S]*?<\/nav>/gi, '')
-    .replace(/<footer[\s\S]*?<\/footer>/gi, '')
-    .replace(/<header[\s\S]*?<\/header>/gi, '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&[a-z]+;/gi, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
+const FETCH_OPTS = {
+  headers: {
+    'User-Agent': 'Mozilla/5.0 (compatible; MyGeoRadar/1.0; +https://mygeoradar.com)',
+    'Accept': 'text/html,application/xhtml+xml,text/xml',
+    'Accept-Language': 'en-US,en;q=0.9',
+  },
 }
 
-async function fetchPage(url: string): Promise<string> {
-  const res = await fetch(url, {
-    headers: {
-      'User-Agent': 'Mozilla/5.0 (compatible; MyGeoRadar/1.0; +https://mygeoradar.com)',
-      'Accept': 'text/html,application/xhtml+xml',
-      'Accept-Language': 'en-US,en;q=0.9',
-    },
-    signal: AbortSignal.timeout(8000),
-  })
-  if (!res.ok) throw new Error(`HTTP ${res.status}`)
-  const html = await res.text()
-  return stripHtml(html)
+/** Extract only high-signal text: title, meta desc, headings, list items, paragraphs */
+function extractSignal(html: string): string {
+  const get = (pattern: RegExp) => (html.match(pattern) ?? []).map(m => m.replace(/<[^>]+>/g, '').trim()).filter(Boolean)
+
+  const title    = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? ''
+  const metaDesc = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1]?.trim() ?? ''
+  const h1s      = get(/<h1[^>]*>(.*?)<\/h1>/gis)
+  const h2s      = get(/<h2[^>]*>(.*?)<\/h2>/gis)
+  const h3s      = get(/<h3[^>]*>(.*?)<\/h3>/gis)
+  const lis      = get(/<li[^>]*>(.*?)<\/li>/gis).slice(0, 30)
+  const ps       = get(/<p[^>]*>(.*?)<\/p>/gis).slice(0, 20)
+
+  return [
+    title       && `TITLE: ${title}`,
+    metaDesc    && `META: ${metaDesc}`,
+    h1s.length  && `H1: ${h1s.join(' | ')}`,
+    h2s.length  && `H2: ${h2s.join(' | ')}`,
+    h3s.length  && `H3: ${h3s.join(' | ')}`,
+    lis.length  && `ITEMS: ${lis.join(' | ')}`,
+    ps.length   && `BODY: ${ps.join(' ')}`,
+  ].filter(Boolean).join('\n').slice(0, 2500)
+}
+
+async function fetchSignal(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, { ...FETCH_OPTS, signal: AbortSignal.timeout(7000) })
+    if (!res.ok) return null
+    const html = await res.text()
+    if (html.length < 200) return null // likely JS shell
+    const signal = extractSignal(html)
+    return signal.length > 80 ? signal : null
+  } catch {
+    return null
+  }
+}
+
+/** Parse sitemap.xml and return up to 8 useful URLs */
+async function getSitemapUrls(base: string): Promise<string[]> {
+  try {
+    const res = await fetch(`${base}/sitemap.xml`, { ...FETCH_OPTS, signal: AbortSignal.timeout(5000) })
+    if (!res.ok) return []
+    const xml = await res.text()
+    const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
+      .map(m => m[1].trim())
+      .filter(u => !/\.(jpg|png|gif|pdf|webp|svg)/i.test(u))
+      .filter(u => /(service|product|about|faq|offer|solution|feature|pricing|how)/i.test(u))
+    return urls.slice(0, 8)
+  } catch {
+    return []
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -38,68 +70,65 @@ export async function POST(req: NextRequest) {
 
     const base = url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
 
-    const pagesToTry = [
+    // Priority order: highest-signal pages first
+    const priorityPages = [
+      `${base}/services`,
+      `${base}/products`,
+      `${base}/solutions`,
+      `${base}/offerings`,
       base,
       `${base}/about`,
       `${base}/about-us`,
-      `${base}/services`,
-      `${base}/products`,
       `${base}/faq`,
+      `${base}/pricing`,
     ]
 
-    const results = await Promise.allSettled(pagesToTry.map(fetchPage))
+    // Fetch priority pages in parallel
+    const priorityResults = await Promise.all(priorityPages.map(fetchSignal))
+    let signals = priorityResults.filter((s): s is string => s !== null)
 
-    const combinedText = results
-      .filter((r): r is PromiseFulfilledResult<string> => r.status === 'fulfilled')
-      .map(r => r.value)
-      .join('\n\n---\n\n')
-      .slice(0, 16000)
+    // If we got fewer than 2 good pages, try sitemap fallback
+    if (signals.length < 2) {
+      const sitemapUrls = await getSitemapUrls(base)
+      const sitemapResults = await Promise.all(sitemapUrls.map(fetchSignal))
+      signals = [...signals, ...sitemapResults.filter((s): s is string => s !== null)]
+    }
 
-    if (!combinedText.trim()) {
+    if (signals.length === 0) {
       return NextResponse.json({ error: 'Could not fetch that website. Please check the URL.' }, { status: 422 })
     }
 
-    const prompt = `You are an expert at understanding businesses and generating the exact search queries real customers type into AI engines like ChatGPT, Perplexity, Google, and Claude.
+    // Cap total context — each signal already capped at 2500 chars, take top 5 pages
+    const context = signals.slice(0, 5).join('\n\n---\n\n')
 
-Website URL: ${base}
-Combined page content (homepage, about, services, faq):
-${combinedText}
+    const prompt = `You are an expert business analyst. Analyze this website and generate realistic search queries customers use to find this type of business.
 
-Your job: deeply understand what this business does, who their customers are, and generate 40-50 highly specific, realistic search queries that potential customers would type to find this business or a business like it.
+URL: ${base}
+Extracted content:
+${context}
 
-Return ONLY valid JSON with this exact structure:
+Return ONLY this JSON:
 {
-  "businessName": "The exact brand/company name",
-  "industry": "Exactly one of: Restaurant, Legal, Home Services, Health, Fitness, Real Estate, SaaS / Tech, E-commerce, Other",
-  "location": "City and state if the business is local (e.g. 'Austin, TX'), or null for online businesses",
-  "topics": [
-    "...40-50 search queries here..."
-  ]
+  "businessName": "exact brand name",
+  "industry": "one of: Restaurant, Legal, Home Services, Health, Fitness, Real Estate, SaaS / Tech, E-commerce, Other",
+  "location": "City, State if local — else null",
+  "topics": ["40-50 search queries"]
 }
 
-Rules for generating topics (CRITICAL):
-- Generate EXACTLY 40-50 queries. More is better as long as they are distinct and realistic.
-- Each query must be 4-10 words, phrased as a natural search question or phrase
-- Cover ALL of these intent categories (at least 6 queries per category):
-  1. TRANSACTIONAL: 'best [service] near me', 'hire a [role] in [city]', '[service] cost', 'affordable [service]'
-  2. INFORMATIONAL: 'how to find a good [service]', 'what does [service] include', 'signs you need [service]', 'how much does [service] cost'
-  3. COMPARISON: 'best [service] options in [city]', '[type A] vs [type B]', 'top rated [service] [city]'
-  4. PROBLEM-AWARE: describe the customer's problem, not the solution ('roof is leaking who to call', 'tooth pain no insurance dentist')
-  5. BRAND-ADJACENT: queries about this type of business that a competitor might rank for
-  6. LONG-TAIL SPECIFIC: highly specific queries combining service + location + qualifier ('24 hour emergency [service] [city] [state]')
-  7. QUESTION-BASED: full questions a user might ask ChatGPT ('who is the best [service] in [city]', 'what should I look for in a [service provider]')
-- If the business is local (has a city/state), include the location in at least 8 queries
-- Queries must be specific to what THIS business actually does — not generic industry phrases
-- Do NOT use marketing language, taglines, or brand names in the topics
-- Do NOT repeat the same concept twice
-- Return exactly the JSON object, nothing else`
+Topic rules:
+- 40-50 queries total, each 4-10 words
+- Natural language a real customer types — no marketing speak, no brand names
+- Cover: transactional (best X near me, hire X, X cost), informational (how to X, what does X include), comparison (top X in city, X vs Y), problem-aware (customer's pain not the solution), long-tail (emergency X city state), question-based (who is best X in city)
+- If local, include location in 8+ queries
+- Be specific to THIS business — not generic industry boilerplate
+- No duplicate concepts`
 
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [{ role: 'user', content: prompt }],
       temperature: 0.2,
       response_format: { type: 'json_object' },
-      max_tokens: 2800,
+      max_tokens: 2200,
     })
 
     const extracted = JSON.parse(completion.choices[0].message.content!)
