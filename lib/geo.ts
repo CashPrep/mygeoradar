@@ -1,5 +1,5 @@
 import OpenAI from 'openai'
-import type { ScanReport, EngineResult, ActionItem, VisibilityLevel } from './types'
+import type { ScanReport, EngineResult, ActionItem, VisibilityLevel, AiEngine } from './types'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
@@ -22,7 +22,7 @@ async function scoreBatch(
   scan: { business_name: string; website: string; location?: string | null; industry?: string | null },
   topics: string[],
   isFirst: boolean
-): Promise<{ engines: Omit<EngineResult, 'prompts' | 'rawResponse' | 'competitorsInResponse' | 'summary' | 'overallScore'> & { overallScore: number; summary?: string; prompts?: string[]; rawResponse?: string; competitorsInResponse?: string[] } }[]> {
+): Promise<any[]> {
   const locationStr = scan.location ? ` in ${scan.location}` : ''
   const topicList   = topics.join(', ')
 
@@ -93,23 +93,26 @@ export async function runGeoScan(scan: {
   industry?: string | null
 }): Promise<Omit<ScanReport, 'id' | 'createdAt' | 'businessName' | 'website' | 'topics' | 'location' | 'industry' | 'paid'>> {
 
-  const batches  = chunkArray(scan.topics, BATCH_SIZE)
-  const isFirst  = true
+  const batches = chunkArray(scan.topics, BATCH_SIZE)
 
-  // Run batches sequentially to avoid rate limits; first batch gets full metadata
+  // Run batches sequentially; first batch gets full metadata fields
   const batchResults = await batches.reduce<Promise<any[][]>>(async (accP, batch, idx) => {
     const acc = await accP
     const result = await scoreBatch(scan, batch, idx === 0)
     return [...acc, result]
   }, Promise.resolve([]))
 
-  // Merge all batches: stitch topic arrays together per engine
-  const engineOrder = ['chatgpt', 'perplexity', 'gemini', 'claude']
-  const engineLabels: Record<string, string> = { chatgpt: 'ChatGPT', perplexity: 'Perplexity', gemini: 'Gemini', claude: 'Claude' }
+  const engineOrder: AiEngine[] = ['chatgpt', 'perplexity', 'gemini', 'claude']
+  const engineLabels: Record<AiEngine, string> = {
+    chatgpt:    'ChatGPT',
+    perplexity: 'Perplexity',
+    gemini:     'Gemini',
+    claude:     'Claude',
+  }
 
   const engines: EngineResult[] = engineOrder.map((engineId, eIdx) => {
     const firstBatchEngine = batchResults[0]?.[eIdx] ?? {}
-    const allTopics = batchResults.flatMap(batchEngines => {
+    const allTopics = batchResults.flatMap((batchEngines: any[]) => {
       const eng = batchEngines?.[eIdx]
       return (eng?.topics ?? []).map((t: any) => ({
         ...t,
@@ -124,7 +127,7 @@ export async function runGeoScan(scan: {
 
     return {
       engine:                engineId,
-      engineLabel:           engineLabels[engineId] ?? engineId,
+      engineLabel:           engineLabels[engineId],
       overallScore:          Math.round(firstBatchEngine.overallScore ?? avgScore),
       summary:               firstBatchEngine.summary               ?? '',
       prompts:               firstBatchEngine.prompts               ?? [],
@@ -134,7 +137,6 @@ export async function runGeoScan(scan: {
     }
   })
 
-  // Get top-level actions from a dedicated small call
   const actionPrompt = `You are a GEO analyst. Based on this business profile, return exactly 5 prioritised action items and 3 quick wins.
 
 Business: ${scan.business_name} | ${scan.website}${scan.location ? ` in ${scan.location}` : ''} | Industry: ${scan.industry || 'Not specified'}
