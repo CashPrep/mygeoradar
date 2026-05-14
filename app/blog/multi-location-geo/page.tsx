@@ -18,7 +18,7 @@ export default function MultiLocationGeoPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Badge variant="accent">Local GEO</Badge>
-            <span className="text-xs text-muted">May 13, 2026 &middot; 8 min read</span>
+            <span className="text-xs text-muted">May 7, 2026 &middot; 8 min read</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
             Multi-Location GEO: How Chains and Franchises Should Handle AI Visibility
@@ -45,7 +45,7 @@ export default function MultiLocationGeoPage() {
           {[
             {
               title: 'Brand-level GEO',
-              body: 'This covers the parent entity: what the brand is, what it stands for, what it offers. It lives on your main domain, in press coverage, in Wikipedia/Wikidata if applicable, and in national directories. Brand-level GEO determines whether AI engines mention you in category-level queries like "what are the biggest fast casual chains in the US."',
+              body: 'This covers the parent entity: what the brand is, what it stands for, what it offers. It lives on your main domain, in press coverage, in Wikipedia/Wikidata if applicable, and in national directories. Brand-level GEO determines whether AI engines mention you in category-level queries like &ldquo;what are the biggest fast casual chains in the US.&rdquo;',
             },
             {
               title: 'Location-level GEO',
@@ -54,7 +54,7 @@ export default function MultiLocationGeoPage() {
           ].map((p) => (
             <div key={p.title}>
               <h3 className="font-semibold text-foreground mb-1">{p.title}</h3>
-              <p>{p.body}</p>
+              <p dangerouslySetInnerHTML={{ __html: p.body }} />
             </div>
           ))}
 
@@ -69,11 +69,11 @@ export default function MultiLocationGeoPage() {
                 'Main domain: Organization schema with name, logo, founding date, description, and sameAs links to all location pages',
                 'Each location page: LocalBusiness schema (subtype of your category) with its own address, phone, geo coordinates, hours, and review aggregate',
                 'On location pages: parentOrganization property pointing back to the main brand entity',
-                'Breadcrumb schema on every location page showing Brand → City → Location',
+                'Breadcrumb schema on every location page showing Brand &rarr; City &rarr; Location',
               ].map((item) => (
                 <li key={item} className="flex items-start gap-2">
                   <span className="text-accent mt-1 shrink-0">&#8250;</span>
-                  {item}
+                  <span dangerouslySetInnerHTML={{ __html: item }} />
                 </li>
               ))}
             </ul>
@@ -117,7 +117,7 @@ export default function MultiLocationGeoPage() {
 
         <div className="mt-10 p-6 bg-surface-2 border border-border rounded-xl flex flex-col gap-4">
           <p className="font-semibold text-foreground">Scan any of your locations for free</p>
-          <p className="text-sm text-foreground-dim">See exactly how AI engines describe each location — and get a prioritized action plan to improve it.</p>
+          <p className="text-sm text-foreground-dim">See exactly how AI engines describe each location &mdash; and get a prioritized action plan to improve it.</p>
           <Link
             href="/scan"
             className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors w-fit"

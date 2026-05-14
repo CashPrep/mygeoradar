@@ -18,7 +18,7 @@ export default function AiSearchGuidePage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Badge variant="accent">AI Search</Badge>
-            <span className="text-xs text-muted">May 10, 2026 &middot; 7 min read</span>
+            <span className="text-xs text-muted">May 12, 2026 &middot; 7 min read</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
             How AI Search Engines Decide Which Businesses to Mention

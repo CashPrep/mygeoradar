@@ -18,7 +18,7 @@ export default function AiHallucinationFixPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Badge variant="accent">Technical GEO</Badge>
-            <span className="text-xs text-muted">May 13, 2026 &middot; 7 min read</span>
+            <span className="text-xs text-muted">May 5, 2026 &middot; 7 min read</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
             When AI Gets Your Business Wrong: How to Fix AI Hallucinations About Your Company
@@ -40,17 +40,17 @@ export default function AiHallucinationFixPage() {
 
           <h2 className="text-xl font-bold text-foreground mt-4">The most common AI errors about businesses</h2>
           {[
-            { error: 'Wrong hours', cause: 'AI trained on old data, or different seasonal hours from a past year persist in training sets', impact: 'High — directly causes failed visits' },
-            { error: 'Wrong address', cause: 'Old location data, especially after a move. The old address may be more cited than the new one', impact: 'Critical — sends customers to the wrong place' },
-            { error: 'Services you don\'t offer', cause: 'AI confused you with a similar business, or you used to offer a service and removed it', impact: 'Medium — creates wrong expectations, damaged trust' },
-            { error: 'Wrong ownership or staff', cause: 'Business sold or staff changed, but old bios persist in cited sources', impact: 'Medium — confusing for returning customers' },
-            { error: 'Wrong price range or tier', cause: 'Pricing has changed, or AI is conflating you with a different business in the same category', impact: 'Medium-High — filters out the right customers, attracts wrong ones' },
-            { error: 'Closed or permanently shut', cause: 'AI has encountered a news article or review mentioning you closed, possibly temporarily, and treats it as fact', impact: 'Critical — eliminates you from consideration entirely' },
+            { error: 'Wrong hours', cause: 'AI trained on old data, or different seasonal hours from a past year persist in training sets', impact: 'High &mdash; directly causes failed visits' },
+            { error: 'Wrong address', cause: 'Old location data, especially after a move. The old address may be more cited than the new one', impact: 'Critical &mdash; sends customers to the wrong place' },
+            { error: 'Services you don\'t offer', cause: 'AI confused you with a similar business, or you used to offer a service and removed it', impact: 'Medium &mdash; creates wrong expectations, damaged trust' },
+            { error: 'Wrong ownership or staff', cause: 'Business sold or staff changed, but old bios persist in cited sources', impact: 'Medium &mdash; confusing for returning customers' },
+            { error: 'Wrong price range or tier', cause: 'Pricing has changed, or AI is conflating you with a different business in the same category', impact: 'Medium-High &mdash; filters out the right customers, attracts wrong ones' },
+            { error: 'Closed or permanently shut', cause: 'AI has encountered a news article or review mentioning you closed, possibly temporarily, and treats it as fact', impact: 'Critical &mdash; eliminates you from consideration entirely' },
           ].map((row) => (
             <div key={row.error} className="p-4 bg-surface-2 border border-border rounded-xl">
               <div className="flex items-start justify-between gap-4 mb-1">
                 <p className="font-semibold text-foreground">{row.error}</p>
-                <span className="text-xs text-foreground-dim shrink-0">Impact: <span className="text-foreground">{row.impact}</span></span>
+                <span className="text-xs text-foreground-dim shrink-0">Impact: <span className="text-foreground" dangerouslySetInnerHTML={{ __html: row.impact }} /></span>
               </div>
               <p className="text-sm">Cause: {row.cause}</p>
             </div>
@@ -63,14 +63,14 @@ export default function AiHallucinationFixPage() {
           <ul className="flex flex-col gap-2 list-none">
             {[
               'Run a MyGeoRadar scan to see the exact responses ChatGPT, Perplexity, Gemini, and Claude generate about your business',
-              'Manually ask ChatGPT: "What are the hours for [business name] in [city]?" and "Is [business name] still open?"',
-              'Ask Perplexity: "Tell me about [business name] — what do they offer and where are they located?"',
+              'Manually ask ChatGPT: &ldquo;What are the hours for [business name] in [city]?&rdquo; and &ldquo;Is [business name] still open?&rdquo;',
+              'Ask Perplexity: &ldquo;Tell me about [business name] &mdash; what do they offer and where are they located?&rdquo;',
               'Check Gemini via Google Search by typing your business name and looking at the AI Overview',
               'Document every error with a screenshot and note which AI engine produced it',
             ].map((item) => (
               <li key={item} className="flex items-start gap-2 text-sm">
                 <span className="text-accent mt-1 shrink-0">&#8250;</span>
-                {item}
+                <span dangerouslySetInnerHTML={{ __html: item }} />
               </li>
             ))}
           </ul>
@@ -90,7 +90,7 @@ export default function AiHallucinationFixPage() {
             },
             {
               title: '3. Publish a correction page on your website',
-              body: 'Create a clearly structured page (or update your About/Contact pages) with your correct information in plain text and in schema markup. Title it something specific like "[Business Name] — Current Hours, Address, and Services." AI engines that scrape your site will encounter this.',
+              body: 'Create a clearly structured page (or update your About/Contact pages) with your correct information in plain text and in schema markup. Title it something specific like &ldquo;[Business Name] &mdash; Current Hours, Address, and Services.&rdquo; AI engines that scrape your site will encounter this.',
             },
             {
               title: '4. Add schema that overrides the error',
@@ -98,24 +98,24 @@ export default function AiHallucinationFixPage() {
             },
             {
               title: '5. Create fresh citations that mention the correct information',
-              body: 'A recent press release, a blog post, a social media post that mentions your current address and hours all become new data points for AI retrieval. Recency helps — AI engines weight newer sources more heavily for factual details.',
+              body: 'A recent press release, a blog post, a social media post that mentions your current address and hours all become new data points for AI retrieval. Recency helps &mdash; AI engines weight newer sources more heavily for factual details.',
             },
           ].map((p) => (
             <div key={p.title}>
               <h3 className="font-semibold text-foreground mb-1">{p.title}</h3>
-              <p>{p.body}</p>
+              <p dangerouslySetInnerHTML={{ __html: p.body }} />
             </div>
           ))}
 
           <h2 className="text-xl font-bold text-foreground mt-4">How long until the errors are corrected?</h2>
           <p>
-            For AI engines with real-time retrieval (Perplexity, Gemini with live search, Bing-powered ChatGPT): 1 to 4 weeks after you update primary sources. For AI engines relying on training data: the next model update, which could be anywhere from a few weeks to several months. This is why ongoing monitoring matters — you need to verify the correction actually propagated.
+            For AI engines with real-time retrieval (Perplexity, Gemini with live search, Bing-powered ChatGPT): 1 to 4 weeks after you update primary sources. For AI engines relying on training data: the next model update, which could be anywhere from a few weeks to several months. This is why ongoing monitoring matters &mdash; you need to verify the correction actually propagated.
           </p>
         </div>
 
         <div className="mt-10 p-6 bg-surface-2 border border-border rounded-xl flex flex-col gap-4">
           <p className="font-semibold text-foreground">See what AI engines are saying about your business right now</p>
-          <p className="text-sm text-foreground-dim">Free scan in 60 seconds. We show you the exact AI-generated answers — errors and all.</p>
+          <p className="text-sm text-foreground-dim">Free scan in 60 seconds. We show you the exact AI-generated answers &mdash; errors and all.</p>
           <Link
             href="/scan"
             className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors w-fit"

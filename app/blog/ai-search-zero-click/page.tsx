@@ -18,7 +18,7 @@ export default function AiSearchZeroClickPage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Badge variant="accent">AI Search</Badge>
-            <span className="text-xs text-muted">May 13, 2026 &middot; 7 min read</span>
+            <span className="text-xs text-muted">May 11, 2026 &middot; 7 min read</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
             The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer
@@ -30,7 +30,7 @@ export default function AiSearchZeroClickPage() {
 
         <div className="flex flex-col gap-6 text-foreground-dim leading-relaxed">
 
-          <h2 className="text-xl font-bold text-foreground mt-4">We&apos;ve been here before — but this time it&apos;s different</h2>
+          <h2 className="text-xl font-bold text-foreground mt-4">We&apos;ve been here before &mdash; but this time it&apos;s different</h2>
           <p>
             In 2018, Google introduced featured snippets and started answering questions directly in search results. SEOs called it the &ldquo;zero-click apocalypse.&rdquo; Traffic to many information sites dropped. But businesses that sold local services largely survived, because Google still needed to point users somewhere.
           </p>
@@ -40,10 +40,10 @@ export default function AiSearchZeroClickPage() {
 
           <h2 className="text-xl font-bold text-foreground mt-4">The new math of discovery</h2>
           <p>
-            In the old model, visibility meant ranking. Being on page 1 guaranteed some percentage of users would see your listing. The conversion chain was: search → see listing → click → land on site → convert.
+            In the old model, visibility meant ranking. Being on page 1 guaranteed some percentage of users would see your listing. The conversion chain was: search &rarr; see listing &rarr; click &rarr; land on site &rarr; convert.
           </p>
           <p>
-            In the AI model, visibility means being mentioned. The conversion chain compresses to: ask AI → get recommendation → contact business directly. The website visit may never happen &mdash; and yet the lead is real. This means your website traffic is no longer a reliable proxy for your actual visibility. A business could be getting recommended by AI hundreds of times per week and see no uptick in analytics.
+            In the AI model, visibility means being mentioned. The conversion chain compresses to: ask AI &rarr; get recommendation &rarr; contact business directly. The website visit may never happen &mdash; and yet the lead is real. This means your website traffic is no longer a reliable proxy for your actual visibility. A business could be getting recommended by AI hundreds of times per week and see no uptick in analytics.
           </p>
 
           <h2 className="text-xl font-bold text-foreground mt-4">What zero-click AI means for your metrics</h2>
@@ -54,7 +54,7 @@ export default function AiSearchZeroClickPage() {
             },
             {
               title: 'Brand recall matters more than it has in years',
-              body: 'When AI mentions your business by name, users remember that name. They may search for it directly later, ask a follow-up question, or recommend it to someone else. AI recommendation is the new word-of-mouth — and it scales in a way human referrals never could.',
+              body: 'When AI mentions your business by name, users remember that name. They may search for it directly later, ask a follow-up question, or recommend it to someone else. AI recommendation is the new word-of-mouth &mdash; and it scales in a way human referrals never could.',
             },
             {
               title: 'Your competitors\' websites aren\'t necessarily winning',
@@ -62,7 +62,7 @@ export default function AiSearchZeroClickPage() {
             },
             {
               title: 'First mention advantage is real',
-              body: 'When an AI engine mentions a business first in an answer, users are disproportionately likely to choose that option. Position matters in AI answers just as it did in search — but the signals that determine position are completely different.',
+              body: 'When an AI engine mentions a business first in an answer, users are disproportionately likely to choose that option. Position matters in AI answers just as it did in search &mdash; but the signals that determine position are completely different.',
             },
           ].map((p) => (
             <div key={p.title}>
@@ -77,8 +77,8 @@ export default function AiSearchZeroClickPage() {
           </p>
           <ul className="flex flex-col gap-3 list-none">
             {[
-              { item: 'Entity dominance', detail: 'Your business name, category, location, and key attributes must be consistent and authoritative across every online touchpoint. AI engines build a confidence model — the more consistent the data, the higher the confidence.' },
-              { item: 'Citation breadth', detail: 'Get mentioned in as many credible, relevant sources as possible. Review platforms, local directories, press coverage, industry publications — each one adds a data point to your entity.' },
+              { item: 'Entity dominance', detail: 'Your business name, category, location, and key attributes must be consistent and authoritative across every online touchpoint. AI engines build a confidence model &mdash; the more consistent the data, the higher the confidence.' },
+              { item: 'Citation breadth', detail: 'Get mentioned in as many credible, relevant sources as possible. Review platforms, local directories, press coverage, industry publications &mdash; each one adds a data point to your entity.' },
               { item: 'Topical depth', detail: 'Create content that directly answers the questions your customers are asking AI engines. When the AI needs to answer a question about your category, your content should be the natural source.' },
             ].map(({ item, detail }) => (
               <li key={item} className="flex items-start gap-3">
@@ -93,7 +93,7 @@ export default function AiSearchZeroClickPage() {
 
           <h2 className="text-xl font-bold text-foreground mt-4">Measuring what you can&apos;t track directly</h2>
           <p>
-            Since AI-driven discovery often bypasses your website entirely, you need leading indicators. Monthly branded search volume on Google is one proxy — if more people are searching your business name directly, something is driving awareness. Direct traffic spikes, call volume, and &ldquo;how did you hear about us&rdquo; responses that mention AI are others.
+            Since AI-driven discovery often bypasses your website entirely, you need leading indicators. Monthly branded search volume on Google is one proxy &mdash; if more people are searching your business name directly, something is driving awareness. Direct traffic spikes, call volume, and &ldquo;how did you hear about us&rdquo; responses that mention AI are others.
           </p>
           <p>
             The most direct measurement is running regular AI visibility scans. If AI engines are mentioning you more consistently and more prominently over time, the downstream business impact will follow &mdash; even if traditional analytics can&apos;t capture it directly.
