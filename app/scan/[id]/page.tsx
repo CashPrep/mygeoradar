@@ -14,7 +14,7 @@ import {
   Radar, Share2, RefreshCw, Zap, Code2, MessageSquareText,
   MapPin, CheckCircle2, XCircle, AlertCircle, ChevronDown, ChevronUp,
   Swords, TrendingUp, ArrowRight, LineChart, Wrench, CalendarClock,
-  Mail, Loader2
+  Mail, Loader2, Search, Eye, EyeOff
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -69,9 +69,34 @@ function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size
 
 const ENGINE_ICONS: Record<string, string> = { chatgpt: '🤖', perplexity: '🔍', gemini: '✨', claude: '🧠' }
 
-function EngineCard({ engine }: { engine: EngineResult }) {
+/**
+ * Highlights occurrences of businessName in text with a yellow-tinted <mark>.
+ * If the name is not present the text is returned as-is inside a <span>.
+ */
+function HighlightedResponse({ text, businessName }: { text: string; businessName: string }) {
+  if (!businessName || !text.toLowerCase().includes(businessName.toLowerCase())) {
+    return <span>{text}</span>
+  }
+  const parts = text.split(new RegExp(`(${businessName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'))
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === businessName.toLowerCase()
+          ? <mark key={i} className="bg-accent/20 text-accent rounded px-0.5 font-semibold not-italic">{part}</mark>
+          : <span key={i}>{part}</span>
+      )}
+    </>
+  )
+}
+
+function EngineCard({ engine, businessName }: { engine: EngineResult; businessName: string }) {
+  const [showResponse, setShowResponse] = useState(false)
+  const isMentioned = engine.rawResponse &&
+    engine.rawResponse.toLowerCase().includes(businessName.toLowerCase())
+
   return (
     <div className="card p-5 flex flex-col gap-4">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-xl">{ENGINE_ICONS[engine.engine] ?? '🔮'}</span>
@@ -79,7 +104,69 @@ function EngineCard({ engine }: { engine: EngineResult }) {
         </div>
         <ScoreRing score={engine.overallScore} size={56} strokeWidth={5} />
       </div>
+
+      {/* Prompt pills */}
+      {engine.prompts && engine.prompts.length > 0 && (
+        <div className="flex flex-col gap-1.5">
+          <span className="text-xs text-muted uppercase tracking-wide font-semibold flex items-center gap-1">
+            <Search className="w-3 h-3" /> Queries tested
+          </span>
+          <div className="flex flex-col gap-1">
+            {engine.prompts.map((p, i) => (
+              <div key={i} className="flex items-center gap-1.5 text-xs text-foreground-dim bg-surface-2 border border-border rounded-lg px-2.5 py-1.5 font-mono">
+                <Search className="w-3 h-3 text-muted flex-shrink-0" />
+                &ldquo;{p}&rdquo;
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Summary */}
       <p className="text-sm text-foreground-dim leading-relaxed">{engine.summary}</p>
+
+      {/* Raw AI response toggle */}
+      {engine.rawResponse && (
+        <div className="border border-border rounded-xl overflow-hidden">
+          <button
+            onClick={() => setShowResponse(v => !v)}
+            className={clsx(
+              'w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold transition-colors',
+              isMentioned
+                ? 'bg-success/8 text-success hover:bg-success/12'
+                : 'bg-danger/8 text-danger hover:bg-danger/12'
+            )}
+          >
+            <span className="flex items-center gap-1.5">
+              {showResponse ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              {isMentioned
+                ? `✓ ${engine.engineLabel} mentioned your brand — see what it said`
+                : `✗ ${engine.engineLabel} didn't mention you — see what it said instead`
+              }
+            </span>
+            {showResponse ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
+          {showResponse && (
+            <div className="px-3 py-3 bg-surface-2 text-sm text-foreground-dim leading-relaxed italic border-t border-border">
+              <HighlightedResponse text={engine.rawResponse} businessName={businessName} />
+              {engine.competitorsInResponse && engine.competitorsInResponse.length > 0 && (
+                <div className="mt-2.5 pt-2.5 border-t border-border not-italic">
+                  <span className="text-xs text-muted uppercase tracking-wide font-semibold">Competitors named instead:</span>
+                  <div className="flex flex-wrap gap-1.5 mt-1.5">
+                    {engine.competitorsInResponse.map((c) => (
+                      <span key={c} className="text-xs px-2 py-0.5 bg-danger/8 border border-danger/20 rounded-full text-danger font-medium">
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Topics */}
       <div className="flex flex-col gap-2">
         {engine.topics.map((t) => (
           <div key={t.topic}>
@@ -864,7 +951,9 @@ export default function ScanResultPage() {
 
         {/* Engine cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          {report.engines.map((engine) => <EngineCard key={engine.engine} engine={engine} />)}
+          {report.engines.map((engine) => (
+            <EngineCard key={engine.engine} engine={engine} businessName={report.businessName} />
+          ))}
         </div>
 
         {/* Action plan */}

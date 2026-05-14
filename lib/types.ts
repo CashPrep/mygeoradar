@@ -17,6 +17,12 @@ export interface EngineResult {
   overallScore: number
   topics:       TopicResult[]
   summary:      string
+  /** The exact query/queries sent to this engine */
+  prompts?:     string[]
+  /** The raw simulated AI response (full text, unscored) */
+  rawResponse?: string
+  /** Competitor brand names that appeared in the raw response */
+  competitorsInResponse?: string[]
 }
 
 export interface ActionItem {

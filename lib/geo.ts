@@ -55,6 +55,12 @@ Return ONLY valid JSON. No markdown, no explanation.
       "engineLabel": "ChatGPT",
       "overallScore": 45,
       "summary": "2-3 sentence realistic summary of how ChatGPT currently handles queries about this business and why it scores this way.",
+      "prompts": [
+        "best ${topicList.split(',')[0].trim()}${locationStr}",
+        "top ${scan.industry || 'business'} near me${locationStr}"
+      ],
+      "rawResponse": "A realistic 3-5 sentence paragraph that this AI engine would actually output when asked about the primary topic. Write it as if you ARE the AI engine responding to a user query. Mention competing brands by name if they would realistically appear. Only mention ${scan.business_name} if they would realistically be cited — do not force it in.",
+      "competitorsInResponse": ["Competitor Name 1", "Competitor Name 2"],
       "topics": [
         {
           "topic": "exact topic string from input",
@@ -92,6 +98,9 @@ Rules:
 - All scores are integers 0–100
 - Be realistic — most small/unknown businesses will score 20–50, not 70+
 - snippet should sound like an actual AI response, not a score description
+- prompts must be 2 realistic search queries a user would type to find this type of business
+- rawResponse must be a realistic full AI answer (3-5 sentences) — be specific about which brands/sources ARE mentioned if this business is NOT cited
+- competitorsInResponse: array of brand names that appear in the rawResponse (empty array [] if none)
 `.trim()
 
   const completion = await openai.chat.completions.create({
@@ -99,7 +108,7 @@ Rules:
     messages:        [{ role: 'user', content: prompt }],
     temperature:     0.3,
     response_format: { type: 'json_object' },
-    max_tokens:      4000,
+    max_tokens:      5000,
   })
 
   const raw = JSON.parse(completion.choices[0].message.content!)
@@ -107,6 +116,9 @@ Rules:
   const engines: EngineResult[] = (raw.engines ?? []).map((e: EngineResult) => ({
     ...e,
     overallScore: Math.round(e.overallScore),
+    prompts:      e.prompts ?? [],
+    rawResponse:  e.rawResponse ?? '',
+    competitorsInResponse: e.competitorsInResponse ?? [],
     topics: e.topics.map((t) => ({
       ...t,
       score: Math.round(t.score),
