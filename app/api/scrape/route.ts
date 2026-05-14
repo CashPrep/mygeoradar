@@ -11,10 +11,22 @@ const FETCH_OPTS = {
   },
 }
 
+/** Polyfill for matchAll — works on any TS target */
+function matchAllCompat(str: string, pattern: RegExp): RegExpExecArray[] {
+  const results: RegExpExecArray[] = []
+  const re = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : pattern.flags + 'g')
+  let m: RegExpExecArray | null
+  while ((m = re.exec(str)) !== null) results.push(m)
+  return results
+}
+
 /** Extract only high-signal text: title, meta desc, headings, list items, paragraphs */
 function extractSignal(html: string): string {
-  // Use [\s\S] instead of the /s dotAll flag for broad TS target compatibility
-  const get = (pattern: RegExp) => (html.match(pattern) ?? []).map(m => m.replace(/<[^>]+>/g, '').trim()).filter(Boolean)
+  // [\s\S] instead of /s dotAll flag; matchAllCompat instead of matchAll spread
+  const get = (pattern: RegExp) =>
+    matchAllCompat(html, pattern)
+      .map(m => (m[1] ?? m[0]).replace(/<[^>]+>/g, '').trim())
+      .filter(Boolean)
 
   const title    = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? ''
   const metaDesc = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1]?.trim() ?? ''
@@ -40,7 +52,7 @@ async function fetchSignal(url: string): Promise<string | null> {
     const res = await fetch(url, { ...FETCH_OPTS, signal: AbortSignal.timeout(7000) })
     if (!res.ok) return null
     const html = await res.text()
-    if (html.length < 200) return null // likely JS shell
+    if (html.length < 200) return null
     const signal = extractSignal(html)
     return signal.length > 80 ? signal : null
   } catch {
@@ -53,8 +65,8 @@ async function getSitemapUrls(base: string): Promise<string[]> {
   try {
     const res = await fetch(`${base}/sitemap.xml`, { ...FETCH_OPTS, signal: AbortSignal.timeout(5000) })
     if (!res.ok) return []
-    const xml = await res.text()
-    const urls = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)]
+    const xml  = await res.text()
+    const urls = matchAllCompat(xml, /<loc>([^<]+)<\/loc>/g)
       .map(m => m[1].trim())
       .filter(u => !/\.(jpg|png|gif|pdf|webp|svg)/i.test(u))
       .filter(u => /(service|product|about|faq|offer|solution|feature|pricing|how)/i.test(u))
@@ -71,7 +83,6 @@ export async function POST(req: NextRequest) {
 
     const base = url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
 
-    // Priority order: highest-signal pages first
     const priorityPages = [
       `${base}/services`,
       `${base}/products`,
@@ -84,13 +95,11 @@ export async function POST(req: NextRequest) {
       `${base}/pricing`,
     ]
 
-    // Fetch priority pages in parallel
     const priorityResults = await Promise.all(priorityPages.map(fetchSignal))
     let signals = priorityResults.filter((s): s is string => s !== null)
 
-    // If we got fewer than 2 good pages, try sitemap fallback
     if (signals.length < 2) {
-      const sitemapUrls = await getSitemapUrls(base)
+      const sitemapUrls    = await getSitemapUrls(base)
       const sitemapResults = await Promise.all(sitemapUrls.map(fetchSignal))
       signals = [...signals, ...sitemapResults.filter((s): s is string => s !== null)]
     }
@@ -99,7 +108,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Could not fetch that website. Please check the URL.' }, { status: 422 })
     }
 
-    // Cap total context — each signal already capped at 2500 chars, take top 5 pages
     const context = signals.slice(0, 5).join('\n\n---\n\n')
 
     const prompt = `You are an expert business analyst. Analyze this website and generate realistic search queries customers use to find this type of business.
@@ -125,11 +133,11 @@ Topic rules:
 - No duplicate concepts`
 
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [{ role: 'user', content: prompt }],
-      temperature: 0.2,
+      model:           'gpt-4o',
+      messages:        [{ role: 'user', content: prompt }],
+      temperature:     0.2,
       response_format: { type: 'json_object' },
-      max_tokens: 2200,
+      max_tokens:      2200,
     })
 
     const extracted = JSON.parse(completion.choices[0].message.content!)
