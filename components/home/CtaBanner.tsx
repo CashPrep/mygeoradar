@@ -40,8 +40,9 @@ export function CtaBanner() {
             </Button>
 
             <p className="text-xs text-muted">
+              50% off your first scan &middot; normally{' '}
               <span className="line-through text-muted/60">${SCAN_PRICE_USD.toFixed(2)}</span>{' '}
-              today only · No account · Secure Stripe checkout
+              &middot; No account &middot; Secure Stripe checkout
             </p>
           </div>
         </div>
