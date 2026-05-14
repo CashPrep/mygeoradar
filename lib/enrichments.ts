@@ -6,6 +6,15 @@ import type {
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
+const ENRICHMENT_TIMEOUT_MS = 52_000 // 52s — safely under Vercel's 60s function limit
+
+function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
+  return Promise.race([
+    promise,
+    new Promise<T>((resolve) => setTimeout(() => resolve(fallback), ms)),
+  ])
+}
+
 // ─── Shared HTML helpers ──────────────────────────────────────────────────────
 
 async function fetchHtml(url: string): Promise<string> {
@@ -13,7 +22,7 @@ async function fetchHtml(url: string): Promise<string> {
   try {
     const res = await fetch(fullUrl, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; MyGeoRadar/1.0; +https://mygeoradar.com)' },
-      signal: AbortSignal.timeout(10000),
+      signal: AbortSignal.timeout(8000),
     })
     return await res.text()
   } catch {
@@ -123,11 +132,11 @@ async function generateContentGaps(
 
 Business: ${businessName} (${website})${locationStr}
 Industry: ${industry || 'General'}
-Topics they care about: ${topics.join(', ')}
+Topics they care about: ${topics.slice(0, 20).join(', ')}
 
 Generate exactly 5 high-value questions that:
 1. People are actively asking ChatGPT, Perplexity, Gemini, or Claude related to this business's industry and location
-2. The business website likely does NOT have a dedicated answer for (based on typical sites in this industry)
+2. The business website likely does NOT have a dedicated answer for
 3. If answered well on their site, would directly improve their AI visibility score
 
 Return ONLY valid JSON:
@@ -167,7 +176,7 @@ async function analyzeCompetitorGap(
 
 Business: ${businessName} (${website})${locationStr}
 Industry: ${industry || 'General'}
-Topics: ${topics.join(', ')}
+Topics: ${topics.slice(0, 15).join(', ')}
 
 Identify exactly 2 realistic direct competitors for this business. These should be:
 - Actual businesses that exist and compete for the same customers
@@ -187,7 +196,7 @@ Return ONLY valid JSON:
   try {
     const res = await openai.chat.completions.create({
       model: 'gpt-4o', messages: [{ role: 'user', content: identifyPrompt }],
-      temperature: 0.2, response_format: { type: 'json_object' }, max_tokens: 200,
+      temperature: 0.1, response_format: { type: 'json_object' }, max_tokens: 200,
     })
     const raw = JSON.parse(res.choices[0].message.content!)
     competitorList = (raw.competitors ?? []).slice(0, 2)
@@ -204,53 +213,30 @@ Return ONLY valid JSON:
     })
   )
 
-  const analyzePrompt = `You are a GEO (Generative Engine Optimization) analyst.
+  const analyzePrompt = `You are a GEO analyst comparing a business against its competitors for AI search visibility.
 
-You are comparing a business against its competitors for AI search visibility.
+Business: ${businessName} | ${website}${locationStr} | Industry: ${industry || 'General'}
+Current AI visibility score: ${yourScore}/100
 
-The business being analyzed:
-- Name: ${businessName}
-- Website: ${website}${locationStr}
-- Industry: ${industry || 'General'}
-- Topics: ${topics.join(', ')}
-- Current AI visibility score: ${yourScore}/100
+Competitors:
+${competitorData.map((c, i) => `${i + 1}. ${c.name} (${c.domain}) — Schema: ${c.schemaTypes.length > 0 ? c.schemaTypes.join(', ') : 'none'} — Reachable: ${c.fetchedOk}`).join('\n')}
 
-Competitors found:
-${competitorData.map((c, i) => `
-Competitor ${i + 1}: ${c.name} (${c.domain})
-Schema types found on their site: ${c.schemaTypes.length > 0 ? c.schemaTypes.join(', ') : 'none detected'}
-Site was reachable: ${c.fetchedOk}
-`).join('')}
-
-For each competitor:
-- Estimate their AI visibility score (0–100) based on their schema richness, brand recognition, and typical industry presence
-- List 2–3 specific things they are doing better than our business for AI visibility
-
-Then provide 3 specific, actionable closing moves our business can implement to close the gap.
+For each competitor estimate their AI visibility score and list 2–3 specific advantages.
+Provide 3 specific closing moves our business can implement.
 
 Return ONLY valid JSON:
 {
   "competitors": [
-    {
-      "name": "competitor name",
-      "domain": "domain.com",
-      "estimatedScore": 65,
-      "schemaTypes": ["types found"],
-      "advantages": ["Specific advantage 1", "Specific advantage 2"]
-    }
+    { "name": "name", "domain": "domain.com", "estimatedScore": 65, "schemaTypes": [], "advantages": ["adv1", "adv2"] }
   ],
-  "closingMoves": [
-    "Specific action to close the gap — concrete and implementable",
-    "Second closing move",
-    "Third closing move"
-  ],
-  "summary": "1-2 sentence narrative comparing the business to its top competitor and what the gap means."
+  "closingMoves": ["move1", "move2", "move3"],
+  "summary": "1-2 sentence narrative."
 }`
 
   try {
     const res = await openai.chat.completions.create({
       model: 'gpt-4o', messages: [{ role: 'user', content: analyzePrompt }],
-      temperature: 0.3, response_format: { type: 'json_object' }, max_tokens: 800,
+      temperature: 0.1, response_format: { type: 'json_object' }, max_tokens: 800,
     })
     const raw = JSON.parse(res.choices[0].message.content!) as {
       competitors: CompetitorDetail[]
@@ -281,17 +267,17 @@ export async function runEnrichments(scan: {
   gbpSignal:     GbpSignal
   competitorGap: CompetitorGap | null
 }> {
+  const fallbackSchema: SchemaCheck = { url: scan.website, checked: [], score: 0, fetchedOk: false }
+  const fallbackGbp: GbpSignal = { detected: false, hasReviewSchema: false, hasNapConsistency: false, recommendations: [] }
+
   const [schemaCheck, contentGaps, gbpSignal, competitorGap] = await Promise.all([
-    checkSchema(scan.website),
-    generateContentGaps(scan.business_name, scan.website, scan.industry ?? 'General', scan.topics, scan.location),
-    inferGbpSignal(scan.website, scan.business_name),
-    analyzeCompetitorGap(
-      scan.business_name,
-      scan.website,
-      scan.industry ?? 'General',
-      scan.topics,
-      scan.location,
-      scan.overall_score ?? 0
+    withTimeout(checkSchema(scan.website), ENRICHMENT_TIMEOUT_MS, fallbackSchema),
+    withTimeout(generateContentGaps(scan.business_name, scan.website, scan.industry ?? 'General', scan.topics, scan.location), ENRICHMENT_TIMEOUT_MS, []),
+    withTimeout(inferGbpSignal(scan.website, scan.business_name), ENRICHMENT_TIMEOUT_MS, fallbackGbp),
+    withTimeout(
+      analyzeCompetitorGap(scan.business_name, scan.website, scan.industry ?? 'General', scan.topics, scan.location, scan.overall_score ?? 0),
+      ENRICHMENT_TIMEOUT_MS,
+      null
     ),
   ])
 

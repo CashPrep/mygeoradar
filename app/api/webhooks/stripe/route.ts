@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 import { runGeoScan } from '@/lib/geo'
 import { runEnrichments } from '@/lib/enrichments'
 import { sendScanReport, sendWelcomeEmail } from '@/lib/email'
@@ -72,20 +73,21 @@ export async function POST(req: NextRequest) {
 
     if (!scan) return NextResponse.json({ ok: true })
 
-    // If scan has no user_id yet, try to match via email
+    // Link scan to user via service-role client (bypasses RLS, can read auth.users)
     if (!scan.user_id) {
       const customerEmail = scan.email || session.customer_details?.email
       if (customerEmail) {
-        const { data: authUsers } = await supabase
-          .from('auth.users')
-          .select('id')
-          .eq('email', customerEmail)
-          .limit(1)
-        if (authUsers && authUsers.length > 0) {
-          await supabase
-            .from('scan_reports')
-            .update({ user_id: authUsers[0].id })
-            .eq('id', scanId)
+        try {
+          const { data: { users } } = await supabaseAdmin.auth.admin.listUsers()
+          const matched = users.find(u => u.email === customerEmail)
+          if (matched) {
+            await supabase
+              .from('scan_reports')
+              .update({ user_id: matched.id })
+              .eq('id', scanId)
+          }
+        } catch (err) {
+          console.error('User lookup error:', err)
         }
       }
     }
@@ -134,10 +136,7 @@ export async function POST(req: NextRequest) {
           ...result,
         }
 
-        // 1. Send the full report email
         await sendScanReport(email, fullReport).catch(console.error)
-
-        // 2. Send the welcome / onboarding email immediately
         await sendWelcomeEmail({
           email,
           businessName: scan.business_name,
@@ -145,7 +144,6 @@ export async function POST(req: NextRequest) {
           score: result.overallScore,
         }).catch(console.error)
 
-        // 3. Schedule day-3 and day-7 follow-ups
         const topAction = result.topActions?.[0]?.description
         await scheduleFollowUp(email, scanId, scan.business_name, topAction).catch(console.error)
       }

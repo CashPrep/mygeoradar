@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
+import { supabase } from '@/lib/supabase'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
-// In-memory rate limit: max 3 free snapshots per IP per day
-// (resets on server restart / redeploy — fine for Edge/Vercel serverless)
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>()
 
 const MAX_PER_DAY = 3
 
@@ -17,17 +14,27 @@ function getClientIp(req: NextRequest): string {
   )
 }
 
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now()
-  const dayMs = 24 * 60 * 60 * 1000
-  const entry = rateLimitMap.get(ip)
+async function checkRateLimit(ip: string): Promise<boolean> {
+  if (ip === 'unknown') return true // can't reliably rate limit
 
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + dayMs })
+  const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+
+  const { count, error } = await supabase
+    .from('snapshot_rate_limits')
+    .select('*', { count: 'exact', head: true })
+    .eq('ip_address', ip)
+    .gte('created_at', dayAgo)
+
+  if (error) {
+    // If table doesn't exist yet, fail open so users aren't blocked
+    console.error('Rate limit check error:', error)
     return true
   }
-  if (entry.count >= MAX_PER_DAY) return false
-  entry.count++
+
+  if ((count ?? 0) >= MAX_PER_DAY) return false
+
+  // Record this attempt
+  await supabase.from('snapshot_rate_limits').insert({ ip_address: ip }).catch(console.error)
   return true
 }
 
@@ -43,9 +50,10 @@ export async function POST(req: NextRequest) {
     }
 
     const ip = getClientIp(req)
-    if (!checkRateLimit(ip)) {
+    const allowed = await checkRateLimit(ip)
+    if (!allowed) {
       return NextResponse.json(
-        { error: 'You\'ve used your 3 free snapshots today. Come back tomorrow or run a full scan.' },
+        { error: "You've used your 3 free snapshots today. Come back tomorrow or run a full scan." },
         { status: 429 }
       )
     }
@@ -82,7 +90,7 @@ Rules:
     const completion = await openai.chat.completions.create({
       model:           'gpt-4o-mini',
       messages:        [{ role: 'user', content: prompt }],
-      temperature:     0.3,
+      temperature:     0.1,
       response_format: { type: 'json_object' },
       max_tokens:      300,
     })
@@ -90,7 +98,6 @@ Rules:
     const raw = JSON.parse(completion.choices[0].message.content!)
 
     const score = Math.min(100, Math.max(0, Math.round(Number(raw.score) || 0)))
-    const levelMap: Record<number, string> = {}
     const level: string =
       score >= 80 ? 'excellent' :
       score >= 60 ? 'good' :
@@ -99,10 +106,10 @@ Rules:
     return NextResponse.json({
       score,
       level,
-      headline:   raw.headline   ?? 'Your AI visibility needs work.',
-      topIssues:  (raw.topIssues ?? []).slice(0, 3) as string[],
+      headline:     raw.headline   ?? 'Your AI visibility needs work.',
+      topIssues:    (raw.topIssues ?? []).slice(0, 3) as string[],
       businessName: businessName.trim(),
-      website:    cleanWebsite,
+      website:      cleanWebsite,
     })
   } catch (err) {
     console.error('[snapshot] error:', err)
