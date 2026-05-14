@@ -13,15 +13,16 @@ const FETCH_OPTS = {
 
 /** Extract only high-signal text: title, meta desc, headings, list items, paragraphs */
 function extractSignal(html: string): string {
+  // Use [\s\S] instead of the /s dotAll flag for broad TS target compatibility
   const get = (pattern: RegExp) => (html.match(pattern) ?? []).map(m => m.replace(/<[^>]+>/g, '').trim()).filter(Boolean)
 
   const title    = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? ''
   const metaDesc = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1]?.trim() ?? ''
-  const h1s      = get(/<h1[^>]*>(.*?)<\/h1>/gis)
-  const h2s      = get(/<h2[^>]*>(.*?)<\/h2>/gis)
-  const h3s      = get(/<h3[^>]*>(.*?)<\/h3>/gis)
-  const lis      = get(/<li[^>]*>(.*?)<\/li>/gis).slice(0, 30)
-  const ps       = get(/<p[^>]*>(.*?)<\/p>/gis).slice(0, 20)
+  const h1s      = get(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)
+  const h2s      = get(/<h2[^>]*>([\s\S]*?)<\/h2>/gi)
+  const h3s      = get(/<h3[^>]*>([\s\S]*?)<\/h3>/gi)
+  const lis      = get(/<li[^>]*>([\s\S]*?)<\/li>/gi).slice(0, 30)
+  const ps       = get(/<p[^>]*>([\s\S]*?)<\/p>/gi).slice(0, 20)
 
   return [
     title       && `TITLE: ${title}`,
