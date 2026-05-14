@@ -11,6 +11,46 @@ export const metadata = {
 
 const posts = [
   {
+    slug:        'ai-hallucination-fix',
+    title:       'When AI Gets Your Business Wrong: How to Fix AI Hallucinations About Your Company',
+    description: 'AI engines sometimes generate confidently wrong information about businesses — wrong hours, wrong address, wrong services. Here\'s how to find it and fix it before it costs you customers.',
+    date:        'May 13, 2026',
+    readTime:    '7 min read',
+    tag:         'Technical GEO',
+  },
+  {
+    slug:        'multi-location-geo',
+    title:       'Multi-Location GEO: How Chains and Franchises Should Handle AI Visibility',
+    description: 'Single-location GEO is straightforward. Managing AI visibility across 10, 50, or 500 locations is a different challenge entirely. Here\'s the right architecture.',
+    date:        'May 13, 2026',
+    readTime:    '8 min read',
+    tag:         'Local GEO',
+  },
+  {
+    slug:        'geo-before-launch',
+    title:       'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
+    description: 'Most new businesses lose their first 90 days of AI visibility by doing nothing. Here\'s how to build your GEO foundation before you open — so you show up from day one.',
+    date:        'May 13, 2026',
+    readTime:    '6 min read',
+    tag:         'Strategy',
+  },
+  {
+    slug:        'ai-search-zero-click',
+    title:       'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
+    description: 'AI search doesn\'t send clicks — it gives answers. If your business isn\'t mentioned in those answers, you\'re invisible. Here\'s what zero-click AI means for your growth strategy.',
+    date:        'May 13, 2026',
+    readTime:    '7 min read',
+    tag:         'AI Search',
+  },
+  {
+    slug:        'geo-score-benchmarks',
+    title:       'What\'s a Good GEO Score? Industry Benchmarks for 2026',
+    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries — and what score you actually need to compete.',
+    date:        'May 13, 2026',
+    readTime:    '6 min read',
+    tag:         'Strategy',
+  },
+  {
     slug:        'what-is-geo',
     title:       'What is GEO? The Beginner\'s Guide to Generative Engine Optimization',
     description: 'Traditional SEO gets you on Google. GEO gets you cited in AI answers. Here\'s what it is, why it matters, and how to start.',
