@@ -60,7 +60,7 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
       ...scan,
       overall_score:  result.overallScore,
       competitor_url: (scan.competitor_url as string) ?? null,
-    } as Parameters<typeof runEnrichments>[0])
+    } as unknown as Parameters<typeof runEnrichments>[0])
 
     await supabase.from('scan_reports').update({
       schema_check:   enrichments.schemaCheck,
