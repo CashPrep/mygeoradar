@@ -8,12 +8,14 @@ export const AI_ENGINES = [
 // ─── Pricing ─── edit ONLY here to update every page ───────────────────────
 export const SCAN_PRICE_CENTS   = 4999    // $49.99 full price
 export const SCAN_PRICE_USD     = 49.99
-export const PROMO_PRICE_CENTS  = 2499    // $24.99 promo
+export const PROMO_PRICE_CENTS  = 2499    // $24.99 first scan promo
 export const PROMO_PRICE_USD    = 24.99
 export const FULL_PRICE_USD     = 49.99
 export const PROMO_DISCOUNT_PCT = 50
 export const PROMO_LABEL        = '50% off — first scan only'
-// ────────────────────────────────────────────────────────────────────────────
+export const RESCAN_PRICE_CENTS = 3499    // $34.99 returning customer rescan
+export const RESCAN_PRICE_USD   = 34.99
+// ───────────────────────────────────────────────────────────────────────────
 
 export const SCORE_LABELS = {
   excellent: { label: 'Excellent', color: 'text-success', bg: 'bg-success', hex: '#22c55e' },

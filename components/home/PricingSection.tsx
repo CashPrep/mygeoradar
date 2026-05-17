@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Check, ArrowRight, Zap, Lock } from 'lucide-react'
-import { SCAN_PRICE_USD, PROMO_PRICE_USD, PROMO_DISCOUNT_PCT } from '@/lib/constants'
+import { Check, ArrowRight, Zap, Lock, RefreshCw } from 'lucide-react'
+import { SCAN_PRICE_USD, PROMO_PRICE_USD, PROMO_DISCOUNT_PCT, RESCAN_PRICE_USD } from '@/lib/constants'
 
 const included = [
   'Scores across ChatGPT, Perplexity, Gemini & Claude',
@@ -18,12 +18,13 @@ export function PricingSection() {
         <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Pricing</p>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight">One scan. One payment.</h2>
         <p className="mt-4 text-foreground-dim max-w-xl mx-auto">
-          No monthly fees. No subscriptions. Just your report.
+          No monthly fees. No subscriptions. Pay only when you scan.
         </p>
       </div>
 
       <div className="max-w-sm mx-auto flex flex-col gap-4">
 
+        {/* First scan promo card */}
         <div className="flex items-center justify-between gap-3 px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-xl">
           <div className="flex items-center gap-2">
             <Zap className="w-4 h-4 text-green-400 shrink-0" />
@@ -34,13 +35,12 @@ export function PricingSection() {
 
         <div className="card p-8 flex flex-col gap-6 border-accent/20 shadow-glow-sm">
           <div className="text-center">
-            <p className="text-sm text-muted line-through mb-1">${SCAN_PRICE_USD.toFixed(2)} normally</p>
+            <p className="text-sm text-muted line-through mb-1">${SCAN_PRICE_USD.toFixed(2)}</p>
             <div className="flex items-end justify-center gap-1">
               <span className="text-6xl font-extrabold text-green-400">${Math.floor(PROMO_PRICE_USD)}</span>
               <span className="text-green-400 text-2xl font-bold mb-2">.{String(PROMO_PRICE_USD.toFixed(2).split('.')[1])}</span>
             </div>
             <p className="text-sm font-semibold text-green-400 mt-1">your first scan</p>
-            <p className="text-xs text-muted mt-1">${SCAN_PRICE_USD.toFixed(2)} per scan after that &middot; one-time &middot; no account needed</p>
           </div>
 
           <ul className="flex flex-col gap-3">
@@ -67,6 +67,17 @@ export function PricingSection() {
             <span>Secure payment via Stripe &middot; Results in ~60 seconds</span>
           </div>
         </div>
+
+        {/* Rescan pricing — transparent, no sticker shock */}
+        <div className="flex items-center gap-3 px-4 py-3 bg-surface border border-border rounded-xl">
+          <RefreshCw className="w-4 h-4 text-muted shrink-0" />
+          <p className="text-sm text-muted">
+            Already a customer?{' '}
+            <span className="text-foreground font-medium">Rescans are ${RESCAN_PRICE_USD.toFixed(2)}</span>
+            {' '}— a loyalty discount applied automatically at checkout.
+          </p>
+        </div>
+
       </div>
     </section>
   )
