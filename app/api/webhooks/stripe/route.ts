@@ -40,26 +40,37 @@ function scheduleFollowUp(email: string, scanId: string, businessName: string, t
   ])
 }
 
-// ─── Background scan — runs after we've already returned 200 to Stripe ────────
 async function processScan(scan: Record<string, unknown>, customerEmail: string | null) {
   const scanId = scan.id as string
 
   try {
-    const result = await runGeoScan(scan as Parameters<typeof runGeoScan>[0])
+    // Explicitly build typed object — never rely on spread to satisfy runGeoScan's required fields
+    const result = await runGeoScan({
+      id:            scanId,
+      business_name: scan.business_name as string,
+      website:       scan.website       as string,
+      topics:        scan.topics        as string[],
+      location:      (scan.location     as string | null) ?? null,
+      industry:      (scan.industry     as string | null) ?? null,
+    })
 
     await supabase.from('scan_reports').update({
-      overall_score:        result.overallScore,
-      level:                result.level,
-      engines:              result.engines,
-      top_actions:          result.topActions,
-      quick_wins:           result.quickWins,
-      scan_error:           null,
+      overall_score: result.overallScore,
+      level:         result.level,
+      engines:       result.engines,
+      top_actions:   result.topActions,
+      quick_wins:    result.quickWins,
+      scan_error:    null,
     }).eq('id', scanId)
 
     const enrichments = await runEnrichments({
-      ...scan,
-      overall_score:  result.overallScore,
-      competitor_url: (scan.competitor_url as string) ?? null,
+      id:            scanId,
+      business_name: scan.business_name as string,
+      website:       scan.website       as string,
+      topics:        scan.topics        as string[],
+      location:      (scan.location     as string | null) ?? null,
+      industry:      (scan.industry     as string | null) ?? null,
+      overall_score: result.overallScore,
     } as unknown as Parameters<typeof runEnrichments>[0])
 
     await supabase.from('scan_reports').update({
@@ -72,12 +83,12 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
     if (customerEmail) {
       const fullReport: ScanReport = {
         id:            scanId,
-        createdAt:     scan.created_at as string,
+        createdAt:     scan.created_at    as string,
         businessName:  scan.business_name as string,
-        website:       scan.website as string,
-        topics:        scan.topics as string[],
-        location:      (scan.location as string) ?? null,
-        industry:      (scan.industry as string) ?? null,
+        website:       scan.website       as string,
+        topics:        scan.topics        as string[],
+        location:      (scan.location     as string) ?? null,
+        industry:      (scan.industry     as string) ?? null,
         competitorUrl: (scan.competitor_url as string) ?? null,
         paid:          true,
         schemaCheck:   enrichments.schemaCheck,
@@ -101,12 +112,10 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
   } catch (err) {
     console.error('processScan failed for', scanId, err)
 
-    // Write error state to DB so the report page shows an error instead of spinning forever
     await supabase.from('scan_reports').update({
       scan_error: err instanceof Error ? err.message : 'Unknown error',
     }).eq('id', scanId).catch(console.error)
 
-    // Email the customer so they know and can contact support
     if (customerEmail) {
       await sendScanErrorEmail({
         email:        customerEmail,
@@ -115,7 +124,6 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
       }).catch(console.error)
     }
 
-    // Alert yourself
     const adminEmail = process.env.ADMIN_ALERT_EMAIL
     if (adminEmail) {
       const { Resend } = await import('resend')
@@ -146,7 +154,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature.' }, { status: 400 })
   }
 
-  // ── checkout.session.completed ───────────────────────────────────────────────
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
     const scanId  = session.metadata?.scanId
@@ -160,21 +167,16 @@ export async function POST(req: NextRequest) {
 
     if (!scan) return NextResponse.json({ ok: true })
 
-    // ── Idempotency guard ────────────────────────────────────────────────────
-    // Stripe retries webhooks on timeout. If processing_started_at is already
-    // set (or scan has results), a retry must not fire runGeoScan again.
     if (scan.processing_started_at || scan.overall_score != null || scan.scan_error) {
       console.log(`Webhook retry skipped for scan ${scanId} — already processed or in progress`)
       return NextResponse.json({ ok: true })
     }
 
-    // Mark processing started immediately — this prevents any concurrent retry
     await supabase
       .from('scan_reports')
       .update({ paid: true, processing_started_at: new Date().toISOString() })
       .eq('id', scanId)
 
-    // Link scan to Supabase auth user if one exists with this email
     if (!scan.user_id) {
       const customerEmail = scan.email || session.customer_details?.email
       if (customerEmail) {
@@ -195,19 +197,14 @@ export async function POST(req: NextRequest) {
 
     const customerEmail = scan.email || session.customer_details?.email || null
 
-    // ── Background the expensive work ───────────────────────────────────────
-    // waitUntil keeps the lambda alive after we return 200 to Stripe.
-    // Stripe gets its 200 in < 1 second; the scan runs in the background.
     const ctx = (req as unknown as { waitUntil?: (p: Promise<unknown>) => void }).waitUntil
     if (typeof ctx === 'function') {
       ctx(processScan(scan, customerEmail))
     } else {
-      // Fallback for local dev / non-edge environments — fire and forget
       processScan(scan, customerEmail).catch(console.error)
     }
   }
 
-  // ── invoice.payment_succeeded ────────────────────────────────────────────────
   if (event.type === 'invoice.payment_succeeded') {
     const invoice    = event.data.object as Stripe.Invoice
     const customerId = invoice.customer as string
@@ -224,7 +221,6 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  // ── customer.subscription.deleted ───────────────────────────────────────────
   if (event.type === 'customer.subscription.deleted') {
     const sub        = event.data.object as Stripe.Subscription
     const customerId = sub.customer as string
