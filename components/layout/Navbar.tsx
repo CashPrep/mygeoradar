@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Menu, X, User, LogOut } from 'lucide-react'
+import { Menu, X, Radar, User, LogOut } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { createSupabaseBrowser } from '@/lib/supabase-browser'
 import { clsx } from 'clsx'
@@ -15,51 +15,6 @@ const navLinks = [
   { href: '/blog',          label: 'Blog' },
   { href: '/about',         label: 'About' },
 ]
-
-// Inline SVG logo — radar dish emitting concentric arcs with a pulse dot
-function GeoRadarLogo({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-label="MyGeoRadar"
-      viewBox="0 0 32 32"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-    >
-      {/* Base dish */}
-      <path
-        d="M6 26 L16 14 L26 26 Z"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      {/* Dish stand */}
-      <line x1="16" y1="26" x2="16" y2="28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <line x1="12" y1="28" x2="20" y2="28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      {/* Signal arcs emanating from tip */}
-      <path
-        d="M11.5 10.5 Q16 5 20.5 10.5"
-        stroke="currentColor"
-        strokeWidth="1.75"
-        strokeLinecap="round"
-        fill="none"
-        opacity="0.55"
-      />
-      <path
-        d="M8.5 7.5 Q16 0.5 23.5 7.5"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        fill="none"
-        opacity="0.3"
-      />
-      {/* Pulse dot at apex */}
-      <circle cx="16" cy="14" r="2" fill="currentColor" />
-      <circle cx="16" cy="14" r="3.5" stroke="currentColor" strokeWidth="1" opacity="0.35" />
-    </svg>
-  )
-}
 
 export function Navbar() {
   const router                  = useRouter()
@@ -97,7 +52,10 @@ export function Navbar() {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 group" aria-label="MyGeoRadar home">
-          <GeoRadarLogo className="w-7 h-7 text-accent transition-transform duration-200 group-hover:scale-110" />
+          <div className="relative">
+            <Radar className="w-5 h-5 text-accent" />
+            <span className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+          </div>
           <span className="font-bold text-base tracking-tight">
             my<span className="text-accent">geo</span>radar
           </span>
