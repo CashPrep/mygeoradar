@@ -11,14 +11,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
 })
 
-function scheduleFollowUp(email: string, scanId: string, businessName: string, topAction?: string) {
+async function scheduleFollowUp(email: string, scanId: string, businessName: string, topAction?: string) {
   const now  = new Date()
   const day3 = new Date(now)
   day3.setDate(day3.getDate() + 3)
   const day7 = new Date(now)
   day7.setDate(day7.getDate() + 7)
 
-  return supabase.from('scheduled_emails').insert([
+  await supabase.from('scheduled_emails').insert([
     {
       email,
       type:          'day3_tip',
@@ -44,7 +44,6 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
   const scanId = scan.id as string
 
   try {
-    // Explicitly build typed object — never rely on spread to satisfy runGeoScan's required fields
     const result = await runGeoScan({
       id:            scanId,
       business_name: scan.business_name as string,
@@ -107,14 +106,18 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
       }).catch(console.error)
 
       const topAction = result.topActions?.[0]?.description
-      await scheduleFollowUp(customerEmail, scanId, scan.business_name as string, topAction).catch(console.error)
+      try {
+        await scheduleFollowUp(customerEmail, scanId, scan.business_name as string, topAction)
+      } catch (scheduleErr) {
+        console.error('scheduleFollowUp failed:', scheduleErr)
+      }
     }
   } catch (err) {
     console.error('processScan failed for', scanId, err)
 
     await supabase.from('scan_reports').update({
       scan_error: err instanceof Error ? err.message : 'Unknown error',
-    }).eq('id', scanId).catch(console.error)
+    }).eq('id', scanId)
 
     if (customerEmail) {
       await sendScanErrorEmail({
