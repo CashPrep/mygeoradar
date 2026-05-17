@@ -799,6 +799,7 @@ export default function ScanResultPage() {
   const { id }                    = useParams<{ id: string }>()
   const [report,    setReport]    = useState<ScanReport | null>(null)
   const [status,    setStatus]    = useState<'loading' | 'pending' | 'ready' | 'error'>('loading')
+  const [scanError, setScanError] = useState<string | null>(null)
   const [pollCount, setPollCount] = useState(0)
   const [enrichmentsDone, setEnrichmentsDone] = useState(false)
   const [reportEmail, setReportEmail] = useState<string | undefined>(undefined)
@@ -818,6 +819,15 @@ export default function ScanResultPage() {
         const res  = await fetch(`/api/scan/${id}`)
         const data = await res.json()
         if (!res.ok) { setStatus('error'); return }
+
+        // ── Scan failed after payment ──────────────────────────────────────
+        // The webhook wrote scan_error to the DB. Show a proper error state
+        // instead of spinning forever.
+        if (data.scan_error) {
+          setScanError(data.scan_error)
+          setStatus('error')
+          return
+        }
 
         if (data.paid && data.overall_score != null) {
           const mapped: ScanReport = {
@@ -856,6 +866,7 @@ export default function ScanResultPage() {
     fetchReport()
     const interval = setInterval(() => {
       if (status === 'ready' && enrichmentsDone) return
+      if (status === 'error') return  // stop polling once we have a definitive error
       fetchReport()
     }, 3000)
     return () => clearInterval(interval)
@@ -871,30 +882,69 @@ export default function ScanResultPage() {
       { label: 'Querying Claude',        done: pollCount > 8 },
       { label: 'Generating action plan', done: pollCount > 10 },
     ]
+
+    // ── Definitive scan failure ──────────────────────────────────────────────
+    const isScanFailed = status === 'error' && scanError !== null
+
     return (
       <main className="min-h-screen bg-background">
         <Navbar />
         <div className="max-w-md mx-auto px-4 pt-32 pb-20 flex flex-col items-center gap-8">
-          <div className="relative">
-            <Radar className="w-16 h-16 text-accent animate-pulse" />
-            <div className="absolute inset-0 rounded-full border-2 border-accent/30 animate-ping" />
-          </div>
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-2">Scanning your business</h1>
-            <p className="text-muted text-sm">Simulating AI engine queries. This takes about 20–30 seconds.</p>
-          </div>
-          <div className="w-full flex flex-col gap-2">
-            {steps.map((s) => (
-              <div key={s.label} className={clsx(
-                'flex items-center gap-3 px-4 py-3 rounded-xl border transition-all text-sm',
-                s.done ? 'border-success/30 bg-success/5 text-success' : 'border-border bg-surface text-muted'
-              )}>
-                <span className={clsx('w-2 h-2 rounded-full flex-shrink-0', s.done ? 'bg-success' : 'bg-border')} />
-                {s.label}
+          {isScanFailed ? (
+            <>
+              <div className="w-16 h-16 rounded-full bg-danger/10 border border-danger/20 flex items-center justify-center">
+                <XCircle className="w-8 h-8 text-danger" />
               </div>
-            ))}
-          </div>
-          {status === 'error' && <p className="text-danger text-sm text-center">Something went wrong. Please refresh or contact support.</p>}
+              <div className="text-center">
+                <h1 className="text-2xl font-bold mb-2">Your scan hit a snag</h1>
+                <p className="text-muted text-sm leading-relaxed">
+                  Your payment went through successfully, but our AI scan ran into an error.
+                  We&apos;ve been automatically notified.
+                </p>
+              </div>
+              <div className="w-full card p-5 flex flex-col gap-3">
+                <p className="text-sm text-foreground-dim leading-relaxed">
+                  If your report isn&apos;t ready within the next hour, reply to the confirmation email
+                  or contact us directly — we&apos;ll re-run your scan or issue a full refund immediately.
+                </p>
+                <a
+                  href="mailto:andrew@mygeoradar.com?subject=Scan%20failed&body=My%20scan%20ID%20is%3A%20"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl transition-colors text-sm"
+                >
+                  <Mail className="w-4 h-4" /> Email support
+                </a>
+                <p className="text-xs text-muted text-center">Scan ID: <code className="text-foreground-dim">{id}</code></p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="relative">
+                <Radar className="w-16 h-16 text-accent animate-pulse" />
+                <div className="absolute inset-0 rounded-full border-2 border-accent/30 animate-ping" />
+              </div>
+              <div className="text-center">
+                <h1 className="text-2xl font-bold mb-2">Scanning your business</h1>
+                <p className="text-muted text-sm">Simulating AI engine queries. This takes about 20–30 seconds.</p>
+              </div>
+              <div className="w-full flex flex-col gap-2">
+                {steps.map((s) => (
+                  <div key={s.label} className={clsx(
+                    'flex items-center gap-3 px-4 py-3 rounded-xl border transition-all text-sm',
+                    s.done ? 'border-success/30 bg-success/5 text-success' : 'border-border bg-surface text-muted'
+                  )}>
+                    <span className={clsx('w-2 h-2 rounded-full flex-shrink-0', s.done ? 'bg-success' : 'bg-border')} />
+                    {s.label}
+                  </div>
+                ))}
+              </div>
+              {status === 'error' && (
+                <p className="text-danger text-sm text-center">
+                  Something went wrong. Please refresh or{' '}
+                  <a href="mailto:andrew@mygeoradar.com" className="underline">contact support</a>.
+                </p>
+              )}
+            </>
+          )}
         </div>
       </main>
     )
