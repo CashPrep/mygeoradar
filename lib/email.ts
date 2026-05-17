@@ -15,7 +15,7 @@ function emailShell(body: string) {
   return `<!DOCTYPE html><html><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><style>${BASE_STYLES}</style></head><body><div class="wrap">${body}</div></body></html>`
 }
 
-// ─── 1. Scan Report (existing) ────────────────────────────────────────────────
+// ─── 1. Scan Report ───────────────────────────────────────────────────────────
 
 export async function sendScanReport(email: string, report: ScanReport) {
   const resend      = new Resend(process.env.RESEND_API_KEY)
@@ -43,7 +43,7 @@ export async function sendScanReport(email: string, report: ScanReport) {
     <div style="text-align:center;margin-top:28px">
       <a href="${process.env.NEXT_PUBLIC_APP_URL}/scan/${report.id}"
         style="display:inline-block;padding:12px 28px;background:#4f8ef7;color:#fff;font-weight:600;border-radius:10px;text-decoration:none;font-size:14px">
-        View full report →
+        View full report &rarr;
       </a>
     </div>
     <p class="footer">Sent by MyGeoRadar &mdash; AI Visibility Intelligence</p>
@@ -57,7 +57,7 @@ export async function sendScanReport(email: string, report: ScanReport) {
   })
 }
 
-// ─── 2. Welcome Email (sent immediately after purchase) ───────────────────────
+// ─── 2. Welcome Email ─────────────────────────────────────────────────────────
 
 export async function sendWelcomeEmail({
   email, firstName, businessName, scanId, score,
@@ -116,7 +116,7 @@ export async function sendWelcomeEmail({
     <div style="text-align:center">
       <a href="${appUrl}/scan/${scanId}"
         style="display:inline-block;padding:13px 32px;background:#4f8ef7;color:#fff;font-weight:700;border-radius:10px;text-decoration:none;font-size:14px">
-        Open my report →
+        Open my report &rarr;
       </a>
     </div>
     <p class="footer" style="margin-top:28px">MyGeoRadar &mdash; reply to this email anytime if you need help</p>
@@ -130,7 +130,58 @@ export async function sendWelcomeEmail({
   })
 }
 
-// ─── 3. Day-3 Tip Email ───────────────────────────────────────────────────────
+// ─── 3. Scan Error Email ──────────────────────────────────────────────────────
+// Sent when runGeoScan throws after a successful payment.
+
+export async function sendScanErrorEmail({
+  email, businessName, scanId,
+}: {
+  email: string
+  businessName: string
+  scanId: string
+}) {
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mygeoradar.com'
+
+  const html = emailShell(`
+    <p class="label">MyGeoRadar</p>
+    <h1 style="font-size:22px;font-weight:700;margin:0 0 12px;color:#e8e8f0;text-align:center">
+      Your scan hit a snag 😔
+    </h1>
+    <p style="color:#c8c8d8;font-size:15px;text-align:center;margin-bottom:24px;line-height:1.6">
+      We successfully received your payment for <strong>${businessName}</strong>,
+      but the AI scan ran into an error. This is on us.
+    </p>
+
+    <div class="card">
+      <p style="color:#e8e8f0;font-size:14px;line-height:1.65;margin:0 0 16px">
+        We&rsquo;ve been automatically notified and will re-run your scan shortly.
+        If it isn&rsquo;t ready within the next hour, just reply to this email and
+        we&rsquo;ll sort it out immediately &mdash; including a full refund if needed.
+      </p>
+      <div style="text-align:center">
+        <a href="${appUrl}/scan/${scanId}"
+          style="display:inline-block;padding:11px 26px;background:#4f8ef7;color:#fff;font-weight:600;border-radius:10px;text-decoration:none;font-size:14px">
+          Check my report status &rarr;
+        </a>
+      </div>
+    </div>
+
+    <p style="color:#9898b0;font-size:13px;text-align:center;line-height:1.6">
+      Scan ID: <code style="color:#c8c8d8">${scanId}</code> &mdash; include this if you email us.
+    </p>
+    <p class="footer" style="margin-top:16px">— Andrew, MyGeoRadar founder &mdash; <a href="mailto:andrew@mygeoradar.com" style="color:#4f8ef7;text-decoration:none">andrew@mygeoradar.com</a></p>
+  `)
+
+  await resend.emails.send({
+    from:    'Andrew at MyGeoRadar <andrew@mygeoradar.com>',
+    to:      email,
+    subject: `Action needed: your MyGeoRadar scan for ${businessName}`,
+    html,
+  })
+}
+
+// ─── 4. Day-3 Tip Email ───────────────────────────────────────────────────────
 
 export async function sendDay3TipEmail({
   email, businessName, scanId, topAction,
@@ -167,7 +218,7 @@ export async function sendDay3TipEmail({
     <div style="text-align:center">
       <a href="${appUrl}/scan/${scanId}"
         style="display:inline-block;padding:12px 28px;background:#4f8ef7;color:#fff;font-weight:600;border-radius:10px;text-decoration:none;font-size:14px">
-        View my full action plan →
+        View my full action plan &rarr;
       </a>
     </div>
     <p class="footer" style="margin-top:28px">MyGeoRadar &mdash; <a href="${appUrl}" style="color:#4f8ef7;text-decoration:none">mygeoradar.com</a></p>
@@ -181,7 +232,7 @@ export async function sendDay3TipEmail({
   })
 }
 
-// ─── 4. Day-7 Review Request Email ────────────────────────────────────────────
+// ─── 5. Day-7 Review Request Email ───────────────────────────────────────────
 
 export async function sendDay7ReviewRequestEmail({
   email, businessName, scanId,
@@ -223,10 +274,10 @@ export async function sendDay7ReviewRequestEmail({
     <div style="text-align:center">
       <a href="${appUrl}/scan/${scanId}"
         style="color:#4f8ef7;font-size:13px;text-decoration:none">
-        View my report again →
+        View my report again &rarr;
       </a>
     </div>
-    <p class="footer" style="margin-top:28px">— Andrew, MyGeoRadar founder</p>
+    <p class="footer" style="margin-top:28px">&mdash; Andrew, MyGeoRadar founder</p>
   `)
 
   await resend.emails.send({

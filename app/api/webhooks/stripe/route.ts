@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 import { supabaseAdmin } from '@/lib/supabase-admin'
 import { runGeoScan } from '@/lib/geo'
 import { runEnrichments } from '@/lib/enrichments'
-import { sendScanReport, sendWelcomeEmail } from '@/lib/email'
+import { sendScanReport, sendWelcomeEmail, sendScanErrorEmail } from '@/lib/email'
 import type { ScanReport } from '@/lib/types'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -12,36 +12,122 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 })
 
 function scheduleFollowUp(email: string, scanId: string, businessName: string, topAction?: string) {
-  const now = new Date()
-
+  const now  = new Date()
   const day3 = new Date(now)
   day3.setDate(day3.getDate() + 3)
-
   const day7 = new Date(now)
   day7.setDate(day7.getDate() + 7)
 
-  return Promise.resolve(
-    supabase.from('scheduled_emails').insert([
-      {
-        email,
-        type:          'day3_tip',
-        scan_id:       scanId,
-        business_name: businessName,
-        top_action:    topAction || null,
-        send_at:       day3.toISOString(),
-        sent:          false,
-      },
-      {
-        email,
-        type:          'day7_review',
-        scan_id:       scanId,
-        business_name: businessName,
-        top_action:    null,
-        send_at:       day7.toISOString(),
-        sent:          false,
-      },
-    ])
-  )
+  return supabase.from('scheduled_emails').insert([
+    {
+      email,
+      type:          'day3_tip',
+      scan_id:       scanId,
+      business_name: businessName,
+      top_action:    topAction || null,
+      send_at:       day3.toISOString(),
+      sent:          false,
+    },
+    {
+      email,
+      type:          'day7_review',
+      scan_id:       scanId,
+      business_name: businessName,
+      top_action:    null,
+      send_at:       day7.toISOString(),
+      sent:          false,
+    },
+  ])
+}
+
+// ─── Background scan — runs after we've already returned 200 to Stripe ────────
+async function processScan(scan: Record<string, unknown>, customerEmail: string | null) {
+  const scanId = scan.id as string
+
+  try {
+    const result = await runGeoScan(scan as Parameters<typeof runGeoScan>[0])
+
+    await supabase.from('scan_reports').update({
+      overall_score:        result.overallScore,
+      level:                result.level,
+      engines:              result.engines,
+      top_actions:          result.topActions,
+      quick_wins:           result.quickWins,
+      scan_error:           null,
+    }).eq('id', scanId)
+
+    const enrichments = await runEnrichments({
+      ...scan,
+      overall_score:  result.overallScore,
+      competitor_url: (scan.competitor_url as string) ?? null,
+    } as Parameters<typeof runEnrichments>[0])
+
+    await supabase.from('scan_reports').update({
+      schema_check:   enrichments.schemaCheck,
+      content_gaps:   enrichments.contentGaps,
+      gbp_signal:     enrichments.gbpSignal,
+      competitor_gap: enrichments.competitorGap,
+    }).eq('id', scanId)
+
+    if (customerEmail) {
+      const fullReport: ScanReport = {
+        id:            scanId,
+        createdAt:     scan.created_at as string,
+        businessName:  scan.business_name as string,
+        website:       scan.website as string,
+        topics:        scan.topics as string[],
+        location:      (scan.location as string) ?? null,
+        industry:      (scan.industry as string) ?? null,
+        competitorUrl: (scan.competitor_url as string) ?? null,
+        paid:          true,
+        schemaCheck:   enrichments.schemaCheck,
+        contentGaps:   enrichments.contentGaps,
+        gbpSignal:     enrichments.gbpSignal,
+        competitorGap: enrichments.competitorGap,
+        ...result,
+      }
+
+      await sendScanReport(customerEmail, fullReport).catch(console.error)
+      await sendWelcomeEmail({
+        email:        customerEmail,
+        businessName: scan.business_name as string,
+        scanId,
+        score:        result.overallScore,
+      }).catch(console.error)
+
+      const topAction = result.topActions?.[0]?.description
+      await scheduleFollowUp(customerEmail, scanId, scan.business_name as string, topAction).catch(console.error)
+    }
+  } catch (err) {
+    console.error('processScan failed for', scanId, err)
+
+    // Write error state to DB so the report page shows an error instead of spinning forever
+    await supabase.from('scan_reports').update({
+      scan_error: err instanceof Error ? err.message : 'Unknown error',
+    }).eq('id', scanId).catch(console.error)
+
+    // Email the customer so they know and can contact support
+    if (customerEmail) {
+      await sendScanErrorEmail({
+        email:        customerEmail,
+        businessName: scan.business_name as string,
+        scanId,
+      }).catch(console.error)
+    }
+
+    // Alert yourself
+    const adminEmail = process.env.ADMIN_ALERT_EMAIL
+    if (adminEmail) {
+      const { Resend } = await import('resend')
+      const resend = new Resend(process.env.RESEND_API_KEY)
+      await resend.emails.send({
+        from:    'MyGeoRadar Alerts <reports@mygeoradar.com>',
+        to:      adminEmail,
+        subject: `[ALERT] Scan failed: ${scan.business_name} (${scanId})`,
+        text:    `Scan ${scanId} for ${scan.business_name} failed.\n\nError: ${err instanceof Error ? err.message : String(err)}\n\nCustomer email: ${customerEmail ?? 'unknown'}`,
+      }).catch(console.error)
+    }
+  }
 }
 
 export async function POST(req: NextRequest) {
@@ -60,6 +146,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature.' }, { status: 400 })
   }
 
+  // ── checkout.session.completed ───────────────────────────────────────────────
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
     const scanId  = session.metadata?.scanId
@@ -73,13 +160,27 @@ export async function POST(req: NextRequest) {
 
     if (!scan) return NextResponse.json({ ok: true })
 
-    // Link scan to user via service-role client (bypasses RLS, can read auth.users)
+    // ── Idempotency guard ────────────────────────────────────────────────────
+    // Stripe retries webhooks on timeout. If processing_started_at is already
+    // set (or scan has results), a retry must not fire runGeoScan again.
+    if (scan.processing_started_at || scan.overall_score != null || scan.scan_error) {
+      console.log(`Webhook retry skipped for scan ${scanId} — already processed or in progress`)
+      return NextResponse.json({ ok: true })
+    }
+
+    // Mark processing started immediately — this prevents any concurrent retry
+    await supabase
+      .from('scan_reports')
+      .update({ paid: true, processing_started_at: new Date().toISOString() })
+      .eq('id', scanId)
+
+    // Link scan to Supabase auth user if one exists with this email
     if (!scan.user_id) {
       const customerEmail = scan.email || session.customer_details?.email
       if (customerEmail) {
         try {
           const { data: { users } } = await supabaseAdmin.auth.admin.listUsers()
-          const matched = users.find(u => u.email === customerEmail)
+          const matched = users.find((u) => u.email === customerEmail)
           if (matched) {
             await supabase
               .from('scan_reports')
@@ -92,64 +193,21 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Mark paid immediately so report page stops polling
-    await supabase.from('scan_reports').update({ paid: true }).eq('id', scanId)
+    const customerEmail = scan.email || session.customer_details?.email || null
 
-    runGeoScan(scan).then(async (result) => {
-      await supabase.from('scan_reports').update({
-        overall_score: result.overallScore,
-        level:         result.level,
-        engines:       result.engines,
-        top_actions:   result.topActions,
-        quick_wins:    result.quickWins,
-      }).eq('id', scanId)
-
-      const enrichments = await runEnrichments({
-        ...scan,
-        overall_score:  result.overallScore,
-        competitor_url: scan.competitor_url ?? null,
-      })
-
-      await supabase.from('scan_reports').update({
-        schema_check:   enrichments.schemaCheck,
-        content_gaps:   enrichments.contentGaps,
-        gbp_signal:     enrichments.gbpSignal,
-        competitor_gap: enrichments.competitorGap,
-      }).eq('id', scanId)
-
-      const email = scan.email || session.customer_details?.email
-      if (email) {
-        const fullReport: ScanReport = {
-          id:            scanId,
-          createdAt:     scan.created_at,
-          businessName:  scan.business_name,
-          website:       scan.website,
-          topics:        scan.topics,
-          location:      scan.location,
-          industry:      scan.industry,
-          competitorUrl: scan.competitor_url ?? null,
-          paid:          true,
-          schemaCheck:   enrichments.schemaCheck,
-          contentGaps:   enrichments.contentGaps,
-          gbpSignal:     enrichments.gbpSignal,
-          competitorGap: enrichments.competitorGap,
-          ...result,
-        }
-
-        await sendScanReport(email, fullReport).catch(console.error)
-        await sendWelcomeEmail({
-          email,
-          businessName: scan.business_name,
-          scanId,
-          score: result.overallScore,
-        }).catch(console.error)
-
-        const topAction = result.topActions?.[0]?.description
-        await scheduleFollowUp(email, scanId, scan.business_name, topAction).catch(console.error)
-      }
-    }).catch(console.error)
+    // ── Background the expensive work ───────────────────────────────────────
+    // waitUntil keeps the lambda alive after we return 200 to Stripe.
+    // Stripe gets its 200 in < 1 second; the scan runs in the background.
+    const ctx = (req as unknown as { waitUntil?: (p: Promise<unknown>) => void }).waitUntil
+    if (typeof ctx === 'function') {
+      ctx(processScan(scan, customerEmail))
+    } else {
+      // Fallback for local dev / non-edge environments — fire and forget
+      processScan(scan, customerEmail).catch(console.error)
+    }
   }
 
+  // ── invoice.payment_succeeded ────────────────────────────────────────────────
   if (event.type === 'invoice.payment_succeeded') {
     const invoice    = event.data.object as Stripe.Invoice
     const customerId = invoice.customer as string
@@ -166,6 +224,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // ── customer.subscription.deleted ───────────────────────────────────────────
   if (event.type === 'customer.subscription.deleted') {
     const sub        = event.data.object as Stripe.Subscription
     const customerId = sub.customer as string
