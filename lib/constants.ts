@@ -12,7 +12,7 @@ export const PROMO_PRICE_CENTS  = 2999    // $29.99
 export const PROMO_PRICE_USD    = 29.99
 export const FULL_PRICE_USD     = 29.99
 export const PROMO_DISCOUNT_PCT = 0
-export const PROMO_LABEL        = ''
+export const PROMO_LABEL        = 'AI Visibility Scan'
 export const RESCAN_PRICE_CENTS = 2999    // $29.99
 export const RESCAN_PRICE_USD   = 29.99
 // ───────────────────────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ export const SCORE_LABELS = {
   poor:      { label: 'Poor',      color: 'text-danger',  bg: 'bg-danger',  hex: '#ef4444' },
 } as const
 
-export const MAX_TOPICS = 5
+export const MAX_TOPICS = 50
 
 export const SAMPLE_BUSINESSES = [
   { name: 'Blue Ridge Roofing', website: 'blueridgeroofing.com', topics: ['roofer near me', 'roof repair', 'roofing contractor'] },

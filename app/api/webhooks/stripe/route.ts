@@ -11,6 +11,15 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
 })
 
+/** Safely parse topics — Supabase may return a JSON string instead of an array */
+function parseTopics(raw: unknown): string[] {
+  if (Array.isArray(raw)) return raw as string[]
+  if (typeof raw === 'string') {
+    try { return JSON.parse(raw) } catch { return [] }
+  }
+  return []
+}
+
 async function scheduleFollowUp(email: string, scanId: string, businessName: string, topAction?: string) {
   const now  = new Date()
   const day3 = new Date(now)
@@ -44,13 +53,19 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
   const scanId = scan.id as string
 
   try {
+    const topics = parseTopics(scan.topics)
+
+    if (!topics.length) {
+      throw new Error(`No topics found for scan ${scanId} — cannot run GEO scan`)
+    }
+
     const result = await runGeoScan({
       id:            scanId,
       business_name: scan.business_name as string,
       website:       scan.website       as string,
-      topics:        scan.topics        as string[],
-      location:      (scan.location     as string | null) ?? null,
-      industry:      (scan.industry     as string | null) ?? null,
+      topics,
+      location:      (scan.location  as string | null) ?? null,
+      industry:      (scan.industry  as string | null) ?? null,
     })
 
     await supabase.from('scan_reports').update({
@@ -66,9 +81,9 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
       id:            scanId,
       business_name: scan.business_name as string,
       website:       scan.website       as string,
-      topics:        scan.topics        as string[],
-      location:      (scan.location     as string | null) ?? null,
-      industry:      (scan.industry     as string | null) ?? null,
+      topics,
+      location:      (scan.location  as string | null) ?? null,
+      industry:      (scan.industry  as string | null) ?? null,
       overall_score: result.overallScore,
     } as unknown as Parameters<typeof runEnrichments>[0])
 
@@ -82,12 +97,12 @@ async function processScan(scan: Record<string, unknown>, customerEmail: string 
     if (customerEmail) {
       const fullReport: ScanReport = {
         id:            scanId,
-        createdAt:     scan.created_at    as string,
-        businessName:  scan.business_name as string,
-        website:       scan.website       as string,
-        topics:        scan.topics        as string[],
-        location:      (scan.location     as string) ?? null,
-        industry:      (scan.industry     as string) ?? null,
+        createdAt:     scan.created_at     as string,
+        businessName:  scan.business_name  as string,
+        website:       scan.website        as string,
+        topics,
+        location:      (scan.location      as string) ?? null,
+        industry:      (scan.industry      as string) ?? null,
         competitorUrl: (scan.competitor_url as string) ?? null,
         paid:          true,
         schemaCheck:   enrichments.schemaCheck,

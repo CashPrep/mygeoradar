@@ -3,7 +3,7 @@ import Stripe from 'stripe'
 import { supabase } from '@/lib/supabase'
 import { createSupabaseServer } from '@/lib/supabase-server'
 import { nanoid } from 'nanoid'
-import { SCAN_PRICE_CENTS, PROMO_PRICE_CENTS, PROMO_LABEL } from '@/lib/constants'
+import { SCAN_PRICE_CENTS } from '@/lib/constants'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   try {
     const {
       businessName, website, topics, location,
-      industry, email, competitorUrl, usePromo,
+      industry, email, competitorUrl,
     } = await req.json()
 
     if (!businessName || !website || !topics?.length) {
@@ -34,22 +34,6 @@ export async function POST(req: NextRequest) {
 
     const ip     = getClientIp(req)
     const scanId = nanoid(10)
-
-    let promoAllowed = false
-    if (usePromo && ip !== 'unknown') {
-      const { data: prior } = await supabase
-        .from('scan_reports')
-        .select('id')
-        .eq('ip_address', ip)
-        .eq('paid', true)
-        .limit(1)
-      promoAllowed = !prior || prior.length === 0
-    }
-
-    const chargeAmount = promoAllowed ? PROMO_PRICE_CENTS : SCAN_PRICE_CENTS
-    const priceLabel   = promoAllowed
-      ? `AI Visibility Scan — ${PROMO_LABEL}`
-      : 'AI Visibility Scan'
 
     const { error: dbError } = await supabase.from('scan_reports').insert([{
       id:             scanId,
@@ -77,9 +61,9 @@ export async function POST(req: NextRequest) {
       line_items: [{
         price_data: {
           currency:     'usd',
-          unit_amount:  chargeAmount,
+          unit_amount:  SCAN_PRICE_CENTS,
           product_data: {
-            name:        priceLabel,
+            name:        'AI Visibility Scan',
             description: 'One-time GEO scan across ChatGPT, Perplexity, Gemini & Claude',
           },
         },
@@ -89,7 +73,7 @@ export async function POST(req: NextRequest) {
       customer_email: user?.email || email || undefined,
       success_url: `${appUrl}/scan/${scanId}?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${appUrl}/scan`,
-      metadata: { scanId, businessName, website, promoUsed: promoAllowed ? 'true' : 'false' },
+      metadata: { scanId, businessName, website },
     })
 
     return NextResponse.json({ url: session.url })
