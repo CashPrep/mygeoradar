@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react'
 import { PROMO_PRICE_USD } from '@/lib/constants'
 import { SnapshotWidget } from './SnapshotWidget'
 
@@ -22,18 +22,8 @@ export function HeroSection() {
           Get a free score in seconds. See exactly where you stand on ChatGPT, Perplexity, Gemini, and Claude.
         </p>
 
+        {/* FREE score widget */}
         <SnapshotWidget />
-
-        <div className="flex flex-col items-center gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => window.location.href = '/scan'}
-          >
-            Skip to full report — ${PROMO_PRICE_USD.toFixed(2)}
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Button>
-        </div>
 
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           {[
@@ -46,6 +36,28 @@ export function HeroSection() {
               <span className="text-xs text-muted">{item}</span>
             </div>
           ))}
+        </div>
+
+        {/* Visual separator before paid CTA */}
+        <div className="w-full max-w-sm flex items-center gap-3 mt-2">
+          <div className="flex-1 h-px bg-border" />
+          <span className="text-xs text-muted uppercase tracking-widest">or</span>
+          <div className="flex-1 h-px bg-border" />
+        </div>
+
+        {/* PAID full report CTA — visually distinct */}
+        <div className="flex flex-col items-center gap-1.5">
+          <p className="text-xs text-muted">Want the full deep-dive right now?</p>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => window.location.href = '/scan'}
+          >
+            <Sparkles className="w-3.5 h-3.5" />
+            Get full AI report — ${PROMO_PRICE_USD.toFixed(2)}
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Button>
+          <p className="text-xs text-muted opacity-70">One-time payment &middot; Instant results</p>
         </div>
 
       </div>

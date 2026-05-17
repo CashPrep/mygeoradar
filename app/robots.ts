@@ -9,7 +9,8 @@ export default function robots(): MetadataRoute.Robots {
         disallow: [
           '/api/',
           '/dashboard/',
-          '/scan/',   // individual report pages are private/user-specific
+          '/account/',
+          '/scan/',   // individual report pages /scan/[id] are private — /scan itself stays crawlable
         ],
       },
     ],
