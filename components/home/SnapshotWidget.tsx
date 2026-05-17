@@ -30,6 +30,23 @@ const LEVEL_CONFIG: Record<Level, {
   excellent: { label: 'EXCELLENT', color: 'text-success', bg: 'bg-success/10', border: 'border-success/30', ringColor: '#22c55e', icon: <CheckCircle2  className="w-4 h-4" /> },
 }
 
+function normalizeUrl(raw: string): string {
+  const s = raw.trim()
+  if (!s) return s
+  if (/^https?:\/\//i.test(s)) return s
+  return 'https://' + s
+}
+
+function isValidUrl(raw: string): boolean {
+  try {
+    const url = new URL(normalizeUrl(raw))
+    // must have a real-looking hostname (at least one dot)
+    return url.hostname.includes('.')
+  } catch {
+    return false
+  }
+}
+
 function ScoreRingMini({ score, level }: { score: number; level: Level }) {
   const size   = 96
   const sw     = 8
@@ -63,14 +80,35 @@ export function SnapshotWidget() {
   const [businessName, setBusinessName] = useState('')
   const [website,      setWebsite]      = useState('')
   const [loading,      setLoading]      = useState(false)
-  const [error,        setError]        = useState('')
   const [result,       setResult]       = useState<SnapshotResult | null>(null)
   const resultRef = useRef<HTMLDivElement>(null)
 
+  // Per-field error state
+  const [nameError, setNameError]   = useState('')
+  const [urlError,  setUrlError]    = useState('')
+
+  function validateFields(): boolean {
+    let valid = true
+    if (!businessName.trim()) {
+      setNameError('Enter your business name.')
+      valid = false
+    } else {
+      setNameError('')
+    }
+    if (!website.trim()) {
+      setUrlError('Enter your website URL.')
+      valid = false
+    } else if (!isValidUrl(website)) {
+      setUrlError('Enter a valid URL, e.g. yoursite.com')
+      valid = false
+    } else {
+      setUrlError('')
+    }
+    return valid
+  }
+
   async function handleScan() {
-    if (!businessName.trim()) { setError('Enter your business name.'); return }
-    if (!website.trim())      { setError('Enter your website URL.');   return }
-    setError('')
+    if (!validateFields()) return
     setLoading(true)
     setResult(null)
 
@@ -78,19 +116,19 @@ export function SnapshotWidget() {
       const res  = await fetch('/api/snapshot', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ businessName: businessName.trim(), website: website.trim() }),
+        body:    JSON.stringify({ businessName: businessName.trim(), website: normalizeUrl(website) }),
       })
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || 'Something went wrong. Please try again.')
+        setUrlError(data.error || 'Something went wrong. Please try again.')
         return
       }
 
       setResult(data as SnapshotResult)
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120)
     } catch {
-      setError('Network error — please try again.')
+      setUrlError('Network error \u2014 please try again.')
     } finally {
       setLoading(false)
     }
@@ -101,7 +139,7 @@ export function SnapshotWidget() {
   return (
     <div className="w-full max-w-md flex flex-col gap-3">
 
-      {/* ── Input card (always visible until result) ── */}
+      {/* ── Input card ── */}
       {!result && (
         <div className="bg-surface border border-border rounded-2xl p-5 flex flex-col gap-3">
           <div className="flex items-center justify-between">
@@ -110,32 +148,54 @@ export function SnapshotWidget() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <input
-              type="text"
-              placeholder="Business name"
-              value={businessName}
-              disabled={loading}
-              onChange={(e) => setBusinessName(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleScan() }}
-              className="w-full px-3 py-2.5 rounded-xl bg-surface-2 border border-border text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/60 transition-colors disabled:opacity-50"
-            />
-            <input
-              type="text"
-              placeholder="yourwebsite.com"
-              value={website}
-              disabled={loading}
-              onChange={(e) => setWebsite(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleScan() }}
-              className="w-full px-3 py-2.5 rounded-xl bg-surface-2 border border-border text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/60 transition-colors disabled:opacity-50"
-            />
-          </div>
+            {/* Business name field */}
+            <div className="flex flex-col gap-1">
+              <input
+                type="text"
+                placeholder="Business name"
+                value={businessName}
+                disabled={loading}
+                onChange={(e) => { setBusinessName(e.target.value); if (nameError) setNameError('') }}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleScan() }}
+                aria-invalid={!!nameError}
+                className={clsx(
+                  'w-full px-3 py-2.5 rounded-xl bg-surface-2 border text-sm text-foreground placeholder:text-muted focus:outline-none transition-colors disabled:opacity-50',
+                  nameError
+                    ? 'border-danger/60 focus:border-danger'
+                    : 'border-border focus:border-accent/60'
+                )}
+              />
+              {nameError && (
+                <p className="text-xs text-danger flex items-center gap-1">
+                  <AlertTriangle className="w-3 h-3 shrink-0" />{nameError}
+                </p>
+              )}
+            </div>
 
-          {error && (
-            <p className="text-xs text-danger flex items-center gap-1.5">
-              <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
-              {error}
-            </p>
-          )}
+            {/* URL field */}
+            <div className="flex flex-col gap-1">
+              <input
+                type="text"
+                placeholder="yourwebsite.com"
+                value={website}
+                disabled={loading}
+                onChange={(e) => { setWebsite(e.target.value); if (urlError) setUrlError('') }}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleScan() }}
+                aria-invalid={!!urlError}
+                className={clsx(
+                  'w-full px-3 py-2.5 rounded-xl bg-surface-2 border text-sm text-foreground placeholder:text-muted focus:outline-none transition-colors disabled:opacity-50',
+                  urlError
+                    ? 'border-danger/60 focus:border-danger'
+                    : 'border-border focus:border-accent/60'
+                )}
+              />
+              {urlError && (
+                <p className="text-xs text-danger flex items-center gap-1">
+                  <AlertTriangle className="w-3 h-3 shrink-0" />{urlError}
+                </p>
+              )}
+            </div>
+          </div>
 
           <button
             onClick={handleScan}
@@ -149,7 +209,7 @@ export function SnapshotWidget() {
             )}
           </button>
 
-          <p className="text-xs text-muted text-center">No payment · No account · Takes ~5 seconds</p>
+          <p className="text-xs text-muted text-center">No payment \u00b7 No account \u00b7 Takes ~5 seconds</p>
         </div>
       )}
 
@@ -184,7 +244,7 @@ export function SnapshotWidget() {
             <p className="text-xs text-muted">
               This is your surface score. The full scan reveals your exact breakdown across{' '}
               <span className="text-foreground font-semibold">ChatGPT, Perplexity, Gemini &amp; Claude</span>{' '}
-              — plus a complete fix-it action plan.
+              \u2014 plus a complete fix-it action plan.
             </p>
             <button
               className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-sm font-semibold transition-all shadow-glow-sm hover:shadow-glow-md"
@@ -193,11 +253,11 @@ export function SnapshotWidget() {
                 window.location.href = `/scan?${p.toString()}`
               }}
             >
-              Fix my score — Full scan ${PROMO_PRICE_USD.toFixed(2)}
+              Fix my score \u2014 Full scan ${PROMO_PRICE_USD.toFixed(2)}
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
-              onClick={() => { setResult(null); setBusinessName(''); setWebsite(''); setError('') }}
+              onClick={() => { setResult(null); setBusinessName(''); setWebsite(''); setNameError(''); setUrlError('') }}
               className="text-xs text-muted hover:text-foreground-dim transition-colors text-center"
             >
               Scan a different business
