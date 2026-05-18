@@ -53,9 +53,53 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'MyGeoRadar',
+  url: 'https://mygeoradar.com',
+  logo: 'https://mygeoradar.com/icon.svg',
+  description: 'AI search visibility platform that shows how ChatGPT, Perplexity, Gemini, and Claude talk about your business.',
+  founder: {
+    '@type': 'Person',
+    name: 'Andrew Garber',
+  },
+  sameAs: [
+    'https://twitter.com/MyGEORadar',
+  ],
+}
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'MyGeoRadar',
+  url: 'https://mygeoradar.com',
+  description: 'Find out how ChatGPT, Perplexity & Gemini talk about your business.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://mygeoradar.com/scan?q={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
+  },
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
+      <head>
+        <Script
+          id="schema-organization"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <Script
+          id="schema-website"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+      </head>
       <body className="bg-background text-foreground font-sans antialiased min-h-screen">
         {children}
         <Script
