@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/Button'
 import { ArrowRight } from 'lucide-react'
-import { PROMO_PRICE_USD, SCAN_PRICE_USD } from '@/lib/constants'
+import { SCAN_PRICE_USD } from '@/lib/constants'
 
 export function CtaBanner() {
   return (
@@ -35,14 +35,12 @@ export function CtaBanner() {
               className="w-full sm:w-auto px-10"
               onClick={() => window.location.href = '/scan'}
             >
-              Run my scan — ${PROMO_PRICE_USD.toFixed(2)} first scan
+              Run my scan — ${SCAN_PRICE_USD.toFixed(2)}
               <ArrowRight className="w-4 h-4" />
             </Button>
 
             <p className="text-xs text-muted">
-              50% off your first scan &middot; normally{' '}
-              <span className="line-through text-muted/60">${SCAN_PRICE_USD.toFixed(2)}</span>{' '}
-              &middot; No account &middot; Secure Stripe checkout
+              One-time payment &middot; Results in ~60 seconds &middot; No account needed &middot; Secure Stripe checkout
             </p>
           </div>
         </div>
