@@ -1,4 +1,4 @@
-// Intentionally empty — next.config.ts is the authoritative config.
-// This file exists only to prevent Next.js from warning about a missing .js config.
-// Do not add configuration here.
+// This file is intentionally minimal.
+// next.config.ts is the authoritative Next.js config.
+// Keeping this file empty prevents framework warnings on some tooling.
 module.exports = {}
