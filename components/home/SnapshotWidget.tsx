@@ -68,55 +68,64 @@ function ScoreRingMini({ score, level }: { score: number; level: Level }) {
 }
 
 export function SnapshotWidget() {
-  const [businessName,   setBusinessName]   = useState('')
-  const [website,        setWebsite]        = useState('')
-  const [loading,        setLoading]        = useState(false)
-  const [result,         setResult]         = useState<SnapshotResult | null>(null)
-  const [nameError,      setNameError]      = useState('')
-  const [urlError,       setUrlError]       = useState('')
-  const [crawlStatus,    setCrawlStatus]    = useState<'idle' | 'crawling' | 'done' | 'failed'>('idle')
+  const [businessName, setBusinessName] = useState('')
+  const [website,      setWebsite]      = useState('')
+  const [loading,      setLoading]      = useState(false)
+  const [result,       setResult]       = useState<SnapshotResult | null>(null)
+  const [nameError,    setNameError]    = useState('')
+  const [urlError,     setUrlError]     = useState('')
+  // crawlStatus is purely cosmetic — NEVER blocks the scan button
+  const [crawlStatus,  setCrawlStatus]  = useState<'idle' | 'crawling' | 'done' | 'failed'>('idle')
   const resultRef      = useRef<HTMLDivElement>(null)
   const lastCrawledUrl = useRef('')
+  const crawlVersion   = useRef(0) // guard against stale responses
 
   async function autofillFromUrl(url: string) {
-    const normalized = url.trim().replace(/\/$/, '')
+    const normalized = normalizeUrl(url.trim().replace(/\/$/, ''))
     if (!normalized || !isValidUrl(normalized) || normalized === lastCrawledUrl.current) return
     lastCrawledUrl.current = normalized
+
+    const version = ++crawlVersion.current
     setCrawlStatus('crawling')
+
     try {
       const res  = await fetch('/api/scrape', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ url: normalized }),
       })
+      // Discard if a newer crawl has started
+      if (version !== crawlVersion.current) return
+
       const data = await res.json()
-      if (res.ok && data.businessName && !businessName) {
-        setBusinessName(data.businessName)
+      if (res.ok && data.businessName) {
+        setBusinessName(prev => prev || data.businessName)
         if (nameError) setNameError('')
       }
-      setCrawlStatus(res.ok ? 'done' : 'failed')
+      setCrawlStatus(res.ok && data.businessName ? 'done' : 'failed')
     } catch {
-      setCrawlStatus('failed')
+      if (version === crawlVersion.current) setCrawlStatus('failed')
     }
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedAutofill = useCallback(
-    debounce((url: string) => { if (url.length > 6) autofillFromUrl(url) }, 900),
+    debounce((url: string) => { if (url.length > 5) autofillFromUrl(url) }, 900),
     []
   )
 
   function handleUrlChange(val: string) {
     setWebsite(val)
     if (urlError) setUrlError('')
-    if (crawlStatus !== 'idle') { setCrawlStatus('idle'); lastCrawledUrl.current = '' }
+    // Only reset visual status — don't cancel the in-flight request
+    setCrawlStatus('idle')
     debouncedAutofill(val)
   }
 
   function validateFields(): boolean {
     let valid = true
     if (!businessName.trim()) { setNameError('Enter your business name.'); valid = false } else { setNameError('') }
-    if (!website.trim())      { setUrlError('Enter your website URL.');    valid = false }
+    if (!website.trim())           { setUrlError('Enter your website URL.'); valid = false }
     else if (!isValidUrl(website)) { setUrlError('Enter a valid URL, e.g. yoursite.com'); valid = false }
     else { setUrlError('') }
     return valid
@@ -156,7 +165,7 @@ export function SnapshotWidget() {
           </div>
 
           <div className="flex flex-col gap-2">
-            {/* URL field first — triggers auto-fill of business name */}
+            {/* URL field — triggers auto-fill */}
             <div className="flex flex-col gap-1">
               <div className="relative">
                 <input
@@ -165,28 +174,28 @@ export function SnapshotWidget() {
                   value={website}
                   disabled={loading}
                   onChange={e => handleUrlChange(e.target.value)}
-                  onBlur={e => { if (e.target.value) autofillFromUrl(e.target.value) }}
+                  onBlur={e => { if (e.target.value && crawlStatus === 'idle') autofillFromUrl(e.target.value) }}
                   onKeyDown={e => { if (e.key === 'Enter') handleScan() }}
                   aria-invalid={!!urlError}
                   className={clsx(
-                    'w-full px-3 py-2.5 rounded-xl bg-surface-2 border text-sm text-foreground placeholder:text-muted focus:outline-none transition-colors disabled:opacity-50',
+                    'w-full px-3 py-2.5 pr-9 rounded-xl bg-surface-2 border text-sm text-foreground placeholder:text-muted focus:outline-none transition-colors disabled:opacity-50',
                     urlError ? 'border-danger/60 focus:border-danger' : 'border-border focus:border-accent/60'
                   )}
                 />
                 {crawlStatus === 'crawling' && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                     <Loader2 className="w-4 h-4 text-accent animate-spin" />
                   </div>
                 )}
                 {crawlStatus === 'done' && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                     <CheckCircle2 className="w-4 h-4 text-success" />
                   </div>
                 )}
               </div>
               {crawlStatus === 'crawling' && (
                 <p className="text-xs text-accent flex items-center gap-1">
-                  <Sparkles className="w-3 h-3 animate-pulse" /> Auto-detecting business name\u2026
+                  <Sparkles className="w-3 h-3 animate-pulse" /> Detecting business name&hellip;
                 </p>
               )}
               {urlError && (
@@ -196,12 +205,12 @@ export function SnapshotWidget() {
               )}
             </div>
 
-            {/* Business name — auto-filled from crawl */}
+            {/* Business name — auto-filled or manual */}
             <div className="flex flex-col gap-1">
               <div className="relative">
                 <input
                   type="text"
-                  placeholder={crawlStatus === 'crawling' ? 'Detecting name\u2026' : 'Business name'}
+                  placeholder={crawlStatus === 'crawling' ? 'Detecting\u2026' : 'Business name'}
                   value={businessName}
                   disabled={loading}
                   onChange={e => { setBusinessName(e.target.value); if (nameError) setNameError('') }}
@@ -213,7 +222,7 @@ export function SnapshotWidget() {
                   )}
                 />
                 {crawlStatus === 'done' && businessName && (
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
                     <CheckCircle2 className="w-4 h-4 text-success" />
                   </div>
                 )}
@@ -226,18 +235,16 @@ export function SnapshotWidget() {
             </div>
           </div>
 
+          {/* Button is ONLY disabled while the actual scan is running, never during crawl */}
           <button
             onClick={handleScan}
-            disabled={loading || crawlStatus === 'crawling'}
+            disabled={loading}
             className="w-full inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-sm font-semibold transition-all shadow-glow-sm hover:shadow-glow-md disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> Scanning&hellip;</>
-            ) : crawlStatus === 'crawling' ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> Detecting site info&hellip;</>
-            ) : (
-              <><Zap className="w-4 h-4" /> Get My Free Score</>
-            )}
+            {loading
+              ? <><Loader2 className="w-4 h-4 animate-spin" /> Scanning&hellip;</>
+              : <><Zap className="w-4 h-4" /> Get My Free Score</>
+            }
           </button>
 
           <p className="text-xs text-muted text-center">No payment &middot; No account &middot; Takes ~5 seconds</p>
@@ -286,7 +293,16 @@ export function SnapshotWidget() {
               <ArrowRight className="w-4 h-4" />
             </button>
             <button
-              onClick={() => { setResult(null); setBusinessName(''); setWebsite(''); setNameError(''); setUrlError(''); setCrawlStatus('idle'); lastCrawledUrl.current = '' }}
+              onClick={() => {
+                setResult(null)
+                setBusinessName('')
+                setWebsite('')
+                setNameError('')
+                setUrlError('')
+                setCrawlStatus('idle')
+                lastCrawledUrl.current = ''
+                crawlVersion.current   = 0
+              }}
               className="text-xs text-muted hover:text-foreground-dim transition-colors text-center"
             >
               Scan a different business
