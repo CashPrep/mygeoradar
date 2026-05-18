@@ -6,7 +6,7 @@ import type {
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-const ENRICHMENT_TIMEOUT_MS = 52_000 // 52s — safely under Vercel's 60s function limit
+const ENRICHMENT_TIMEOUT_MS = 52_000 // 52s — safely under Vercel’s 60s function limit
 
 function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T> {
   return Promise.race([
@@ -15,7 +15,7 @@ function withTimeout<T>(promise: Promise<T>, ms: number, fallback: T): Promise<T
   ])
 }
 
-// ─── Shared HTML helpers ──────────────────────────────────────────────────────
+// ─── Shared HTML helpers ──────────────────────────────────────────────────
 
 async function fetchHtml(url: string): Promise<string> {
   const fullUrl = url.startsWith('http') ? url : `https://${url}`
@@ -64,7 +64,7 @@ function hasType(presentTypes: string[], target: string): boolean {
   return presentTypes.some(t => t.toLowerCase().includes(target.toLowerCase()))
 }
 
-// ─── Schema Checker ───────────────────────────────────────────────────────────
+// ─── Schema Checker ───────────────────────────────────────────────────
 
 const SCHEMA_MATRIX: Array<{ type: SchemaType; impact: 'high' | 'medium' | 'low'; note: string }> = [
   { type: 'LocalBusiness',  impact: 'high',   note: 'Critical for Gemini & ChatGPT local citations. Add LocalBusiness JSON-LD with name, address, phone, url, and opening hours.' },
@@ -96,7 +96,7 @@ async function checkSchema(url: string): Promise<SchemaCheck> {
   return { url: fullUrl, checked, score, fetchedOk }
 }
 
-// ─── GBP Signal ───────────────────────────────────────────────────────────────
+// ─── GBP Signal ──────────────────────────────────────────────────────
 
 async function inferGbpSignal(url: string, businessName: string): Promise<GbpSignal> {
   const html      = await fetchHtml(url)
@@ -118,7 +118,7 @@ async function inferGbpSignal(url: string, businessName: string): Promise<GbpSig
   return { detected: hasLocalBusiness, hasReviewSchema, hasNapConsistency, recommendations }
 }
 
-// ─── Content Gap ──────────────────────────────────────────────────────────────
+// ─── Content Gap ──────────────────────────────────────────────────────
 
 async function generateContentGaps(
   businessName: string,
@@ -135,7 +135,7 @@ Industry: ${industry || 'General'}
 Topics they care about: ${topics.slice(0, 20).join(', ')}
 
 Generate exactly 5 high-value questions that:
-1. People are actively asking ChatGPT, Perplexity, Gemini, or Claude related to this business's industry and location
+1. People are actively asking ChatGPT, Perplexity, Gemini, or Claude related to this business’s industry and location
 2. The business website likely does NOT have a dedicated answer for
 3. If answered well on their site, would directly improve their AI visibility score
 
@@ -160,7 +160,7 @@ Return ONLY valid JSON:
   } catch { return [] }
 }
 
-// ─── Competitor Gap ───────────────────────────────────────────────────────────
+// ─── Competitor Gap ─────────────────────────────────────────────────────
 
 async function analyzeCompetitorGap(
   businessName: string,
@@ -168,44 +168,64 @@ async function analyzeCompetitorGap(
   industry: string,
   topics: string[],
   location: string | null | undefined,
-  yourScore: number
+  yourScore: number,
+  competitorUrl?: string | null  // customer-provided competitor — used as first entry if present
 ): Promise<CompetitorGap | null> {
   const locationStr = location ? ` in ${location}` : ''
 
+  let competitorList: Array<{ name: string; domain: string }> = []
+
+  // If the customer provided their own competitor URL, use it as the first entry.
+  // We still ask GPT to identify one additional competitor for comparison richness.
+  if (competitorUrl) {
+    const cleanDomain = competitorUrl
+      .replace(/https?:\/\/(www\.)?/, '')
+      .split('/')[0]
+      .toLowerCase()
+    // Use the domain as a best-guess name — the analyze prompt will use real schema data anyway
+    competitorList.push({ name: cleanDomain, domain: competitorUrl.startsWith('http') ? competitorUrl : `https://${cleanDomain}` })
+  }
+
+  // Ask GPT to fill remaining slots (1 if competitor provided, 2 if not)
+  const slotsNeeded = competitorUrl ? 1 : 2
   const identifyPrompt = `You are a competitive research expert.
 
 Business: ${businessName} (${website})${locationStr}
 Industry: ${industry || 'General'}
 Topics: ${topics.slice(0, 15).join(', ')}
+${
+  competitorUrl
+    ? `The customer has already identified one competitor (${competitorUrl}). Identify ${slotsNeeded} additional direct competitor(s) that are DIFFERENT from that one.`
+    : `Identify exactly ${slotsNeeded} realistic direct competitors for this business.`
+}
 
-Identify exactly 2 realistic direct competitors for this business. These should be:
+These should be:
 - Actual businesses that exist and compete for the same customers
 - Have a real website you can name confidently
 - Be in the same geographic market if location is specified
-- Prefer well-known regional or national competitors over obscure ones
 
 Return ONLY valid JSON:
 {
   "competitors": [
-    { "name": "Competitor Business Name", "domain": "competitordomain.com" },
-    { "name": "Second Competitor Name",   "domain": "secondcompetitor.com" }
+    { "name": "Competitor Business Name", "domain": "competitordomain.com" }
   ]
 }`
 
-  let competitorList: Array<{ name: string; domain: string }> = []
   try {
     const res = await openai.chat.completions.create({
       model: 'gpt-4o', messages: [{ role: 'user', content: identifyPrompt }],
       temperature: 0.1, response_format: { type: 'json_object' }, max_tokens: 200,
     })
     const raw = JSON.parse(res.choices[0].message.content!)
-    competitorList = (raw.competitors ?? []).slice(0, 2)
-  } catch { return null }
+    const gptuggested = (raw.competitors ?? []).slice(0, slotsNeeded) as Array<{ name: string; domain: string }>
+    competitorList = [...competitorList, ...gptuggested]
+  } catch { /* proceed with what we have */ }
 
   if (!competitorList.length) return null
 
+  // Fetch schema data for all competitors in parallel
   const competitorData = await Promise.all(
-    competitorList.map(async (c) => {
+    competitorList.slice(0, 2).map(async (c) => {
       const html      = await fetchHtml(c.domain)
       const schemas   = extractJsonLd(html)
       const typesList = flattenTypes(schemas)
@@ -252,15 +272,16 @@ Return ONLY valid JSON:
   } catch { return null }
 }
 
-// ─── Main export ──────────────────────────────────────────────────────────────
+// ─── Main export ──────────────────────────────────────────────────────────
 
 export async function runEnrichments(scan: {
-  business_name: string
-  website:       string
-  industry?:     string | null
-  topics:        string[]
-  location?:     string | null
+  business_name:  string
+  website:        string
+  industry?:      string | null
+  topics:         string[]
+  location?:      string | null
   overall_score?: number
+  competitor_url?: string | null  // passed from process/route.ts
 }): Promise<{
   schemaCheck:   SchemaCheck
   contentGaps:   ContentGapItem[]
@@ -275,7 +296,15 @@ export async function runEnrichments(scan: {
     withTimeout(generateContentGaps(scan.business_name, scan.website, scan.industry ?? 'General', scan.topics, scan.location), ENRICHMENT_TIMEOUT_MS, []),
     withTimeout(inferGbpSignal(scan.website, scan.business_name), ENRICHMENT_TIMEOUT_MS, fallbackGbp),
     withTimeout(
-      analyzeCompetitorGap(scan.business_name, scan.website, scan.industry ?? 'General', scan.topics, scan.location, scan.overall_score ?? 0),
+      analyzeCompetitorGap(
+        scan.business_name,
+        scan.website,
+        scan.industry ?? 'General',
+        scan.topics,
+        scan.location,
+        scan.overall_score ?? 0,
+        scan.competitor_url,  // ← pass customer’s competitor through
+      ),
       ENRICHMENT_TIMEOUT_MS,
       null
     ),
