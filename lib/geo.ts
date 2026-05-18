@@ -3,7 +3,9 @@ import type { ScanReport, EngineResult, ActionItem, VisibilityLevel, AiEngine } 
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-const BATCH_SIZE = 15
+// Reduced from 15 to 10 — fewer tokens per call = faster GPT-4o response,
+// keeping total scan time under 45s even on slow OpenAI days.
+const BATCH_SIZE = 10
 
 function scoreToLevel(score: number): VisibilityLevel {
   if (score >= 80) return 'excellent'
@@ -77,7 +79,7 @@ Rules:
     messages:        [{ role: 'user', content: prompt }],
     temperature:     0.1,
     response_format: { type: 'json_object' },
-    max_tokens:      4000,
+    max_tokens:      3000,
   })
 
   const raw = JSON.parse(completion.choices[0].message.content!)
@@ -93,9 +95,10 @@ export async function runGeoScan(scan: {
   industry?: string | null
 }): Promise<Omit<ScanReport, 'id' | 'createdAt' | 'businessName' | 'website' | 'topics' | 'location' | 'industry' | 'paid'>> {
 
+  // Topics already capped at 30 by process/route.ts
   const batches = chunkArray(scan.topics, BATCH_SIZE)
 
-  // Run all batches in PARALLEL — major speed improvement
+  // Run all batches in PARALLEL — max speed
   const batchResults = await Promise.all(
     batches.map((batch, idx) => scoreBatch(scan, batch, idx === 0))
   )
@@ -135,7 +138,7 @@ export async function runGeoScan(scan: {
     }
   })
 
-  // Generate action items with gpt-4o-mini (faster + cheaper, no quality loss for this task)
+  // Generate action items with gpt-4o-mini (faster + cheaper)
   const actionPrompt = `You are a GEO analyst. Based on this business profile, return exactly 5 prioritised action items and 3 quick wins.
 
 Business: ${scan.business_name} | ${scan.website}${scan.location ? ` in ${scan.location}` : ''} | Industry: ${scan.industry || 'Not specified'}
