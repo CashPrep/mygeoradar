@@ -71,7 +71,7 @@ export default function AboutPage() {
                 </p>
 
                 <p className="text-foreground-dim leading-relaxed text-sm">
-                  I&apos;m a self-taught developer and entrepreneur. I&apos;ll be attending Elon University as an incoming <strong className="text-foreground">Artificial Intelligence Scholar</strong> &mdash; one of a select group of students chosen for deep study at the intersection of AI, ethics, and real-world application.
+                  I&apos;m a self-taught developer and entrepreneur. I attend Elon University as an <strong className="text-foreground">Artificial Intelligence Scholar</strong> &mdash; one of a select group of students chosen for deep study at the intersection of AI, ethics, and real-world application.
                 </p>
 
                 <p className="text-foreground-dim leading-relaxed text-sm">
