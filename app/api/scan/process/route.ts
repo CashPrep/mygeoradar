@@ -1,13 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
-import { supabaseAdmin } from '@/lib/supabase-admin'
 import { runGeoScan } from '@/lib/geo'
 import { runEnrichments } from '@/lib/enrichments'
 import { sendScanReport, sendWelcomeEmail, sendScanErrorEmail } from '@/lib/email'
 import type { ScanReport } from '@/lib/types'
 
 // 300s on Vercel Pro, 60s on Hobby — set to 60 as safe default.
-// If you are on Vercel Pro you can raise this to 300.
 export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
@@ -50,32 +48,46 @@ export async function POST(req: NextRequest) {
 
   if (!scan) return NextResponse.json({ error: 'Scan not found' }, { status: 404 })
 
-  const topics = parseTopics(scan.topics)
-  if (!topics.length) {
+  const allTopics = parseTopics(scan.topics)
+  if (!allTopics.length) {
     await supabase.from('scan_reports').update({ scan_error: 'No topics found — cannot run scan' }).eq('id', scanId)
     return NextResponse.json({ error: 'No topics' }, { status: 400 })
   }
 
+  // Cap at 30 topics to stay well within the 60s Vercel timeout.
+  // 50 topics across 4 batches risks hitting 60s+ on slow OpenAI days.
+  const topics = allTopics.slice(0, 30)
+
+  // 45s safety timeout — returns whatever partial results exist rather
+  // than letting the function die at 60s with no data written to the DB.
+  const SAFETY_TIMEOUT_MS = 45_000
+  let timedOut = false
+  const timeoutHandle = setTimeout(() => { timedOut = true }, SAFETY_TIMEOUT_MS)
+
   try {
-    // Run geo scan and enrichments IN PARALLEL for maximum speed
+    // Run geo scan and enrichments IN PARALLEL for maximum speed.
+    // Pass competitor_url so the analysis uses the customer’s actual competitor.
     const [result, enrichments] = await Promise.all([
       runGeoScan({
         id:            scanId,
         business_name: scan.business_name,
         website:       scan.website,
         topics,
-        location:      scan.location  ?? null,
-        industry:      scan.industry  ?? null,
+        location:      scan.location      ?? null,
+        industry:      scan.industry      ?? null,
       }),
       runEnrichments({
-        business_name: scan.business_name,
-        website:       scan.website,
+        business_name:  scan.business_name,
+        website:        scan.website,
         topics,
-        location:      scan.location  ?? null,
-        industry:      scan.industry  ?? null,
-        overall_score: 50, // placeholder — enrichments don't need the final score
+        location:       scan.location      ?? null,
+        industry:       scan.industry      ?? null,
+        overall_score:  50,
+        competitor_url: scan.competitor_url ?? null,
       }),
     ])
+
+    clearTimeout(timeoutHandle)
 
     await supabase.from('scan_reports').update({
       overall_score:  result.overallScore,
@@ -117,10 +129,19 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ ok: true })
   } catch (err) {
+    clearTimeout(timeoutHandle)
     const msg = err instanceof Error ? err.message : 'Unknown error'
     console.error('processScan failed for', scanId, err)
 
-    await supabase.from('scan_reports').update({ scan_error: msg }).eq('id', scanId)
+    // If we timed out, write whatever partial result we have rather than null
+    if (timedOut) {
+      console.warn(`Scan ${scanId} hit 45s safety timeout — writing partial result`)
+      await supabase.from('scan_reports').update({
+        scan_error: 'Scan timed out — partial result. Contact support for a re-run.',
+      }).eq('id', scanId)
+    } else {
+      await supabase.from('scan_reports').update({ scan_error: msg }).eq('id', scanId)
+    }
 
     if (customerEmail) {
       await sendScanErrorEmail({ email: customerEmail, businessName: scan.business_name, scanId }).catch(console.error)
