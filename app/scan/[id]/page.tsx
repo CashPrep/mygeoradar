@@ -14,7 +14,7 @@ import {
   Radar, Share2, RefreshCw, Zap, Code2, MessageSquareText,
   MapPin, CheckCircle2, XCircle, AlertCircle, ChevronDown, ChevronUp,
   Swords, TrendingUp, ArrowRight, LineChart, Wrench, CalendarClock,
-  Mail, Loader2, Search, Eye, EyeOff
+  Mail, Loader2, Search, Eye, EyeOff, Info
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -252,8 +252,8 @@ function DfyUpsell() {
         </div>
       </div>
       <ul className="flex flex-col gap-1.5 text-sm text-foreground-dim">
-        <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Schema markup installed & validated</li>
-        <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Content gap pages written & published</li>
+        <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Schema markup installed &amp; validated</li>
+        <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Content gap pages written &amp; published</li>
         <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Google Business Profile signals fixed</li>
         <li className="flex items-center gap-2"><CheckCircle2 className="w-3.5 h-3.5 text-accent flex-shrink-0" /> Re-scan after 30 days to confirm improvement</li>
       </ul>
@@ -784,6 +784,19 @@ function GbpSignalSection({ gbp }: { gbp: GbpSignal }) {
   )
 }
 
+// ─── Methodology Disclosure ───────────────────────────────────────────────────
+
+function MethodologyDisclosure() {
+  return (
+    <div className="flex items-start gap-2 px-4 py-3 bg-surface-2 border border-border rounded-xl">
+      <Info className="w-3.5 h-3.5 text-muted flex-shrink-0 mt-0.5" />
+      <p className="text-xs text-muted leading-relaxed">
+        AI visibility scores are estimated using site analysis and AI modeling — not live queries to external engines.
+      </p>
+    </div>
+  )
+}
+
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
 export default function ScanResultPage() {
@@ -917,7 +930,7 @@ export default function ScanResultPage() {
               </div>
               <div className="text-center">
                 <h1 className="text-2xl font-bold mb-2">Scanning your business</h1>
-                <p className="text-muted text-sm">Simulating AI engine queries. This takes about 20–30 seconds.</p>
+                <p className="text-muted text-sm">Analyzing your site and modeling AI engine visibility. This takes about 20–30 seconds.</p>
               </div>
               <div className="w-full flex flex-col gap-2">
                 {steps.map((s) => (
@@ -930,6 +943,8 @@ export default function ScanResultPage() {
                   </div>
                 ))}
               </div>
+              {/* Methodology disclosure — scan loading state */}
+              <MethodologyDisclosure />
               {status === 'error' && (
                 <p className="text-danger text-sm text-center">
                   Something went wrong. Please refresh or{' '}
@@ -966,7 +981,7 @@ export default function ScanResultPage() {
         </div>
 
         {/* Overall score */}
-        <div className="card p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 mb-6">
+        <div className="card p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 mb-4">
           <ScoreRing score={report.overallScore} size={120} strokeWidth={10} />
           <div className="flex flex-col gap-2 text-center md:text-left">
             <span className={clsx('text-sm font-bold', getScoreColor(report.overallScore))}>{formatScore(report.overallScore)}</span>
@@ -980,6 +995,11 @@ export default function ScanResultPage() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Methodology disclosure — report page */}
+        <div className="mb-6">
+          <MethodologyDisclosure />
         </div>
 
         {/* Onboarding Checklist */}
