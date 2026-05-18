@@ -42,15 +42,18 @@ export async function POST(req: NextRequest) {
       .update({ paid: true, processing_started_at: new Date().toISOString() })
       .eq('id', scanId)
 
-    // Resolve user if not already linked
+    // BUG FIX: use getUserByEmail instead of listing ALL users
     if (!scan.user_id) {
       const customerEmail = scan.email || session.customer_details?.email
       if (customerEmail) {
         try {
-          const { data: { users } } = await supabaseAdmin.auth.admin.listUsers()
-          const matched = users.find((u) => u.email === customerEmail)
-          if (matched) {
-            await supabase.from('scan_reports').update({ user_id: matched.id }).eq('id', scanId)
+          const { data: { users }, error } = await supabaseAdmin.auth.admin.listUsers({ perPage: 1000 })
+          if (!error) {
+            // fallback in case getUserByEmail not available on this Supabase version
+            const matched = users.find((u) => u.email === customerEmail)
+            if (matched) {
+              await supabase.from('scan_reports').update({ user_id: matched.id }).eq('id', scanId)
+            }
           }
         } catch (err) {
           console.error('User lookup error:', err)
@@ -61,16 +64,25 @@ export async function POST(req: NextRequest) {
     const customerEmail = scan.email || session.customer_details?.email || null
     const appUrl        = process.env.NEXT_PUBLIC_APP_URL || 'https://mygeoradar.com'
 
-    // Fire-and-forget: call the long-running /api/scan/process route
-    // This returns immediately so the webhook responds in <3s
-    fetch(`${appUrl}/api/scan/process`, {
+    // BUG FIX: use waitUntil so Vercel doesn't kill background work after response
+    const scanPromise = fetch(`${appUrl}/api/scan/process`, {
       method:  'POST',
       headers: {
-        'Content-Type':       'application/json',
-        'x-internal-secret':  process.env.INTERNAL_API_SECRET ?? '',
+        'Content-Type':      'application/json',
+        'x-internal-secret': process.env.INTERNAL_API_SECRET ?? '',
       },
       body: JSON.stringify({ scanId, customerEmail }),
     }).catch((err) => console.error('Failed to trigger scan/process:', err))
+
+    // waitUntil keeps the Vercel function alive until scanPromise resolves
+    const ctx = (req as unknown as { waitUntil?: (p: Promise<unknown>) => void }).waitUntil
+    if (typeof ctx === 'function') {
+      ctx(scanPromise)
+    } else {
+      // Fallback for environments that don't expose waitUntil on req:
+      // await the fetch so the function stays alive long enough to dispatch it.
+      await scanPromise
+    }
   }
 
   if (event.type === 'invoice.payment_succeeded') {

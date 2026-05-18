@@ -6,8 +6,9 @@ import { runEnrichments } from '@/lib/enrichments'
 import { sendScanReport, sendWelcomeEmail, sendScanErrorEmail } from '@/lib/email'
 import type { ScanReport } from '@/lib/types'
 
-// Allow up to 300s on Vercel Pro / 60s on Hobby
-export const maxDuration = 300
+// 300s on Vercel Pro, 60s on Hobby — set to 60 as safe default.
+// If you are on Vercel Pro you can raise this to 300.
+export const maxDuration = 60
 export const dynamic = 'force-dynamic'
 
 /** Safely parse topics — Supabase may return a JSON string instead of an array */

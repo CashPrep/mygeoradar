@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
 import { OnboardingChecklist } from '@/components/scan/OnboardingChecklist'
@@ -69,10 +69,6 @@ function ScoreRing({ score, size = 100, strokeWidth = 8 }: { score: number; size
 
 const ENGINE_ICONS: Record<string, string> = { chatgpt: '🤖', perplexity: '🔍', gemini: '✨', claude: '🧠' }
 
-/**
- * Highlights occurrences of businessName in text with a yellow-tinted <mark>.
- * If the name is not present the text is returned as-is inside a <span>.
- */
 function HighlightedResponse({ text, businessName }: { text: string; businessName: string }) {
   if (!businessName || !text.toLowerCase().includes(businessName.toLowerCase())) {
     return <span>{text}</span>
@@ -96,7 +92,6 @@ function EngineCard({ engine, businessName }: { engine: EngineResult; businessNa
 
   return (
     <div className="card p-5 flex flex-col gap-4">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-xl">{ENGINE_ICONS[engine.engine] ?? '🔮'}</span>
@@ -105,7 +100,6 @@ function EngineCard({ engine, businessName }: { engine: EngineResult; businessNa
         <ScoreRing score={engine.overallScore} size={56} strokeWidth={5} />
       </div>
 
-      {/* Prompt pills */}
       {engine.prompts && engine.prompts.length > 0 && (
         <div className="flex flex-col gap-1.5">
           <span className="text-xs text-muted uppercase tracking-wide font-semibold flex items-center gap-1">
@@ -122,10 +116,8 @@ function EngineCard({ engine, businessName }: { engine: EngineResult; businessNa
         </div>
       )}
 
-      {/* Summary */}
       <p className="text-sm text-foreground-dim leading-relaxed">{engine.summary}</p>
 
-      {/* Raw AI response toggle */}
       {engine.rawResponse && (
         <div className="border border-border rounded-xl overflow-hidden">
           <button
@@ -166,7 +158,6 @@ function EngineCard({ engine, businessName }: { engine: EngineResult; businessNa
         </div>
       )}
 
-      {/* Topics */}
       <div className="flex flex-col gap-2">
         {engine.topics.map((t) => (
           <div key={t.topic}>
@@ -811,67 +802,70 @@ export default function ScanResultPage() {
     sb.auth.getUser().then(({ data }) => setHasAccount(!!data.user))
   }, [])
 
+  // BUG FIX: use useCallback + refs so the interval always sees fresh state
+  const statusRef         = useRef(status)
+  const enrichmentsDoneRef = useRef(enrichmentsDone)
+  useEffect(() => { statusRef.current = status }, [status])
+  useEffect(() => { enrichmentsDoneRef.current = enrichmentsDone }, [enrichmentsDone])
+
+  const fetchReport = useCallback(async () => {
+    if (!id) return
+    try {
+      const res  = await fetch(`/api/scan/${id}`)
+      const data = await res.json()
+      if (!res.ok) { setStatus('error'); return }
+
+      if (data.scan_error) {
+        setScanError(data.scan_error)
+        setStatus('error')
+        return
+      }
+
+      if (data.paid && data.overall_score != null) {
+        const mapped: ScanReport = {
+          id:            data.id,
+          createdAt:     data.created_at,
+          businessName:  data.business_name,
+          website:       data.website,
+          topics:        data.topics,
+          location:      data.location,
+          industry:      data.industry,
+          competitorUrl: data.competitor_url ?? null,
+          paid:          data.paid,
+          overallScore:  data.overall_score,
+          level:         data.level,
+          engines:       data.engines,
+          topActions:    data.top_actions,
+          quickWins:     data.quick_wins,
+          schemaCheck:   data.schema_check   ?? null,
+          contentGaps:   data.content_gaps   ?? null,
+          gbpSignal:     data.gbp_signal     ?? null,
+          competitorGap: data.competitor_gap ?? null,
+        }
+        setReport(mapped)
+        setStatus('ready')
+        if (data.email) setReportEmail(data.email)
+        if (data.schema_check && data.content_gaps && data.gbp_signal && data.competitor_gap) {
+          setEnrichmentsDone(true)
+        }
+      } else {
+        setStatus('pending')
+        setPollCount(c => c + 1)
+      }
+    } catch { setStatus('error') }
+  }, [id])
+
   useEffect(() => {
     if (!id) return
-
-    async function fetchReport() {
-      try {
-        const res  = await fetch(`/api/scan/${id}`)
-        const data = await res.json()
-        if (!res.ok) { setStatus('error'); return }
-
-        // ── Scan failed after payment ──────────────────────────────────────
-        // The webhook wrote scan_error to the DB. Show a proper error state
-        // instead of spinning forever.
-        if (data.scan_error) {
-          setScanError(data.scan_error)
-          setStatus('error')
-          return
-        }
-
-        if (data.paid && data.overall_score != null) {
-          const mapped: ScanReport = {
-            id:            data.id,
-            createdAt:     data.created_at,
-            businessName:  data.business_name,
-            website:       data.website,
-            topics:        data.topics,
-            location:      data.location,
-            industry:      data.industry,
-            competitorUrl: data.competitor_url ?? null,
-            paid:          data.paid,
-            overallScore:  data.overall_score,
-            level:         data.level,
-            engines:       data.engines,
-            topActions:    data.top_actions,
-            quickWins:     data.quick_wins,
-            schemaCheck:   data.schema_check   ?? null,
-            contentGaps:   data.content_gaps   ?? null,
-            gbpSignal:     data.gbp_signal     ?? null,
-            competitorGap: data.competitor_gap ?? null,
-          }
-          setReport(mapped)
-          setStatus('ready')
-          if (data.email) setReportEmail(data.email)
-          if (data.schema_check && data.content_gaps && data.gbp_signal && data.competitor_gap) {
-            setEnrichmentsDone(true)
-          }
-        } else {
-          setStatus('pending')
-          setPollCount(c => c + 1)
-        }
-      } catch { setStatus('error') }
-    }
-
     fetchReport()
     const interval = setInterval(() => {
-      if (status === 'ready' && enrichmentsDone) return
-      if (status === 'error') return  // stop polling once we have a definitive error
+      // Read fresh values from refs — avoids stale closure bug
+      if (statusRef.current === 'ready' && enrichmentsDoneRef.current) return
+      if (statusRef.current === 'error') return
       fetchReport()
     }, 3000)
     return () => clearInterval(interval)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, enrichmentsDone])
+  }, [id, fetchReport])
 
   if (status !== 'ready') {
     const steps = [
@@ -883,7 +877,6 @@ export default function ScanResultPage() {
       { label: 'Generating action plan', done: pollCount > 10 },
     ]
 
-    // ── Definitive scan failure ──────────────────────────────────────────────
     const isScanFailed = status === 'error' && scanError !== null
 
     return (
@@ -908,7 +901,7 @@ export default function ScanResultPage() {
                   or contact us directly — we&apos;ll re-run your scan or issue a full refund immediately.
                 </p>
                 <a
-                  href="mailto:andrew@mygeoradar.com?subject=Scan%20failed&body=My%20scan%20ID%20is%3A%20"
+                  href={`mailto:andrew@mygeoradar.com?subject=Scan%20failed&body=My%20scan%20ID%20is%3A%20${id}`}
                   className="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-accent hover:bg-accent-hover text-white font-semibold rounded-xl transition-colors text-sm"
                 >
                   <Mail className="w-4 h-4" /> Email support
@@ -989,7 +982,7 @@ export default function ScanResultPage() {
           </div>
         </div>
 
-        {/* ── Onboarding Checklist ── */}
+        {/* Onboarding Checklist */}
         <div className="mb-6">
           <OnboardingChecklist scanId={report.id} hasAccount={hasAccount} />
         </div>
@@ -1048,7 +1041,7 @@ export default function ScanResultPage() {
           }
         </div>
 
-        {/* Monthly Tracking Subscription */}
+        {/* Monthly Tracking */}
         <div className="mb-6">
           <MonthlyTrackingUpsell scanId={report.id} reportEmail={reportEmail} />
         </div>
