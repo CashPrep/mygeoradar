@@ -1,13 +1,14 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import { ArrowRight, AlertTriangle, CheckCircle2, TrendingUp, XCircle, Zap, Loader2, Sparkles } from 'lucide-react'
+import { ArrowRight, AlertTriangle, CheckCircle2, TrendingUp, XCircle, Zap, Loader2, Sparkles, Radio } from 'lucide-react'
 import { clsx } from 'clsx'
 import { PROMO_PRICE_USD } from '@/lib/constants'
 
 type Level = 'poor' | 'weak' | 'good' | 'excellent'
 
 interface SnapshotResult {
+  known:        boolean
   score:        number
   level:        Level
   headline:     string
@@ -78,25 +79,21 @@ export function SnapshotWidget() {
   const [crawlStatus,  setCrawlStatus]  = useState<'idle' | 'crawling' | 'done' | 'failed'>('idle')
   const resultRef      = useRef<HTMLDivElement>(null)
   const lastCrawledUrl = useRef('')
-  const crawlVersion   = useRef(0) // guard against stale responses
+  const crawlVersion   = useRef(0)
 
   async function autofillFromUrl(url: string) {
     const normalized = normalizeUrl(url.trim().replace(/\/$/, ''))
     if (!normalized || !isValidUrl(normalized) || normalized === lastCrawledUrl.current) return
     lastCrawledUrl.current = normalized
-
     const version = ++crawlVersion.current
     setCrawlStatus('crawling')
-
     try {
       const res  = await fetch('/api/scrape', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ url: normalized }),
       })
-      // Discard if a newer crawl has started
       if (version !== crawlVersion.current) return
-
       const data = await res.json()
       if (res.ok && data.businessName) {
         setBusinessName(prev => prev || data.businessName)
@@ -117,7 +114,6 @@ export function SnapshotWidget() {
   function handleUrlChange(val: string) {
     setWebsite(val)
     if (urlError) setUrlError('')
-    // Only reset visual status — don't cancel the in-flight request
     setCrawlStatus('idle')
     debouncedAutofill(val)
   }
@@ -143,6 +139,14 @@ export function SnapshotWidget() {
       })
       const data = await res.json()
       if (!res.ok) { setUrlError(data.error || 'Something went wrong. Please try again.'); return }
+
+      // Business is completely unknown to AI — send to the invisibility guide
+      if (data.known === false) {
+        const p = new URLSearchParams({ name: data.businessName, url: data.website })
+        window.location.href = `/invisible?${p.toString()}`
+        return
+      }
+
       setResult(data as SnapshotResult)
       setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120)
     } catch {
@@ -165,7 +169,6 @@ export function SnapshotWidget() {
           </div>
 
           <div className="flex flex-col gap-2">
-            {/* URL field — triggers auto-fill */}
             <div className="flex flex-col gap-1">
               <div className="relative">
                 <input
@@ -205,7 +208,6 @@ export function SnapshotWidget() {
               )}
             </div>
 
-            {/* Business name — auto-filled or manual */}
             <div className="flex flex-col gap-1">
               <div className="relative">
                 <input
@@ -235,7 +237,6 @@ export function SnapshotWidget() {
             </div>
           </div>
 
-          {/* Button is ONLY disabled while the actual scan is running, never during crawl */}
           <button
             onClick={handleScan}
             disabled={loading}

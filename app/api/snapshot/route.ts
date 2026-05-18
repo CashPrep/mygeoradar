@@ -16,29 +16,15 @@ function getClientIp(req: NextRequest): string {
 
 async function checkRateLimit(ip: string): Promise<boolean> {
   if (ip === 'unknown') return true
-
   const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-
   const { count, error } = await supabase
     .from('snapshot_rate_limits')
     .select('*', { count: 'exact', head: true })
     .eq('ip_address', ip)
     .gte('created_at', dayAgo)
-
-  if (error) {
-    console.error('Rate limit check error:', error)
-    return true // fail open if table missing
-  }
-
+  if (error) return true
   if ((count ?? 0) >= MAX_PER_DAY) return false
-
-  // Record this attempt — Supabase builder is not a native Promise, use try/catch
-  try {
-    await supabase.from('snapshot_rate_limits').insert({ ip_address: ip })
-  } catch (err) {
-    console.error('Rate limit insert error:', err)
-  }
-
+  try { await supabase.from('snapshot_rate_limits').insert({ ip_address: ip }) } catch {}
   return true
 }
 
@@ -66,13 +52,18 @@ export async function POST(req: NextRequest) {
 
     const prompt = `You are a GEO (Generative Engine Optimization) analyst.
 
-Quickly assess the AI search visibility of this business based on what you know about it and typical signals for businesses of its type.
+Assess the AI search visibility of this business.
 
 Business name: ${businessName.trim()}
 Website: ${cleanWebsite}
 
+First, determine if you have REAL knowledge of this specific business (not just the industry).
+A business is "known" if you have seen it in training data — its actual brand, services, location, or reputation.
+A newly launched, very small, or purely local business with no web presence is NOT known.
+
 Return ONLY valid JSON — no markdown, no explanation:
 {
+  "known": true,
   "score": 28,
   "level": "poor",
   "headline": "One punchy sentence describing their AI visibility situation (max 12 words)",
@@ -84,22 +75,31 @@ Return ONLY valid JSON — no markdown, no explanation:
 }
 
 Rules:
-- score is an integer 0–100
+- known: boolean — true only if you have genuine training data about this specific business
+- score is an integer 0–100 (only meaningful when known is true; return 0 when known is false)
 - level is exactly one of: "poor" (0-39), "weak" (40-59), "good" (60-79), "excellent" (80-100)
-- topIssues must have exactly 3 items — each is 1 sentence, specific to this business type, not generic
+- topIssues must have exactly 3 items when known is true; empty array [] when known is false
 - Most small/unknown local businesses score 15–45
-- Be honest and realistic — a low score is more useful to the user than flattery
-- headline should feel urgent and personal, e.g. "AI engines can't find you — you're missing critical signals"`
+- Be honest — if you are not sure whether you know them, return known: false`
 
     const completion = await openai.chat.completions.create({
       model:           'gpt-4o-mini',
       messages:        [{ role: 'user', content: prompt }],
       temperature:     0.1,
       response_format: { type: 'json_object' },
-      max_tokens:      300,
+      max_tokens:      350,
     })
 
     const raw = JSON.parse(completion.choices[0].message.content!)
+
+    // If GPT doesn't know this business, signal the client to redirect
+    if (raw.known === false) {
+      return NextResponse.json({
+        known:        false,
+        businessName: businessName.trim(),
+        website:      cleanWebsite,
+      })
+    }
 
     const score = Math.min(100, Math.max(0, Math.round(Number(raw.score) || 0)))
     const level: string =
@@ -108,6 +108,7 @@ Rules:
       score >= 40 ? 'weak' : 'poor'
 
     return NextResponse.json({
+      known:        true,
       score,
       level,
       headline:     raw.headline   ?? 'Your AI visibility needs work.',
