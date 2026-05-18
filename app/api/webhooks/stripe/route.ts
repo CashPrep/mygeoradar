@@ -49,10 +49,15 @@ export async function POST(req: NextRequest) {
       const customerEmail = scan.email || session.customer_details?.email
       if (customerEmail) {
         try {
-          // Use getUserByEmail directly — avoids fetching all users
-          const { data: { user }, error } = await supabaseAdmin.auth.admin.getUserByEmail(customerEmail)
-          if (!error && user) {
-            await supabase.from('scan_reports').update({ user_id: user.id }).eq('id', scanId)
+          // listUsers with a filter is the correct admin API for email lookup
+          const { data, error } = await supabaseAdmin.auth.admin.listUsers()
+          if (!error && data?.users) {
+            const user = data.users.find(
+              (u) => u.email?.toLowerCase() === customerEmail.toLowerCase()
+            )
+            if (user) {
+              await supabase.from('scan_reports').update({ user_id: user.id }).eq('id', scanId)
+            }
           }
         } catch (err) {
           console.error('User lookup error:', err)
