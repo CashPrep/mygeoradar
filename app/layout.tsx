@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s | MyGeoRadar',
   },
   description:
-    'See exactly how AI engines like ChatGPT, Perplexity, and Gemini answer questions about your business — and get a clear action plan to show up more.',
+    'Find out how ChatGPT, Perplexity & Gemini talk about your business. Get your AI visibility score and a step-by-step action plan — free scan in 60 seconds.',
   keywords: [
     'GEO', 'generative engine optimization', 'AI search visibility',
     'ChatGPT visibility', 'AI citation tracking', 'GEO tool',
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://mygeoradar.com',
     title: 'MyGeoRadar — AI Search Visibility for Your Business',
-    description: 'See exactly how AI answers talk about your business and get a clear action plan to show up more.',
+    description: 'Find out how ChatGPT, Perplexity & Gemini talk about your business. Get your AI visibility score and a step-by-step action plan — free scan in 60 seconds.',
     siteName: 'MyGeoRadar',
     images: [
       {
@@ -43,11 +43,11 @@ export const metadata: Metadata = {
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
     title: 'MyGeoRadar — AI Search Visibility',
-    description: 'See how AI answers see your business. Fix it in minutes.',
+    description: 'Find out how ChatGPT, Perplexity & Gemini talk about your business. Get your AI visibility score and a step-by-step action plan — free scan in 60 seconds.',
     images: ['/og-image.png'],
   },
   icons: {
-    icon: '/og-image.png',
+    icon: '/icon.svg',
     apple: '/og-image.png',
   },
   robots: { index: true, follow: true },
