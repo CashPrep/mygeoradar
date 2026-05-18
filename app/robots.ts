@@ -10,7 +10,8 @@ export default function robots(): MetadataRoute.Robots {
           '/api/',
           '/dashboard/',
           '/account/',
-          '/scan/',   // individual report pages /scan/[id] are private — /scan itself stays crawlable
+          // Block individual private report pages but keep /scan itself crawlable
+          '/scan/r/',
         ],
       },
     ],
