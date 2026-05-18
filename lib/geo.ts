@@ -95,12 +95,10 @@ export async function runGeoScan(scan: {
 
   const batches = chunkArray(scan.topics, BATCH_SIZE)
 
-  // Run batches sequentially; first batch gets full metadata fields
-  const batchResults = await batches.reduce<Promise<any[][]>>(async (accP, batch, idx) => {
-    const acc = await accP
-    const result = await scoreBatch(scan, batch, idx === 0)
-    return [...acc, result]
-  }, Promise.resolve([]))
+  // Run all batches in PARALLEL — major speed improvement
+  const batchResults = await Promise.all(
+    batches.map((batch, idx) => scoreBatch(scan, batch, idx === 0))
+  )
 
   const engineOrder: AiEngine[] = ['chatgpt', 'perplexity', 'gemini', 'claude']
   const engineLabels: Record<AiEngine, string> = {
@@ -137,6 +135,7 @@ export async function runGeoScan(scan: {
     }
   })
 
+  // Generate action items with gpt-4o-mini (faster + cheaper, no quality loss for this task)
   const actionPrompt = `You are a GEO analyst. Based on this business profile, return exactly 5 prioritised action items and 3 quick wins.
 
 Business: ${scan.business_name} | ${scan.website}${scan.location ? ` in ${scan.location}` : ''} | Industry: ${scan.industry || 'Not specified'}
@@ -153,7 +152,7 @@ Return ONLY valid JSON:
 Rules: topActions has exactly 5 items ordered high→medium→low. quickWins has exactly 3 items. No generic advice.`
 
   const actionCompletion = await openai.chat.completions.create({
-    model:           'gpt-4o',
+    model:           'gpt-4o-mini',
     messages:        [{ role: 'user', content: actionPrompt }],
     temperature:     0.1,
     response_format: { type: 'json_object' },
