@@ -8,6 +8,10 @@
  *
  * This means the free score is always honest and always matches
  * what the customer will see after paying.
+ *
+ * Zero web presence: if the site has no scrapeable content AND scores
+ * below the "no presence" threshold, we return known=false so the
+ * frontend redirects to the $9.99 Web Presence Starter Guide.
  */
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
@@ -19,6 +23,9 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 // (max 15) so we stay well under that limit while using the real pipeline.
 const SNAPSHOT_MAX_TOPICS = 15
 const MAX_PER_DAY = 3
+
+// Businesses scoring below this with zero scrapeable content have no web presence
+const ZERO_PRESENCE_SCORE_THRESHOLD = 15
 
 function getClientIp(req: NextRequest): string {
   return (
@@ -84,25 +91,37 @@ async function fetchSignal(url: string): Promise<string | null> {
   } catch { return null }
 }
 
+/**
+ * Returns topics + a hasContent flag.
+ * hasContent=false means no scrapeable signals were found on the site —
+ * a strong indicator of zero or near-zero web presence.
+ */
 async function scrapeTopics(
   base: string,
   businessName: string
-): Promise<{ topics: string[]; industry: string | null; location: string | null }> {
+): Promise<{ topics: string[]; industry: string | null; location: string | null; hasContent: boolean }> {
   const pages = [base, `${base}/services`, `${base}/about`, `${base}/products`, `${base}/shop`]
   const results = await Promise.all(pages.map(fetchSignal))
   const signals = results.filter((s): s is string => s !== null)
 
   // Fallback: raw homepage text
+  let rawFallbackUsed = false
   if (signals.length === 0) {
     try {
       const res = await fetch(base, { ...FETCH_OPTS, signal: AbortSignal.timeout(9000) })
       if (res.ok) {
         const html = await res.text()
         const raw = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 2000)
-        if (raw.length > 80) signals.push(`RAW: ${raw}`)
+        if (raw.length > 80) {
+          signals.push(`RAW: ${raw}`)
+          rawFallbackUsed = true
+        }
       }
     } catch { /* silent */ }
   }
+
+  // If we got zero signals at all, site has no scrapeable content
+  const hasContent = signals.length > 0 && !rawFallbackUsed
 
   const domainHint = base.replace(/https?:\/\/(www\.)?/, '').split('/')[0]
   const context = signals.slice(0, 3).join('\n\n---\n\n')
@@ -136,9 +155,10 @@ Rules: be specific to THIS business, cover transactional + informational + local
       topics:   topics.length > 0 ? topics : [`best ${domainHint} services`, `${domainHint} reviews`, `${domainHint} near me`],
       industry: raw.industry || null,
       location: raw.location || null,
+      hasContent,
     }
   } catch {
-    return { topics: [`best ${domainHint} services`, `${domainHint} reviews`, `${domainHint} near me`], industry: null, location: null }
+    return { topics: [`best ${domainHint} services`, `${domainHint} reviews`, `${domainHint} near me`], industry: null, location: null, hasContent: false }
   }
 }
 
@@ -166,7 +186,7 @@ Engine behaviour:
 Also return 3 specific issues that are the BIGGEST reasons this business scores low across AI engines. These must be:
 - Concrete and actionable (not generic)
 - Based on the actual business/industry
-- Honest — tell them what’s really missing
+- Honest — tell them what's really missing
 
 Return ONLY valid JSON:
 {
@@ -245,7 +265,7 @@ export async function POST(req: NextRequest) {
       : `https://${website.trim().replace(/\/$/, '')}`
 
     // Step 1: Scrape real topics from the business website
-    const { topics, industry, location } = await scrapeTopics(cleanWebsite, businessName.trim())
+    const { topics, industry, location, hasContent } = await scrapeTopics(cleanWebsite, businessName.trim())
 
     // Step 2: Score using the same methodology as the paid scan pipeline
     const { overallScore, topIssues } = await scoreTopics(
@@ -255,6 +275,19 @@ export async function POST(req: NextRequest) {
       industry,
       location,
     )
+
+    // ── Zero web presence detection ──────────────────────────────────────
+    // If the site had no scrapeable content AND scored critically low,
+    // the business has essentially no web presence. Send them to the guide.
+    if (!hasContent && overallScore < ZERO_PRESENCE_SCORE_THRESHOLD) {
+      return NextResponse.json({
+        known:        false,
+        score:        overallScore,
+        businessName: businessName.trim(),
+        website:      cleanWebsite.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+      })
+    }
+    // ─────────────────────────────────────────────────────────────────────
 
     const level =
       overallScore >= 80 ? 'excellent' :
@@ -279,7 +312,7 @@ export async function POST(req: NextRequest) {
       website:      cleanWebsite.replace(/^https?:\/\//, '').replace(/\/$/, ''),
       industry,
       location,
-      // known is always true now — we ran a real scan
+      // known=true means the business has some detectable web presence
       known:        true,
     })
   } catch (err) {
