@@ -96,6 +96,10 @@ function EngineCard({ engine, businessName }: { engine: EngineResult; businessNa
         <div className="flex items-center gap-2">
           <span className="text-xl">{ENGINE_ICONS[engine.engine] ?? '🔮'}</span>
           <span className="font-semibold text-foreground">{engine.engineLabel}</span>
+          {/* Estimated score badge */}
+          <span className="text-xs px-1.5 py-0.5 rounded border border-border bg-surface-2 text-muted font-normal">
+            estimated
+          </span>
         </div>
         <ScoreRing score={engine.overallScore} size={56} strokeWidth={5} />
       </div>
@@ -103,7 +107,7 @@ function EngineCard({ engine, businessName }: { engine: EngineResult; businessNa
       {engine.prompts && engine.prompts.length > 0 && (
         <div className="flex flex-col gap-1.5">
           <span className="text-xs text-muted uppercase tracking-wide font-semibold flex items-center gap-1">
-            <Search className="w-3 h-3" /> Queries tested
+            <Search className="w-3 h-3" /> Topics modeled
           </span>
           <div className="flex flex-col gap-1">
             {engine.prompts.map((p, i) => (
@@ -132,14 +136,21 @@ function EngineCard({ engine, businessName }: { engine: EngineResult; businessNa
             <span className="flex items-center gap-1.5">
               {showResponse ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               {isMentioned
-                ? `✓ ${engine.engineLabel} mentioned your brand — see what it said`
-                : `✗ ${engine.engineLabel} didn't mention you — see what it said instead`
+                ? `✓ ${engine.engineLabel} would likely mention you — see simulated response`
+                : `✗ ${engine.engineLabel} likely wouldn’t mention you — see simulated response`
               }
             </span>
             {showResponse ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
           </button>
           {showResponse && (
             <div className="px-3 py-3 bg-surface-2 text-sm text-foreground-dim leading-relaxed italic border-t border-border">
+              {/* Simulation disclosure inside the revealed response */}
+              <div className="flex items-start gap-1.5 mb-2.5 not-italic">
+                <Info className="w-3 h-3 text-muted flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-muted">
+                  Simulated response — AI-modeled based on your site content, not a live query to {engine.engineLabel}.
+                </p>
+              </div>
               <HighlightedResponse text={engine.rawResponse} businessName={businessName} />
               {engine.competitorsInResponse && engine.competitorsInResponse.length > 0 && (
                 <div className="mt-2.5 pt-2.5 border-t border-border not-italic">
@@ -559,7 +570,13 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
       <p className="text-sm text-foreground-dim leading-relaxed">{gap.summary}</p>
       {topCompetitor && (
         <div className="p-4 bg-surface-2 border border-border rounded-xl flex flex-col gap-3">
-          <p className="text-xs text-muted uppercase tracking-wide font-semibold">AI Visibility Score Comparison</p>
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted uppercase tracking-wide font-semibold">AI Visibility Score Comparison</p>
+            {/* Competitor scores are AI-estimated, not live scans */}
+            <span className="flex items-center gap-1 text-xs text-muted">
+              <Info className="w-3 h-3" /> competitor scores estimated
+            </span>
+          </div>
           <div className="flex flex-col gap-3">
             <div>
               <div className="flex items-center justify-between mb-1.5">
@@ -578,7 +595,10 @@ function CompetitorGapSection({ gap, businessName }: { gap: CompetitorGap; busin
                     <span className="text-xs font-medium text-foreground-dim">{c.name}</span>
                     <span className="text-xs text-muted">({c.domain})</span>
                   </div>
-                  <span className={clsx('text-xs font-bold', getScoreColor(c.estimatedScore))}>{c.estimatedScore}/100</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-muted italic">est.</span>
+                    <span className={clsx('text-xs font-bold', getScoreColor(c.estimatedScore))}>{c.estimatedScore}/100</span>
+                  </div>
                 </div>
                 <div className="h-2.5 bg-surface rounded-full overflow-hidden">
                   <div className="h-full rounded-full transition-all"
@@ -724,9 +744,16 @@ function ContentGapsSection({ gaps }: { gaps: ContentGapItem[] }) {
         <MessageSquareText className="w-4 h-4 text-accent" />
         <h3 className="font-semibold text-foreground">Content Gap Analysis</h3>
       </div>
+      {/* Updated subtitle — honest about AI-inferred nature */}
       <p className="text-sm text-foreground-dim">
-        These are questions AI engines are actively answering about your industry that your site doesn&apos;t adequately cover.
+        AI-inferred questions your industry gets asked that your site doesn&apos;t adequately answer.
       </p>
+      <div className="flex items-start gap-1.5 px-3 py-2.5 bg-surface-2 border border-border rounded-lg">
+        <Info className="w-3 h-3 text-muted flex-shrink-0 mt-0.5" />
+        <p className="text-xs text-muted leading-relaxed">
+          These questions are inferred by AI based on your industry and site content — not pulled from live engine query logs.
+        </p>
+      </div>
       <div className="flex flex-col gap-3">
         {gaps.map((gap, i) => (
           <div key={i} className="p-4 bg-surface-2 border border-border rounded-xl flex flex-col gap-2">
@@ -809,14 +836,12 @@ export default function ScanResultPage() {
   const [reportEmail, setReportEmail] = useState<string | undefined>(undefined)
   const [hasAccount,  setHasAccount]  = useState(false)
 
-  // Check if user is logged in (for checklist)
   useEffect(() => {
     const sb = createSupabaseBrowser()
     sb.auth.getUser().then(({ data }) => setHasAccount(!!data.user))
   }, [])
 
-  // BUG FIX: use useCallback + refs so the interval always sees fresh state
-  const statusRef         = useRef(status)
+  const statusRef          = useRef(status)
   const enrichmentsDoneRef = useRef(enrichmentsDone)
   useEffect(() => { statusRef.current = status }, [status])
   useEffect(() => { enrichmentsDoneRef.current = enrichmentsDone }, [enrichmentsDone])
@@ -872,7 +897,6 @@ export default function ScanResultPage() {
     if (!id) return
     fetchReport()
     const interval = setInterval(() => {
-      // Read fresh values from refs — avoids stale closure bug
       if (statusRef.current === 'ready' && enrichmentsDoneRef.current) return
       if (statusRef.current === 'error') return
       fetchReport()
@@ -881,13 +905,14 @@ export default function ScanResultPage() {
   }, [id, fetchReport])
 
   if (status !== 'ready') {
+    // Renamed loading steps to reflect what’s actually happening
     const steps = [
-      { label: 'Payment confirmed',      done: status !== 'loading' },
-      { label: 'Querying ChatGPT',       done: pollCount > 2 },
-      { label: 'Querying Perplexity',    done: pollCount > 4 },
-      { label: 'Querying Gemini',        done: pollCount > 6 },
-      { label: 'Querying Claude',        done: pollCount > 8 },
-      { label: 'Generating action plan', done: pollCount > 10 },
+      { label: 'Payment confirmed',             done: status !== 'loading' },
+      { label: 'Modeling ChatGPT visibility',   done: pollCount > 2 },
+      { label: 'Modeling Perplexity visibility', done: pollCount > 4 },
+      { label: 'Modeling Gemini visibility',     done: pollCount > 6 },
+      { label: 'Modeling Claude visibility',     done: pollCount > 8 },
+      { label: 'Generating action plan',         done: pollCount > 10 },
     ]
 
     const isScanFailed = status === 'error' && scanError !== null
@@ -943,7 +968,6 @@ export default function ScanResultPage() {
                   </div>
                 ))}
               </div>
-              {/* Methodology disclosure — scan loading state */}
               <MethodologyDisclosure />
               {status === 'error' && (
                 <p className="text-danger text-sm text-center">
@@ -987,7 +1011,7 @@ export default function ScanResultPage() {
             <span className={clsx('text-sm font-bold', getScoreColor(report.overallScore))}>{formatScore(report.overallScore)}</span>
             <h2 className="text-xl font-bold">Overall AI Visibility Score</h2>
             <p className="text-sm text-muted max-w-sm">
-              Your business scores <span className={clsx('font-bold', getScoreColor(report.overallScore))}>{report.overallScore}/100</span> across ChatGPT, Perplexity, Gemini, and Claude.
+              Estimated visibility across ChatGPT, Perplexity, Gemini, and Claude based on your site&apos;s content and signals.
             </p>
             <div className="flex flex-wrap gap-2 mt-1 justify-center md:justify-start">
               {report.topics.map((t) => (
