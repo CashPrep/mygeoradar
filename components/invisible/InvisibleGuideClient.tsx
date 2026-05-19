@@ -23,13 +23,14 @@ const FREE_STEPS = [
 ]
 
 const LOCKED_STEPS = [
-  { number: 4,  title: 'Rewrite your About page so AI can quote it (with formula)' },
-  { number: 5,  title: 'Create a /facts page — your AI knowledge base (with template)' },
-  { number: 6,  title: 'Get cited in local press — includes a press pitch email template' },
-  { number: 7,  title: 'Build a FAQ page with FAQPage schema AI engines quote directly' },
-  { number: 8,  title: 'Index your site in Bing Webmaster Tools (powers Microsoft Copilot)' },
-  { number: 9,  title: 'Create a Wikidata entry — the closest thing to an AI directory listing' },
-  { number: 10, title: 'Your 30-day execution calendar: day-by-day timeline + weekly checklist' },
+  { number: 4,  title: 'Set up Google Search Console & submit your sitemap for fast indexing' },
+  { number: 5,  title: 'Rewrite your About page so AI can quote it (with formula)' },
+  { number: 6,  title: 'Create a /facts page — your AI knowledge base (with template)' },
+  { number: 7,  title: 'Get cited in local press — includes pitch email + press release template' },
+  { number: 8,  title: 'Build a FAQ page with FAQPage schema AI engines quote directly' },
+  { number: 9,  title: 'Index your site in Bing Webmaster Tools (powers Microsoft Copilot)' },
+  { number: 10, title: 'Create a Wikidata entry — the closest thing to an AI directory listing' },
+  { number: 11, title: 'Your 30-day execution calendar: day-by-day timeline + weekly checklist' },
 ]
 
 function InvisibleGuideInner() {
@@ -143,11 +144,11 @@ function InvisibleGuideInner() {
                 <Lock className="w-5 h-5 text-accent" />
               </div>
               <div className="flex flex-col gap-1">
-                <p className="text-sm font-bold text-foreground">Steps 4–10 + all templates are locked</p>
+                <p className="text-sm font-bold text-foreground">Steps 4–11 + all templates are locked</p>
                 <p className="text-sm text-foreground-dim">
-                  The remaining 7 steps include copy-paste schema code, a press pitch email, an About page formula,
-                  a Wikidata walkthrough, and your full 30-day day-by-day execution calendar — everything you need
-                  to go from invisible to indexable.
+                  The remaining 8 steps include copy-paste schema code, a press pitch email, an About page formula,
+                  a Google Search Console setup walkthrough, a Wikidata entry guide, and your full 30-day
+                  day-by-day execution calendar — everything you need to go from invisible to indexable.
                 </p>
               </div>
             </div>
@@ -164,7 +165,7 @@ function InvisibleGuideInner() {
             {/* Value callouts */}
             <div className="grid grid-cols-3 gap-2 border-t border-border pt-4">
               {[
-                { icon: '📋', label: '7 copy-paste templates' },
+                { icon: '📋', label: '8 copy-paste templates' },
                 { icon: '📅', label: '30-day calendar' },
                 { icon: '✅', label: 'Progress checklist' },
               ].map(v => (
