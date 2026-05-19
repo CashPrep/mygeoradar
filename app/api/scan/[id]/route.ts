@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 import { createSupabaseServer } from '@/lib/supabase-server'
 
 export async function GET(
@@ -8,11 +8,9 @@ export async function GET(
 ) {
   const { id } = params
 
-  if (!supabase) {
-    return NextResponse.json({ error: 'Supabase client not initialized.' }, { status: 500 })
-  }
-
-  const { data, error } = await supabase
+  // Use supabaseAdmin so RLS never silently blocks a valid report fetch.
+  // Security is enforced below via explicit ownership check — not RLS.
+  const { data, error } = await supabaseAdmin
     .from('scan_reports')
     .select('*')
     .eq('id', id)
@@ -27,8 +25,8 @@ export async function GET(
     return NextResponse.json({ id: data.id, paid: false, business_name: data.business_name })
   }
 
-  // Ownership check: if a logged-in user is present, they must own this scan
-  // (anonymous paid scans — no user_id — are accessible to anyone with the link)
+  // Ownership check: if a logged-in user is present, they must own this scan.
+  // Anonymous paid scans (no user_id) are accessible to anyone with the link.
   try {
     const serverSupabase = await createSupabaseServer()
     const { data: { user } } = await serverSupabase.auth.getUser()
@@ -57,5 +55,8 @@ export async function GET(
     content_gaps:   data.content_gaps   ?? null,
     gbp_signal:     data.gbp_signal     ?? null,
     competitor_gap: data.competitor_gap ?? null,
+    scan_error:     data.scan_error     ?? null,
+    email:          data.email          ?? null,
+    user_id:        data.user_id        ?? null,
   })
 }

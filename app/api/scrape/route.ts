@@ -3,6 +3,34 @@ import OpenAI from 'openai'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
+// ─── In-memory IP rate limiter ────────────────────────────────────────────────
+// Max 5 requests per IP per hour. Resets on next request after the window.
+// This works fine on Vercel (single warm instance handles burst). If you ever
+// move to multi-region edge, swap this for Upstash Redis.
+
+const ipMap = new Map<string, { count: number; resetAt: number }>()
+const RATE_LIMIT   = 5
+const WINDOW_MS    = 60 * 60 * 1000 // 1 hour
+
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
+  const now    = Date.now()
+  const record = ipMap.get(ip)
+
+  if (!record || now > record.resetAt) {
+    ipMap.set(ip, { count: 1, resetAt: now + WINDOW_MS })
+    return { allowed: true, remaining: RATE_LIMIT - 1 }
+  }
+
+  if (record.count >= RATE_LIMIT) {
+    return { allowed: false, remaining: 0 }
+  }
+
+  record.count += 1
+  return { allowed: true, remaining: RATE_LIMIT - record.count }
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
 const FETCH_OPTS = {
   headers: {
     'User-Agent': 'Mozilla/5.0 (compatible; MyGeoRadar/1.0; +https://mygeoradar.com)',
@@ -11,7 +39,6 @@ const FETCH_OPTS = {
   },
 }
 
-/** Polyfill for matchAll — works on any TS target */
 function matchAllCompat(str: string, pattern: RegExp): RegExpExecArray[] {
   const results: RegExpExecArray[] = []
   const re = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : pattern.flags + 'g')
@@ -20,7 +47,6 @@ function matchAllCompat(str: string, pattern: RegExp): RegExpExecArray[] {
   return results
 }
 
-/** Extract only high-signal text: title, meta desc, headings, list items, paragraphs */
 function extractSignal(html: string): string {
   const get = (pattern: RegExp) =>
     matchAllCompat(html, pattern)
@@ -46,10 +72,6 @@ function extractSignal(html: string): string {
   ].filter(Boolean).join('\n').slice(0, 2500)
 }
 
-/**
- * Attempt to fetch a URL and extract signal text.
- * Returns null on any failure or empty result.
- */
 async function fetchSignal(url: string): Promise<string | null> {
   try {
     const res = await fetch(url, { ...FETCH_OPTS, signal: AbortSignal.timeout(7000) })
@@ -63,17 +85,12 @@ async function fetchSignal(url: string): Promise<string | null> {
   }
 }
 
-/**
- * Fetch homepage HTML raw (no signal extraction) — last resort before domain-only fallback.
- * Returns the raw stripped text up to 2500 chars.
- */
 async function fetchHomepageRaw(base: string): Promise<string | null> {
   try {
     const res = await fetch(base, { ...FETCH_OPTS, signal: AbortSignal.timeout(10000) })
     if (!res.ok) return null
     const html = await res.text()
     if (html.length < 100) return null
-    // Strip all tags and collapse whitespace
     const text = html
       .replace(/<script[\s\S]*?<\/script>/gi, '')
       .replace(/<style[\s\S]*?<\/style>/gi, '')
@@ -87,7 +104,6 @@ async function fetchHomepageRaw(base: string): Promise<string | null> {
   }
 }
 
-/** Parse sitemap.xml and return up to 8 useful URLs */
 async function getSitemapUrls(base: string): Promise<string[]> {
   try {
     const res = await fetch(`${base}/sitemap.xml`, { ...FETCH_OPTS, signal: AbortSignal.timeout(5000) })
@@ -103,23 +119,42 @@ async function getSitemapUrls(base: string): Promise<string[]> {
   }
 }
 
+// ─── Route ────────────────────────────────────────────────────────────────────
+
 export async function POST(req: NextRequest) {
+  // IP rate limiting — protect GPT-4o spend
+  const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
+  const { allowed, remaining } = checkRateLimit(ip)
+
+  if (!allowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please try again in an hour.' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After':          '3600',
+          'X-RateLimit-Limit':    String(RATE_LIMIT),
+          'X-RateLimit-Remaining':'0',
+        },
+      }
+    )
+  }
+
   try {
     const { url } = await req.json()
     if (!url) return NextResponse.json({ error: 'URL required.' }, { status: 400 })
 
     const base = url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
 
-    // Tier 1: priority pages (expanded to cover more site types)
     const priorityPages = [
       `${base}/services`,
       `${base}/products`,
       `${base}/solutions`,
       `${base}/offerings`,
-      `${base}/collections/all`,      // Shopify
-      `${base}/shop`,                  // WooCommerce / generic
-      `${base}/menu`,                  // Restaurants
-      `${base}/work`,                  // Agencies / portfolios
+      `${base}/collections/all`,
+      `${base}/shop`,
+      `${base}/menu`,
+      `${base}/work`,
       base,
       `${base}/about`,
       `${base}/about-us`,
@@ -130,23 +165,18 @@ export async function POST(req: NextRequest) {
     const priorityResults = await Promise.all(priorityPages.map(fetchSignal))
     let signals = priorityResults.filter((s): s is string => s !== null)
 
-    // Tier 2: sitemap URLs
     if (signals.length < 2) {
       const sitemapUrls    = await getSitemapUrls(base)
       const sitemapResults = await Promise.all(sitemapUrls.map(fetchSignal))
       signals = [...signals, ...sitemapResults.filter((s): s is string => s !== null)]
     }
 
-    // Tier 3: raw homepage text (catches SPAs that return minimal structured HTML)
     if (signals.length === 0) {
       const raw = await fetchHomepageRaw(base)
       if (raw) signals = [raw]
     }
 
-    // Build the best available context string
-    const context = signals.slice(0, 5).join('\n\n---\n\n')
-
-    // Even if context is empty, extract domain name as a last-resort hint
+    const context    = signals.slice(0, 5).join('\n\n---\n\n')
     const domainHint = base.replace(/https?:\/\/(www\.)?/, '').split('/')[0]
 
     const prompt = `You are an expert business analyst. Analyze this website and generate realistic search queries customers use to find this type of business.
@@ -186,33 +216,38 @@ Topic rules:
     const extracted = JSON.parse(completion.choices[0].message.content!)
     const topics = Array.isArray(extracted.topics) ? extracted.topics.slice(0, 40) : []
 
-    // Safety net: if GPT somehow returns 0 topics (shouldn\'t happen), generate generic ones
     if (topics.length === 0) {
-      return NextResponse.json({
-        businessName: extracted.businessName || domainHint,
-        industry:     extracted.industry     || 'Other',
-        location:     extracted.location     || null,
-        topics: [
-          `best ${domainHint} services`,
-          `${domainHint} reviews`,
-          `how to contact ${domainHint}`,
-          `${domainHint} pricing`,
-          `${domainHint} near me`,
-          `top rated ${domainHint}`,
-          `${domainHint} alternatives`,
-          `is ${domainHint} legit`,
-          `${domainHint} customer service`,
-          `${domainHint} how it works`,
-        ],
-      })
+      return NextResponse.json(
+        {
+          businessName: extracted.businessName || domainHint,
+          industry:     extracted.industry     || 'Other',
+          location:     extracted.location     || null,
+          topics: [
+            `best ${domainHint} services`,
+            `${domainHint} reviews`,
+            `how to contact ${domainHint}`,
+            `${domainHint} pricing`,
+            `${domainHint} near me`,
+            `top rated ${domainHint}`,
+            `${domainHint} alternatives`,
+            `is ${domainHint} legit`,
+            `${domainHint} customer service`,
+            `${domainHint} how it works`,
+          ],
+        },
+        { headers: { 'X-RateLimit-Remaining': String(remaining) } }
+      )
     }
 
-    return NextResponse.json({
-      businessName: extracted.businessName || null,
-      industry:     extracted.industry     || null,
-      location:     extracted.location     || null,
-      topics,
-    })
+    return NextResponse.json(
+      {
+        businessName: extracted.businessName || null,
+        industry:     extracted.industry     || null,
+        location:     extracted.location     || null,
+        topics,
+      },
+      { headers: { 'X-RateLimit-Remaining': String(remaining) } }
+    )
   } catch (err) {
     console.error('Scrape error:', err)
     return NextResponse.json({ error: 'Failed to extract info from that page.' }, { status: 500 })
