@@ -3,6 +3,7 @@ import { waitUntil } from '@vercel/functions'
 import Stripe from 'stripe'
 import { supabase } from '@/lib/supabase'
 import { supabaseAdmin } from '@/lib/supabase-admin'
+import { sendInvisibleGuideEmail } from '@/lib/email'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
@@ -22,7 +23,27 @@ export async function POST(req: NextRequest) {
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
-    const scanId  = session.metadata?.scanId
+
+    // ── Invisible Guide purchase ──────────────────────────────────────────────
+    if (session.metadata?.product === 'invisible-guide') {
+      const customerEmail = session.customer_details?.email
+      const businessName  = session.metadata?.businessName || 'Your Business'
+      const website       = session.metadata?.website       || ''
+
+      if (customerEmail) {
+        try {
+          await sendInvisibleGuideEmail({ email: customerEmail, businessName, website })
+        } catch (err) {
+          // Log but don't fail — Stripe has already confirmed payment
+          console.error('[invisible-guide email] failed to send:', err)
+        }
+      }
+
+      return NextResponse.json({ ok: true })
+    }
+
+    // ── Scan purchase (existing flow) ─────────────────────────────────────────
+    const scanId = session.metadata?.scanId
     if (!scanId) return NextResponse.json({ ok: true })
 
     const { data: scan } = await supabase
@@ -49,7 +70,6 @@ export async function POST(req: NextRequest) {
       const customerEmail = scan.email || session.customer_details?.email
       if (customerEmail) {
         try {
-          // listUsers with a filter is the correct admin API for email lookup
           const { data, error } = await supabaseAdmin.auth.admin.listUsers()
           if (!error && data?.users) {
             const user = data.users.find(
@@ -68,9 +88,6 @@ export async function POST(req: NextRequest) {
     const customerEmail = scan.email || session.customer_details?.email || null
     const appUrl        = process.env.NEXT_PUBLIC_APP_URL || 'https://mygeoradar.com'
 
-    // waitUntil from @vercel/functions keeps the Vercel function alive
-    // after we return 200 to Stripe, so the scan can run its full 60s
-    // without Stripe retrying the webhook due to a timeout.
     waitUntil(
       fetch(`${appUrl}/api/scan/process`, {
         method:  'POST',

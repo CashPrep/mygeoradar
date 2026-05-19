@@ -287,3 +287,75 @@ export async function sendDay7ReviewRequestEmail({
     html,
   })
 }
+
+// ─── 6. Invisible Guide Access Email ─────────────────────────────────────────
+// Sent immediately after a successful $9.99 invisible-guide purchase.
+// Gives the buyer a permanent link back to /invisible/success so they
+// never lose access even if they close the tab.
+
+export async function sendInvisibleGuideEmail({
+  email,
+  businessName,
+  website,
+}: {
+  email: string
+  businessName: string
+  website: string
+}) {
+  const resend = new Resend(process.env.RESEND_API_KEY)
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://mygeoradar.com'
+
+  const guideUrl = `${appUrl}/invisible/success?name=${encodeURIComponent(businessName)}&url=${encodeURIComponent(website)}`
+
+  const html = emailShell(`
+    <p class="label">MyGeoRadar</p>
+    <h1 style="font-size:22px;font-weight:700;margin:0 0 12px;color:#e8e8f0;text-align:center">
+      Your AI Visibility Guide is ready 🎉
+    </h1>
+    <p style="color:#c8c8d8;font-size:15px;text-align:center;margin-bottom:24px;line-height:1.6">
+      Thank you for your purchase. Your complete 11-step guide to getting
+      <strong>${businessName}</strong> found by ChatGPT, Perplexity, Gemini, and Claude is below.
+      Bookmark this email &mdash; your guide link works forever.
+    </p>
+
+    <div class="card">
+      <p style="font-size:13px;font-weight:600;color:#9898b0;text-transform:uppercase;letter-spacing:.08em;margin:0 0 12px">What&rsquo;s inside</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        ${[
+          '✅ 11 step-by-step actions with exact instructions',
+          '📋 Copy-paste templates for every step',
+          '📅 Your 30-day day-by-day execution calendar',
+          '🗂️ Interactive progress checklist',
+          '💡 Pro tips from real AI visibility data',
+        ].map(item => `
+          <p style="color:#c8c8d8;font-size:14px;margin:0;line-height:1.5">${item}</p>
+        `).join('')}
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-bottom:24px">
+      <a href="${guideUrl}"
+        style="display:inline-block;padding:14px 36px;background:#4f8ef7;color:#fff;font-weight:700;border-radius:12px;text-decoration:none;font-size:15px;letter-spacing:.01em">
+        Open my guide &rarr;
+      </a>
+    </div>
+
+    <div style="background:#0d0d1a;border:1px solid #1e1e3a;border-radius:10px;padding:16px;margin-bottom:24px">
+      <p style="font-size:12px;font-weight:600;color:#9898b0;text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px">Your guide link</p>
+      <p style="font-size:12px;color:#4f8ef7;word-break:break-all;margin:0;font-family:monospace">${guideUrl}</p>
+    </div>
+
+    <p style="color:#9898b0;font-size:13px;line-height:1.6;text-align:center;margin-bottom:0">
+      Start with Steps 1&ndash;3 today &mdash; they take under 2 hours and give you the fastest results.
+      Reply to this email anytime if you have questions.
+    </p>
+    <p class="footer" style="margin-top:20px">&mdash; Andrew, MyGeoRadar founder &mdash; <a href="mailto:andrew@mygeoradar.com" style="color:#4f8ef7;text-decoration:none">andrew@mygeoradar.com</a></p>
+  `)
+
+  await resend.emails.send({
+    from:    'Andrew at MyGeoRadar <andrew@mygeoradar.com>',
+    to:      email,
+    subject: `Your AI Visibility Guide for ${businessName} — open anytime`,
+    html,
+  })
+}
