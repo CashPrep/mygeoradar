@@ -95,7 +95,7 @@ export default function AiSearchGuidePage() {
 
         <div className="mt-10 p-6 bg-surface-2 border border-border rounded-xl flex flex-col gap-4">
           <p className="font-semibold text-foreground">Get your free AI visibility score</p>
-          <p className="text-sm text-foreground-dim">Free score in 5 seconds. Full report $24.99 (50% off your first scan).</p>
+          <p className="text-sm text-foreground-dim">Free score in 5 seconds. Full report $29.99.</p>
           <Link
             href="/scan"
             className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors w-fit"
