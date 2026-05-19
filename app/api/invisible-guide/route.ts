@@ -21,10 +21,10 @@ export async function POST(req: NextRequest) {
       line_items: [{
         price_data: {
           currency:    'usd',
-          unit_amount: 499,
+          unit_amount: 999,
           product_data: {
-            name:        'AI Invisibility Fix Guide',
-            description: '10-step action plan to get your business seen by ChatGPT, Perplexity, Gemini & Claude',
+            name:        'Web Presence Starter Guide',
+            description: 'Step-by-step action plan to build your web presence from scratch so AI engines like ChatGPT, Perplexity, Gemini & Claude can find and recommend your business.',
           },
         },
         quantity: 1,
