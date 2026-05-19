@@ -4,5 +4,10 @@
       "path": "/api/email/send-scheduled",
       "schedule": "0 10 * * *"
     }
-  ]
+  ],
+  "functions": {
+    "app/api/scan/process/route.ts": { "maxDuration": 300 },
+    "app/api/scrape/route.ts":        { "maxDuration": 60  },
+    "app/api/snapshot/route.ts":      { "maxDuration": 60  }
+  }
 }
