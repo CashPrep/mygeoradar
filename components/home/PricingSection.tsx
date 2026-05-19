@@ -1,8 +1,8 @@
 'use client'
 
 import { Button } from '@/components/ui/Button'
-import { Check, ArrowRight, Zap, Lock, RefreshCw } from 'lucide-react'
-import { SCAN_PRICE_USD, PROMO_PRICE_USD, PROMO_DISCOUNT_PCT, RESCAN_PRICE_USD } from '@/lib/constants'
+import { Check, ArrowRight, Lock, RefreshCw } from 'lucide-react'
+import { SCAN_PRICE_USD, RESCAN_PRICE_USD } from '@/lib/constants'
 
 const included = [
   'Scores across ChatGPT, Perplexity, Gemini & Claude',
@@ -24,29 +24,19 @@ export function PricingSection() {
 
       <div className="max-w-sm mx-auto flex flex-col gap-4">
 
-        {/* First scan promo card */}
-        <div className="flex items-center justify-between gap-3 px-4 py-3 bg-green-500/10 border border-green-500/30 rounded-xl">
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-green-400 shrink-0" />
-            <p className="text-sm font-bold text-green-400">First scan — {PROMO_DISCOUNT_PCT}% off</p>
-          </div>
-          <p className="text-xs text-muted whitespace-nowrap">Applied at checkout</p>
-        </div>
-
         <div className="card p-8 flex flex-col gap-6 border-accent/20 shadow-glow-sm">
           <div className="text-center">
-            <p className="text-sm text-muted line-through mb-1">${SCAN_PRICE_USD.toFixed(2)}</p>
             <div className="flex items-end justify-center gap-1">
-              <span className="text-6xl font-extrabold text-green-400">${Math.floor(PROMO_PRICE_USD)}</span>
-              <span className="text-green-400 text-2xl font-bold mb-2">.{String(PROMO_PRICE_USD.toFixed(2).split('.')[1])}</span>
+              <span className="text-6xl font-extrabold text-accent">${Math.floor(SCAN_PRICE_USD)}</span>
+              <span className="text-accent text-2xl font-bold mb-2">.{String(SCAN_PRICE_USD.toFixed(2).split('.')[1])}</span>
             </div>
-            <p className="text-sm font-semibold text-green-400 mt-1">your first scan</p>
+            <p className="text-sm font-semibold text-foreground-dim mt-1">one-time · no subscription</p>
           </div>
 
           <ul className="flex flex-col gap-3">
             {included.map((item) => (
               <li key={item} className="flex items-start gap-3">
-                <Check className="w-4 h-4 text-green-400 mt-0.5 shrink-0" />
+                <Check className="w-4 h-4 text-accent mt-0.5 shrink-0" />
                 <span className="text-sm text-foreground-dim">{item}</span>
               </li>
             ))}
@@ -58,7 +48,7 @@ export function PricingSection() {
             className="w-full"
             onClick={() => window.location.href = '/scan'}
           >
-            Get my report for ${PROMO_PRICE_USD.toFixed(2)}
+            Get my report
             <ArrowRight className="w-4 h-4" />
           </Button>
 
@@ -68,7 +58,7 @@ export function PricingSection() {
           </div>
         </div>
 
-        {/* Rescan pricing — transparent, no sticker shock */}
+        {/* Rescan pricing */}
         <div className="flex items-center gap-3 px-4 py-3 bg-surface border border-border rounded-xl">
           <RefreshCw className="w-4 h-4 text-muted shrink-0" />
           <p className="text-sm text-muted">

@@ -7,6 +7,7 @@ import {
   Code2, MessageSquareText, MapPin, Swords, TrendingUp
 } from 'lucide-react'
 import { clsx } from 'clsx'
+import { SCAN_PRICE_USD } from '@/lib/constants'
 
 const TABS = [
   { id: 'score',      label: 'Score Overview',   icon: TrendingUp },
@@ -26,7 +27,6 @@ function ScoreOverviewMockup() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex items-center gap-5">
-        {/* Score ring */}
         <div className="relative flex items-center justify-center shrink-0" style={{ width: 88, height: 88 }}>
           <svg width={88} height={88} className="-rotate-90">
             <circle cx={44} cy={44} r={36} fill="none" stroke="#27272a" strokeWidth={8} />
@@ -283,7 +283,6 @@ export function SampleResult() {
 
         {/* Report card */}
         <div className="card p-6">
-          {/* Consistent header */}
           <div className="flex items-center justify-between mb-5 pb-4 border-b border-border">
             <div>
               <p className="text-xs text-muted">Sample Business</p>
@@ -298,8 +297,6 @@ export function SampleResult() {
               <span className="px-2.5 py-1 text-xs font-bold bg-warning/10 border border-warning/20 text-warning rounded-full">Weak</span>
             </div>
           </div>
-
-          {/* Tab content */}
           <div>{MOCKUPS[active]}</div>
         </div>
 
@@ -307,7 +304,7 @@ export function SampleResult() {
         <div className="mt-8 p-6 rounded-2xl border border-accent/20 bg-accent/5 flex flex-col md:flex-row items-center justify-between gap-4">
           <div>
             <p className="font-bold text-foreground text-lg">Ready to see your real scores?</p>
-            <p className="text-sm text-muted mt-1">Get your full report — all 7 sections — for $24.99. Takes 30 seconds.</p>
+            <p className="text-sm text-muted mt-1">Get your full report — all 7 sections — for ${SCAN_PRICE_USD.toFixed(2)}. Takes 30 seconds.</p>
           </div>
           <Button variant="primary" size="lg" onClick={() => window.location.href = '/scan'}>
             Scan my business

@@ -7,6 +7,7 @@ const footerLinks = {
     { href: '/#how-it-works', label: 'How it works' },
     { href: '/#pricing',      label: 'Pricing' },
     { href: '/scan',          label: 'Run a scan' },
+    { href: '/invisible',     label: 'Is your business invisible?' },
   ],
   Resources: [
     { href: '/blog',                  label: 'Blog' },
@@ -67,6 +68,7 @@ export function Footer() {
               href="https://launchboosts.com/project/my-geo-radar"
               target="_blank"
               rel="noopener noreferrer"
+              className="opacity-80 hover:opacity-100 transition-opacity"
             >
               <Image
                 src="https://launchboosts.com/badges/featured-dark.svg"
@@ -80,6 +82,7 @@ export function Footer() {
               href="https://dang.ai/"
               target="_blank"
               rel="noopener noreferrer"
+              className="opacity-80 hover:opacity-100 transition-opacity"
             >
               <Image
                 src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png"

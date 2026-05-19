@@ -9,7 +9,7 @@ import {
   Loader2, Globe, Sparkles, MapPin,
 } from 'lucide-react'
 import { clsx } from 'clsx'
-import { PROMO_PRICE_USD, FULL_PRICE_USD } from '@/lib/constants'
+import { SCAN_PRICE_USD } from '@/lib/constants'
 
 const MAX_TOPICS = 50
 type CrawlStatus = 'idle' | 'crawling' | 'success' | 'failed'
@@ -119,7 +119,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
     }
   }
 
-  // Debounced crawl fires 800ms after user stops typing a URL
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedCrawl = useCallback(
     debounce((url: string) => {
@@ -179,7 +178,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
   return (
     <div className="card p-6 flex flex-col gap-5">
 
-      {/* ── URL field — triggers auto-fill ── */}
+      {/* ── URL field ── */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-foreground-dim flex items-center gap-1.5">
           <Globe className="w-3.5 h-3.5" /> Website *
@@ -204,7 +203,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
             </div>
           )}
         </div>
-        {/* Crawl status banner */}
         {crawlStatus === 'crawling' && (
           <p className="text-xs text-accent flex items-center gap-1.5">
             <Sparkles className="w-3 h-3 animate-pulse" /> Auto-filling your details\u2026
@@ -269,7 +267,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           <span className="text-xs text-muted">{topics.length}/{MAX_TOPICS}</span>
         </div>
 
-        {/* Topic chips */}
         {topics.length > 0 && (
           <div className="max-h-52 overflow-y-auto flex flex-col gap-1.5 pr-1">
             {topics.map((t, i) => (
@@ -297,7 +294,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           <p className="text-xs text-warning">No topics detected — add them manually below.</p>
         )}
 
-        {/* Manual add */}
         {topics.length < MAX_TOPICS && (
           <div className="flex gap-2">
             <input
@@ -324,7 +320,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       <div className="flex items-center justify-between px-4 py-3 bg-surface-2 border border-border rounded-xl">
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-accent shrink-0" />
-          <span className="text-xs text-foreground-dim">45–90 second scan</span>
+          <span className="text-xs text-foreground-dim">45\u201390 second scan</span>
         </div>
         <div className="flex gap-1.5">
           {['ChatGPT', 'Perplexity', 'Gemini', 'Claude'].map(e => (
@@ -337,15 +333,12 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       <div className="bg-accent/5 border border-accent/20 rounded-xl p-4 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold">One-time payment</p>
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-sm line-through text-muted/60">${FULL_PRICE_USD.toFixed(2)}</span>
-            <span className="text-lg font-bold text-accent">${PROMO_PRICE_USD.toFixed(2)}</span>
-          </div>
+          <span className="text-lg font-bold text-accent">${SCAN_PRICE_USD.toFixed(2)}</span>
         </div>
         <div className="flex flex-col gap-1.5 pt-2 border-t border-accent/10">
           <div className="flex items-center gap-2 text-xs text-foreground-dim">
             <Lock className="w-3.5 h-3.5 text-success shrink-0" />
-            256-bit SSL — secured by Stripe
+            256-bit SSL \u2014 secured by Stripe
           </div>
           <div className="flex items-center gap-2 text-xs text-foreground-dim">
             <Zap className="w-3.5 h-3.5 text-warning shrink-0" />
@@ -365,7 +358,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       >
         {loading ? 'Redirecting to checkout\u2026' :
          crawlStatus === 'crawling' ? 'Scanning your site\u2026' :
-         `Pay $${PROMO_PRICE_USD.toFixed(2)} \u00b7 Run Full Scan`}
+         `Pay $${SCAN_PRICE_USD.toFixed(2)} \u00b7 Run Full Scan`}
       </Button>
 
       {!canSubmit && crawlStatus !== 'crawling' && (

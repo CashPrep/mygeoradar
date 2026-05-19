@@ -78,9 +78,9 @@ const jsonLd = {
       operatingSystem: 'Web',
       offers: {
         '@type': 'Offer',
-        price: '24.99',
+        price: '29.99',
         priceCurrency: 'USD',
-        description: 'First AI visibility scan — 50% off introductory price.',
+        description: 'One-time AI visibility scan report.',
       },
       description:
         'AI search visibility scanner. See how ChatGPT, Perplexity, Gemini, and Claude answer questions about your business and get a prioritized fix plan.',
