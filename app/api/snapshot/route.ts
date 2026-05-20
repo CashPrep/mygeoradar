@@ -6,12 +6,8 @@
  * The paid report unlocks: per-engine breakdown, all topics, actions,
  * content gaps, schema check, competitor analysis, GBP signals.
  *
- * This means the free score is always honest and always matches
- * what the customer will see after paying.
- *
  * Zero web presence: if the site has no scrapeable content AND scores
- * below the "no presence" threshold, we return known=false so the
- * frontend redirects to the $9.99 Web Presence Starter Guide.
+ * below the threshold, we return known=false → redirect to guide.
  */
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
@@ -21,7 +17,6 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 const SNAPSHOT_MAX_TOPICS = 15
 const MAX_PER_DAY = 3
-
 const ZERO_PRESENCE_SCORE_THRESHOLD = 15
 
 function getClientIp(req: NextRequest): string {
@@ -101,10 +96,7 @@ async function scrapeTopics(
       if (res.ok) {
         const html = await res.text()
         const raw = html.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 2000)
-        if (raw.length > 80) {
-          signals.push(`RAW: ${raw}`)
-          rawFallbackUsed = true
-        }
+        if (raw.length > 80) { signals.push(`RAW: ${raw}`); rawFallbackUsed = true }
       }
     } catch { /* silent */ }
   }
@@ -170,27 +162,12 @@ Engine behaviour:
 - Gemini: Google ecosystem, weights GBP, Google reviews, local pack
 - Claude: training data only, favours editorial/authoritative content
 
-Also return 3 specific issues that are the BIGGEST reasons this business scores low across AI engines. These must be:
-- Concrete and actionable (not generic)
-- Based on the actual business/industry
-- Honest — tell them what's really missing
-
 Return ONLY valid JSON:
 {
   "engines": [
-    {
-      "engine": "chatgpt",
-      "overallScore": 42,
-      "topics": [
-        { "topic": "exact topic", "score": 35 }
-      ]
-    }
+    { "engine": "chatgpt", "overallScore": 42, "topics": [{ "topic": "exact topic", "score": 35 }] }
   ],
-  "topIssues": [
-    "Specific issue 1",
-    "Specific issue 2",
-    "Specific issue 3"
-  ]
+  "topIssues": ["Specific issue 1", "Specific issue 2", "Specific issue 3"]
 }
 
 Rules:
@@ -212,37 +189,27 @@ Rules:
 
   let overallScore = 0
   if (engines.length > 0) {
-    const engineAvgs = engines.map(e => {
-      if (e.topics?.length) {
-        return e.topics.reduce((s, t) => s + (t.score ?? 0), 0) / e.topics.length
-      }
-      return e.overallScore ?? 0
-    })
+    const engineAvgs = engines.map(e =>
+      e.topics?.length
+        ? e.topics.reduce((s, t) => s + (t.score ?? 0), 0) / e.topics.length
+        : e.overallScore ?? 0
+    )
     overallScore = Math.round(engineAvgs.reduce((s, a) => s + a, 0) / engineAvgs.length)
   }
   overallScore = Math.min(100, Math.max(0, overallScore))
 
-  const topIssues = (raw.topIssues ?? []).slice(0, 3) as string[]
-
-  return { overallScore, topIssues }
+  return { overallScore, topIssues: (raw.topIssues ?? []).slice(0, 3) as string[] }
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { businessName, website, email } = await req.json()
+    const { businessName, website, email, marketingOptIn } = await req.json()
 
     if (!businessName?.trim() || !website?.trim()) {
-      return NextResponse.json(
-        { error: 'Business name and website are required.' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Business name and website are required.' }, { status: 400 })
     }
-
     if (!email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
-      return NextResponse.json(
-        { error: 'A valid email address is required to get your free score.' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'A valid email address is required to get your free score.' }, { status: 400 })
     }
 
     const ip      = getClientIp(req)
@@ -254,34 +221,32 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // Save email lead to Supabase (non-blocking — never fail the scan over this)
+    // Save lead + marketing opt-in (non-blocking)
     try {
       await supabase.from('email_leads').upsert(
-        { email: email.trim().toLowerCase(), business_name: businessName.trim(), website: website.trim(), source: 'free_snapshot' },
+        {
+          email:            email.trim().toLowerCase(),
+          business_name:    businessName.trim(),
+          website:          website.trim(),
+          source:           'free_snapshot',
+          marketing_opt_in: marketingOptIn ?? false,
+        },
         { onConflict: 'email', ignoreDuplicates: false }
       )
-    } catch { /* silent — never block the scan */ }
+    } catch { /* silent */ }
 
     const cleanWebsite = website.trim().startsWith('http')
       ? website.trim().replace(/\/$/, '')
       : `https://${website.trim().replace(/\/$/, '')}`
 
     const { topics, industry, location, hasContent } = await scrapeTopics(cleanWebsite, businessName.trim())
-
-    const { overallScore, topIssues } = await scoreTopics(
-      businessName.trim(),
-      cleanWebsite,
-      topics,
-      industry,
-      location,
-    )
+    const { overallScore, topIssues } = await scoreTopics(businessName.trim(), cleanWebsite, topics, industry, location)
 
     if (!hasContent && overallScore < ZERO_PRESENCE_SCORE_THRESHOLD) {
       return NextResponse.json({
-        known:        false,
-        score:        overallScore,
+        known: false, score: overallScore,
         businessName: businessName.trim(),
-        website:      cleanWebsite.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+        website: cleanWebsite.replace(/^https?:\/\//, '').replace(/\/$/, ''),
       })
     }
 
@@ -298,21 +263,13 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      score:        overallScore,
-      level,
-      headline:     headlines[level],
-      topIssues,
+      score: overallScore, level, headline: headlines[level], topIssues,
       businessName: businessName.trim(),
-      website:      cleanWebsite.replace(/^https?:\/\//, '').replace(/\/$/, ''),
-      industry,
-      location,
-      known:        true,
+      website: cleanWebsite.replace(/^https?:\/\//, '').replace(/\/$/, ''),
+      industry, location, known: true,
     })
   } catch (err) {
     console.error('[snapshot] error:', err)
-    return NextResponse.json(
-      { error: 'Something went wrong. Please try again.' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Something went wrong. Please try again.' }, { status: 500 })
   }
 }
