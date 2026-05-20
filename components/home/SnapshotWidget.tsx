@@ -104,6 +104,8 @@ export function SnapshotWidget() {
   const resultRef = useRef<HTMLDivElement>(null)
 
   // ── On mount: resume a pending scan if returning from OAuth ──
+  // Uses onAuthStateChange so we wait for Supabase to fully hydrate the
+  // session after the redirect — getSession() alone can return null too early.
   useEffect(() => {
     const raw = sessionStorage.getItem('pending_snapshot')
     if (!raw) return
@@ -111,18 +113,19 @@ export function SnapshotWidget() {
     let pending: { businessName: string; website: string; email?: string; marketingOptIn: boolean }
     try { pending = JSON.parse(raw) } catch { sessionStorage.removeItem('pending_snapshot'); return }
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!session) return // not authenticated yet — leave form alone
-      sessionStorage.removeItem('pending_snapshot')
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) return
+      subscription.unsubscribe() // fire once only
 
+      sessionStorage.removeItem('pending_snapshot')
       const emailAddr = pending.email ?? session.user.email ?? ''
+
       setBusinessName(pending.businessName)
       setWebsite(pending.website)
       setMarketingOptIn(pending.marketingOptIn)
-
-      // kick off the scan immediately
       setLoading(true)
       setResult(null)
+
       fetch('/api/snapshot', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -148,11 +151,12 @@ export function SnapshotWidget() {
         .catch(() => { setUrlError('Network error — please try again.'); setStep('details') })
         .finally(() => setLoading(false))
     })
+
+    return () => subscription.unsubscribe()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // ── After Google OAuth returns, run the scan automatically ──
-  // (Supabase will redirect back; the scan page re-mounts with session)
   // We store pending scan data in sessionStorage so it survives the redirect.
   async function savePendingAndRedirect(provider: 'google') {
     sessionStorage.setItem('pending_snapshot', JSON.stringify({
@@ -178,7 +182,6 @@ export function SnapshotWidget() {
     setEmailError('')
     setAuthLoading(true)
     setAuthError('')
-    // Save pending data so after verification we can auto-run
     sessionStorage.setItem('pending_snapshot', JSON.stringify({
       businessName: businessName.trim(),
       website:      normalizeUrl(website),
