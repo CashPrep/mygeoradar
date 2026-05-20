@@ -1,7 +1,7 @@
 'use client'
 
 import { useSearchParams } from 'next/navigation'
-import { Suspense, useState } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { CheckCircle2, ArrowRight, Loader2, Clock, Copy, Check, ChevronDown, ChevronUp } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -10,7 +10,7 @@ interface Step {
   title:    string
   why:      string
   time:     string
-  actions:  string[]
+  actions:  (string | { text: string; href: string })[]
   template?: { label: string; code: string }
   tip?:     string
 }
@@ -48,8 +48,8 @@ const ALL_STEPS: Step[] = [
       'In WordPress: install "Schema & Structured Data for WP" (free) and paste it in, or add it to your theme\'s <head> via a Custom HTML block.',
       'In Squarespace/Wix: go to Settings → Advanced → Code Injection → Header and paste it there.',
       'In raw HTML: paste it inside your <head> tag.',
-      'After publishing, test it at: validator.schema.org — paste your homepage URL and check for errors.',
-      'Also test at: search.google.com/test/rich-results',
+      { text: 'After publishing, test it at validator.schema.org — paste your homepage URL and check for errors.', href: 'https://validator.schema.org' },
+      { text: 'Also test at Google\'s Rich Results Test.', href: 'https://search.google.com/test/rich-results' },
     ],
     template: {
       label: 'JSON-LD schema template — paste into your <head>',
@@ -105,18 +105,18 @@ const ALL_STEPS: Step[] = [
     actions: [
       'Create a text file with your exact NAP: business name spelled exactly as on your GBP, full street address, phone number in +1-XXX-XXX-XXXX format, website URL. Use this same info everywhere — never abbreviate or vary it.',
       'Submit to these 10 in order of priority:',
-      '1. Yelp — biz.yelp.com/claim/search',
-      '2. Bing Places — bingplaces.com (feeds Microsoft Copilot directly)',
-      '3. Apple Maps — mapsconnect.apple.com',
-      '4. Facebook Business — facebook.com/pages/creation',
-      '5. Foursquare — foursquare.com/add-place',
-      '6. Yellow Pages — yp.com/yellowpages/claim-business',
-      '7. BBB — bbb.org/get-accredited (free listing, paid accreditation optional)',
-      '8. Angi / HomeAdvisor (if home services) — pro.angi.com/listing',
-      '9. Your local Chamber of Commerce directory (search "[your city] chamber of commerce")',
-      '10. Your top industry-specific directory (e.g., Avvo for lawyers, Zocdoc for doctors, Houzz for contractors)',
+      { text: '1. Yelp — Claim your business listing', href: 'https://biz.yelp.com/claim/search' },
+      { text: '2. Bing Places — feeds Microsoft Copilot directly', href: 'https://www.bingplaces.com' },
+      { text: '3. Apple Maps Connect', href: 'https://mapsconnect.apple.com' },
+      { text: '4. Facebook Business Page creation', href: 'https://www.facebook.com/pages/creation' },
+      { text: '5. Foursquare — Add a place', href: 'https://foursquare.com/add-place' },
+      { text: '6. Yellow Pages', href: 'https://www.yp.com/yellowpages/claim-business' },
+      { text: '7. BBB listing (free listing, paid accreditation optional)', href: 'https://www.bbb.org/get-accredited' },
+      { text: '8. Angi / HomeAdvisor (home services businesses)', href: 'https://pro.angi.com/listing' },
+      'Search "[your city] chamber of commerce" and submit to their local directory.',
+      'Find your top industry-specific directory (e.g. Avvo for lawyers, Zocdoc for doctors, Houzz for contractors) and submit there.',
       'After submitting all 10, do a Google search for your business name and city. Every listing that appears with wrong info (old address, old phone) needs to be corrected.',
-      'Use Moz Local (moz.com/products/local) or BrightLocal (brightlocal.com) to audit NAP consistency across 50+ directories automatically.',
+      { text: 'Use Moz Local to audit NAP consistency across 50+ directories automatically.', href: 'https://moz.com/products/local' },
     ],
     tip: 'NAP consistency is critical. If Yelp says "St." and your GBP says "Street," fix it. AI engines that find conflicting info treat it as a red flag.',
   },
@@ -126,15 +126,20 @@ const ALL_STEPS: Step[] = [
     why:    'Google Search Console is the direct line between your website and Google\'s crawler. Without it, Google may not know your site\'s pages exist. Submitting your sitemap here gets every page crawled faster — and since ChatGPT, Perplexity, and Gemini all draw from Google\'s index, this directly accelerates your AI visibility.',
     time:   '20–30 min',
     actions: [
-      'Go to search.google.com/search-console and sign in with your Google account.',
+      { text: 'Go to Google Search Console and sign in with your Google account.', href: 'https://search.google.com/search-console' },
       'Click "Add property" and enter your website domain (e.g. yourwebsite.com). Choose "Domain" property type for full coverage.',
-      'Verify ownership: the easiest method is the HTML meta tag — copy it, paste it into your homepage\'s <head>, then click "Verify."',
+      'Verify ownership using the HTML meta tag method: copy the tag from GSC, paste it into your homepage\'s <head>, then click "Verify." See the template below.',
       'Once verified, click "Sitemaps" in the left sidebar. Enter your sitemap URL (usually yourwebsite.com/sitemap.xml) and click "Submit."',
       'If you don\'t have a sitemap: in WordPress use Yoast SEO (free). In Squarespace/Wix it\'s automatic. Otherwise generate one free at xml-sitemaps.com.',
       'Click "URL Inspection" and paste in your homepage URL. Click "Request Indexing." Repeat for your About, FAQ, and Facts pages.',
       'Return after 72 hours and check "Coverage" — any pages listed as "Excluded" or "Error" need to be fixed.',
       'Under "Performance," check which queries are generating impressions. This tells you how Google currently understands your business.',
     ],
+    template: {
+      label: 'Google Search Console HTML verification tag (paste into your <head>)',
+      code: `<!-- Replace XXXXXXXXXXXXXXXXX with the code Google gives you -->
+<meta name="google-site-verification" content="XXXXXXXXXXXXXXXXX" />`,
+    },
     tip: 'After any major content update — new About page, new FAQ page — always come back here and request re-indexing for that specific URL. Changes can take 2–5 days to propagate to AI engines after Google re-crawls.',
   },
   {
@@ -220,8 +225,8 @@ A: [2–3 sentence answer]`,
       'Find the right contact: for newspapers, look for the "local business" or "community" reporter. For blogs, find the editor. Check their Twitter/LinkedIn for direct contact.',
       'Send the pitch email below — personalize the first line for each outlet.',
       'Follow up once after 5 business days if no response.',
-      'If no organic coverage after 2 weeks: use EIN Presswire (einpresswire.com, ~$99/release) to distribute a press release to 400+ indexed news sites. This directly creates AI-indexable coverage.',
-      'Also submit your business to PR Newswire\'s free tier (prnewswire.com) and send a press release template below to your local outlets.',
+      { text: 'If no organic coverage after 2 weeks: use EIN Presswire (~$99/release) to distribute a press release to 400+ indexed news sites.', href: 'https://www.einpresswire.com' },
+      { text: 'Also consider PR Newswire for additional distribution reach.', href: 'https://www.prnewswire.com' },
     ],
     template: {
       label: 'Press pitch email + press release template',
@@ -315,14 +320,19 @@ Contact:
     why:    'Bing powers Microsoft Copilot, one of the fastest-growing AI assistants. Businesses not indexed in Bing are completely invisible to Copilot users. Setup takes 15 minutes and has an outsized impact on AI visibility.',
     time:   '15–30 min',
     actions: [
-      'Go to bing.com/webmasters and sign in with a Microsoft account (create one free if needed).',
+      { text: 'Go to Bing Webmaster Tools and sign in with a Microsoft account (create one free if needed).', href: 'https://www.bing.com/webmasters' },
       'Click "Add a site" and enter your website URL.',
-      'Verify ownership: the easiest method is the XML meta tag — copy it, paste it into your homepage\'s <head>, then click "Verify."',
+      'Verify ownership using the XML meta tag method: copy the tag from Bing, paste it into your homepage\'s <head>, then click "Verify." See the template below.',
       'After verification, click "Sitemaps" in the left sidebar and submit your sitemap URL (usually yourwebsite.com/sitemap.xml).',
       'Click "URL Inspection" and submit your homepage, About page, FAQ page, and Facts page for immediate crawling.',
       'Go to "SEO" → "Site Scan" and run a scan. Fix every issue flagged as "Critical" or "Warning."',
       'Return weekly for the first month to check the crawl stats.',
     ],
+    template: {
+      label: 'Bing Webmaster Tools XML verification tag (paste into your <head>)',
+      code: `<!-- Replace XXXXXXXXXXXXXXXXX with the key Bing gives you -->
+<meta name="msvalidate.01" content="XXXXXXXXXXXXXXXXX" />`,
+    },
     tip: 'If you don\'t have a sitemap, generate one free at xml-sitemaps.com and upload the file to your site root.',
   },
   {
@@ -331,8 +341,8 @@ Contact:
     why:    'Wikidata is the structured knowledge database that powers Wikipedia\'s infoboxes and feeds directly into Google\'s Knowledge Graph and several AI training pipelines. A Wikidata entry is the closest thing that exists to an "official AI directory listing." Most small businesses don\'t have one — which means having one is a significant competitive advantage.',
     time:   '30–45 min',
     actions: [
-      'Go to wikidata.org and create a free account.',
-      'Go to wikidata.org/wiki/Special:NewItem.',
+      { text: 'Go to Wikidata and create a free account.', href: 'https://www.wikidata.org' },
+      { text: 'Go to Special:NewItem on Wikidata to create your entry.', href: 'https://www.wikidata.org/wiki/Special:NewItem' },
       'Label: enter your business name. Description: enter a one-sentence description, e.g. "roofing contractor based in Asheville, North Carolina."',
       'Click "Create." You now have a Wikidata item.',
       'Add these 8 statements (click "+ add statement" for each):',
@@ -345,7 +355,8 @@ Contact:
       '• inception (P571): [founding year]',
       '• described at URL (P973): link to your /facts page',
       'Save each statement. Your entry is now live and will be picked up by Google\'s Knowledge Graph within 2–4 weeks.',
-      'Bonus: also create profiles on LinkedIn (linkedin.com/company/new) and Crunchbase (crunchbase.com/add-new-entity) — both are heavily scraped by AI training pipelines.',
+      { text: 'Bonus: create a LinkedIn Company page — heavily scraped by AI training pipelines.', href: 'https://www.linkedin.com/company/setup/new/' },
+      { text: 'Bonus: create a Crunchbase profile — also scraped by AI data providers.', href: 'https://www.crunchbase.com/add-new-entity' },
     ],
     template: {
       label: 'Description formula for the Wikidata label field',
@@ -409,6 +420,8 @@ const CHECKLIST_ITEMS = [
   '30-day calendar in progress',
 ]
 
+const STORAGE_KEY = 'invisible-guide-checklist'
+
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false)
   function handleCopy() {
@@ -424,6 +437,44 @@ function CopyButton({ text }: { text: string }) {
     >
       {copied ? <><Check className="w-3 h-3" /> Copied!</> : <><Copy className="w-3 h-3" /> Copy</>}
     </button>
+  )
+}
+
+type ActionItem = string | { text: string; href: string }
+
+function ActionLine({ action, index }: { action: ActionItem; index: number }) {
+  if (typeof action === 'object') {
+    return (
+      <li className="flex gap-2.5">
+        <span className="w-5 h-5 rounded-full bg-surface-offset border border-border text-muted text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+          {index + 1}
+        </span>
+        <span className="text-sm text-foreground-dim leading-relaxed">
+          {action.text.split(action.href)[0]}
+          <a
+            href={action.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-accent hover:text-accent-hover underline underline-offset-2 transition-colors"
+          >
+            {action.href.replace('https://', '').replace(/\/$/, '')}
+          </a>
+        </span>
+      </li>
+    )
+  }
+  if (action === '') return <div className="h-1" />
+  if (action.startsWith('──')) return <li className="text-xs font-bold text-accent pt-1">{action}</li>
+  if (action.match(/^\d+\./) || action.startsWith('•')) {
+    return <li className="text-sm text-foreground-dim leading-relaxed pl-4">{action}</li>
+  }
+  return (
+    <li className="flex gap-2.5">
+      <span className="w-5 h-5 rounded-full bg-surface-offset border border-border text-muted text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
+        {index + 1}
+      </span>
+      <span className="text-sm text-foreground-dim leading-relaxed">{action}</span>
+    </li>
   )
 }
 
@@ -461,19 +512,7 @@ function StepCard({ step }: { step: Step }) {
             <p className="text-xs font-semibold text-foreground uppercase tracking-wider mb-2">Exact steps</p>
             <ol className="flex flex-col gap-2">
               {step.actions.map((action, i) => (
-                action === '' ? <div key={i} className="h-1" /> :
-                action.startsWith('──') ? (
-                  <li key={i} className="text-xs font-bold text-accent pt-1">{action}</li>
-                ) : action.match(/^\d+\./) || action.startsWith('•') ? (
-                  <li key={i} className="text-sm text-foreground-dim leading-relaxed pl-4">{action}</li>
-                ) : (
-                  <li key={i} className="flex gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-surface-offset border border-border text-muted text-[10px] font-bold flex items-center justify-center shrink-0 mt-0.5">
-                      {i + 1}
-                    </span>
-                    <span className="text-sm text-foreground-dim leading-relaxed">{action}</span>
-                  </li>
-                )
+                <ActionLine key={i} action={action} index={i} />
               ))}
             </ol>
           </div>
@@ -508,7 +547,22 @@ function InvisibleSuccessInner() {
   const params       = useSearchParams()
   const businessName = params.get('name') || 'Your Business'
   const website      = params.get('url')  || ''
-  const [checked, setChecked] = useState<boolean[]>(new Array(CHECKLIST_ITEMS.length).fill(false))
+
+  const [checked, setChecked] = useState<boolean[]>(() => {
+    if (typeof window === 'undefined') return new Array(CHECKLIST_ITEMS.length).fill(false)
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved) as boolean[]
+        if (Array.isArray(parsed) && parsed.length === CHECKLIST_ITEMS.length) return parsed
+      }
+    } catch {}
+    return new Array(CHECKLIST_ITEMS.length).fill(false)
+  })
+
+  useEffect(() => {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(checked)) } catch {}
+  }, [checked])
 
   function toggle(i: number) {
     setChecked(prev => { const n = [...prev]; n[i] = !n[i]; return n })
@@ -575,7 +629,7 @@ function InvisibleSuccessInner() {
               </button>
             ))}
           </div>
-          <p className="text-xs text-muted">Check items off as you complete them — progress is saved while you have this page open.</p>
+          <p className="text-xs text-muted">Your progress is automatically saved — it will still be here when you come back.</p>
         </div>
       </section>
 
@@ -584,7 +638,26 @@ function InvisibleSuccessInner() {
         {ALL_STEPS.map(step => <StepCard key={step.number} step={step} />)}
       </section>
 
-      {/* CTA */}
+      {/* Mid-page upsell — shown after Step 11 calendar */}
+      <section className="max-w-2xl mx-auto px-4 pb-6">
+        <div className="bg-surface border border-accent/30 rounded-2xl p-6 flex flex-col gap-3">
+          <p className="text-sm font-bold text-foreground">✅ You now have everything you need to get found by AI.</p>
+          <p className="text-sm text-foreground-dim leading-relaxed">
+            Once you&apos;ve worked through the 30-day calendar, run the full MyGeoRadar scan to measure exactly
+            how far you&apos;ve moved — broken down per engine: ChatGPT, Perplexity, Gemini, and Claude.
+            Most businesses that complete this guide see a 15–30 point score increase.
+          </p>
+          <a
+            href={`/scan?name=${encodeURIComponent(businessName)}&url=${encodeURIComponent(website)}`}
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-hover text-white text-sm font-bold transition-all shadow-glow-sm hover:shadow-glow-md w-fit"
+          >
+            Measure my progress — Full AI scan <ArrowRight className="w-4 h-4" />
+          </a>
+          <p className="text-xs text-muted">$29.99 &middot; Results in ~60 seconds &middot; Full per-engine breakdown</p>
+        </div>
+      </section>
+
+      {/* Footer CTA */}
       <section className="border-t border-border bg-surface">
         <div className="max-w-2xl mx-auto px-4 py-8 flex flex-col gap-3 items-center text-center">
           <p className="text-sm font-semibold text-foreground">Once you&apos;ve completed these steps, measure exactly how far you&apos;ve come.</p>
