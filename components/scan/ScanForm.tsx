@@ -37,13 +37,16 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
   const [industry,     setIndustry]     = useState('')
   const [location,     setLocation]     = useState('')
   const [geoLoading,   setGeoLoading]   = useState(false)
+  // Track whether geolocation has already resolved (success or denied)
+  // so crawl results never clobber a real geo-detected city.
+  const geoResolved = useRef(false)
   const [crawlStatus,  setCrawlStatus]  = useState<CrawlStatus>('idle')
   const [crawlMessage, setCrawlMessage] = useState('')
   const lastCrawledUrl = useRef('')
 
   // Auto-detect location on mount
   useEffect(() => {
-    if (location || !navigator.geolocation) return
+    if (!navigator.geolocation) return
     setGeoLoading(true)
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
@@ -55,9 +58,16 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
           if (city && state)  setLocation(`${city}, ${state}`)
           else if (state)     setLocation(state)
         } catch { /* silent */ }
-        finally { setGeoLoading(false) }
+        finally {
+          geoResolved.current = true
+          setGeoLoading(false)
+        }
       },
-      () => setGeoLoading(false),
+      () => {
+        // Permission denied or unavailable — mark resolved so crawl can fill
+        geoResolved.current = true
+        setGeoLoading(false)
+      },
       { timeout: 6000 }
     )
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -90,14 +100,20 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
 
       if (!res.ok || data.error) {
         setCrawlStatus('failed')
-        setCrawlMessage('Could not scan site — fill in topics manually below.')
+        setCrawlMessage('Could not scan site \u2014 fill in topics manually below.')
         return
       }
 
       let filled = 0
       if (data.businessName && !businessName) { setBusinessName(data.businessName); filled++ }
       if (data.industry)                       { setIndustry(data.industry); filled++ }
-      if (data.location && !location)          { setLocation(data.location); filled++ }
+      // Only use crawl-returned location if geolocation has resolved and left
+      // the field empty (permission denied / unavailable). Never overwrite a
+      // real geo-detected city with whatever GPT guessed from the website.
+      if (data.location && geoResolved.current) {
+        setLocation(prev => prev === '' ? data.location : prev)
+        filled++
+      }
       if (Array.isArray(data.topics) && data.topics.length > 0) {
         setTopics(data.topics.slice(0, MAX_TOPICS))
         filled++
@@ -105,17 +121,17 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
 
       if (data.topics?.length > 0) {
         setCrawlStatus('success')
-        setCrawlMessage(`Auto-filled ${data.topics.length} topics from your site — review or edit below.`)
+        setCrawlMessage(`Auto-filled ${data.topics.length} topics from your site \u2014 review or edit below.`)
       } else if (filled > 0) {
         setCrawlStatus('success')
-        setCrawlMessage('Site scanned — no topics detected, add them below.')
+        setCrawlMessage('Site scanned \u2014 no topics detected, add them below.')
       } else {
         setCrawlStatus('failed')
-        setCrawlMessage('Could not extract enough info — fill in manually.')
+        setCrawlMessage('Could not extract enough info \u2014 fill in manually.')
       }
     } catch {
       setCrawlStatus('failed')
-      setCrawlMessage('Network error while scanning — fill in manually.')
+      setCrawlMessage('Network error while scanning \u2014 fill in manually.')
     }
   }
 
@@ -150,7 +166,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
   async function handleSubmit() {
     if (!businessName.trim()) return setError('Enter your business name.')
     if (!website.trim())      return setError('Enter your website URL.')
-    if (topics.length === 0)  return setError('Add at least one topic — or wait for the scan to finish.')
+    if (topics.length === 0)  return setError('Add at least one topic \u2014 or wait for the scan to finish.')
 
     setLoading(true)
     setError('')
@@ -178,7 +194,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
   return (
     <div className="card p-6 flex flex-col gap-5">
 
-      {/* ── URL field ── */}
+      {/* \u2500\u2500 URL field \u2500\u2500 */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-foreground-dim flex items-center gap-1.5">
           <Globe className="w-3.5 h-3.5" /> Website *
@@ -220,7 +236,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         )}
       </div>
 
-      {/* ── Business name ── */}
+      {/* \u2500\u2500 Business name \u2500\u2500 */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-foreground-dim">Business name *</label>
         <input
@@ -232,7 +248,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         />
       </div>
 
-      {/* ── Industry + Location row ── */}
+      {/* \u2500\u2500 Industry + Location row \u2500\u2500 */}
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-foreground-dim">Industry</label>
@@ -260,7 +276,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         </div>
       </div>
 
-      {/* ── Topics ── */}
+      {/* \u2500\u2500 Topics \u2500\u2500 */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <label className="text-sm font-medium text-foreground-dim">Topics to scan</label>
@@ -287,11 +303,11 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
 
         {topics.length === 0 && crawlStatus === 'idle' && (
           <p className="text-xs text-muted">
-            Enter your URL above — we\u2019ll auto-detect up to 50 topics from your site.
+            Enter your URL above \u2014 we\u2019ll auto-detect up to 50 topics from your site.
           </p>
         )}
         {topics.length === 0 && crawlStatus === 'failed' && (
-          <p className="text-xs text-warning">No topics detected — add them manually below.</p>
+          <p className="text-xs text-warning">No topics detected \u2014 add them manually below.</p>
         )}
 
         {topics.length < MAX_TOPICS && (
@@ -316,7 +332,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         )}
       </div>
 
-      {/* ── Engines + timing ── */}
+      {/* \u2500\u2500 Engines + timing \u2500\u2500 */}
       <div className="flex items-center justify-between px-4 py-3 bg-surface-2 border border-border rounded-xl">
         <div className="flex items-center gap-2">
           <Clock className="w-4 h-4 text-accent shrink-0" />
@@ -329,7 +345,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         </div>
       </div>
 
-      {/* ── Payment summary ── */}
+      {/* \u2500\u2500 Payment summary \u2500\u2500 */}
       <div className="bg-accent/5 border border-accent/20 rounded-xl p-4 flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <p className="text-sm font-semibold">One-time payment</p>

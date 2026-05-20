@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { Radar } from 'lucide-react'
 
 const footerLinks = {
@@ -70,12 +69,13 @@ export function Footer() {
               rel="noopener noreferrer"
               className="opacity-80 hover:opacity-100 transition-opacity"
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="https://launchboosts.com/badges/featured-dark.svg"
                 alt="Featured on LaunchBoosts"
                 width={120}
                 height={36}
-                unoptimized
+                style={{ height: 36, width: 'auto' }}
               />
             </a>
             <a
@@ -84,12 +84,13 @@ export function Footer() {
               rel="noopener noreferrer"
               className="opacity-80 hover:opacity-100 transition-opacity"
             >
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="https://cdn.prod.website-files.com/63d8afd87da01fb58ea3fbcb/6487e2868c6c8f93b4828827_dang-badge.png"
                 alt="Dang.ai"
                 width={120}
                 height={36}
-                unoptimized
+                style={{ height: 36, width: 'auto' }}
               />
             </a>
           </div>
