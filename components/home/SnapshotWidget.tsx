@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useCallback } from 'react'
-import { ArrowRight, AlertTriangle, CheckCircle2, TrendingUp, XCircle, Zap, Loader2, Sparkles, Radio } from 'lucide-react'
+import { ArrowRight, AlertTriangle, CheckCircle2, TrendingUp, XCircle, Zap, Loader2, Sparkles, Mail } from 'lucide-react'
 import { clsx } from 'clsx'
 import { PROMO_PRICE_USD } from '@/lib/constants'
 
@@ -43,6 +43,10 @@ function isValidUrl(raw: string): boolean {
   catch { return false }
 }
 
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())
+}
+
 function debounce<T extends (...args: any[]) => void>(fn: T, ms: number) {
   let t: ReturnType<typeof setTimeout>
   return (...args: Parameters<T>) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms) }
@@ -69,13 +73,14 @@ function ScoreRingMini({ score, level }: { score: number; level: Level }) {
 }
 
 export function SnapshotWidget() {
+  const [email,        setEmail]        = useState('')
   const [businessName, setBusinessName] = useState('')
   const [website,      setWebsite]      = useState('')
   const [loading,      setLoading]      = useState(false)
   const [result,       setResult]       = useState<SnapshotResult | null>(null)
+  const [emailError,   setEmailError]   = useState('')
   const [nameError,    setNameError]    = useState('')
   const [urlError,     setUrlError]     = useState('')
-  // crawlStatus is purely cosmetic — NEVER blocks the scan button
   const [crawlStatus,  setCrawlStatus]  = useState<'idle' | 'crawling' | 'done' | 'failed'>('idle')
   const resultRef      = useRef<HTMLDivElement>(null)
   const lastCrawledUrl = useRef('')
@@ -120,6 +125,10 @@ export function SnapshotWidget() {
 
   function validateFields(): boolean {
     let valid = true
+    if (!email.trim() || !isValidEmail(email)) {
+      setEmailError('Enter a valid email address.')
+      valid = false
+    } else { setEmailError('') }
     if (!businessName.trim()) { setNameError('Enter your business name.'); valid = false } else { setNameError('') }
     if (!website.trim())           { setUrlError('Enter your website URL.'); valid = false }
     else if (!isValidUrl(website)) { setUrlError('Enter a valid URL, e.g. yoursite.com'); valid = false }
@@ -135,12 +144,11 @@ export function SnapshotWidget() {
       const res  = await fetch('/api/snapshot', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ businessName: businessName.trim(), website: normalizeUrl(website) }),
+        body:    JSON.stringify({ businessName: businessName.trim(), website: normalizeUrl(website), email: email.trim() }),
       })
       const data = await res.json()
       if (!res.ok) { setUrlError(data.error || 'Something went wrong. Please try again.'); return }
 
-      // Business is completely unknown to AI — send to the invisibility guide
       if (data.known === false) {
         const p = new URLSearchParams({ name: data.businessName, url: data.website })
         window.location.href = `/invisible?${p.toString()}`
@@ -169,6 +177,33 @@ export function SnapshotWidget() {
           </div>
 
           <div className="flex flex-col gap-2">
+
+            {/* Email field */}
+            <div className="flex flex-col gap-1">
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted pointer-events-none" />
+                <input
+                  type="email"
+                  placeholder="your@email.com"
+                  value={email}
+                  disabled={loading}
+                  onChange={e => { setEmail(e.target.value); if (emailError) setEmailError('') }}
+                  onKeyDown={e => { if (e.key === 'Enter') handleScan() }}
+                  aria-invalid={!!emailError}
+                  className={clsx(
+                    'w-full pl-9 pr-3 py-2.5 rounded-xl bg-surface-2 border text-sm text-foreground placeholder:text-muted focus:outline-none transition-colors disabled:opacity-50',
+                    emailError ? 'border-danger/60 focus:border-danger' : 'border-border focus:border-accent/60'
+                  )}
+                />
+              </div>
+              {emailError && (
+                <p className="text-xs text-danger flex items-center gap-1">
+                  <AlertTriangle className="w-3 h-3 shrink-0" />{emailError}
+                </p>
+              )}
+            </div>
+
+            {/* Website field */}
             <div className="flex flex-col gap-1">
               <div className="relative">
                 <input
@@ -208,6 +243,7 @@ export function SnapshotWidget() {
               )}
             </div>
 
+            {/* Business name field */}
             <div className="flex flex-col gap-1">
               <div className="relative">
                 <input
@@ -248,7 +284,7 @@ export function SnapshotWidget() {
             }
           </button>
 
-          <p className="text-xs text-muted text-center">No payment &middot; No account &middot; Takes ~5 seconds</p>
+          <p className="text-xs text-muted text-center">No payment &middot; No spam &middot; Takes ~5 seconds</p>
         </div>
       )}
 
@@ -296,8 +332,10 @@ export function SnapshotWidget() {
             <button
               onClick={() => {
                 setResult(null)
+                setEmail('')
                 setBusinessName('')
                 setWebsite('')
+                setEmailError('')
                 setNameError('')
                 setUrlError('')
                 setCrawlStatus('idle')

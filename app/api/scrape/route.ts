@@ -3,33 +3,21 @@ import OpenAI from 'openai'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-// ─── In-memory IP rate limiter ────────────────────────────────────────────────
-// Max 5 requests per IP per hour. Resets on next request after the window.
-// This works fine on Vercel (single warm instance handles burst). If you ever
-// move to multi-region edge, swap this for Upstash Redis.
-
 const ipMap = new Map<string, { count: number; resetAt: number }>()
 const RATE_LIMIT   = 5
-const WINDOW_MS    = 60 * 60 * 1000 // 1 hour
+const WINDOW_MS    = 60 * 60 * 1000
 
 function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
   const now    = Date.now()
   const record = ipMap.get(ip)
-
   if (!record || now > record.resetAt) {
     ipMap.set(ip, { count: 1, resetAt: now + WINDOW_MS })
     return { allowed: true, remaining: RATE_LIMIT - 1 }
   }
-
-  if (record.count >= RATE_LIMIT) {
-    return { allowed: false, remaining: 0 }
-  }
-
+  if (record.count >= RATE_LIMIT) return { allowed: false, remaining: 0 }
   record.count += 1
   return { allowed: true, remaining: RATE_LIMIT - record.count }
 }
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const FETCH_OPTS = {
   headers: {
@@ -52,7 +40,6 @@ function extractSignal(html: string): string {
     matchAllCompat(html, pattern)
       .map(m => (m[1] ?? m[0]).replace(/<[^>]+>/g, '').trim())
       .filter(Boolean)
-
   const title    = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.trim() ?? ''
   const metaDesc = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1]?.trim() ?? ''
   const h1s      = get(/<h1[^>]*>([\s\S]*?)<\/h1>/gi)
@@ -60,7 +47,6 @@ function extractSignal(html: string): string {
   const h3s      = get(/<h3[^>]*>([\s\S]*?)<\/h3>/gi)
   const lis      = get(/<li[^>]*>([\s\S]*?)<\/li>/gi).slice(0, 30)
   const ps       = get(/<p[^>]*>([\s\S]*?)<\/p>/gi).slice(0, 20)
-
   return [
     title       && `TITLE: ${title}`,
     metaDesc    && `META: ${metaDesc}`,
@@ -80,9 +66,7 @@ async function fetchSignal(url: string): Promise<string | null> {
     if (html.length < 200) return null
     const signal = extractSignal(html)
     return signal.length > 80 ? signal : null
-  } catch {
-    return null
-  }
+  } catch { return null }
 }
 
 async function fetchHomepageRaw(base: string): Promise<string | null> {
@@ -99,9 +83,7 @@ async function fetchHomepageRaw(base: string): Promise<string | null> {
       .trim()
       .slice(0, 2500)
     return text.length > 80 ? `RAW_TEXT: ${text}` : null
-  } catch {
-    return null
-  }
+  } catch { return null }
 }
 
 async function getSitemapUrls(base: string): Promise<string[]> {
@@ -114,29 +96,16 @@ async function getSitemapUrls(base: string): Promise<string[]> {
       .filter(u => !/\.(jpg|png|gif|pdf|webp|svg)/i.test(u))
       .filter(u => /(service|product|about|faq|offer|solution|feature|pricing|how|collection|category)/i.test(u))
     return urls.slice(0, 8)
-  } catch {
-    return []
-  }
+  } catch { return [] }
 }
 
-// ─── Route ────────────────────────────────────────────────────────────────────
-
 export async function POST(req: NextRequest) {
-  // IP rate limiting — protect GPT-4o spend
   const ip = req.headers.get('x-forwarded-for')?.split(',')[0].trim() ?? 'unknown'
   const { allowed, remaining } = checkRateLimit(ip)
-
   if (!allowed) {
     return NextResponse.json(
       { error: 'Too many requests. Please try again in an hour.' },
-      {
-        status: 429,
-        headers: {
-          'Retry-After':          '3600',
-          'X-RateLimit-Limit':    String(RATE_LIMIT),
-          'X-RateLimit-Remaining':'0',
-        },
-      }
+      { status: 429, headers: { 'Retry-After': '3600', 'X-RateLimit-Limit': String(RATE_LIMIT), 'X-RateLimit-Remaining': '0' } }
     )
   }
 
@@ -147,19 +116,9 @@ export async function POST(req: NextRequest) {
     const base = url.startsWith('http') ? url.replace(/\/$/, '') : `https://${url.replace(/\/$/, '')}`
 
     const priorityPages = [
-      `${base}/services`,
-      `${base}/products`,
-      `${base}/solutions`,
-      `${base}/offerings`,
-      `${base}/collections/all`,
-      `${base}/shop`,
-      `${base}/menu`,
-      `${base}/work`,
-      base,
-      `${base}/about`,
-      `${base}/about-us`,
-      `${base}/faq`,
-      `${base}/pricing`,
+      `${base}/services`, `${base}/products`, `${base}/solutions`, `${base}/offerings`,
+      `${base}/collections/all`, `${base}/shop`, `${base}/menu`, `${base}/work`,
+      base, `${base}/about`, `${base}/about-us`, `${base}/faq`, `${base}/pricing`,
     ]
 
     const priorityResults = await Promise.all(priorityPages.map(fetchSignal))
@@ -206,7 +165,7 @@ Topic rules:
 - CRITICAL: always return at least 20 topics even if content is sparse`
 
     const completion = await openai.chat.completions.create({
-      model:           'gpt-4o',
+      model:           'gpt-4o-mini',
       messages:        [{ role: 'user', content: prompt }],
       temperature:     0.2,
       response_format: { type: 'json_object' },
@@ -223,16 +182,10 @@ Topic rules:
           industry:     extracted.industry     || 'Other',
           location:     extracted.location     || null,
           topics: [
-            `best ${domainHint} services`,
-            `${domainHint} reviews`,
-            `how to contact ${domainHint}`,
-            `${domainHint} pricing`,
-            `${domainHint} near me`,
-            `top rated ${domainHint}`,
-            `${domainHint} alternatives`,
-            `is ${domainHint} legit`,
-            `${domainHint} customer service`,
-            `${domainHint} how it works`,
+            `best ${domainHint} services`, `${domainHint} reviews`, `how to contact ${domainHint}`,
+            `${domainHint} pricing`, `${domainHint} near me`, `top rated ${domainHint}`,
+            `${domainHint} alternatives`, `is ${domainHint} legit`,
+            `${domainHint} customer service`, `${domainHint} how it works`,
           ],
         },
         { headers: { 'X-RateLimit-Remaining': String(remaining) } }
@@ -240,12 +193,7 @@ Topic rules:
     }
 
     return NextResponse.json(
-      {
-        businessName: extracted.businessName || null,
-        industry:     extracted.industry     || null,
-        location:     extracted.location     || null,
-        topics,
-      },
+      { businessName: extracted.businessName || null, industry: extracted.industry || null, location: extracted.location || null, topics },
       { headers: { 'X-RateLimit-Remaining': String(remaining) } }
     )
   } catch (err) {

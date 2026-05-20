@@ -19,12 +19,9 @@ import { supabase } from '@/lib/supabase'
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
-// Snapshot is capped at 60s by Vercel Hobby — we use a subset of topics
-// (max 15) so we stay well under that limit while using the real pipeline.
 const SNAPSHOT_MAX_TOPICS = 15
 const MAX_PER_DAY = 3
 
-// Businesses scoring below this with zero scrapeable content have no web presence
 const ZERO_PRESENCE_SCORE_THRESHOLD = 15
 
 function getClientIp(req: NextRequest): string {
@@ -48,8 +45,6 @@ async function checkRateLimit(ip: string): Promise<boolean> {
   try { await supabase.from('snapshot_rate_limits').insert({ ip_address: ip }) } catch {}
   return true
 }
-
-// ─── Step 1: Scrape the site for topics (mirrors /api/scrape) ──────────────
 
 const FETCH_OPTS = {
   headers: {
@@ -91,11 +86,6 @@ async function fetchSignal(url: string): Promise<string | null> {
   } catch { return null }
 }
 
-/**
- * Returns topics + a hasContent flag.
- * hasContent=false means no scrapeable signals were found on the site —
- * a strong indicator of zero or near-zero web presence.
- */
 async function scrapeTopics(
   base: string,
   businessName: string
@@ -104,7 +94,6 @@ async function scrapeTopics(
   const results = await Promise.all(pages.map(fetchSignal))
   const signals = results.filter((s): s is string => s !== null)
 
-  // Fallback: raw homepage text
   let rawFallbackUsed = false
   if (signals.length === 0) {
     try {
@@ -120,9 +109,7 @@ async function scrapeTopics(
     } catch { /* silent */ }
   }
 
-  // If we got zero signals at all, site has no scrapeable content
   const hasContent = signals.length > 0 && !rawFallbackUsed
-
   const domainHint = base.replace(/https?:\/\/(www\.)?/, '').split('/')[0]
   const context = signals.slice(0, 3).join('\n\n---\n\n')
 
@@ -131,8 +118,7 @@ URL: ${base}\nBusiness: ${businessName}
 ${
   context
     ? `Content:\n${context}`
-    : `No content could be fetched. Infer from domain: "${domainHint}".
-`
+    : `No content could be fetched. Infer from domain: "${domainHint}".`
 }
 
 Return ONLY JSON:
@@ -146,8 +132,11 @@ Rules: be specific to THIS business, cover transactional + informational + local
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-4o', messages: [{ role: 'user', content: prompt }],
-      temperature: 0.2, response_format: { type: 'json_object' }, max_tokens: 1200,
+      model: 'gpt-4o-mini',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.2,
+      response_format: { type: 'json_object' },
+      max_tokens: 1200,
     })
     const raw = JSON.parse(completion.choices[0].message.content!)
     const topics = Array.isArray(raw.topics) ? raw.topics.slice(0, SNAPSHOT_MAX_TOPICS) : []
@@ -161,8 +150,6 @@ Rules: be specific to THIS business, cover transactional + informational + local
     return { topics: [`best ${domainHint} services`, `${domainHint} reviews`, `${domainHint} near me`], industry: null, location: null, hasContent: false }
   }
 }
-
-// ─── Step 2: Score topics across 4 engines (same as runGeoScan) ──────────
 
 async function scoreTopics(
   businessName: string,
@@ -213,14 +200,16 @@ Rules:
 - topIssues: exactly 3 strings, specific to this business`
 
   const completion = await openai.chat.completions.create({
-    model: 'gpt-4o', messages: [{ role: 'user', content: prompt }],
-    temperature: 0.1, response_format: { type: 'json_object' }, max_tokens: 2000,
+    model: 'gpt-4o-mini',
+    messages: [{ role: 'user', content: prompt }],
+    temperature: 0.1,
+    response_format: { type: 'json_object' },
+    max_tokens: 2000,
   })
 
   const raw = JSON.parse(completion.choices[0].message.content!)
   const engines: Array<{ overallScore: number; topics: Array<{ score: number }> }> = raw.engines ?? []
 
-  // Compute overall score the same way runGeoScan does: mean of per-engine averages
   let overallScore = 0
   if (engines.length > 0) {
     const engineAvgs = engines.map(e => {
@@ -238,15 +227,20 @@ Rules:
   return { overallScore, topIssues }
 }
 
-// ─── Main handler ─────────────────────────────────────────────────────
-
 export async function POST(req: NextRequest) {
   try {
-    const { businessName, website } = await req.json()
+    const { businessName, website, email } = await req.json()
 
     if (!businessName?.trim() || !website?.trim()) {
       return NextResponse.json(
         { error: 'Business name and website are required.' },
+        { status: 400 }
+      )
+    }
+
+    if (!email?.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return NextResponse.json(
+        { error: 'A valid email address is required to get your free score.' },
         { status: 400 }
       )
     }
@@ -260,14 +254,20 @@ export async function POST(req: NextRequest) {
       )
     }
 
+    // Save email lead to Supabase (non-blocking — never fail the scan over this)
+    try {
+      await supabase.from('email_leads').upsert(
+        { email: email.trim().toLowerCase(), business_name: businessName.trim(), website: website.trim(), source: 'free_snapshot' },
+        { onConflict: 'email', ignoreDuplicates: false }
+      )
+    } catch { /* silent — never block the scan */ }
+
     const cleanWebsite = website.trim().startsWith('http')
       ? website.trim().replace(/\/$/, '')
       : `https://${website.trim().replace(/\/$/, '')}`
 
-    // Step 1: Scrape real topics from the business website
     const { topics, industry, location, hasContent } = await scrapeTopics(cleanWebsite, businessName.trim())
 
-    // Step 2: Score using the same methodology as the paid scan pipeline
     const { overallScore, topIssues } = await scoreTopics(
       businessName.trim(),
       cleanWebsite,
@@ -276,9 +276,6 @@ export async function POST(req: NextRequest) {
       location,
     )
 
-    // ── Zero web presence detection ──────────────────────────────────────
-    // If the site had no scrapeable content AND scored critically low,
-    // the business has essentially no web presence. Send them to the guide.
     if (!hasContent && overallScore < ZERO_PRESENCE_SCORE_THRESHOLD) {
       return NextResponse.json({
         known:        false,
@@ -287,7 +284,6 @@ export async function POST(req: NextRequest) {
         website:      cleanWebsite.replace(/^https?:\/\//, '').replace(/\/$/, ''),
       })
     }
-    // ─────────────────────────────────────────────────────────────────────
 
     const level =
       overallScore >= 80 ? 'excellent' :
@@ -302,17 +298,14 @@ export async function POST(req: NextRequest) {
     }
 
     return NextResponse.json({
-      // The score and issues are 100% real — same pipeline as paid
       score:        overallScore,
       level,
       headline:     headlines[level],
-      topIssues,        // 3 real issues revealed free
-      // Metadata passed to the checkout form so the paid scan can reuse this work
+      topIssues,
       businessName: businessName.trim(),
       website:      cleanWebsite.replace(/^https?:\/\//, '').replace(/\/$/, ''),
       industry,
       location,
-      // known=true means the business has some detectable web presence
       known:        true,
     })
   } catch (err) {
