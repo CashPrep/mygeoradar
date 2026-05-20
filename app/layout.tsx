@@ -47,9 +47,16 @@ export const metadata: Metadata = {
     images: ['/og-image.png'],
   },
   icons: {
-    icon: '/icon.svg',
-    apple: '/og-image.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
+  manifest: '/site.webmanifest',
   robots: { index: true, follow: true },
 }
 
@@ -58,7 +65,7 @@ const organizationSchema = {
   '@type': 'Organization',
   name: 'MyGeoRadar',
   url: 'https://mygeoradar.com',
-  logo: 'https://mygeoradar.com/icon.svg',
+  logo: 'https://mygeoradar.com/icon-512.png',
   description: 'AI search visibility platform that shows how ChatGPT, Perplexity, Gemini, and Claude talk about your business.',
   founder: {
     '@type': 'Person',
