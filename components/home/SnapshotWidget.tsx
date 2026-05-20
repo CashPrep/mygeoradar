@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import {
   ArrowRight, AlertTriangle, CheckCircle2, TrendingUp,
   XCircle, Zap, Loader2, Sparkles, Mail, Chrome,
@@ -102,6 +102,54 @@ export function SnapshotWidget() {
   const [loading, setLoading] = useState(false)
   const [result,  setResult]  = useState<SnapshotResult | null>(null)
   const resultRef = useRef<HTMLDivElement>(null)
+
+  // ── On mount: resume a pending scan if returning from OAuth ──
+  useEffect(() => {
+    const raw = sessionStorage.getItem('pending_snapshot')
+    if (!raw) return
+
+    let pending: { businessName: string; website: string; email?: string; marketingOptIn: boolean }
+    try { pending = JSON.parse(raw) } catch { sessionStorage.removeItem('pending_snapshot'); return }
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!session) return // not authenticated yet — leave form alone
+      sessionStorage.removeItem('pending_snapshot')
+
+      const emailAddr = pending.email ?? session.user.email ?? ''
+      setBusinessName(pending.businessName)
+      setWebsite(pending.website)
+      setMarketingOptIn(pending.marketingOptIn)
+
+      // kick off the scan immediately
+      setLoading(true)
+      setResult(null)
+      fetch('/api/snapshot', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          businessName:   pending.businessName,
+          website:        pending.website,
+          email:          emailAddr,
+          marketingOptIn: pending.marketingOptIn,
+        }),
+      })
+        .then(res => res.json().then(data => ({ ok: res.ok, data })))
+        .then(({ ok, data }) => {
+          if (!ok) { setUrlError(data.error || 'Something went wrong. Please try again.'); setStep('details'); return }
+          if (data.known === false) {
+            const p = new URLSearchParams({ name: data.businessName, url: data.website })
+            window.location.href = `/invisible?${p.toString()}`
+            return
+          }
+          setResult(data as SnapshotResult)
+          setStep('results')
+          setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120)
+        })
+        .catch(() => { setUrlError('Network error — please try again.'); setStep('details') })
+        .finally(() => setLoading(false))
+    })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   // ── After Google OAuth returns, run the scan automatically ──
   // (Supabase will redirect back; the scan page re-mounts with session)
