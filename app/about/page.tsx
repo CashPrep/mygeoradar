@@ -3,10 +3,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, GraduationCap, Lightbulb, Radar } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
-import { SCAN_PRICE_USD } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: 'About the Founder | MyGeoRadar',
+  title: 'About the Founder',
   description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
   openGraph: {
     title: 'About the Founder | MyGeoRadar',
@@ -55,7 +54,7 @@ export default function AboutPage() {
                 href="/scan"
                 className="inline-flex items-center gap-2 bg-surface border border-border text-foreground font-semibold text-sm px-6 py-3 rounded-xl hover:bg-surface-2 transition-colors"
               >
-                Full report &mdash; ${SCAN_PRICE_USD.toFixed(2)}
+                Full report &mdash; $29.99
               </Link>
             </div>
           </div>
