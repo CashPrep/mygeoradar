@@ -1,28 +1,25 @@
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
-import { ArrowRight } from 'lucide-react'
-import Link from 'next/link'
+import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
-  title: 'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
-  description: 'Most new businesses lose their first 90 days of AI visibility by doing nothing. Here\'s how to build your GEO foundation before you open — so you show up from day one.',
+  title: 'GEO Before Launch: Why AI Visibility Should Be Day-One Infrastructure',
+  description: 'Most businesses treat AI visibility as an afterthought. Here\'s why you should build GEO infrastructure before you launch — and what that looks like in practice.',
   openGraph: {
-    title: 'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
-    description: 'Most new businesses lose their first 90 days of AI visibility by doing nothing. Here\'s how to build your GEO foundation before you open — so you show up from day one.',
+    title: 'GEO Before Launch: Why AI Visibility Should Be Day-One Infrastructure',
+    description: 'Most businesses treat AI visibility as an afterthought. Here\'s why you should build GEO infrastructure before you launch.',
     url: 'https://mygeoradar.com/blog/geo-before-launch',
     siteName: 'MyGeoRadar',
     images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
     type: 'article',
-    publishedTime: '2026-05-09T00:00:00.000Z',
-    authors: ['https://mygeoradar.com'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
-    description: 'Most new businesses lose their first 90 days of AI visibility by doing nothing. Here\'s how to build your GEO foundation before you open.',
+    title: 'GEO Before Launch: Why AI Visibility Should Be Day-One Infrastructure',
+    description: 'Most businesses treat AI visibility as an afterthought. Here\'s why you should build GEO before you launch.',
     images: ['https://mygeoradar.com/og-image.png'],
   },
 }
@@ -32,102 +29,43 @@ export default function GeoBeforeLaunchPage() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
-
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Badge variant="accent">Strategy</Badge>
-            <span className="text-xs text-muted">May 9, 2026 &middot; 6 min read</span>
+            <span className="text-xs text-muted">May 14, 2026 &middot; 5 min read</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
-            Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live
+            GEO Before Launch: Why AI Visibility Should Be Day-One Infrastructure
           </h1>
           <p className="text-lg text-foreground-dim leading-relaxed">
-            Most new businesses lose their first 90 days of AI visibility by doing nothing. Here&apos;s how to build your GEO foundation before you open &mdash; so you show up from day one.
+            Most businesses treat AI visibility as an afterthought. Here&apos;s why you should build GEO infrastructure before you launch &mdash; and what that looks like in practice.
           </p>
         </div>
-
         <div className="flex flex-col gap-6 text-foreground-dim leading-relaxed">
-
-          <h2 className="text-xl font-bold text-foreground mt-4">The invisible opening</h2>
-          <p>
-            Every new business spends its first weeks focused on operations: signage, inventory, staff, systems. Digital presence is usually an afterthought. &ldquo;We&apos;ll get to the website later.&rdquo; Social media &ldquo;once we&apos;re settled.&rdquo; Google listing &ldquo;when we have time.&rdquo;
-          </p>
-          <p>
-            In the AI era, this delay has a specific cost. AI engines build their entity models from aggregated web data. The earlier and more consistently your business appears across credible sources, the faster the AI&apos;s confidence in your entity grows. Every week you delay is a week you&apos;re not building that signal &mdash; and a week a competitor who launched earlier gets to compound their head start.
-          </p>
-
-          <h2 className="text-xl font-bold text-foreground mt-4">The pre-launch GEO checklist</h2>
-          <p>You can complete most of this before you open your doors. Some of it can be done even before your website is live.</p>
-
+          <h2 className="text-xl font-bold text-foreground mt-4">The compounding advantage of early signals</h2>
+          <p>AI models learn from the web over time. The earlier your business has clean entity signals, structured data, and directory presence, the earlier that data enters training pipelines and retrieval indexes. A business that launches with complete GEO infrastructure on day one has a compounding head start over a competitor that adds it six months later.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">What to build before launch</h2>
           {[
-            {
-              phase: 'Phase 1: Before launch (2&ndash;4 weeks out)',
-              items: [
-                'Claim and fully complete your Google Business Profile &mdash; you can add your opening date and set status to &lsquo;opening soon&rsquo;',
-                'Register your business on Bing Places for Business (this directly feeds ChatGPT\'s local knowledge)',
-                'Create profiles on Yelp, Apple Maps, and Facebook Business even before you have reviews',
-                'Choose your business name, address, and phone number format and commit to it &mdash; never change this across platforms',
-                'Set up Wikidata entry if your category warrants it (service businesses usually don\'t; notable brands do)',
-              ],
-            },
-            {
-              phase: 'Phase 2: At launch (launch week)',
-              items: [
-                'Add LocalBusiness JSON-LD schema to your homepage &mdash; include name, address, phone, hours, category, and geo coordinates',
-                'Write and publish your About page with specific, entity-rich language: who you are, what you do, where you serve, and your founding story',
-                'Publish one foundational FAQ page that answers the 10 most common questions about your category',
-                'Ask your first 10 customers for Google reviews immediately &mdash; early review velocity signals a real, active business',
-                'Submit a press release to local media about your opening &mdash; even a brief mention in a local outlet creates a credible citation',
-              ],
-            },
-            {
-              phase: 'Phase 3: First 30 days',
-              items: [
-                'Get listed on 5&ndash;10 industry-specific directories relevant to your business category',
-                'Publish one educational blog post per week about topics your customers search for',
-                'Run your first MyGeoRadar scan to establish a baseline AI visibility score',
-                'Set a monthly reminder to check your score and scan for inaccurate AI-generated information about your business',
-              ],
-            },
-          ].map((phase) => (
-            <div key={phase.phase}>
-              <h3 className="font-semibold text-foreground mb-3" dangerouslySetInnerHTML={{ __html: phase.phase }} />
-              <ul className="flex flex-col gap-2">
-                {phase.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm">
-                    <span className="text-accent mt-1 shrink-0">&#8250;</span>
-                    <span dangerouslySetInnerHTML={{ __html: item }} />
-                  </li>
-                ))}
-              </ul>
+            { title: 'LocalBusiness JSON-LD schema', desc: 'Add this to your homepage on day one. Name, address, phone, URL, opening hours, service area. This is the single highest-leverage technical action for AI visibility.' },
+            { title: 'Google Business Profile', desc: 'Claim and fully complete your GBP before you open. Add photos, hours, services, and your exact business description. The data feeds directly into Gemini and Google AI Overviews.' },
+            { title: 'Core directory listings', desc: 'Submit to Yelp, BBB, Apple Maps, Bing Places, and the top 5 industry-specific directories before launch. NAP consistency from day one avoids the cleanup work most businesses eventually face.' },
+            { title: 'An About page with entity signals', desc: 'Write a clear, factual About page that states who you are, what you do, where you operate, how long you\'ve been in business, and any credentials. This is what AI cites when it describes you.' },
+            { title: 'An FAQ page', desc: 'Publish answers to the 5-10 most common questions customers ask about your category. AI engines are specifically trained to surface FAQ content in answer to conversational queries.' },
+          ].map((item) => (
+            <div key={item.title} className="p-4 bg-surface-2 border border-border rounded-xl">
+              <p className="font-semibold text-foreground mb-1">{item.title}</p>
+              <p className="text-sm">{item.desc}</p>
             </div>
           ))}
-
-          <h2 className="text-xl font-bold text-foreground mt-4">Why early consistency compounds</h2>
-          <p>
-            AI engines don&apos;t just look at your data today. They build a longitudinal picture: how long has this entity existed, has it been consistent over time, does new data confirm old data or contradict it? A business that has had consistent NAP data across 15 directories for six months is more trustworthy to an AI engine than one that set everything up perfectly last Tuesday.
-          </p>
-          <p>
-            Starting early means you&apos;re building that history from day one. By the time your competitors in the same market get serious about GEO, your entity will already have a track record they can&apos;t fast-track.
-          </p>
-
-          <h2 className="text-xl font-bold text-foreground mt-4">The one thing most new businesses skip</h2>
-          <p>
-            Schema markup. It takes under an hour to implement, costs nothing, and sends one of the clearest possible signals to AI engines about exactly who and what your business is. The overwhelming majority of small businesses have no schema at all. Adding it puts you immediately ahead of competitors who have been operating for years but never got around to it.
-          </p>
+          <h2 className="text-xl font-bold text-foreground mt-4">The cost of not doing this at launch</h2>
+          <p>Every month you operate without clean GEO signals is a month where AI models are building an impression of your business from incomplete or inconsistent data. That impression is hard to correct. Schema and directory listings that go in after launch don&apos;t retroactively fix the gap &mdash; they just start the clock on improvement from wherever you are now.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">How to verify your day-one baseline</h2>
+          <p>Run a scan within the first week of launch. Your score will be low &mdash; that&apos;s expected for a new business. What you&apos;re looking for is a clean baseline with structured data in place and no hallucination errors. That&apos;s the foundation everything else builds on.</p>
         </div>
-
-        <div className="mt-10 p-6 bg-surface-2 border border-border rounded-xl flex flex-col gap-4">
-          <p className="font-semibold text-foreground">Check your AI visibility from day one</p>
-          <p className="text-sm text-foreground-dim">See how ChatGPT, Perplexity, Gemini, and Claude currently describe your business &mdash; free in 60 seconds.</p>
-          <Link
-            href="/scan"
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors w-fit"
-          >
-            Run my free scan <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
+        <BlogCta
+          heading="Check your launch-day AI visibility baseline"
+          subheading="Free score in 5 seconds. See what AI engines already know about your business."
+        />
       </article>
       <Footer />
     </main>

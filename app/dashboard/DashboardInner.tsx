@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { ScansTable } from '@/components/dashboard/ScansTable'
 import { ReviewsTable } from '@/components/dashboard/ReviewsTable'
 import { Badge } from '@/components/ui/Badge'
@@ -19,8 +19,9 @@ type Stats = {
 type Tab = 'scans' | 'reviews'
 
 export default function DashboardInner() {
-  const params     = useSearchParams()
-  const secretKey  = params.get('key') ?? ''
+  const params    = useSearchParams()
+  const router    = useRouter()
+  const secretKey = params.get('key') ?? ''
 
   const [stats,   setStats]   = useState<Stats | null>(null)
   const [tab,     setTab]     = useState<Tab>('scans')
@@ -30,11 +31,15 @@ export default function DashboardInner() {
   const fetchStats = useCallback(async () => {
     const res  = await fetch(`/api/dashboard/stats?key=${secretKey}`)
     const data = await res.json()
-    if (data.error) { setAuthed(false); setLoading(false); return }
+    if (data.error) {
+      // No key or wrong key — silently redirect to homepage, exposing nothing
+      router.replace('/')
+      return
+    }
     setStats(data)
     setAuthed(true)
     setLoading(false)
-  }, [secretKey])
+  }, [secretKey, router])
 
   useEffect(() => { fetchStats() }, [fetchStats])
 
@@ -46,16 +51,7 @@ export default function DashboardInner() {
     )
   }
 
-  if (!authed) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-xl font-semibold mb-2">Unauthorized</h2>
-          <p className="text-muted">Add <code>?key=YOUR_DASHBOARD_SECRET</code> to the URL.</p>
-        </div>
-      </div>
-    )
-  }
+  if (!authed) return null
 
   const statCards = [
     { label: 'Total scans',     value: stats!.totalScans,              icon: Radar,      color: 'text-accent' },
@@ -66,13 +62,11 @@ export default function DashboardInner() {
 
   return (
     <div className="min-h-screen bg-background p-8">
-      {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-2xl font-bold">Dashboard</h1>
         <Badge variant="neutral">Admin</Badge>
       </div>
 
-      {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {statCards.map((s) => {
           const Icon = s.icon
@@ -88,7 +82,6 @@ export default function DashboardInner() {
         })}
       </div>
 
-      {/* Tabs */}
       <div className="flex border-b border-border mb-6">
         {(['scans', 'reviews'] as Tab[]).map((t) => (
           <button

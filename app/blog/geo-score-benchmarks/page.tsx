@@ -1,8 +1,7 @@
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
-import { ArrowRight } from 'lucide-react'
-import Link from 'next/link'
+import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
   title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
@@ -32,7 +31,6 @@ export default function GeoScoreBenchmarksPage() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
-
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Badge variant="accent">Strategy</Badge>
@@ -45,22 +43,12 @@ export default function GeoScoreBenchmarksPage() {
             Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries &mdash; and what score you actually need to compete.
           </p>
         </div>
-
         <div className="flex flex-col gap-6 text-foreground-dim leading-relaxed">
-
           <h2 className="text-xl font-bold text-foreground mt-4">Why benchmarks matter</h2>
-          <p>
-            A score without context is just a number. Knowing you scored 42/100 on AI visibility means nothing unless you know that the average competitor in your category scores 38. That gap &mdash; four points &mdash; might mean you&apos;re already winning. Or it might mean you&apos;re all equally invisible.
-          </p>
-          <p>
-            GEO scores are still a young metric. Most businesses haven&apos;t even run their first AI visibility scan. That means the benchmarks are shifting fast &mdash; and the businesses that move now are locking in advantages while the baseline is still low.
-          </p>
-
+          <p>A score without context is just a number. Knowing you scored 42/100 on AI visibility means nothing unless you know that the average competitor in your category scores 38. That gap &mdash; four points &mdash; might mean you&apos;re already winning. Or it might mean you&apos;re all equally invisible.</p>
+          <p>GEO scores are still a young metric. Most businesses haven&apos;t even run their first AI visibility scan. That means the benchmarks are shifting fast &mdash; and the businesses that move now are locking in advantages while the baseline is still low.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">The overall baseline: where most businesses start</h2>
-          <p>
-            Across all industries and business types, the median GEO score for a business that has never actively optimized for AI visibility sits between 18 and 28 out of 100. The breakdown looks roughly like this:
-          </p>
-
+          <p>Across all industries and business types, the median GEO score for a business that has never actively optimized for AI visibility sits between 18 and 28 out of 100. The breakdown looks roughly like this:</p>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border border-border rounded-xl overflow-hidden">
               <thead>
@@ -87,12 +75,8 @@ export default function GeoScoreBenchmarksPage() {
               </tbody>
             </table>
           </div>
-
           <h2 className="text-xl font-bold text-foreground mt-4">Industry-by-industry benchmarks</h2>
-          <p>
-            AI visibility varies significantly by category. Some industries have well-established entities (law firms, hospitals, major restaurants) because they&apos;ve been discussed online for decades. Others are virtually unrepresented in AI training data.
-          </p>
-
+          <p>AI visibility varies significantly by category. Some industries have well-established entities because they&apos;ve been discussed online for decades. Others are virtually unrepresented in AI training data.</p>
           {[
             { industry: 'Healthcare & Dentistry', median: '28–35', competitive: '55+', note: 'Regulated content limits what AI will say; entity clarity matters more than topical content here.' },
             { industry: 'Legal Services', median: '22–30', competitive: '50+', note: 'Highly competitive in major cities. Topical authority through educational content is the primary differentiator.' },
@@ -113,15 +97,9 @@ export default function GeoScoreBenchmarksPage() {
               <p className="text-sm">{row.note}</p>
             </div>
           ))}
-
           <h2 className="text-xl font-bold text-foreground mt-4">What score do you actually need?</h2>
-          <p>
-            The honest answer: you don&apos;t need a perfect score. You need to beat your direct competitors in your geography and category. A 45 in a market where competitors average 22 is more valuable than a 70 in a category where every player is already above 65.
-          </p>
-          <p>
-            The practical threshold for consistent AI citation in most local and regional categories is <strong className="text-foreground">40–50/100</strong>. That&apos;s achievable within 60 to 90 days of focused optimization for most businesses starting from the average baseline.
-          </p>
-
+          <p>The honest answer: you don&apos;t need a perfect score. You need to beat your direct competitors in your geography and category. A 45 in a market where competitors average 22 is more valuable than a 70 in a category where every player is already above 65.</p>
+          <p>The practical threshold for consistent AI citation in most local and regional categories is <strong className="text-foreground">40–50/100</strong>. That&apos;s achievable within 60 to 90 days of focused optimization for most businesses starting from the average baseline.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">The fastest path from 20 to 50</h2>
           {[
             { action: 'Complete your Google Business Profile', impact: '+6 to +10 pts', effort: 'Low — 30 minutes' },
@@ -138,24 +116,13 @@ export default function GeoScoreBenchmarksPage() {
               </div>
             </div>
           ))}
-
           <h2 className="text-xl font-bold text-foreground mt-4">Track your score over time</h2>
-          <p>
-            GEO scores fluctuate as AI models update, competitors optimize, and your citation volume changes. A one-time scan gives you a baseline; monthly rescans show you whether your efforts are working and alert you to competitive movement.
-          </p>
+          <p>GEO scores fluctuate as AI models update, competitors optimize, and your citation volume changes. A one-time scan gives you a baseline; monthly rescans show you whether your efforts are working and alert you to competitive movement.</p>
         </div>
-
-        <div className="mt-10 p-6 bg-surface-2 border border-border rounded-xl flex flex-col gap-4">
-          <p className="font-semibold text-foreground">See where your score stands</p>
-          <p className="text-sm text-foreground-dim">Run a free scan and get your score against these benchmarks in under 60 seconds.</p>
-          <Link
-            href="/scan"
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors w-fit"
-          >
-            Run my free scan <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
+        <BlogCta
+          heading="See where your score stands"
+          subheading="Free score in 5 seconds. Compare against these benchmarks instantly."
+        />
       </article>
       <Footer />
     </main>

@@ -1,29 +1,26 @@
-import type { Metadata } from 'next'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
-import { ArrowRight } from 'lucide-react'
-import Link from 'next/link'
+import { BlogCta } from '@/components/blog/BlogCta'
 
-export const metadata: Metadata = {
-  title: 'What is GEO? The Beginner\'s Guide to Generative Engine Optimization',
-  description: 'Traditional SEO gets you on Google. GEO gets you cited in AI answers. Here\'s what it is, why it matters, and how to start.',
+export const metadata = {
+  title: 'What is GEO? Generative Engine Optimization Explained',
+  description: 'GEO is the practice of optimizing your business to appear in AI-generated answers from ChatGPT, Perplexity, Gemini, and Claude. Here\'s what it is, why it matters, and how to start.',
   openGraph: {
-    type: 'article',
-    title: 'What is GEO? The Beginner\'s Guide to Generative Engine Optimization',
-    description: 'Traditional SEO gets you on Google. GEO gets you cited in AI answers. Here\'s what it is, why it matters, and how to start.',
+    title: 'What is GEO? Generative Engine Optimization Explained',
+    description: 'GEO is the practice of optimizing your business to appear in AI-generated answers from ChatGPT, Perplexity, Gemini, and Claude.',
     url: 'https://mygeoradar.com/blog/what-is-geo',
-    publishedTime: '2026-05-10T00:00:00Z',
-    authors: ['Andrew Garber'],
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'What is GEO?' }],
+    siteName: 'MyGeoRadar',
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    type: 'article',
   },
   twitter: {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'What is GEO? The Beginner\'s Guide to Generative Engine Optimization',
-    description: 'Traditional SEO gets you on Google. GEO gets you cited in AI answers.',
-    images: ['/og-image.png'],
+    title: 'What is GEO? Generative Engine Optimization Explained',
+    description: 'GEO is the practice of optimizing your business to appear in AI-generated answers from ChatGPT, Perplexity, Gemini, and Claude.',
+    images: ['https://mygeoradar.com/og-image.png'],
   },
 }
 
@@ -32,96 +29,41 @@ export default function WhatIsGeoPage() {
     <main className="min-h-screen bg-background">
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
-
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <Badge variant="accent">GEO Basics</Badge>
+            <Badge variant="accent">Explainer</Badge>
             <span className="text-xs text-muted">May 10, 2026 &middot; 5 min read</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
-            What is GEO? The Beginner&apos;s Guide to Generative Engine Optimization
+            What is GEO? Generative Engine Optimization Explained
           </h1>
           <p className="text-lg text-foreground-dim leading-relaxed">
-            Traditional SEO gets you on Google. GEO gets you cited in AI answers. Here&apos;s what it is, why it matters, and how to start.
+            GEO is the practice of optimizing your business to appear in AI-generated answers. Here&apos;s what it is, why it matters, and how to start.
           </p>
         </div>
-
-        <div className="prose prose-invert max-w-none flex flex-col gap-6 text-foreground-dim leading-relaxed">
-
-          <h2 className="text-xl font-bold text-foreground mt-4">The shift nobody prepared for</h2>
-          <p>
-            For 20 years, the game was simple: rank on Google, get traffic. Businesses spent billions optimizing title tags, building backlinks, and chasing algorithm updates. It worked.
-          </p>
-          <p>
-            Then ChatGPT launched. Then Perplexity. Then Google&apos;s AI Overviews. Suddenly, millions of people stopped clicking search results and started reading AI-generated answers instead. And those answers don&apos;t always mention the businesses that rank #1 on Google.
-          </p>
-
-          <h2 className="text-xl font-bold text-foreground mt-4">So what is GEO?</h2>
-          <p>
-            Generative Engine Optimization (GEO) is the practice of making your business more likely to be mentioned, cited, or recommended by AI-powered search engines like ChatGPT, Perplexity, Gemini, and Claude.
-          </p>
-          <p>
-            Instead of optimizing for a ranking position, you&apos;re optimizing to be part of the answer. When someone asks &ldquo;best personal injury lawyer in Boston&rdquo; or &ldquo;what&apos;s a good yoga studio near me,&rdquo; you want your business to appear in what the AI says back.
-          </p>
-
-          <h2 className="text-xl font-bold text-foreground mt-4">How is GEO different from SEO?</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border border-border rounded-xl overflow-hidden">
-              <thead>
-                <tr className="bg-surface-2">
-                  <th className="text-left p-3 text-foreground font-semibold border-b border-border"></th>
-                  <th className="text-left p-3 text-foreground font-semibold border-b border-border">SEO</th>
-                  <th className="text-left p-3 text-accent font-semibold border-b border-border">GEO</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['Goal',    'Rank in search results',       'Get cited in AI answers'],
-                  ['Channel', 'Google, Bing',                 'ChatGPT, Perplexity, Gemini, Claude'],
-                  ['Signal',  'Backlinks, keywords, clicks',  'Entity authority, structured data, E-E-A-T'],
-                  ['Output',  'Blue links on a results page', 'Mentioned in a generated answer'],
-                  ['Speed',   'Months to see results',        'Weeks with the right changes'],
-                ].map(([aspect, seo, geo]) => (
-                  <tr key={aspect} className="border-b border-border/50">
-                    <td className="p-3 text-foreground font-medium">{aspect}</td>
-                    <td className="p-3 text-foreground-dim">{seo}</td>
-                    <td className="p-3 text-foreground-dim">{geo}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <h2 className="text-xl font-bold text-foreground mt-4">The 4 pillars of GEO</h2>
-          {[
-            { title: '1. Entity clarity', body: 'AI engines build a model of who you are. Your business name, location, services, and category need to be crystal clear and consistent across your website, Google Business Profile, and third-party directories.' },
-            { title: '2. Structured data', body: 'Schema markup (JSON-LD) tells AI crawlers exactly what type of business you are, what services you offer, your hours, reviews, and more. Without it, AI engines have to guess &mdash; and they often guess wrong.' },
-            { title: '3. Authoritative content', body: 'AI engines favor businesses that have published helpful, specific, original content about their industry. FAQs, how-to guides, case studies, and local content all signal that you&apos;re a real expert.' },
-            { title: '4. Third-party mentions', body: 'Just like backlinks for SEO, AI engines weight citations from review sites, news articles, local directories, and industry publications. The more credible sources mention you, the more trustworthy you appear to AI.' },
-          ].map((p) => (
-            <div key={p.title}>
-              <h3 className="font-semibold text-foreground mb-1">{p.title}</h3>
-              <p>{p.body}</p>
+        <div className="flex flex-col gap-6 text-foreground-dim leading-relaxed">
+          <h2 className="text-xl font-bold text-foreground mt-4">The shift from search to answer</h2>
+          <p>When someone types &ldquo;best personal injury lawyer in Austin&rdquo; into ChatGPT, they don&apos;t get a list of blue links. They get a direct answer. That answer names specific firms, explains why they&apos;re recommended, and cites sources. If your business isn&apos;t in that answer, you don&apos;t exist &mdash; not for that user, at that moment.</p>
+          <p>This is the fundamental shift GEO addresses. Traditional SEO optimizes for Google&apos;s 10-blue-links format. GEO optimizes for AI-generated responses &mdash; a different surface, different signals, and a growing share of how people find businesses.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">Why this matters now</h2>
+          <p>AI search usage has grown from a curiosity to a primary research channel for a meaningful share of consumers &mdash; especially for high-consideration purchases. People are using ChatGPT to pick lawyers, dentists, contractors, and software tools. If you&apos;re not showing up, a competitor is.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">What GEO actually optimizes</h2>
+          <p>Unlike traditional SEO, GEO is less about keywords and more about entity clarity &mdash; how clearly an AI can identify who you are, what you do, where you are, and why you&apos;re credible. The key signals:</p>
+          {['Structured data (LocalBusiness, FAQPage, AggregateRating schema)', 'Google Business Profile completeness and review volume', 'Entity consistency across directories and citation sources', 'Topical authority — do you have content that answers the questions AI is being asked?', 'Editorial mentions in authoritative sources'].map((item) => (
+            <div key={item} className="flex items-start gap-2">
+              <span className="text-accent mt-1 shrink-0">&#8250;</span>
+              <p className="text-sm text-foreground-dim">{item}</p>
             </div>
           ))}
-
-          <h2 className="text-xl font-bold text-foreground mt-4">How do I know where I stand?</h2>
-          <p>
-            The fastest way is to run a scan with MyGeoRadar. In under 60 seconds you&apos;ll see exactly how ChatGPT, Perplexity, Gemini and Claude currently talk about your business &mdash; and get a prioritized list of fixes.
-          </p>
+          <h2 className="text-xl font-bold text-foreground mt-4">How to measure it</h2>
+          <p>You can&apos;t improve what you can&apos;t measure. A GEO score gives you a baseline: how often each AI engine mentions your business across relevant queries, how positive those mentions are, and how prominently you appear. That score becomes your north star for improvement work.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">Where to start</h2>
+          <p>Start with a scan. See your current score across ChatGPT, Perplexity, Gemini, and Claude. The report tells you exactly which signals are missing and what to fix first. Most businesses can move from invisible to occasionally cited within 30 to 60 days of focused effort.</p>
         </div>
-
-        <div className="mt-10 p-6 bg-surface-2 border border-border rounded-xl flex flex-col gap-4">
-          <p className="font-semibold text-foreground">Get your free AI visibility score</p>
-          <p className="text-sm text-foreground-dim">Free score in 5 seconds. Full report $29.99.</p>
-          <Link
-            href="/scan"
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold text-sm px-5 py-3 rounded-xl transition-colors w-fit"
-          >
-            Run my free scan <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
-
+        <BlogCta
+          heading="See how your business shows up in AI answers"
+          subheading="Free score in 5 seconds. Full paid report with action plan available instantly."
+        />
       </article>
       <Footer />
     </main>
