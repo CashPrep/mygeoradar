@@ -1,63 +1,34 @@
 import { MetadataRoute } from 'next'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const base = 'https://www.mygeoradar.com'
-  const now  = new Date()
+const BASE = 'https://mygeoradar.com'
 
-  return [
-    {
-      url:              `${base}/`,
-      lastModified:     now,
-      changeFrequency:  'weekly',
-      priority:         1.0,
-    },
-    {
-      url:              `${base}/scan`,
-      lastModified:     now,
-      changeFrequency:  'monthly',
-      priority:         0.9,
-    },
-    {
-      url:              `${base}/invisible`,
-      lastModified:     now,
-      changeFrequency:  'monthly',
-      priority:         0.9,
-    },
-    {
-      url:              `${base}/invisible/success`,
-      lastModified:     now,
-      changeFrequency:  'monthly',
-      priority:         0.7,
-    },
-    {
-      url:              `${base}/dashboard`,
-      lastModified:     now,
-      changeFrequency:  'monthly',
-      priority:         0.7,
-    },
-    {
-      url:              `${base}/about`,
-      lastModified:     now,
-      changeFrequency:  'monthly',
-      priority:         0.6,
-    },
-    {
-      url:              `${base}/blog`,
-      lastModified:     now,
-      changeFrequency:  'weekly',
-      priority:         0.7,
-    },
-    {
-      url:              `${base}/privacy`,
-      lastModified:     now,
-      changeFrequency:  'yearly',
-      priority:         0.3,
-    },
-    {
-      url:              `${base}/terms`,
-      lastModified:     now,
-      changeFrequency:  'yearly',
-      priority:         0.3,
-    },
+const BLOG_POSTS = [
+  { slug: 'what-is-geo',            lastMod: '2026-05-10' },
+  { slug: 'ai-search-guide',        lastMod: '2026-05-11' },
+  { slug: 'ai-search-zero-click',   lastMod: '2026-05-12' },
+  { slug: 'geo-score-benchmarks',   lastMod: '2026-05-13' },
+  { slug: 'geo-before-launch',      lastMod: '2026-05-14' },
+  { slug: 'ai-hallucination-fix',   lastMod: '2026-05-15' },
+  { slug: 'multi-location-geo',     lastMod: '2026-05-16' },
+]
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const corePages: MetadataRoute.Sitemap = [
+    { url: `${BASE}/`,                 lastModified: new Date(), changeFrequency: 'weekly',  priority: 1.0 },
+    { url: `${BASE}/scan`,             lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE}/invisible`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${BASE}/about`,            lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${BASE}/blog`,             lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
+    { url: `${BASE}/privacy`,          lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.3 },
+    { url: `${BASE}/terms`,            lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.3 },
   ]
+
+  const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map(({ slug, lastMod }) => ({
+    url:             `${BASE}/blog/${slug}`,
+    lastModified:    new Date(lastMod),
+    changeFrequency: 'monthly',
+    priority:        0.7,
+  }))
+
+  return [...corePages, ...blogPages]
 }

@@ -2,16 +2,18 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, GraduationCap, Lightbulb, Radar } from 'lucide-react'
-import Navbar from '@/components/layout/Navbar'
+import { Navbar } from '@/components/layout/Navbar'
+import { SCAN_PRICE_USD } from '@/lib/constants'
 
 export const metadata: Metadata = {
-  title: 'About the Founder',
+  title: 'About the Founder | MyGeoRadar',
   description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
   openGraph: {
     title: 'About the Founder | MyGeoRadar',
     description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
     url: 'https://mygeoradar.com/about',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'About MyGeoRadar' }],
+    siteName: 'MyGeoRadar',
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'About MyGeoRadar' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
     creator: '@MyGEORadar',
     title: 'About the Founder | MyGeoRadar',
     description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
-    images: ['/og-image.png'],
+    images: ['https://mygeoradar.com/og-image.png'],
   },
 }
 
@@ -31,7 +33,7 @@ export default function AboutPage() {
         <div className="max-w-3xl mx-auto">
 
           {/* Header */}
-          <div className="text-center mb-14">
+          <div className="text-center mb-10">
             <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">About</p>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
               Built by someone who{' '}
@@ -40,6 +42,22 @@ export default function AboutPage() {
             <p className="mt-5 text-foreground-dim max-w-xl mx-auto leading-relaxed">
               MyGeoRadar isn&apos;t a faceless SaaS. It was built by one person who got frustrated that no tool existed to show how AI engines actually talk about businesses.
             </p>
+
+            {/* Above-fold CTA */}
+            <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <Link
+                href="/"
+                className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent-hover transition-colors shadow-glow-sm"
+              >
+                Get my free AI score <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/scan"
+                className="inline-flex items-center gap-2 bg-surface border border-border text-foreground font-semibold text-sm px-6 py-3 rounded-xl hover:bg-surface-2 transition-colors"
+              >
+                Full report &mdash; ${SCAN_PRICE_USD.toFixed(2)}
+              </Link>
+            </div>
           </div>
 
           {/* Founder card */}
@@ -97,14 +115,14 @@ export default function AboutPage() {
             </div>
           </div>
 
-          {/* CTA */}
+          {/* Bottom CTA */}
           <div className="mt-14 text-center">
             <p className="text-foreground-dim text-sm mb-5">Ready to see how AI engines talk about your business?</p>
             <Link
-              href="/scan"
-              className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent/90 transition-colors"
+              href="/"
+              className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent-hover transition-colors"
             >
-              Run your AI radar scan
+              Get my free AI score
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

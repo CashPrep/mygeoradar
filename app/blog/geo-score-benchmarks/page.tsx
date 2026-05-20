@@ -5,13 +5,13 @@ import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
   title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
-  description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries — and what score you actually need to compete.',
+  description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries \u2014 and what score you actually need to compete.',
   openGraph: {
     title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
-    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries — and what score you actually need to compete.',
+    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries \u2014 and what score you actually need to compete.',
     url: 'https://mygeoradar.com/blog/geo-score-benchmarks',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'GEO Score Benchmarks 2026 \u2014 MyGeoRadar' }],
     type: 'article',
     publishedTime: '2026-05-13T00:00:00.000Z',
     authors: ['https://mygeoradar.com'],
@@ -21,7 +21,7 @@ export const metadata = {
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
     title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
-    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries — and what score you actually need to compete.',
+    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries \u2014 and what score you actually need to compete.',
     images: ['https://mygeoradar.com/og-image.png'],
   },
 }
@@ -60,11 +60,11 @@ export default function GeoScoreBenchmarksPage() {
               </thead>
               <tbody>
                 {[
-                  ['0 – 20', 'Effectively invisible in AI answers', 'No schema, thin site, few external citations'],
-                  ['21 – 40', 'Occasionally mentioned, inconsistently', 'Some GBP presence, no structured data'],
-                  ['41 – 60', 'Regularly cited in relevant queries', 'Good entity clarity, some schema, active reviews'],
-                  ['61 – 80', 'Strong presence, cited unprompted', 'Full schema, high topical authority, press mentions'],
-                  ['81 – 100', 'Category leader in AI answers', 'Wikipedia entry, Wikidata, massive citation volume'],
+                  ['0 \u2013 20', 'Effectively invisible in AI answers', 'No schema, thin site, few external citations'],
+                  ['21 \u2013 40', 'Occasionally mentioned, inconsistently', 'Some GBP presence, no structured data'],
+                  ['41 \u2013 60', 'Regularly cited in relevant queries', 'Good entity clarity, some schema, active reviews'],
+                  ['61 \u2013 80', 'Strong presence, cited unprompted', 'Full schema, high topical authority, press mentions'],
+                  ['81 \u2013 100', 'Category leader in AI answers', 'Wikipedia entry, Wikidata, massive citation volume'],
                 ].map(([range, meaning, profile]) => (
                   <tr key={range} className="border-b border-border/50">
                     <td className="p-3 text-foreground font-medium">{range}</td>
@@ -78,13 +78,13 @@ export default function GeoScoreBenchmarksPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">Industry-by-industry benchmarks</h2>
           <p>AI visibility varies significantly by category. Some industries have well-established entities because they&apos;ve been discussed online for decades. Others are virtually unrepresented in AI training data.</p>
           {[
-            { industry: 'Healthcare & Dentistry', median: '28–35', competitive: '55+', note: 'Regulated content limits what AI will say; entity clarity matters more than topical content here.' },
-            { industry: 'Legal Services', median: '22–30', competitive: '50+', note: 'Highly competitive in major cities. Topical authority through educational content is the primary differentiator.' },
-            { industry: 'Restaurants & Food', median: '30–40', competitive: '60+', note: 'Review volume is the dominant signal. Yelp and Google reviews are heavily weighted.' },
-            { industry: 'Real Estate', median: '20–28', competitive: '48+', note: 'Most agents have weak entity signals. First-movers on structured data win quickly.' },
-            { industry: 'Home Services', median: '18–25', competitive: '45+', note: 'Lowest baseline of any major category. Huge opportunity for early movers.' },
-            { industry: 'SaaS & Tech', median: '35–45', competitive: '65+', note: 'Tech companies have more content by default. The bar to compete is higher.' },
-            { industry: 'E-commerce / Retail', median: '25–33', competitive: '55+', note: 'Product schema and review aggregation are the core signals.' },
+            { industry: 'Healthcare & Dentistry', median: '28\u201335', competitive: '55+', note: 'Regulated content limits what AI will say; entity clarity matters more than topical content here.' },
+            { industry: 'Legal Services', median: '22\u201330', competitive: '50+', note: 'Highly competitive in major cities. Topical authority through educational content is the primary differentiator.' },
+            { industry: 'Restaurants & Food', median: '30\u201340', competitive: '60+', note: 'Review volume is the dominant signal. Yelp and Google reviews are heavily weighted.' },
+            { industry: 'Real Estate', median: '20\u201328', competitive: '48+', note: 'Most agents have weak entity signals. First-movers on structured data win quickly.' },
+            { industry: 'Home Services', median: '18\u201325', competitive: '45+', note: 'Lowest baseline of any major category. Huge opportunity for early movers.' },
+            { industry: 'SaaS & Tech', median: '35\u201345', competitive: '65+', note: 'Tech companies have more content by default. The bar to compete is higher.' },
+            { industry: 'E-commerce / Retail', median: '25\u201333', competitive: '55+', note: 'Product schema and review aggregation are the core signals.' },
           ].map((row) => (
             <div key={row.industry} className="p-4 bg-surface-2 border border-border rounded-xl">
               <div className="flex items-start justify-between gap-4 mb-2">
@@ -99,14 +99,14 @@ export default function GeoScoreBenchmarksPage() {
           ))}
           <h2 className="text-xl font-bold text-foreground mt-4">What score do you actually need?</h2>
           <p>The honest answer: you don&apos;t need a perfect score. You need to beat your direct competitors in your geography and category. A 45 in a market where competitors average 22 is more valuable than a 70 in a category where every player is already above 65.</p>
-          <p>The practical threshold for consistent AI citation in most local and regional categories is <strong className="text-foreground">40–50/100</strong>. That&apos;s achievable within 60 to 90 days of focused optimization for most businesses starting from the average baseline.</p>
+          <p>The practical threshold for consistent AI citation in most local and regional categories is <strong className="text-foreground">40\u201350/100</strong>. That&apos;s achievable within 60 to 90 days of focused optimization for most businesses starting from the average baseline.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">The fastest path from 20 to 50</h2>
           {[
-            { action: 'Complete your Google Business Profile', impact: '+6 to +10 pts', effort: 'Low — 30 minutes' },
-            { action: 'Add LocalBusiness JSON-LD schema', impact: '+8 to +12 pts', effort: 'Low-medium — 1 hour' },
-            { action: 'Get listed on 10 top directories', impact: '+5 to +8 pts', effort: 'Medium — 2 to 4 hours' },
-            { action: 'Publish 3 authoritative FAQ or guide pages', impact: '+4 to +7 pts', effort: 'Medium — ongoing' },
-            { action: 'Generate 20+ recent Google reviews', impact: '+4 to +6 pts', effort: 'Medium — campaign required' },
+            { action: 'Complete your Google Business Profile', impact: '+6 to +10 pts', effort: 'Low \u2014 30 minutes' },
+            { action: 'Add LocalBusiness JSON-LD schema', impact: '+8 to +12 pts', effort: 'Low-medium \u2014 1 hour' },
+            { action: 'Get listed on 10 top directories', impact: '+5 to +8 pts', effort: 'Medium \u2014 2 to 4 hours' },
+            { action: 'Publish 3 authoritative FAQ or guide pages', impact: '+4 to +7 pts', effort: 'Medium \u2014 ongoing' },
+            { action: 'Generate 20+ recent Google reviews', impact: '+4 to +6 pts', effort: 'Medium \u2014 campaign required' },
           ].map((item) => (
             <div key={item.action} className="flex items-start gap-3">
               <span className="text-accent mt-1 shrink-0">&#8250;</span>
@@ -119,10 +119,7 @@ export default function GeoScoreBenchmarksPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">Track your score over time</h2>
           <p>GEO scores fluctuate as AI models update, competitors optimize, and your citation volume changes. A one-time scan gives you a baseline; monthly rescans show you whether your efforts are working and alert you to competitive movement.</p>
         </div>
-        <BlogCta
-          heading="See where your score stands"
-          subheading="Free score in 5 seconds. Compare against these benchmarks instantly."
-        />
+        <BlogCta heading="See where your score stands" subheading="Free score in 5 seconds. Compare against these benchmarks instantly." />
       </article>
       <Footer />
     </main>

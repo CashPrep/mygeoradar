@@ -11,8 +11,10 @@ export const metadata = {
     description: 'GEO is the practice of optimizing your business to appear in AI-generated answers from ChatGPT, Perplexity, Gemini, and Claude.',
     url: 'https://mygeoradar.com/blog/what-is-geo',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'What is GEO? — MyGeoRadar' }],
     type: 'article',
+    publishedTime: '2026-05-10T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
   },
   twitter: {
     card: 'summary_large_image',
@@ -49,7 +51,7 @@ export default function WhatIsGeoPage() {
           <p>AI search usage has grown from a curiosity to a primary research channel for a meaningful share of consumers &mdash; especially for high-consideration purchases. People are using ChatGPT to pick lawyers, dentists, contractors, and software tools. If you&apos;re not showing up, a competitor is.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">What GEO actually optimizes</h2>
           <p>Unlike traditional SEO, GEO is less about keywords and more about entity clarity &mdash; how clearly an AI can identify who you are, what you do, where you are, and why you&apos;re credible. The key signals:</p>
-          {['Structured data (LocalBusiness, FAQPage, AggregateRating schema)', 'Google Business Profile completeness and review volume', 'Entity consistency across directories and citation sources', 'Topical authority — do you have content that answers the questions AI is being asked?', 'Editorial mentions in authoritative sources'].map((item) => (
+          {['Structured data (LocalBusiness, FAQPage, AggregateRating schema)', 'Google Business Profile completeness and review volume', 'Entity consistency across directories and citation sources', 'Topical authority \u2014 do you have content that answers the questions AI is being asked?', 'Editorial mentions in authoritative sources'].map((item) => (
             <div key={item} className="flex items-start gap-2">
               <span className="text-accent mt-1 shrink-0">&#8250;</span>
               <p className="text-sm text-foreground-dim">{item}</p>
@@ -60,10 +62,7 @@ export default function WhatIsGeoPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">Where to start</h2>
           <p>Start with a scan. See your current score across ChatGPT, Perplexity, Gemini, and Claude. The report tells you exactly which signals are missing and what to fix first. Most businesses can move from invisible to occasionally cited within 30 to 60 days of focused effort.</p>
         </div>
-        <BlogCta
-          heading="See how your business shows up in AI answers"
-          subheading="Free score in 5 seconds. Full paid report with action plan available instantly."
-        />
+        <BlogCta heading="See how your business shows up in AI answers" subheading="Free score in 5 seconds. Full paid report with action plan available instantly." />
       </article>
       <Footer />
     </main>

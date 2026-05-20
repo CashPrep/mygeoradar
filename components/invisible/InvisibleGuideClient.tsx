@@ -2,13 +2,14 @@
 
 import { useSearchParams } from 'next/navigation'
 import { Suspense, useState } from 'react'
-import { Lock, Zap, AlertTriangle, CheckCircle2, ArrowRight, Loader2, Radio } from 'lucide-react'
+import { Lock, Zap, AlertTriangle, ArrowRight, Loader2, Radio } from 'lucide-react'
+import { Navbar } from '@/components/layout/Navbar'
 
 const FREE_STEPS = [
   {
     number: 1,
     title: 'Claim & complete your Google Business Profile',
-    body: 'AI engines like ChatGPT and Perplexity pull heavily from Google\'s Knowledge Graph. A fully filled GBP — with categories, description, photos, and hours — is the single fastest signal you can send. Go to business.google.com, claim your listing, and fill every field. Businesses with complete GBPs are significantly more likely to be cited by AI assistants than those without.',
+    body: "AI engines like ChatGPT and Perplexity pull heavily from Google's Knowledge Graph. A fully filled GBP — with categories, description, photos, and hours — is the single fastest signal you can send. Go to business.google.com, claim your listing, and fill every field. Businesses with complete GBPs are significantly more likely to be cited by AI assistants than those without.",
   },
   {
     number: 2,
@@ -61,8 +62,10 @@ function InvisibleGuideInner() {
 
   return (
     <main className="min-h-screen bg-bg text-foreground">
+      <Navbar />
+
       {/* Hero */}
-      <section className="border-b border-border bg-surface">
+      <section className="border-b border-border bg-surface pt-20">
         <div className="max-w-2xl mx-auto px-4 py-12 flex flex-col gap-6">
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-danger/10 border border-danger/30 text-danger text-xs font-bold uppercase tracking-wider">
@@ -85,7 +88,7 @@ function InvisibleGuideInner() {
           <div className="grid grid-cols-3 gap-3">
             {[
               { val: '62%', label: 'of consumers now ask AI before searching Google' },
-              { val: '0×',  label: 'times AI has recommended your business' },
+              { val: '0\u00d7',  label: 'times AI has recommended your business' },
               { val: '30d', label: 'to see real results with the right steps' },
             ].map(s => (
               <div key={s.val} className="bg-surface-2 border border-border rounded-xl p-4 text-center flex flex-col gap-1">
@@ -144,11 +147,11 @@ function InvisibleGuideInner() {
                 <Lock className="w-5 h-5 text-accent" />
               </div>
               <div className="flex flex-col gap-1">
-                <p className="text-sm font-bold text-foreground">Steps 4–11 + all templates are locked</p>
+                <p className="text-sm font-bold text-foreground">Steps 4\u201311 + all templates are locked</p>
                 <p className="text-sm text-foreground-dim">
                   The remaining 8 steps include copy-paste schema code, a press pitch email, an About page formula,
                   a Google Search Console setup walkthrough, a Wikidata entry guide, and your full 30-day
-                  day-by-day execution calendar — everything you need to go from invisible to indexable.
+                  day-by-day execution calendar \u2014 everything you need to go from invisible to indexable.
                 </p>
               </div>
             </div>
@@ -162,12 +165,11 @@ function InvisibleGuideInner() {
               ))}
             </div>
 
-            {/* Value callouts */}
             <div className="grid grid-cols-3 gap-2 border-t border-border pt-4">
               {[
-                { icon: '📋', label: '8 copy-paste templates' },
-                { icon: '📅', label: '30-day calendar' },
-                { icon: '✅', label: 'Progress checklist' },
+                { icon: '\ud83d\udccb', label: '8 copy-paste templates' },
+                { icon: '\ud83d\udcc5', label: '30-day calendar' },
+                { icon: '\u2705', label: 'Progress checklist' },
               ].map(v => (
                 <div key={v.label} className="flex flex-col items-center gap-1 text-center bg-surface-2 rounded-xl p-3">
                   <span className="text-lg">{v.icon}</span>
