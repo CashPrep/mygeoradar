@@ -4,23 +4,25 @@ import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
-  title: 'Multi-Location GEO: How to Get Each Branch Cited by AI',
+  title: 'Multi-Location GEO: How Chains and Franchises Should Handle AI Visibility',
   description: 'Managing AI visibility across multiple locations requires a different strategy than single-location GEO. Here\'s how to structure your entity signals for multi-location businesses.',
   openGraph: {
-    title: 'Multi-Location GEO: How to Get Each Branch Cited by AI',
-    description: 'Managing AI visibility across multiple locations requires a different strategy. Here\'s how.',
+    title: 'Multi-Location GEO: How Chains and Franchises Should Handle AI Visibility',
+    description: 'Managing AI visibility across multiple locations requires a different strategy. Here\'s how to structure your entity signals.',
     url: 'https://mygeoradar.com/blog/multi-location-geo',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/blog/multi-location-geo/opengraph-image', width: 1200, height: 630, alt: 'Multi-Location GEO: How Chains Handle AI Visibility — MyGeoRadar' }],
     type: 'article',
+    publishedTime: '2026-05-16T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'Multi-Location GEO: How to Get Each Branch Cited by AI',
+    title: 'Multi-Location GEO: How Chains and Franchises Should Handle AI Visibility',
     description: 'Managing AI visibility across multiple locations requires a different strategy. Here\'s how.',
-    images: ['https://mygeoradar.com/og-image.png'],
+    images: ['https://mygeoradar.com/blog/multi-location-geo/opengraph-image'],
   },
 }
 
@@ -62,7 +64,7 @@ export default function MultiLocationGeoPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">Review strategy by location</h2>
           <p>Review volume needs to be distributed, not concentrated. If 90% of your reviews are on the brand-level GBP and each location profile has under 20 reviews, AI engines will cite your brand but not your specific branches. Run location-specific review generation campaigns, routing customers to the GBP for the branch they visited.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">Scanning each location separately</h2>
-          <p>Run a separate GEO scan for each location using location-specific topics (e.g., &ldquo;best roofer in Austin&rdquo; vs &ldquo;best roofer in Dallas&rdquo;). The scores will differ &mdash; sometimes significantly. That gap tells you which locations need the most work and where your competitors are beating you geographically.</p>
+          <p>Run a separate GEO scan for each location using location-specific topics. The scores will differ &mdash; sometimes significantly. That gap tells you which locations need the most work and where your competitors are beating you geographically.</p>
         </div>
         <BlogCta
           heading="Scan your locations and see where you stand"

@@ -8,11 +8,13 @@ export const metadata = {
   description: 'Most businesses treat AI visibility as an afterthought. Here\'s why you should build GEO infrastructure before you launch — and what that looks like in practice.',
   openGraph: {
     title: 'GEO Before Launch: Why AI Visibility Should Be Day-One Infrastructure',
-    description: 'Most businesses treat AI visibility as an afterthought. Here\'s why you should build GEO infrastructure before you launch.',
+    description: 'Most businesses treat AI visibility as an afterthought. Here\'s why you should build GEO before you launch.',
     url: 'https://mygeoradar.com/blog/geo-before-launch',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/blog/geo-before-launch/opengraph-image', width: 1200, height: 630, alt: 'GEO Before Launch — MyGeoRadar' }],
     type: 'article',
+    publishedTime: '2026-05-14T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
   },
   twitter: {
     card: 'summary_large_image',
@@ -20,7 +22,7 @@ export const metadata = {
     creator: '@MyGEORadar',
     title: 'GEO Before Launch: Why AI Visibility Should Be Day-One Infrastructure',
     description: 'Most businesses treat AI visibility as an afterthought. Here\'s why you should build GEO before you launch.',
-    images: ['https://mygeoradar.com/og-image.png'],
+    images: ['https://mygeoradar.com/blog/geo-before-launch/opengraph-image'],
   },
 }
 

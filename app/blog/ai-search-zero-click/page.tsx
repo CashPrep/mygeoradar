@@ -4,23 +4,25 @@ import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
-  title: 'AI Search Is Killing Website Traffic — Here\'s What to Do Instead',
-  description: 'Zero-click AI answers are reducing organic website traffic. Here\'s how to adapt your strategy to get cited instead of bypassed.',
+  title: 'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
+  description: 'Zero-click AI answers are pulling users away from websites entirely. Here\'s how to adapt your strategy to get cited instead of bypassed.',
   openGraph: {
-    title: 'AI Search Is Killing Website Traffic — Here\'s What to Do Instead',
-    description: 'Zero-click AI answers are reducing organic website traffic. Here\'s how to adapt.',
+    title: 'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
+    description: 'Zero-click AI answers are pulling users away from websites entirely. Here\'s how to adapt your strategy to get cited instead of bypassed.',
     url: 'https://mygeoradar.com/blog/ai-search-zero-click',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/blog/ai-search-zero-click/opengraph-image', width: 1200, height: 630, alt: 'The Zero-Click AI Era — MyGeoRadar' }],
     type: 'article',
+    publishedTime: '2026-05-11T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'AI Search Is Killing Website Traffic — Here\'s What to Do Instead',
-    description: 'Zero-click AI answers are reducing organic website traffic. Here\'s how to adapt.',
-    images: ['https://mygeoradar.com/og-image.png'],
+    title: 'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
+    description: 'Zero-click AI answers are pulling users away from websites. Here\'s how to adapt.',
+    images: ['https://mygeoradar.com/blog/ai-search-zero-click/opengraph-image'],
   },
 }
 

@@ -4,15 +4,17 @@ import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
-  title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations About Your Company',
+  title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
   description: 'AI engines sometimes describe your business incorrectly, cite wrong info, or confuse you with a competitor. Here\'s why it happens and exactly how to fix it.',
   openGraph: {
     title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
     description: 'AI engines sometimes describe your business incorrectly. Here\'s why it happens and exactly how to fix it.',
     url: 'https://mygeoradar.com/blog/ai-hallucination-fix',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/blog/ai-hallucination-fix/opengraph-image', width: 1200, height: 630, alt: 'When AI Gets Your Business Wrong — MyGeoRadar' }],
     type: 'article',
+    publishedTime: '2026-05-15T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
   },
   twitter: {
     card: 'summary_large_image',
@@ -20,7 +22,7 @@ export const metadata = {
     creator: '@MyGEORadar',
     title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
     description: 'AI engines sometimes describe your business incorrectly. Here\'s why it happens and exactly how to fix it.',
-    images: ['https://mygeoradar.com/og-image.png'],
+    images: ['https://mygeoradar.com/blog/ai-hallucination-fix/opengraph-image'],
   },
 }
 

@@ -4,23 +4,25 @@ import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
-  title: 'The Complete AI Search Visibility Guide for Local Businesses',
-  description: 'A complete guide to getting your local business mentioned in AI-generated answers from ChatGPT, Perplexity, Gemini, and Claude.',
+  title: 'How AI Search Engines Decide Which Businesses to Mention',
+  description: 'ChatGPT, Perplexity and Gemini don\'t rank websites — they generate answers. Here\'s exactly how they decide who gets cited.',
   openGraph: {
-    title: 'The Complete AI Search Visibility Guide for Local Businesses',
-    description: 'A complete guide to getting your local business mentioned in AI-generated answers.',
+    title: 'How AI Search Engines Decide Which Businesses to Mention',
+    description: 'ChatGPT, Perplexity and Gemini don\'t rank websites — they generate answers. Here\'s exactly how they decide who gets cited.',
     url: 'https://mygeoradar.com/blog/ai-search-guide',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/blog/ai-search-guide/opengraph-image', width: 1200, height: 630, alt: 'How AI Search Engines Decide Which Businesses to Mention — MyGeoRadar' }],
     type: 'article',
+    publishedTime: '2026-05-12T00:00:00.000Z',
+    authors: ['https://mygeoradar.com'],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'The Complete AI Search Visibility Guide for Local Businesses',
-    description: 'A complete guide to getting your local business mentioned in AI-generated answers.',
-    images: ['https://mygeoradar.com/og-image.png'],
+    title: 'How AI Search Engines Decide Which Businesses to Mention',
+    description: 'ChatGPT, Perplexity and Gemini don\'t rank websites — they generate answers. Here\'s exactly how they decide who gets cited.',
+    images: ['https://mygeoradar.com/blog/ai-search-guide/opengraph-image'],
   },
 }
 
@@ -32,13 +34,13 @@ export default function AiSearchGuidePage() {
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
             <Badge variant="accent">Guide</Badge>
-            <span className="text-xs text-muted">May 11, 2026 &middot; 8 min read</span>
+            <span className="text-xs text-muted">May 12, 2026 &middot; 7 min read</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
-            The Complete AI Search Visibility Guide for Local Businesses
+            How AI Search Engines Decide Which Businesses to Mention
           </h1>
           <p className="text-lg text-foreground-dim leading-relaxed">
-            A practical playbook for getting your business mentioned in AI-generated answers from ChatGPT, Perplexity, Gemini, and Claude.
+            ChatGPT, Perplexity and Gemini don&apos;t rank websites &mdash; they generate answers. Here&apos;s exactly how they decide who gets cited.
           </p>
         </div>
         <div className="flex flex-col gap-6 text-foreground-dim leading-relaxed">
