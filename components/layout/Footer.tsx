@@ -3,16 +3,14 @@ import { Radar } from 'lucide-react'
 
 const footerLinks = {
   Product: [
-    { href: '/#how-it-works', label: 'How it works' },
+    { href: '/playbook',      label: 'Found by AI — Playbook' },
+    { href: '/#what-you-get', label: 'What you get' },
     { href: '/#pricing',      label: 'Pricing' },
-    { href: '/scan',          label: 'Run a scan' },
-    { href: '/invisible',     label: 'Is your business invisible?' },
+    { href: '/account',       label: 'My purchases' },
   ],
   Resources: [
-    { href: '/blog',                  label: 'Blog' },
-    { href: '/blog/what-is-geo',      label: 'What is GEO?' },
-    { href: '/blog/ai-search-guide',  label: 'AI Search Guide' },
-    { href: '/about',                 label: 'About the Founder' },
+    { href: '/blog',   label: 'Free AI visibility tips' },
+    { href: '/about',  label: 'About the founder' },
   ],
   Legal: [
     { href: '/privacy', label: 'Privacy Policy' },
@@ -33,7 +31,7 @@ export function Footer() {
               <span className="font-bold">my<span className="text-accent">geo</span>radar</span>
             </Link>
             <p className="text-sm text-muted leading-relaxed">
-              See how AI engines see your business — and get a clear plan to show up more.
+              Get your business found and recommended by AI assistants — ChatGPT, Perplexity, Gemini, and Claude.
             </p>
           </div>
 

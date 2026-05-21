@@ -11,30 +11,30 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'MyGeoRadar — AI Search Visibility for Your Business',
+    default: 'MyGeoRadar — Get Found by AI',
     template: '%s | MyGeoRadar',
   },
   description:
-    'Find out how ChatGPT, Perplexity & Gemini talk about your business. Get your AI visibility score and a step-by-step action plan — free scan in 60 seconds.',
+    'Most businesses are invisible to AI assistants like ChatGPT, Perplexity, and Gemini. The Found by AI Playbook gives you the exact step-by-step system to fix that — one time, $27.',
   keywords: [
-    'GEO', 'generative engine optimization', 'AI search visibility',
-    'ChatGPT visibility', 'AI citation tracking', 'GEO tool',
-    'AI SEO', 'show up on ChatGPT',
+    'AI visibility', 'get found by AI', 'ChatGPT business visibility',
+    'Perplexity business listing', 'GEO optimization', 'generative engine optimization',
+    'AI search guide', 'how to show up on ChatGPT', 'found by AI playbook',
   ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://mygeoradar.com'),
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://mygeoradar.com',
-    title: 'MyGeoRadar — AI Search Visibility for Your Business',
-    description: 'Find out how ChatGPT, Perplexity & Gemini talk about your business. Get your AI visibility score and a step-by-step action plan — free scan in 60 seconds.',
+    title: 'MyGeoRadar — Get Found by AI',
+    description: 'Most businesses are invisible to AI assistants. The Found by AI Playbook shows you exactly how to fix that — step by step, one time, $27.',
     siteName: 'MyGeoRadar',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'MyGeoRadar — AI Search Visibility for Your Business',
+        alt: 'MyGeoRadar — Get Found by AI',
       },
     ],
   },
@@ -42,8 +42,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'MyGeoRadar — AI Search Visibility',
-    description: 'Find out how ChatGPT, Perplexity & Gemini talk about your business. Get your AI visibility score and a step-by-step action plan — free scan in 60 seconds.',
+    title: 'MyGeoRadar — Get Found by AI',
+    description: 'Most businesses are invisible to AI assistants. Fix it with the Found by AI Playbook — $27 one time.',
     images: ['/og-image.png'],
   },
   icons: {
@@ -66,7 +66,7 @@ const organizationSchema = {
   name: 'MyGeoRadar',
   url: 'https://mygeoradar.com',
   logo: 'https://mygeoradar.com/icon-512.png',
-  description: 'AI search visibility platform that shows how ChatGPT, Perplexity, Gemini, and Claude talk about your business.',
+  description: 'MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude.',
   founder: {
     '@type': 'Person',
     name: 'Andrew Garber',
@@ -81,15 +81,7 @@ const websiteSchema = {
   '@type': 'WebSite',
   name: 'MyGeoRadar',
   url: 'https://mygeoradar.com',
-  description: 'Find out how ChatGPT, Perplexity & Gemini talk about your business.',
-  potentialAction: {
-    '@type': 'SearchAction',
-    target: {
-      '@type': 'EntryPoint',
-      urlTemplate: 'https://mygeoradar.com/scan?q={search_term_string}',
-    },
-    'query-input': 'required name=search_term_string',
-  },
+  description: 'Get your business found and recommended by AI assistants — ChatGPT, Perplexity, Gemini, and Claude.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

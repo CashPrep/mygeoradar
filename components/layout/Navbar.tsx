@@ -10,9 +10,9 @@ import { clsx } from 'clsx'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 
 const navLinks = [
-  { href: '/#how-it-works', label: 'How it works' },
+  { href: '/#what-you-get', label: 'What you get' },
   { href: '/#pricing',      label: 'Pricing' },
-  { href: '/blog',          label: 'Blog' },
+  { href: '/blog',          label: 'Free tips' },
   { href: '/about',         label: 'About' },
 ]
 
@@ -83,7 +83,7 @@ export function Navbar() {
                 className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
               >
                 <User className="w-4 h-4" />
-                My scans
+                My purchases
               </Link>
               <button
                 onClick={handleSignOut}
@@ -101,8 +101,8 @@ export function Navbar() {
               Sign in
             </Link>
           )}
-          <Button variant="primary" size="sm" onClick={() => window.location.href = '/scan'}>
-            Run a scan
+          <Button variant="primary" size="sm" onClick={() => window.location.href = '/playbook'}>
+            Get the Playbook — $27
           </Button>
         </div>
 
@@ -136,7 +136,7 @@ export function Navbar() {
                 onClick={() => setOpen(false)}
                 className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 flex items-center gap-2"
               >
-                <User className="w-4 h-4" /> My scans
+                <User className="w-4 h-4" /> My purchases
               </Link>
               <button
                 onClick={() => { setOpen(false); handleSignOut() }}
@@ -156,9 +156,9 @@ export function Navbar() {
           )}
           <Button
             variant="primary" size="sm" className="mt-2"
-            onClick={() => { setOpen(false); window.location.href = '/scan' }}
+            onClick={() => { setOpen(false); window.location.href = '/playbook' }}
           >
-            Run a scan
+            Get the Playbook — $27
           </Button>
         </div>
       )}
