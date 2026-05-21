@@ -3,13 +3,16 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, GraduationCap, Lightbulb, Radar } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
+import { Footer } from '@/components/layout/Footer'
 
 export const metadata: Metadata = {
-  title: 'About the Founder',
-  description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
+  title: 'About the Founder | MyGeoRadar',
+  description:
+    'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
   openGraph: {
     title: 'About the Founder | MyGeoRadar',
-    description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
+    description:
+      'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
     url: 'https://mygeoradar.com/about',
     siteName: 'MyGeoRadar',
     images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'About MyGeoRadar' }],
@@ -19,7 +22,8 @@ export const metadata: Metadata = {
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
     title: 'About the Founder | MyGeoRadar',
-    description: 'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
+    description:
+      'MyGeoRadar was built by Andrew Garber, an AI Scholar and entrepreneur obsessed with how AI is reshaping the way businesses get found online.',
     images: ['https://mygeoradar.com/og-image.png'],
   },
 }
@@ -35,26 +39,26 @@ export default function AboutPage() {
           <div className="text-center mb-10">
             <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">About</p>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-              Built by someone who{' '}
-              <span className="text-gradient">actually cares</span>
+              Built by someone who actually cares
             </h1>
-            <p className="mt-5 text-foreground-dim max-w-xl mx-auto leading-relaxed">
-              MyGeoRadar isn&apos;t a faceless SaaS. It was built by one person who got frustrated that no tool existed to show how AI engines actually talk about businesses.
+            <p className="mt-5 text-muted max-w-xl mx-auto leading-relaxed">
+              MyGeoRadar isn&apos;t a faceless SaaS. It was built by one person who got
+              frustrated watching small businesses get left behind as AI replaced traditional search.
             </p>
 
             {/* Above-fold CTA */}
             <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
-                href="/"
-                className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent-hover transition-colors shadow-glow-sm"
+                href="/playbook"
+                className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent/90 transition-colors"
               >
-                Get my free AI score <ArrowRight className="w-4 h-4" />
+                Get the Found by AI Playbook <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                href="/scan"
+                href="/blog"
                 className="inline-flex items-center gap-2 bg-surface border border-border text-foreground font-semibold text-sm px-6 py-3 rounded-xl hover:bg-surface-2 transition-colors"
               >
-                Full report &mdash; $29.99
+                Free AI visibility tips
               </Link>
             </div>
           </div>
@@ -83,16 +87,24 @@ export default function AboutPage() {
                   <p className="text-sm text-accent font-medium mt-1">Founder, MyGeoRadar</p>
                 </div>
 
-                <p className="text-foreground-dim leading-relaxed text-sm">
-                  I built MyGeoRadar because I kept asking the same question: <em>&ldquo;When someone asks ChatGPT or Perplexity to recommend a business like mine, do I even show up?&rdquo;</em> There was no good answer. So I built one.
+                <p className="text-muted leading-relaxed text-sm">
+                  I built MyGeoRadar because I kept asking the same question:
+                  <em> &ldquo;When someone asks ChatGPT or Perplexity to recommend a business like mine, do I even show up?&rdquo;</em>
+                  {' '}Most business owners had no idea. So I built the tools and guides to answer it.
                 </p>
 
-                <p className="text-foreground-dim leading-relaxed text-sm">
-                  I&apos;m a self-taught developer and entrepreneur. I attend Elon University as an <strong className="text-foreground">Artificial Intelligence Scholar</strong> &mdash; one of a select group of students chosen for deep study at the intersection of AI, ethics, and real-world application.
+                <p className="text-muted leading-relaxed text-sm">
+                  I&apos;m a self-taught developer and entrepreneur. I attend Elon University as an{' '}
+                  <strong className="text-foreground">Artificial Intelligence Scholar</strong> &mdash;
+                  one of a select group of students chosen for deep study at the intersection of AI,
+                  ethics, and real-world application.
                 </p>
 
-                <p className="text-foreground-dim leading-relaxed text-sm">
-                  I believe small businesses deserve to understand how the next generation of search works. AI search is already here. MyGeoRadar helps you see where you stand.
+                <p className="text-muted leading-relaxed text-sm">
+                  The <strong className="text-foreground">Found by AI Playbook</strong> is my answer
+                  to the question every small business owner should be asking right now:
+                  how do I get AI assistants to recognize, trust, and recommend my business?
+                  I wrote the playbook I wish existed when I started studying this.
                 </p>
 
                 {/* Credential badges */}
@@ -116,18 +128,21 @@ export default function AboutPage() {
 
           {/* Bottom CTA */}
           <div className="mt-14 text-center">
-            <p className="text-foreground-dim text-sm mb-5">Ready to see how AI engines talk about your business?</p>
+            <p className="text-muted text-sm mb-5">
+              Ready to get your business found and recommended by AI?
+            </p>
             <Link
-              href="/"
-              className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent-hover transition-colors"
+              href="/playbook"
+              className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent/90 transition-colors"
             >
-              Get my free AI score
+              Get the Found by AI Playbook &mdash; $27
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
         </div>
       </main>
+      <Footer />
     </>
   )
 }
