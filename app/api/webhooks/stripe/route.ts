@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { waitUntil } from '@vercel/functions'
 import Stripe from 'stripe'
-import { supabase } from '@/lib/supabase'
 import { supabaseAdmin } from '@/lib/supabase-admin'
-import { sendInvisibleGuideEmail } from '@/lib/email'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2024-04-10',
@@ -21,108 +18,40 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid signature.' }, { status: 400 })
   }
 
+  // ─── Found by AI Playbook purchase ──────────────────────────────────────
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
 
-    // ── Invisible Guide purchase ──────────────────────────────────────────────
-    if (session.metadata?.product === 'invisible-guide') {
+    if (session.metadata?.product === 'found-by-ai-playbook') {
       const customerEmail = session.customer_details?.email
-      const businessName  = session.metadata?.businessName || 'Your Business'
-      const website       = session.metadata?.website       || ''
+      const customerId    = session.customer as string | null
+      const sessionId     = session.id
 
-      if (customerEmail) {
-        try {
-          await sendInvisibleGuideEmail({ email: customerEmail, businessName, website })
-        } catch (err) {
-          // Log but don't fail — Stripe has already confirmed payment
-          console.error('[invisible-guide email] failed to send:', err)
-        }
+      if (!customerEmail) {
+        console.error('[playbook webhook] No customer email in session:', sessionId)
+        return NextResponse.json({ ok: true })
+      }
+
+      try {
+        // Record purchase in Supabase for account access
+        await supabaseAdmin
+          .from('playbook_purchases')
+          .upsert(
+            {
+              stripe_session_id:  sessionId,
+              stripe_customer_id: customerId,
+              email:              customerEmail.toLowerCase(),
+              product:            'found-by-ai-playbook',
+              purchased_at:       new Date().toISOString(),
+            },
+            { onConflict: 'stripe_session_id' }
+          )
+      } catch (dbErr) {
+        // Log but do not fail — Stripe has already confirmed payment
+        console.error('[playbook webhook] DB upsert failed:', dbErr)
       }
 
       return NextResponse.json({ ok: true })
-    }
-
-    // ── Scan purchase (existing flow) ─────────────────────────────────────────
-    const scanId = session.metadata?.scanId
-    if (!scanId) return NextResponse.json({ ok: true })
-
-    const { data: scan } = await supabase
-      .from('scan_reports')
-      .select('id, paid, overall_score, scan_error, processing_started_at, email, user_id')
-      .eq('id', scanId)
-      .single()
-
-    if (!scan) return NextResponse.json({ ok: true })
-
-    // Idempotency guard — skip if already processed or in progress
-    if (scan.processing_started_at || scan.overall_score != null || scan.scan_error) {
-      console.log(`Webhook retry skipped for scan ${scanId} — already processed or in progress`)
-      return NextResponse.json({ ok: true })
-    }
-
-    await supabase
-      .from('scan_reports')
-      .update({ paid: true, processing_started_at: new Date().toISOString() })
-      .eq('id', scanId)
-
-    // Link scan to user account if not already linked
-    if (!scan.user_id) {
-      const customerEmail = scan.email || session.customer_details?.email
-      if (customerEmail) {
-        try {
-          const { data, error } = await supabaseAdmin.auth.admin.listUsers()
-          if (!error && data?.users) {
-            const user = data.users.find(
-              (u) => u.email?.toLowerCase() === customerEmail.toLowerCase()
-            )
-            if (user) {
-              await supabase.from('scan_reports').update({ user_id: user.id }).eq('id', scanId)
-            }
-          }
-        } catch (err) {
-          console.error('User lookup error:', err)
-        }
-      }
-    }
-
-    const customerEmail = scan.email || session.customer_details?.email || null
-    const appUrl        = process.env.NEXT_PUBLIC_APP_URL || 'https://mygeoradar.com'
-
-    waitUntil(
-      fetch(`${appUrl}/api/scan/process`, {
-        method:  'POST',
-        headers: {
-          'Content-Type':      'application/json',
-          'x-internal-secret': process.env.INTERNAL_API_SECRET ?? '',
-        },
-        body: JSON.stringify({ scanId, customerEmail }),
-      }).catch((err) => console.error('Failed to trigger scan/process:', err))
-    )
-  }
-
-  if (event.type === 'invoice.payment_succeeded') {
-    const invoice    = event.data.object as Stripe.Invoice
-    const customerId = invoice.customer as string
-    if (!customerId) return NextResponse.json({ ok: true })
-    try {
-      await supabase.from('subscriptions').upsert(
-        { stripe_customer_id: customerId, status: 'active', updated_at: new Date().toISOString() },
-        { onConflict: 'stripe_customer_id' }
-      )
-    } catch (dbErr) {
-      console.error('Subscription upsert error:', dbErr)
-    }
-  }
-
-  if (event.type === 'customer.subscription.deleted') {
-    const sub        = event.data.object as Stripe.Subscription
-    const customerId = sub.customer as string
-    try {
-      await supabase.from('subscriptions')
-        .update({ status: 'canceled', updated_at: new Date().toISOString() })
-        .eq('stripe_customer_id', customerId)
-    } catch (dbErr) {
-      console.error('Subscription cancel error:', dbErr)
     }
   }
 
