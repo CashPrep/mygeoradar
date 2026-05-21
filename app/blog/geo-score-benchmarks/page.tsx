@@ -4,29 +4,21 @@ import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
-  title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
-  description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries \u2014 and what score you actually need to compete.',
+  title: "What's a Good GEO Score? Industry Benchmarks for 2026",
+  description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries.',
   openGraph: {
-    title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
-    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries \u2014 and what score you actually need to compete.',
+    title: "What's a Good GEO Score? Industry Benchmarks for 2026",
+    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries.',
     url: 'https://mygeoradar.com/blog/geo-score-benchmarks',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'GEO Score Benchmarks 2026 \u2014 MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630 }],
     type: 'article',
     publishedTime: '2026-05-13T00:00:00.000Z',
-    authors: ['https://mygeoradar.com'],
   },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@MyGEORadar',
-    creator: '@MyGEORadar',
-    title: 'What\'s a Good GEO Score? Industry Benchmarks for 2026',
-    description: 'Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries \u2014 and what score you actually need to compete.',
-    images: ['https://mygeoradar.com/og-image.png'],
-  },
+  twitter: { card: 'summary_large_image', site: '@MyGEORadar', images: ['https://mygeoradar.com/og-image.png'] },
 }
 
-export default function GeoScoreBenchmarksPage() {
+export default function GeoBenchmarksPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
@@ -39,87 +31,37 @@ export default function GeoScoreBenchmarksPage() {
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
             What&apos;s a Good GEO Score? Industry Benchmarks for 2026
           </h1>
-          <p className="text-lg text-foreground-dim leading-relaxed">
-            Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries &mdash; and what score you actually need to compete.
+          <p className="text-lg text-muted leading-relaxed">
+            Most businesses score below 30 out of 100 on AI visibility. Here are real benchmark data points across industries — and what score you actually need to compete.
           </p>
         </div>
-        <div className="flex flex-col gap-6 text-foreground-dim leading-relaxed">
-          <h2 className="text-xl font-bold text-foreground mt-4">Why benchmarks matter</h2>
-          <p>A score without context is just a number. Knowing you scored 42/100 on AI visibility means nothing unless you know that the average competitor in your category scores 38. That gap &mdash; four points &mdash; might mean you&apos;re already winning. Or it might mean you&apos;re all equally invisible.</p>
-          <p>GEO scores are still a young metric. Most businesses haven&apos;t even run their first AI visibility scan. That means the benchmarks are shifting fast &mdash; and the businesses that move now are locking in advantages while the baseline is still low.</p>
-          <h2 className="text-xl font-bold text-foreground mt-4">The overall baseline: where most businesses start</h2>
-          <p>Across all industries and business types, the median GEO score for a business that has never actively optimized for AI visibility sits between 18 and 28 out of 100. The breakdown looks roughly like this:</p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border border-border rounded-xl overflow-hidden">
-              <thead>
-                <tr className="bg-surface-2">
-                  <th className="text-left p-3 text-foreground font-semibold border-b border-border">Score Range</th>
-                  <th className="text-left p-3 text-foreground font-semibold border-b border-border">What It Means</th>
-                  <th className="text-left p-3 text-accent font-semibold border-b border-border">Typical Profile</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  ['0 \u2013 20', 'Effectively invisible in AI answers', 'No schema, thin site, few external citations'],
-                  ['21 \u2013 40', 'Occasionally mentioned, inconsistently', 'Some GBP presence, no structured data'],
-                  ['41 \u2013 60', 'Regularly cited in relevant queries', 'Good entity clarity, some schema, active reviews'],
-                  ['61 \u2013 80', 'Strong presence, cited unprompted', 'Full schema, high topical authority, press mentions'],
-                  ['81 \u2013 100', 'Category leader in AI answers', 'Wikipedia entry, Wikidata, massive citation volume'],
-                ].map(([range, meaning, profile]) => (
-                  <tr key={range} className="border-b border-border/50">
-                    <td className="p-3 text-foreground font-medium">{range}</td>
-                    <td className="p-3 text-foreground-dim">{meaning}</td>
-                    <td className="p-3 text-foreground-dim">{profile}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <h2 className="text-xl font-bold text-foreground mt-4">Industry-by-industry benchmarks</h2>
-          <p>AI visibility varies significantly by category. Some industries have well-established entities because they&apos;ve been discussed online for decades. Others are virtually unrepresented in AI training data.</p>
+        <div className="flex flex-col gap-6 text-muted leading-relaxed">
+          <h2 className="text-xl font-bold text-foreground mt-4">The baseline is low — that’s good news</h2>
+          <p>The overwhelming majority of small and medium businesses have never taken a single action to improve their AI visibility. That means the bar for standing out is genuinely low right now. Businesses that implement even the foundational fixes — complete GBP, schema markup, consistent directory listings — immediately outperform 80%+ of their local competitors in AI mentions.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">Rough benchmarks by category</h2>
           {[
-            { industry: 'Healthcare & Dentistry', median: '28\u201335', competitive: '55+', note: 'Regulated content limits what AI will say; entity clarity matters more than topical content here.' },
-            { industry: 'Legal Services', median: '22\u201330', competitive: '50+', note: 'Highly competitive in major cities. Topical authority through educational content is the primary differentiator.' },
-            { industry: 'Restaurants & Food', median: '30\u201340', competitive: '60+', note: 'Review volume is the dominant signal. Yelp and Google reviews are heavily weighted.' },
-            { industry: 'Real Estate', median: '20\u201328', competitive: '48+', note: 'Most agents have weak entity signals. First-movers on structured data win quickly.' },
-            { industry: 'Home Services', median: '18\u201325', competitive: '45+', note: 'Lowest baseline of any major category. Huge opportunity for early movers.' },
-            { industry: 'SaaS & Tech', median: '35\u201345', competitive: '65+', note: 'Tech companies have more content by default. The bar to compete is higher.' },
-            { industry: 'E-commerce / Retail', median: '25\u201333', competitive: '55+', note: 'Product schema and review aggregation are the core signals.' },
-          ].map((row) => (
-            <div key={row.industry} className="p-4 bg-surface-2 border border-border rounded-xl">
-              <div className="flex items-start justify-between gap-4 mb-2">
-                <p className="font-semibold text-foreground">{row.industry}</p>
-                <div className="flex gap-3 text-xs shrink-0">
-                  <span className="text-foreground-dim">Median: <span className="font-medium text-foreground">{row.median}</span></span>
-                  <span className="text-foreground-dim">Competitive: <span className="font-medium text-accent">{row.competitive}</span></span>
-                </div>
+            { category: 'National brands / chains',       score: '60–80', note: 'High editorial coverage, structured data, Wikipedia presence' },
+            { category: 'Established local professionals', score: '30–55', note: 'GBP complete, some reviews, occasional press mentions' },
+            { category: 'Average SMB',                    score: '10–30', note: 'Basic web presence, incomplete GBP, few citations' },
+            { category: 'New or invisible businesses',    score: '0–10',  note: 'No schema, unclaimed GBP, no directory presence' },
+          ].map(({ category, score, note }) => (
+            <div key={category} className="flex gap-4 p-4 rounded-lg bg-surface border border-border">
+              <div className="flex-shrink-0 text-center">
+                <span className="text-lg font-bold text-accent">{score}</span>
+                <p className="text-xs text-muted">/100</p>
               </div>
-              <p className="text-sm">{row.note}</p>
+              <div>
+                <p className="text-sm font-semibold text-foreground">{category}</p>
+                <p className="text-xs text-muted mt-0.5">{note}</p>
+              </div>
             </div>
           ))}
           <h2 className="text-xl font-bold text-foreground mt-4">What score do you actually need?</h2>
-          <p>The honest answer: you don&apos;t need a perfect score. You need to beat your direct competitors in your geography and category. A 45 in a market where competitors average 22 is more valuable than a 70 in a category where every player is already above 65.</p>
-          <p>The practical threshold for consistent AI citation in most local and regional categories is <strong className="text-foreground">40\u201350/100</strong>. That&apos;s achievable within 60 to 90 days of focused optimization for most businesses starting from the average baseline.</p>
-          <h2 className="text-xl font-bold text-foreground mt-4">The fastest path from 20 to 50</h2>
-          {[
-            { action: 'Complete your Google Business Profile', impact: '+6 to +10 pts', effort: 'Low \u2014 30 minutes' },
-            { action: 'Add LocalBusiness JSON-LD schema', impact: '+8 to +12 pts', effort: 'Low-medium \u2014 1 hour' },
-            { action: 'Get listed on 10 top directories', impact: '+5 to +8 pts', effort: 'Medium \u2014 2 to 4 hours' },
-            { action: 'Publish 3 authoritative FAQ or guide pages', impact: '+4 to +7 pts', effort: 'Medium \u2014 ongoing' },
-            { action: 'Generate 20+ recent Google reviews', impact: '+4 to +6 pts', effort: 'Medium \u2014 campaign required' },
-          ].map((item) => (
-            <div key={item.action} className="flex items-start gap-3">
-              <span className="text-accent mt-1 shrink-0">&#8250;</span>
-              <div>
-                <p className="text-sm text-foreground font-medium">{item.action}</p>
-                <p className="text-xs text-foreground-dim mt-0.5">Impact: {item.impact} &middot; Effort: {item.effort}</p>
-              </div>
-            </div>
-          ))}
-          <h2 className="text-xl font-bold text-foreground mt-4">Track your score over time</h2>
-          <p>GEO scores fluctuate as AI models update, competitors optimize, and your citation volume changes. A one-time scan gives you a baseline; monthly rescans show you whether your efforts are working and alert you to competitive movement.</p>
+          <p>You don’t need a perfect score — you need to score higher than your local competitors on the queries that matter to your category. In most local markets, a score of 45–55 is enough to become the default AI recommendation for your business type. That’s achievable in 30–60 days with focused action.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">The fastest way to move your score</h2>
+          <p>The highest-leverage actions in order: complete your Google Business Profile fully, add LocalBusiness schema to your website, get consistent NAP citations across 10+ directories, and build one authoritative editorial mention. These four steps alone can move most businesses from below 20 to above 40.</p>
         </div>
-        <BlogCta heading="See where your score stands" subheading="Free score in 5 seconds. Compare against these benchmarks instantly." />
+        <BlogCta />
       </article>
       <Footer />
     </main>

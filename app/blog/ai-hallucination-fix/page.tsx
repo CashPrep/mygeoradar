@@ -5,69 +5,57 @@ import { BlogCta } from '@/components/blog/BlogCta'
 
 export const metadata = {
   title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
-  description: 'AI engines sometimes describe your business incorrectly, cite wrong info, or confuse you with a competitor. Here\'s why it happens and exactly how to fix it.',
+  description: 'AI engines sometimes generate confidently wrong information about businesses. Here’s how to find it and fix it before it costs you customers.',
   openGraph: {
     title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
-    description: 'AI engines sometimes describe your business incorrectly. Here\'s why it happens and exactly how to fix it.',
+    description: 'AI engines sometimes generate confidently wrong information about businesses. Here’s how to find it and fix it.',
     url: 'https://mygeoradar.com/blog/ai-hallucination-fix',
     siteName: 'MyGeoRadar',
-    images: [{ url: 'https://mygeoradar.com/blog/ai-hallucination-fix/opengraph-image', width: 1200, height: 630, alt: 'When AI Gets Your Business Wrong — MyGeoRadar' }],
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630 }],
     type: 'article',
-    publishedTime: '2026-05-15T00:00:00.000Z',
-    authors: ['https://mygeoradar.com'],
+    publishedTime: '2026-05-05T00:00:00.000Z',
   },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@MyGEORadar',
-    creator: '@MyGEORadar',
-    title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
-    description: 'AI engines sometimes describe your business incorrectly. Here\'s why it happens and exactly how to fix it.',
-    images: ['https://mygeoradar.com/blog/ai-hallucination-fix/opengraph-image'],
-  },
+  twitter: { card: 'summary_large_image', site: '@MyGEORadar', images: ['https://mygeoradar.com/og-image.png'] },
 }
 
-export default function AiHallucinationFixPage() {
+export default function HallucinationFixPage() {
   return (
     <main className="min-h-screen bg-background">
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4">
-            <Badge variant="accent">Fix</Badge>
-            <span className="text-xs text-muted">May 15, 2026 &middot; 7 min read</span>
+            <Badge variant="accent">Technical GEO</Badge>
+            <span className="text-xs text-muted">May 5, 2026 &middot; 7 min read</span>
           </div>
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
             When AI Gets Your Business Wrong: How to Fix AI Hallucinations About Your Company
           </h1>
-          <p className="text-lg text-foreground-dim leading-relaxed">
-            AI engines sometimes describe your business incorrectly, cite wrong info, or confuse you with a competitor. Here&apos;s why it happens and exactly how to fix it.
+          <p className="text-lg text-muted leading-relaxed">
+            AI engines sometimes generate confidently wrong information about businesses — wrong hours, wrong services, wrong location. Here&apos;s how to find it and fix it.
           </p>
         </div>
-        <div className="flex flex-col gap-6 text-foreground-dim leading-relaxed">
-          <h2 className="text-xl font-bold text-foreground mt-4">Why AI gets businesses wrong</h2>
-          <p>AI language models don&apos;t browse the internet in real time (with a few exceptions). They&apos;re trained on snapshots of the web, which means outdated information, thin online presence, and inconsistent business data all feed directly into wrong answers. If your business name is common, you share a niche with other companies, or your website has poor entity signals, the AI may confidently describe a different business &mdash; or make up details entirely.</p>
-          <p>The three most common hallucination patterns: wrong location or service area, incorrect products or services, and confusion with a competitor or identically-named business.</p>
-          <h2 className="text-xl font-bold text-foreground mt-4">Step 1: Find out what AI is actually saying</h2>
-          <p>Before you can fix anything, you need to know what&apos;s wrong. Run queries across ChatGPT, Perplexity, Gemini, and Claude for your business name, your top services, and your location. Look for inconsistencies, wrong details, or absences. A structured scan gives you this across all four engines at once with a scored report.</p>
-          <h2 className="text-xl font-bold text-foreground mt-4">Step 2: Fix your entity signals</h2>
-          <p>Entity clarity is the foundation. AI models build an understanding of your business from structured signals across the web. The clearer and more consistent those signals are, the less room there is for hallucination.</p>
-          {['Add LocalBusiness JSON-LD schema to your homepage with name, address, phone, URL, and category', 'Ensure your business name, address, and phone number are identical across Google Business Profile, Yelp, and every directory', 'Update your About page with a clear, factual description in plain language', 'Add an FAQ section addressing common questions AI engines receive about your category'].map((item) => (
-            <div key={item} className="flex items-start gap-2">
-              <span className="text-accent mt-1 shrink-0">&#8250;</span>
-              <p className="text-sm text-foreground-dim">{item}</p>
+        <div className="flex flex-col gap-6 text-muted leading-relaxed">
+          <h2 className="text-xl font-bold text-foreground mt-4">Why AI hallucinates about businesses</h2>
+          <p>AI models don’t fabricate from nothing — they extrapolate from incomplete or outdated data. If your business has inconsistent information across directories, an old address on a citation site, or a sparse web presence, the model fills gaps with educated guesses. Those guesses become confident-sounding wrong answers that cost you customers.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">How to find what AI is saying about you</h2>
+          <p>Start by asking each major AI assistant directly. Use these prompts in ChatGPT, Perplexity, Gemini, and Claude:</p>
+          {[
+            '"Tell me everything you know about [Business Name] in [City]."',
+            '"What are the hours and services offered by [Business Name]?"',
+            '"Is [Business Name] a reputable choice for [your service category]?"',
+          ].map((prompt) => (
+            <div key={prompt} className="font-mono text-sm bg-surface border border-border rounded-lg px-4 py-3 text-foreground">
+              {prompt}
             </div>
           ))}
-          <h2 className="text-xl font-bold text-foreground mt-4">Step 3: Build authoritative external citations</h2>
-          <p>AI models weight third-party mentions heavily. A mention in a local newspaper, a bar association directory, a Chamber of Commerce listing, or a well-trafficked industry directory adds an external signal that reinforces your entity data. These are harder to fabricate, which is why AI engines trust them.</p>
-          <h2 className="text-xl font-bold text-foreground mt-4">Step 4: Address the confusion source directly</h2>
-          <p>If you&apos;re being confused with another business, the fix is differentiation at the entity level. Add your founding year, your specific geography, your unique service mix, and any distinguishing credentials to your schema and your About page. The more specific and verifiable your entity signals are, the harder it is for an AI to conflate you with someone else.</p>
-          <h2 className="text-xl font-bold text-foreground mt-4">Step 5: Verify the fix</h2>
-          <p>After making changes, wait two to four weeks for AI training data and Perplexity&apos;s live index to update. Then re-run your scan and compare scores. Hallucinations typically decrease significantly once structured data and entity clarity improve &mdash; though complete elimination can take multiple rounds.</p>
+          <p>Screenshot every response. Look for incorrect facts, outdated information, or missing details. This is your fix list.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">The fix: authoritative signal flooding</h2>
+          <p>You cannot directly edit what an AI says about you — but you can flood the web with accurate, authoritative signals that override the bad data. The process: correct every directory listing, update your schema markup with accurate details, publish a factual About page, and get the correct information cited in at least one editorial source. Over weeks, AI models update toward the dominant signal.</p>
+          <h2 className="text-xl font-bold text-foreground mt-4">How long does it take to fix?</h2>
+          <p>Perplexity (which does live searches) updates within days to weeks. ChatGPT and Claude (training-data dependent) can take longer — but fresh web signals from Perplexity citations feed back into the broader AI ecosystem faster than most people realize. Most corrections are reflected within 30–60 days of consistent signal work.</p>
         </div>
-        <BlogCta
-          heading="See what AI engines are saying about your business right now"
-          subheading="Free score in 60 seconds. We show you the exact AI-generated answers — errors and all."
-        />
+        <BlogCta />
       </article>
       <Footer />
     </main>
