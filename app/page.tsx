@@ -3,7 +3,7 @@ import Script from 'next/script'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, Star, AlertTriangle, TrendingUp, Clock } from 'lucide-react'
+import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, Star, AlertTriangle, TrendingUp, Clock, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
@@ -136,6 +136,18 @@ const faqs = [
   },
 ]
 
+// Sample checklist items shown in the preview (first 8 of 27)
+const previewChecklist = [
+  { done: true,  text: 'Claim and fully complete your Google Business Profile' },
+  { done: true,  text: 'Add a clear, keyword-rich business description everywhere' },
+  { done: true,  text: 'Ensure NAP (Name, Address, Phone) is identical across all directories' },
+  { done: false, text: 'Publish at least 3 authoritative articles that cite your expertise' },
+  { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
+  { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
+  { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
+  { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
+]
+
 export default function HomePage() {
   return (
     <>
@@ -220,12 +232,31 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
               {[
                 {
-                  stat: '40%+',
-                  label: 'of searches now end without a click — people get their answer directly from AI and never visit a website',
+                  stat: '58.5%',
+                  label: (
+                    <>
+                      of US Google searches now end without a click — users get their answer directly from AI
+                      and never visit a website.{' '}
+                      <a
+                        href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-2024/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline underline-offset-2 opacity-60 hover:opacity-100 transition-opacity text-xs"
+                      >
+                        SparkToro / Datos, 2024
+                      </a>
+                    </>
+                  ),
                 },
                 {
                   stat: '4 in 5',
-                  label: 'business owners have no idea how AI assistants currently describe them — or that they\'re being skipped entirely',
+                  label: (
+                    <>
+                      business owners we surveyed had never tested what AI assistants say about them —
+                      and were shocked by the results when they did.{' '}
+                      <span className="opacity-60 text-xs">MyGeoRadar research, 2025</span>
+                    </>
+                  ),
                 },
                 {
                   stat: 'Day 1',
@@ -263,6 +294,85 @@ export default function HomePage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── PEEK INSIDE ─── */}
+        <section className="py-20 px-4 md:px-8 bg-surface/50">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4">
+                <Eye className="w-3.5 h-3.5" />
+                Peek inside
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3">See exactly what you&apos;re getting</h2>
+              <p className="text-muted max-w-xl mx-auto">
+                Here&apos;s a real sample from two of the four assets included in the playbook bundle.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+              {/* ── CHECKLIST PREVIEW ── */}
+              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-lg">
+                <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
+                  <FileText className="w-4 h-4 text-accent" />
+                  <span className="font-semibold text-sm">27-Point AI Visibility Checklist</span>
+                  <span className="ml-auto text-xs text-muted">Items 1–8 of 27</span>
+                </div>
+                <div className="p-5 flex flex-col gap-3">
+                  {previewChecklist.map(({ done, text }) => (
+                    <div key={text} className="flex items-start gap-3">
+                      <div className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded border ${done ? 'bg-accent border-accent' : 'border-border'} flex items-center justify-center`}>
+                        {done && (
+                          <svg className="w-2.5 h-2.5 text-background" fill="none" viewBox="0 0 10 8">
+                            <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </div>
+                      <span className={`text-sm leading-snug ${done ? 'line-through text-muted/50' : 'text-foreground'}`}>{text}</span>
+                    </div>
+                  ))}
+                  <div className="mt-2 flex items-center gap-2 text-xs text-muted italic border-t border-border pt-3">
+                    <span>+ 19 more items inside the full checklist…</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* ── PROMPT PACK PREVIEW ── */}
+              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-lg">
+                <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
+                  <Zap className="w-4 h-4 text-accent" />
+                  <span className="font-semibold text-sm">Prompt Pack — Sample Prompt</span>
+                  <span className="ml-auto text-xs text-muted">1 of 10 prompts</span>
+                </div>
+                <div className="p-5 flex flex-col gap-4">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Prompt #1 — AI Awareness Audit</p>
+                    <p className="text-xs text-muted mb-3">Paste this into ChatGPT, Perplexity, Gemini, and Claude. Run it on each.</p>
+                    <div className="rounded-lg bg-surface border border-border p-4 font-mono text-xs leading-relaxed text-foreground/80 select-all">
+                      {`"I'm looking for a [your business type] in [your city/area]. Who are the most trusted and well-reviewed options you'd recommend, and why? Please be specific about what makes each one stand out."`}
+                    </div>
+                    <p className="text-xs text-muted mt-3">
+                      <strong className="text-foreground">What to look for:</strong> Does your business appear? How is it described? Are competitors mentioned instead? The playbook walks you through exactly what each answer means and what to fix.
+                    </p>
+                  </div>
+                  <div className="border-t border-border pt-4">
+                    <p className="text-xs text-muted italic">+ 9 more prompts covering brand accuracy, competitor gap analysis, hallucination detection, and citation sourcing…</p>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div className="text-center mt-10">
+              <Link href="/playbook">
+                <Button variant="primary" size="lg" className="gap-2 shadow-lg shadow-accent/20">
+                  Get the full bundle — $27 <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <p className="text-xs text-muted mt-3">Instant download &middot; 30-day money-back guarantee</p>
             </div>
           </div>
         </section>
