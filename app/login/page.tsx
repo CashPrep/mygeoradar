@@ -4,7 +4,7 @@ import LoginInner from './LoginInner'
 
 export const metadata: Metadata = {
   title: 'Sign In',
-  description: 'Sign in to MyGeoRadar to access your AI visibility scan history and reports.',
+    description: 'Sign in to MyGeoRadar to access your purchased downloads.',
   robots: { index: false, follow: false },
 }
 
