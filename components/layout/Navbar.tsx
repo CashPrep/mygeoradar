@@ -17,10 +17,14 @@ const navLinks = [
 ]
 
 export function Navbar() {
-  const router                  = useRouter()
-  const [open, setOpen]         = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [user, setUser]         = useState<SupabaseUser | null>(null)
+  const router                    = useRouter()
+  const [open, setOpen]           = useState(false)
+  const [scrolled, setScrolled]   = useState(false)
+  const [user, setUser]           = useState<SupabaseUser | null>(null)
+  // Start true — hide auth controls until we know the real state.
+  // Prevents both the "Sign out flash" (logged-out user briefly sees Sign out)
+  // and the "Sign in flash" (logged-in user briefly sees Sign in).
+  const [authReady, setAuthReady] = useState(false)
 
   const supabase = createSupabaseBrowser()
 
@@ -31,9 +35,13 @@ export function Navbar() {
   }, [])
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
+    supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user)
+      setAuthReady(true)
+    })
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null)
+      setAuthReady(true)
     })
     return () => subscription.unsubscribe()
   }, [supabase.auth])
@@ -41,6 +49,64 @@ export function Navbar() {
   async function handleSignOut() {
     await supabase.auth.signOut()
     router.refresh()
+  }
+
+  // Auth controls rendered once we know the real session state.
+  // During the loading tick, renders nothing — no flash in either direction.
+  function AuthControls({ mobile = false }: { mobile?: boolean }) {
+    if (!authReady) return null
+    if (user) {
+      return mobile ? (
+        <>
+          <Link
+            href="/account"
+            onClick={() => setOpen(false)}
+            className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 flex items-center gap-2"
+          >
+            <User className="w-4 h-4" /> My purchases
+          </Link>
+          <button
+            onClick={() => { setOpen(false); handleSignOut() }}
+            className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 flex items-center gap-2 text-left"
+          >
+            <LogOut className="w-4 h-4" /> Sign out
+          </button>
+        </>
+      ) : (
+        <>
+          <Link
+            href="/account"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
+          >
+            <User className="w-4 h-4" />
+            My purchases
+          </Link>
+          <button
+            onClick={handleSignOut}
+            className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
+          >
+            <LogOut className="w-4 h-4" />
+            Sign out
+          </button>
+        </>
+      )
+    }
+    return mobile ? (
+      <Link
+        href="/login"
+        onClick={() => setOpen(false)}
+        className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2"
+      >
+        Sign in
+      </Link>
+    ) : (
+      <Link
+        href="/login"
+        className="px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
+      >
+        Sign in
+      </Link>
+    )
   }
 
   return (
@@ -74,33 +140,9 @@ export function Navbar() {
           ))}
         </nav>
 
-        {/* CTA */}
+        {/* Desktop CTA */}
         <div className="hidden md:flex items-center gap-3">
-          {user ? (
-            <>
-              <Link
-                href="/account"
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
-              >
-                <User className="w-4 h-4" />
-                My purchases
-              </Link>
-              <button
-                onClick={handleSignOut}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign out
-              </button>
-            </>
-          ) : (
-            <Link
-              href="/login"
-              className="px-3 py-1.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 transition-all"
-            >
-              Sign in
-            </Link>
-          )}
+          <AuthControls />
           <Button variant="primary" size="sm" onClick={() => window.location.href = '/playbook'}>
             Get the Playbook — $27
           </Button>
@@ -129,31 +171,7 @@ export function Navbar() {
               {link.label}
             </Link>
           ))}
-          {user ? (
-            <>
-              <Link
-                href="/account"
-                onClick={() => setOpen(false)}
-                className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 flex items-center gap-2"
-              >
-                <User className="w-4 h-4" /> My purchases
-              </Link>
-              <button
-                onClick={() => { setOpen(false); handleSignOut() }}
-                className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2 flex items-center gap-2 text-left"
-              >
-                <LogOut className="w-4 h-4" /> Sign out
-              </button>
-            </>
-          ) : (
-            <Link
-              href="/login"
-              onClick={() => setOpen(false)}
-              className="px-4 py-2.5 text-sm text-foreground-dim hover:text-foreground rounded-lg hover:bg-surface-2"
-            >
-              Sign in
-            </Link>
-          )}
+          <AuthControls mobile />
           <Button
             variant="primary" size="sm" className="mt-2"
             onClick={() => { setOpen(false); window.location.href = '/playbook' }}
