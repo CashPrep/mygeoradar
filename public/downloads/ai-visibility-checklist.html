@@ -1,341 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The 27-Point AI Visibility Checklist — Found by AI</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The 27-Point AI Visibility Checklist &mdash; MyGeoRadar</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', sans-serif; font-size: 12.5px; line-height: 1.6; color: #1a1a2e; background: #fff; max-width: 760px; margin: 0 auto; padding: 48px 56px; }
-  @media print { body { padding: 28px 44px; } }
-  .cover { min-height: 50vh; display: flex; flex-direction: column; justify-content: center; padding-bottom: 48px; border-bottom: 3px solid #6366f1; margin-bottom: 44px; }
-  .badge { display: inline-block; background: #ede9fe; color: #6366f1; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 5px 12px; border-radius: 100px; margin-bottom: 20px; }
-  .cover h1 { font-size: 32px; font-weight: 800; line-height: 1.15; color: #0f0f1a; margin-bottom: 12px; }
-  .cover h1 span { color: #6366f1; }
-  .cover-sub { font-size: 14px; color: #555; max-width: 500px; margin-bottom: 24px; }
-  .cover-meta { font-size: 11px; color: #888; }
-  .cover-meta strong { color: #444; }
-  .section-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6366f1; margin: 36px 0 14px; display: flex; align-items: center; gap: 8px; }
-  .section-label::after { content: ''; flex: 1; height: 1px; background: #ede9fe; }
-  .item { display: flex; align-items: flex-start; gap: 14px; padding: 12px 14px; border-radius: 8px; margin-bottom: 8px; background: #fafafa; border: 1px solid #ebebf5; }
-  .item:hover { border-color: #c4b5fd; }
-  .checkbox { flex-shrink: 0; width: 20px; height: 20px; border: 2px solid #c4b5fd; border-radius: 5px; margin-top: 1px; }
-  .item-content { flex: 1; }
-  .item-title { font-weight: 600; font-size: 12.5px; color: #0f0f1a; margin-bottom: 3px; }
-  .item-verify { font-size: 11.5px; color: #666; }
-  .item-verify strong { color: #6366f1; font-weight: 600; }
-  .priority { flex-shrink: 0; font-size: 9px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; padding: 3px 7px; border-radius: 100px; margin-top: 2px; }
-  .p-high { background: #fef2f2; color: #dc2626; }
-  .p-med { background: #fff7ed; color: #ea580c; }
-  .p-low { background: #f0fdf4; color: #16a34a; }
-  .progress-bar { width: 100%; background: #ede9fe; border-radius: 100px; height: 8px; margin: 8px 0 4px; }
-  .progress-fill { height: 8px; border-radius: 100px; background: #6366f1; }
-  .score-card { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin: 20px 0 36px; }
-  .score-item { background: #f8f8ff; border: 1px solid #e0e0f0; border-radius: 8px; padding: 12px; text-align: center; }
-  .score-num { font-size: 22px; font-weight: 800; color: #6366f1; }
-  .score-label { font-size: 10px; color: #888; margin-top: 2px; }
-  .callout { background: #f5f3ff; border-left: 4px solid #6366f1; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 20px 0; font-size: 12px; }
-  .callout p { margin: 0; }
-  .divider { border: none; border-top: 1px solid #e8e8f0; margin: 28px 0; }
-  .footer { margin-top: 40px; padding-top: 20px; border-top: 2px solid #ede9fe; text-align: center; color: #888; font-size: 10.5px; }
-  .footer strong { color: #6366f1; }
-  .intro-box { background: #f5f3ff; border-radius: 10px; padding: 18px 20px; margin-bottom: 32px; }
-  .intro-box p { margin: 0; font-size: 12.5px; color: #444; }
-  .intro-box p + p { margin-top: 8px; }
+  body { font-family: 'Inter', sans-serif; font-size: 13.5px; line-height: 1.65; color: #1a1a2e; background: #fff; }
+  .page { max-width: 760px; margin: 0 auto; padding: 60px 48px; }
+  /* Cover */
+  .cover { padding-bottom: 60px; border-bottom: 3px solid #6c47ff; margin-bottom: 48px; page-break-after: always; }
+  .cover-badge { display: inline-block; background: #f0ecff; color: #6c47ff; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; margin-bottom: 24px; }
+  .cover h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; }
+  .cover h1 span { color: #6c47ff; }
+  .cover p { color: #555; font-size: 15px; margin-bottom: 6px; }
+  .cover-meta { font-size: 11px; color: #aaa; margin-top: 40px; }
+  /* Section headers */
+  .section-header { margin: 40px 0 16px; }
+  .section-header .label { display: inline-block; background: #6c47ff; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  .section-header h2 { font-size: 18px; font-weight: 800; color: #1a1a2e; }
+  /* Checklist items */
+  .item { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; border: 1.5px solid #e8e8f0; border-radius: 10px; margin-bottom: 10px; transition: border-color .2s; page-break-inside: avoid; }
+  .item:hover { border-color: #6c47ff; }
+  .checkbox { flex-shrink: 0; width: 22px; height: 22px; border: 2px solid #6c47ff; border-radius: 5px; margin-top: 1px; }
+  .item-body {}
+  .item-title { font-size: 13.5px; font-weight: 600; color: #1a1a2e; margin-bottom: 3px; }
+  .item-verify { font-size: 12px; color: #777; }
+  .item-verify strong { color: #6c47ff; font-weight: 600; }
+  /* Priority tag */
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; margin-left: 8px; vertical-align: middle; }
+  .tag-critical { background: #fff0f0; color: #d93025; }
+  .tag-high { background: #fff7e6; color: #b45309; }
+  .tag-medium { background: #f0ecff; color: #6c47ff; }
+  /* Callout */
+  .callout { background: #f0ecff; border-left: 4px solid #6c47ff; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 24px 0; }
+  .callout p { margin: 0; color: #3b2e8a; font-size: 13px; }
+  /* Score box */
+  .score-box { border: 2px solid #6c47ff; border-radius: 12px; padding: 24px 28px; margin: 40px 0; text-align: center; }
+  .score-box h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .score-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
+  .score-cell { background: #f7f7ff; border-radius: 8px; padding: 14px 10px; }
+  .score-cell .range { font-size: 20px; font-weight: 800; color: #6c47ff; }
+  .score-cell .desc { font-size: 11px; color: #666; margin-top: 4px; }
+  /* Footer */
+  .doc-footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid #ebebeb; font-size: 11px; color: #aaa; display: flex; justify-content: space-between; }
+  .divider { border: none; border-top: 1px solid #ebebeb; margin: 32px 0; }
+  .break { page-break-before: always; }
+  @media print {
+    body { font-size: 12.5px; }
+    .page { padding: 36px 32px; }
+    .item { border-color: #ccc; }
+  }
 </style>
 </head>
 <body>
+<div class="page">
 
+<!-- COVER -->
 <div class="cover">
-  <div class="badge">Found by AI Bundle — Checklist</div>
-  <h1>The 27-Point<br><span>AI Visibility</span> Checklist</h1>
-  <p class="cover-sub">27 concrete, binary actions. Check each one off and you'll have stronger AI visibility than 90% of your competitors.</p>
-  <div class="cover-meta">
-    <strong>mygeoradar.com</strong> &nbsp;·&nbsp; hello@mygeoradar.com &nbsp;·&nbsp; © 2026 MyGeoRadar
-  </div>
+  <span class="cover-badge">MyGeoRadar &mdash; mygeoradar.com</span>
+  <h1>The <span>27-Point</span><br>AI Visibility<br>Checklist</h1>
+  <p>Run through every item once and know exactly where you stand.</p>
+  <p style="font-size:13px;color:#888;margin-top:8px;">Each item is a concrete, binary action &mdash; not vague advice.</p>
+  <p class="cover-meta">Version 1.0 &mdash; May 2026 &mdash; &copy; MyGeoRadar. For personal business use only.</p>
 </div>
 
-<div class="intro-box">
-  <p><strong>How to use this checklist:</strong> Work through each item in order. Each one is a concrete action with a clear "how to verify" note so you always know exactly what done looks like.</p>
-  <p>Priority labels: <strong style="color:#dc2626">HIGH</strong> = do these first, biggest impact. <strong style="color:#ea580c">MED</strong> = do after your foundation is solid. <strong style="color:#16a34a">LOW</strong> = polish and scale.</p>
-</div>
+<!-- HOW TO USE -->
+<div class="callout"><p><strong>How to use this checklist:</strong> Print it out or work through it digitally. Check off each item only when it&rsquo;s fully done &mdash; not &ldquo;started&rdquo; or &ldquo;mostly done.&rdquo; Each item includes a &ldquo;How to verify&rdquo; line so you know exactly what done looks like. Aim to complete all 27 within 30 days using the Action Plan calendar in your bundle.</p></div>
 
-<div class="score-card">
-  <div class="score-item"><div class="score-num">27</div><div class="score-label">Total items</div></div>
-  <div class="score-item"><div class="score-num">0</div><div class="score-label">Completed</div></div>
-  <div class="score-item"><div class="score-num">0%</div><div class="score-label">AI Visibility Score</div></div>
-</div>
-
-<!-- SECTION 1 -->
-<div class="section-label">Section 1 — Entity &amp; Google Business Profile (7 items)</div>
-
-<div class="item">
-  <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">GBP claimed and verified</div>
-    <div class="item-verify"><strong>Verify:</strong> You can log into business.google.com and see your listing with a green checkmark or "Verified" status.</div>
-  </div>
-  <div class="priority p-high">HIGH</div>
+<!-- SECTION 1: ENTITY & BASICS -->
+<div class="section-header">
+  <span class="label">Section 1</span>
+  <h2>Entity &amp; Basics &mdash; 8 Items</h2>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Primary category is specific (not generic)</div>
-    <div class="item-verify"><strong>Verify:</strong> Your primary category is the most specific option available — e.g., "Pediatric Dentist" not "Dentist," "Personal Injury Attorney" not "Lawyer."</div>
+  <div class="item-body">
+    <div class="item-title">1. Google Business Profile is claimed and verified <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Sign in to business.google.com &mdash; your listing shows &ldquo;Verified&rdquo; status (green checkmark).</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">2–3 secondary categories added</div>
-    <div class="item-verify"><strong>Verify:</strong> GBP dashboard shows additional categories beyond your primary. These expand the query types you're eligible to appear in.</div>
+  <div class="item-body">
+    <div class="item-title">2. GBP description is complete (750 characters, uses the NAP formula) <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Description field in GBP is filled, includes business type, city/state, 2&ndash;3 services, and one credibility statement.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">GBP description written using the playbook formula (750 chars)</div>
-    <div class="item-verify"><strong>Verify:</strong> Your description includes: business name, type, city/state, 3 specific services, customer type, service area, and one notable credential. No vague claims.</div>
+  <div class="item-body">
+    <div class="item-title">3. GBP primary + secondary categories set correctly <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Primary category is the most specific possible match. At least 2 secondary categories are added.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">All fields complete — address, phone, website, hours, services</div>
-    <div class="item-verify"><strong>Verify:</strong> No empty fields in your GBP dashboard. Hours include holiday hours. Phone is a local number (not 800). Website URL is correct and resolves.</div>
+  <div class="item-body">
+    <div class="item-title">4. GBP has at least 10 photos <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Photos section in GBP shows 10+ images including exterior, interior, team, and work examples.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">10+ photos uploaded (exterior, interior, team, logo)</div>
-    <div class="item-verify"><strong>Verify:</strong> GBP Photos tab shows 10 or more images covering multiple angles and categories. At least one photo of the physical space or team.</div>
+  <div class="item-body">
+    <div class="item-title">5. GBP Services / Products section is filled out <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> At least 5 services or products are listed with names and descriptions.</div>
   </div>
-  <div class="priority p-med">MED</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">No duplicate GBP listings exist</div>
-    <div class="item-verify"><strong>Verify:</strong> Search "[Business Name] [City]" on Google Maps. Only one pin appears. If duplicates exist, request removal via Google Business support.</div>
+  <div class="item-body">
+    <div class="item-title">6. Website has HTTPS and loads without errors <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> URL starts with https://. No browser security warnings. Homepage loads fully.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
-</div>
-
-<!-- SECTION 2 -->
-<div class="section-label">Section 2 — Schema Markup (5 items)</div>
-
-<div class="item">
-  <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">LocalBusiness schema on homepage</div>
-    <div class="item-verify"><strong>Verify:</strong> Go to search.google.com/test/rich-results, enter your homepage URL. Schema is detected with zero critical errors.</div>
-  </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Schema type is specific (not generic "LocalBusiness")</div>
-    <div class="item-verify"><strong>Verify:</strong> Your @type is the most specific applicable value: Restaurant, LegalService, MedicalBusiness, etc. Check schema.org for your correct type.</div>
+  <div class="item-body">
+    <div class="item-title">7. NAP source of truth document is defined <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> You have a written record of the exact business name, address, phone, and website URL format you will use everywhere.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">FAQPage schema on About or FAQ page</div>
-    <div class="item-verify"><strong>Verify:</strong> Rich Results Test on your About/FAQ page detects FAQPage schema. At least 4 questions covering services, location, hours, and contact.</div>
+  <div class="item-body">
+    <div class="item-title">8. NAP on website matches GBP exactly <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Copy the address from your website footer/contact page and compare character-by-character with your GBP listing.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
+</div>
+
+<!-- SECTION 2: STRUCTURED DATA -->
+<div class="break"></div>
+<div class="section-header">
+  <span class="label">Section 2</span>
+  <h2>Structured Data &mdash; 5 Items</h2>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Schema NAP matches GBP exactly</div>
-    <div class="item-verify"><strong>Verify:</strong> Business name, address, and phone in your schema are character-for-character identical to your GBP listing. No abbreviation differences.</div>
+  <div class="item-body">
+    <div class="item-title">9. LocalBusiness schema is live on the homepage <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Go to search.google.com/test/rich-results, enter your homepage URL &mdash; it detects a LocalBusiness schema with no critical errors.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">sameAs field links to all major profiles</div>
-    <div class="item-verify"><strong>Verify:</strong> Your schema's sameAs array includes URLs to your Yelp, Facebook, and GBP profiles at minimum. These links connect your entity across platforms.</div>
+  <div class="item-body">
+    <div class="item-title">10. Schema @type is the most specific match (not just &ldquo;LocalBusiness&rdquo;) <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Check schema.org/LocalBusiness subtypes. If you&rsquo;re a restaurant, dentist, or contractor, use the specific subtype &mdash; not the generic parent type.</div>
   </div>
-  <div class="priority p-med">MED</div>
-</div>
-
-<!-- SECTION 3 -->
-<div class="section-label">Section 3 — Citations &amp; Directories (6 items)</div>
-
-<div class="item">
-  <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">NAP source of truth document created</div>
-    <div class="item-verify"><strong>Verify:</strong> You have a saved document with your exact business name, address, phone, and website formatted precisely as they should appear everywhere.</div>
-  </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Top 5 directories claimed (Google, Bing, Apple, Yelp, Facebook)</div>
-    <div class="item-verify"><strong>Verify:</strong> You can log into each platform and see your claimed, verified listing with the correct NAP. No pending verifications outstanding.</div>
+  <div class="item-body">
+    <div class="item-title">11. Organization schema is live on the About page <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Rich Results Test on your About page URL detects an Organization schema.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">10 total citations submitted with consistent NAP</div>
-    <div class="item-verify"><strong>Verify:</strong> All 10 directories from the playbook have your listing. Search your business name on Google — multiple directory listings appear in results.</div>
+  <div class="item-body">
+    <div class="item-title">12. FAQPage schema is live on at least one page <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Rich Results Test detects a FAQPage schema. FAQs answer the questions customers most commonly ask you.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">No conflicting old addresses or phone numbers exist</div>
-    <div class="item-verify"><strong>Verify:</strong> Search "[Business Name] [old address]" or "[Business Name] [old phone]" on Google. No results showing outdated information.</div>
+  <div class="item-body">
+    <div class="item-title">13. Schema sameAs array links to all major profiles <span class="tag tag-medium">Medium</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Your LocalBusiness schema&rsquo;s sameAs array includes links to GBP, Yelp, Facebook, and any other major active profiles.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
+</div>
+
+<!-- SECTION 3: CITATIONS & REVIEWS -->
+<div class="section-header">
+  <span class="label">Section 3</span>
+  <h2>Citations &amp; Reviews &mdash; 7 Items</h2>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">BBB listing claimed and complete</div>
-    <div class="item-verify"><strong>Verify:</strong> Your business exists on bbb.org with correct NAP and a complete business description. BBB is a high-trust AI credibility signal.</div>
+  <div class="item-body">
+    <div class="item-title">14. Bing Places listing claimed and complete <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Search your business on Bing Maps &mdash; your listing appears with correct name, address, and phone.</div>
   </div>
-  <div class="priority p-med">MED</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Industry-specific directory listed (e.g., Avvo, Healthgrades, Houzz)</div>
-    <div class="item-verify"><strong>Verify:</strong> You appear on the primary industry-specific directory for your category. These carry strong relevance signals for AI recommendation in your category.</div>
+  <div class="item-body">
+    <div class="item-title">15. Apple Maps listing claimed and complete <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Search your business on Apple Maps (from an iPhone or maps.apple.com) &mdash; correct listing appears.</div>
   </div>
-  <div class="priority p-med">MED</div>
-</div>
-
-<!-- SECTION 4 -->
-<div class="section-label">Section 4 — Content &amp; Entity Clarity (5 items)</div>
-
-<div class="item">
-  <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">About page rewritten with the 5-paragraph formula</div>
-    <div class="item-verify"><strong>Verify:</strong> Your About page includes: the what, the who, the services (bulleted), the credentials, and the contact details in plain text.</div>
-  </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">/facts page created and published</div>
-    <div class="item-verify"><strong>Verify:</strong> yourwebsite.com/facts exists and is indexed. It includes founding date, full address, service area, services list, credentials, and any media mentions.</div>
+  <div class="item-body">
+    <div class="item-title">16. Yelp, Facebook, and BBB listings are claimed and accurate <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Search your business on each platform and confirm NAP matches your source of truth exactly.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">At least one "best X in Y" service/location page exists</div>
-    <div class="item-verify"><strong>Verify:</strong> You have a page targeting a phrase like "[your service] in [your city]" with substantive content (not just a thin 100-word page). AI uses these for local recommendation queries.</div>
+  <div class="item-body">
+    <div class="item-title">17. At least 10 total directory citations exist with consistent NAP <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Run a free scan on BrightLocal or Moz Local &mdash; at least 10 directories list your business with matching NAP.</div>
   </div>
-  <div class="priority p-med">MED</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Website is HTTPS, loads fast, and has full contact info in footer</div>
-    <div class="item-verify"><strong>Verify:</strong> URL shows https://. Page loads under 3 seconds. Footer contains name, address, phone, and email in plain text (not just a form).</div>
+  <div class="item-body">
+    <div class="item-title">18. No conflicting old addresses or phone numbers exist <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Search your old address or phone number in Google &mdash; no active directory listings should surface the outdated information.</div>
   </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Google Search Console and Bing Webmaster Tools set up</div>
-    <div class="item-verify"><strong>Verify:</strong> You can log into both. Sitemap is submitted. No critical crawl errors. These ensure AI-adjacent search engines can index your site fully.</div>
+  <div class="item-body">
+    <div class="item-title">19. At least 15 Google reviews with an average above 4.0 <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Your GBP listing shows 15+ reviews and a star rating of 4.0 or higher.</div>
   </div>
-  <div class="priority p-med">MED</div>
-</div>
-
-<!-- SECTION 5 -->
-<div class="section-label">Section 5 — Reviews &amp; Authority (4 items)</div>
-
-<div class="item">
-  <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">25+ Google reviews at 4.2+ average</div>
-    <div class="item-verify"><strong>Verify:</strong> Google Maps shows your star count and review total. This is the threshold where AI systems begin treating you as confidently recommendable.</div>
-  </div>
-  <div class="priority p-high">HIGH</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Reviews present on at least 2 platforms (Google + one other)</div>
-    <div class="item-verify"><strong>Verify:</strong> You have reviews on Google AND at least one of: Yelp, Facebook, or an industry-specific review site. Multi-platform review presence strengthens credibility signals.</div>
+  <div class="item-body">
+    <div class="item-title">20. Reviews exist on at least 2 platforms (not just Google) <span class="tag tag-medium">Medium</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Check Yelp and/or Facebook for at least 3&ndash;5 reviews each.</div>
   </div>
-  <div class="priority p-med">MED</div>
+</div>
+
+<!-- SECTION 4: CONTENT & AUTHORITY -->
+<div class="break"></div>
+<div class="section-header">
+  <span class="label">Section 4</span>
+  <h2>Content &amp; Authority &mdash; 5 Items</h2>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">At least one editorial mention from an independent source</div>
-    <div class="item-verify"><strong>Verify:</strong> A local news site, trade publication, chamber website, or industry blog mentions your business with a link. Not a paid ad. Not a press release you self-published.</div>
+  <div class="item-body">
+    <div class="item-title">21. About page uses the AI-optimized formula (What / Credentials / Facts / Human) <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Your About page states your business type, location, services, founding year, and at least one credibility fact in the first two paragraphs.</div>
   </div>
-  <div class="priority p-med">MED</div>
 </div>
 
 <div class="item">
   <div class="checkbox"></div>
-  <div class="item-content">
-    <div class="item-title">Industry association membership listed on their directory</div>
-    <div class="item-verify"><strong>Verify:</strong> Your primary trade association's member directory shows your business. These domain-authority signals carry strong weight in AI training data.</div>
+  <div class="item-body">
+    <div class="item-title">22. A /facts page (or equivalent) is live on the website <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> yourwebsite.com/facts (or /about/facts or similar) loads and contains a structured list of key business facts &mdash; founding date, services, licenses, awards, location.</div>
   </div>
-  <div class="priority p-low">LOW</div>
 </div>
 
-<hr class="divider">
-
-<div class="callout">
-  <p><strong>Score yourself:</strong> Every checked item = roughly 3.7 points. 10 checked = ~37 points. 20 checked = ~74 points. 27 checked = 100 points — maximum AI visibility foundation. Most local businesses sit at 10–15 points before they start this process.</p>
+<div class="item">
+  <div class="checkbox"></div>
+  <div class="item-body">
+    <div class="item-title">23. At least one editorial mention from a third-party source exists <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Google your business name &mdash; at least one result is a third-party article, press mention, or directory that you did not create (local news, industry blog, chamber feature).</div>
+  </div>
 </div>
 
-<hr class="divider">
-<div class="footer">
-  <p><strong>The 27-Point AI Visibility Checklist — Found by AI Bundle</strong></p>
-  <p>mygeoradar.com &nbsp;·&nbsp; hello@mygeoradar.com &nbsp;·&nbsp; © 2026 MyGeoRadar. All rights reserved.</p>
+<div class="item">
+  <div class="checkbox"></div>
+  <div class="item-body">
+    <div class="item-title">24. Website has at least one service or location page targeting a &ldquo;best X in Y&rdquo; query <span class="tag tag-medium">Medium</span></div>
+    <div class="item-verify"><strong>Verify:</strong> You have a page (could be homepage, service page, or blog post) that directly answers &ldquo;[service] in [city]&rdquo; in its heading and body text.</div>
+  </div>
 </div>
 
+<div class="item">
+  <div class="checkbox"></div>
+  <div class="item-body">
+    <div class="item-title">25. Industry-specific niche directory listing exists (if applicable) <span class="tag tag-medium">Medium</span></div>
+    <div class="item-verify"><strong>Verify:</strong> If you&rsquo;re a lawyer (Avvo), doctor (Healthgrades), contractor (Houzz/Angi), or similar &mdash; your niche platform listing is claimed and accurate.</div>
+  </div>
+</div>
+
+<!-- SECTION 5: TECHNICAL & MONITORING -->
+<div class="section-header">
+  <span class="label">Section 5</span>
+  <h2>Technical &amp; Monitoring &mdash; 4 Items</h2>
+</div>
+
+<div class="item">
+  <div class="checkbox"></div>
+  <div class="item-body">
+    <div class="item-title">26. Google Search Console is set up and sitemap submitted <span class="tag tag-critical">Critical</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Sign in to search.google.com/search-console &mdash; your property is verified and sitemap shows &ldquo;Success&rdquo; status.</div>
+  </div>
+</div>
+
+<div class="item">
+  <div class="checkbox"></div>
+  <div class="item-body">
+    <div class="item-title">27. Bing Webmaster Tools is set up and sitemap submitted <span class="tag tag-high">High</span></div>
+    <div class="item-verify"><strong>Verify:</strong> Sign in to bing.com/webmasters &mdash; your site is verified and sitemap is submitted.</div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- SCORE BOX -->
+<div class="score-box">
+  <h3>How to interpret your score</h3>
+  <p style="font-size:12px;color:#666;margin-top:4px;">Count how many items you&rsquo;ve checked off.</p>
+  <div class="score-grid">
+    <div class="score-cell"><div class="range">0&ndash;9</div><div class="desc">Invisible to AI. Start with Section 1 &amp; 2 immediately.</div></div>
+    <div class="score-cell"><div class="range">10&ndash;18</div><div class="desc">Partially visible. AI may mention you rarely. Complete Section 3 &amp; 4 next.</div></div>
+    <div class="score-cell"><div class="range">19&ndash;27</div><div class="desc">Strong foundation. AI will mention you consistently for relevant queries.</div></div>
+  </div>
+</div>
+
+<div class="callout"><p><strong>Re-run this checklist every 90 days.</strong> Things change &mdash; your GBP can become unclaimed, citations can become inaccurate, reviews go stale. Quarterly checks keep your AI visibility compounding instead of eroding.</p></div>
+
+<div class="doc-footer">
+  <span>The 27-Point AI Visibility Checklist</span>
+  <span>MyGeoRadar &mdash; mygeoradar.com</span>
+</div>
+
+</div><!-- .page -->
 </body>
 </html>
