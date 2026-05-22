@@ -9,7 +9,10 @@ import { Button } from '@/components/ui/Button'
 export default function LoginInner() {
   const router       = useRouter()
   const params       = useSearchParams()
-  const [email, setEmail]     = useState('')
+  const hint         = params.get('hint') ?? ''
+  const next         = params.get('next') ?? '/account'
+
+  const [email, setEmail]     = useState(hint)
   const [sent, setSent]       = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
@@ -20,6 +23,11 @@ export default function LoginInner() {
     if (params.get('error')) setError('Authentication failed. Please try again.')
   }, [params])
 
+  // Keep email in sync if hint changes (e.g. navigation)
+  useEffect(() => {
+    if (hint) setEmail(hint)
+  }, [hint])
+
   async function handleMagicLink(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
@@ -27,7 +35,7 @@ export default function LoginInner() {
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     })
     setLoading(false)
@@ -41,11 +49,13 @@ export default function LoginInner() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`,
       },
     })
     if (error) { setError(error.message); setLoading(false) }
   }
+
+  const fromPurchase = !!params.get('hint')
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
@@ -59,7 +69,11 @@ export default function LoginInner() {
 
       <div className="w-full max-w-sm bg-card border border-border rounded-2xl p-8">
         <h1 className="text-xl font-bold mb-1 text-center">Sign in</h1>
-        <p className="text-sm text-muted text-center mb-6">Access your scan history &amp; reports</p>
+        <p className="text-sm text-muted text-center mb-6">
+          {fromPurchase
+            ? 'Sign in to access your purchased downloads'
+            : 'Access your purchases & downloads'}
+        </p>
 
         {sent ? (
           <div className="text-center">
@@ -68,6 +82,11 @@ export default function LoginInner() {
             </div>
             <p className="font-semibold mb-1">Check your email</p>
             <p className="text-sm text-muted">We sent a magic link to <strong>{email}</strong></p>
+            {fromPurchase && (
+              <p className="text-xs text-muted mt-3">
+                Click the link in your email to unlock your downloads.
+              </p>
+            )}
           </div>
         ) : (
           <>
@@ -87,7 +106,7 @@ export default function LoginInner() {
               <div className="flex-1 h-px bg-border" />
             </div>
 
-            {/* Magic Link */}
+            {/* Magic Link — email pre-filled from ?hint= */}
             <form onSubmit={handleMagicLink} className="flex flex-col gap-3">
               <input
                 type="email"

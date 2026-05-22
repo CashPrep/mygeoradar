@@ -4,14 +4,14 @@ import { cookies } from 'next/headers'
 
 export async function GET(req: NextRequest) {
   const { searchParams, origin } = new URL(req.url)
-  const code     = searchParams.get('code')
-  const next     = searchParams.get('next') ?? '/account'
+  const code = searchParams.get('code')
+  const next = searchParams.get('next') ?? '/account'
 
   if (code) {
     const cookieStore = await cookies()
     const supabase = createServerClient(
-            process.env.SUPABASE_URL!,
-            process.env.SUPABASE_ANON_KEY!,
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_ANON_KEY!,
       {
         cookies: {
           getAll() { return cookieStore.getAll() },
@@ -25,7 +25,9 @@ export async function GET(req: NextRequest) {
     )
     const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`)
+      // Respect the ?next= param so post-purchase logins land on /account
+      const safePath = next.startsWith('/') ? next : '/account'
+      return NextResponse.redirect(`${origin}${safePath}`)
     }
   }
 

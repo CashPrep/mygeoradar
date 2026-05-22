@@ -24,15 +24,24 @@ export async function middleware(req: NextRequest) {
   )
 
   const { data: { user } } = await supabase.auth.getUser()
+  const { pathname } = req.nextUrl
 
   // Protect /account
-  if (req.nextUrl.pathname.startsWith('/account') && !user) {
+  if (pathname.startsWith('/account') && !user) {
     return NextResponse.redirect(new URL('/login', req.url))
+  }
+
+  // Protect /downloads/* — must be logged in
+  // Purchase verification happens in the API route for a clean 403 response
+  if (pathname.startsWith('/downloads/') && !user) {
+    return NextResponse.redirect(
+      new URL(`/login?next=${encodeURIComponent(pathname)}`, req.url)
+    )
   }
 
   return response
 }
 
 export const config = {
-  matcher: ['/account/:path*'],
+  matcher: ['/account/:path*', '/downloads/:path*'],
 }
