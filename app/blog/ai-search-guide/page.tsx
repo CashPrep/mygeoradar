@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
+import { BlogMidCta } from '@/components/blog/BlogMidCta'
 
 export const metadata = {
   title: 'How AI Search Engines Decide Which Businesses to Mention',
@@ -50,6 +51,13 @@ export default function AiSearchGuidePage() {
               <p className="text-sm mt-1">{body}</p>
             </div>
           ))}
+
+          {/* MID-ARTICLE CTA */}
+          <BlogMidCta
+            topic="Entity Recognition & Credibility Signals"
+            hook="The playbook walks through every credibility signal AI models look for — entity recognition, citation sources, review signals — with a 27-point checklist covering all three and the exact directories and schema types that move the needle."
+          />
+
           <h2 className="text-xl font-bold text-foreground mt-4">Why Perplexity behaves differently from ChatGPT</h2>
           <p>Perplexity performs live web searches before generating its answer, which means fresher data and more weight on current web content. ChatGPT (without browsing) relies on its training data, making older but authoritative sources more valuable. Gemini blends both. The implication: you need both a solid training-data footprint (directories, schema, Wikipedia-like sources) and fresh web signals (content, press mentions, reviews).</p>
           <h2 className="text-xl font-bold text-foreground mt-4">The practical takeaway</h2>

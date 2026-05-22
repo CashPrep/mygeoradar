@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
+import { BlogMidCta } from '@/components/blog/BlogMidCta'
 
 export const metadata = {
   title: 'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
@@ -52,6 +53,13 @@ export default function GeoBeforeLaunchPage() {
               <p className="text-sm">{item}</p>
             </div>
           ))}
+
+          {/* MID-ARTICLE CTA */}
+          <BlogMidCta
+            topic="Pre-Launch GEO Foundation"
+            hook="The playbook includes the complete list of the 15 directories that matter most for AI citations, the exact schema markup to add on day one, and a 30-day launch calendar so your new business shows up in AI answers from the start."
+          />
+
           <h2 className="text-xl font-bold text-foreground mt-4">The compound effect</h2>
           <p>Every week you delay establishing these signals is a week your competitors who do have them are building a lead. AI recommendation systems favor businesses with longer, more consistent entity histories. Starting right is dramatically easier than fixing a bad foundation later.</p>
         </div>

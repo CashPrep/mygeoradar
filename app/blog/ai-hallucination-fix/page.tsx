@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
+import { BlogMidCta } from '@/components/blog/BlogMidCta'
 
 export const metadata = {
   title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
@@ -50,6 +51,13 @@ export default function HallucinationFixPage() {
             </div>
           ))}
           <p>Screenshot every response. Look for incorrect facts, outdated information, or missing details. This is your fix list.</p>
+
+          {/* MID-ARTICLE CTA */}
+          <BlogMidCta
+            topic="Hallucination Detection & Fix"
+            hook="The playbook includes a full section on finding and correcting AI misinformation about your business — including the exact signal-flooding sequence that overrides bad data within 30–60 days."
+          />
+
           <h2 className="text-xl font-bold text-foreground mt-4">The fix: authoritative signal flooding</h2>
           <p>You cannot directly edit what an AI says about you — but you can flood the web with accurate, authoritative signals that override the bad data. The process: correct every directory listing, update your schema markup with accurate details, publish a factual About page, and get the correct information cited in at least one editorial source. Over weeks, AI models update toward the dominant signal.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">How long does it take to fix?</h2>

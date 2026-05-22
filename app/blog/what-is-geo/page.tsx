@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
+import { BlogMidCta } from '@/components/blog/BlogMidCta'
 
 export const metadata = {
   title: 'What is GEO? Generative Engine Optimization Explained',
@@ -47,8 +48,15 @@ export default function WhatIsGeoPage() {
           <p>This is the fundamental shift GEO addresses. Traditional SEO optimizes for Google&apos;s ten-blue-links format. GEO optimizes for AI-generated responses &mdash; a different surface, different signals, and a growing share of how people find businesses.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">Why this matters now</h2>
           <p>AI search usage has grown from a curiosity to a primary research channel for a meaningful share of consumers &mdash; especially for high-consideration purchases. People are using ChatGPT to pick lawyers, dentists, contractors, and software tools. If you&apos;re not showing up, a competitor is.</p>
+
+          {/* MID-ARTICLE CTA */}
+          <BlogMidCta
+            topic="Complete GEO Implementation System"
+            hook="Reading about GEO is step one. The playbook gives you the exact checklist, prompts, and 30-day plan to actually implement it — no guesswork, no piecing together blog posts."
+          />
+
           <h2 className="text-xl font-bold text-foreground mt-4">What GEO actually optimizes</h2>
-          <p>Unlike traditional SEO, GEO is less about keywords and more about entity clarity &mdash; how clearly an AI can identify who you are, what you do, where you are, and why you&apos;re credible. The key signals:</p>
+          <p>Unlike traditional SEO, GEO is less about keywords and more about entity clarity — how clearly an AI can identify who you are, what you do, where you are, and why you&apos;re credible. The key signals:</p>
           {['Structured data (LocalBusiness, FAQPage, AggregateRating schema)', 'Google Business Profile completeness and review volume', 'Entity consistency across directories and citation sources', 'Topical authority — do you have content that answers the questions AI is being asked?', 'Editorial mentions in authoritative sources'].map((item) => (
             <div key={item} className="flex items-start gap-2">
               <span className="text-accent mt-1 shrink-0">&#8250;</span>

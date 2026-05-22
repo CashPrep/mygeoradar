@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
+import { BlogMidCta } from '@/components/blog/BlogMidCta'
 
 export const metadata = {
   title: 'Multi-Location GEO: How Chains and Franchises Should Handle AI Visibility',
@@ -39,7 +40,14 @@ export default function MultiLocationGeoPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">The brand vs. location problem</h2>
           <p>Multi-location businesses face a tension: AI models need to understand both the parent brand and each individual location. A query like &ldquo;best burger place near me&rdquo; needs to surface your specific location — not just acknowledge your brand exists. This requires a two-tier GEO strategy: brand-level signals and location-level signals.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">Brand-level signals</h2>
-          <p>At the brand level, you need a strong Wikipedia or Wikidata presence, consistent brand description across all locations’ structured data, editorial coverage that names the brand, and a brand-level Google Business Profile where applicable. These signals train AI models to understand what your brand is and why it’s credible.</p>
+          <p>At the brand level, you need a strong Wikipedia or Wikidata presence, consistent brand description across all locations&apos; structured data, editorial coverage that names the brand, and a brand-level Google Business Profile where applicable. These signals train AI models to understand what your brand is and why it&apos;s credible.</p>
+
+          {/* MID-ARTICLE CTA */}
+          <BlogMidCta
+            topic="Location-Level GEO Foundation"
+            hook="The playbook’s checklist and 30-day plan are built for a single location — the exact foundation every location in your network needs. Apply it per-location, starting with your highest-revenue sites, to systematically build AI visibility across your entire footprint."
+          />
+
           <h2 className="text-xl font-bold text-foreground mt-4">Location-level signals</h2>
           <p>Each location needs its own complete GBP, its own LocalBusiness schema with unique address and phone, its own citation footprint on local directories, and ideally its own local press mention. Sharing a single GBP across locations is one of the most common multi-location GEO mistakes — and it significantly suppresses local AI mentions.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">The priority order for scaling</h2>

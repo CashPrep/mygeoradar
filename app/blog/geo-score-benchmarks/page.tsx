@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
+import { BlogMidCta } from '@/components/blog/BlogMidCta'
 
 export const metadata = {
   title: "What's a Good GEO Score? Industry Benchmarks for 2026",
@@ -36,7 +37,7 @@ export default function GeoBenchmarksPage() {
           </p>
         </div>
         <div className="flex flex-col gap-6 text-muted leading-relaxed">
-          <h2 className="text-xl font-bold text-foreground mt-4">The baseline is low — that’s good news</h2>
+          <h2 className="text-xl font-bold text-foreground mt-4">The baseline is low — that&apos;s good news</h2>
           <p>The overwhelming majority of small and medium businesses have never taken a single action to improve their AI visibility. That means the bar for standing out is genuinely low right now. Businesses that implement even the foundational fixes — complete GBP, schema markup, consistent directory listings — immediately outperform 80%+ of their local competitors in AI mentions.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">Rough benchmarks by category</h2>
           {[
@@ -56,8 +57,15 @@ export default function GeoBenchmarksPage() {
               </div>
             </div>
           ))}
+
+          {/* MID-ARTICLE CTA */}
+          <BlogMidCta
+            topic="Score Improvement System"
+            hook="The playbook’s 27-point checklist is built around the exact actions that move a business from sub-30 to above 45 fastest — the four highest-leverage items are covered in detail, with step-by-step instructions for each."
+          />
+
           <h2 className="text-xl font-bold text-foreground mt-4">What score do you actually need?</h2>
-          <p>You don’t need a perfect score — you need to score higher than your local competitors on the queries that matter to your category. In most local markets, a score of 45–55 is enough to become the default AI recommendation for your business type. That’s achievable in 30–60 days with focused action.</p>
+          <p>You don&apos;t need a perfect score — you need to score higher than your local competitors on the queries that matter to your category. In most local markets, a score of 45–55 is enough to become the default AI recommendation for your business type. That&apos;s achievable in 30–60 days with focused action.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">The fastest way to move your score</h2>
           <p>The highest-leverage actions in order: complete your Google Business Profile fully, add LocalBusiness schema to your website, get consistent NAP citations across 10+ directories, and build one authoritative editorial mention. These four steps alone can move most businesses from below 20 to above 40.</p>
         </div>

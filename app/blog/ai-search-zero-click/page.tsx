@@ -2,6 +2,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
+import { BlogMidCta } from '@/components/blog/BlogMidCta'
 
 export const metadata = {
   title: 'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
@@ -39,11 +40,18 @@ export default function ZeroClickPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">The death of the click</h2>
           <p>For decades, getting found online meant ranking on page one of Google and hoping someone clicked your link. The AI era has broken that model. When a user asks ChatGPT for a recommendation, they get an answer — not a list of links. They act on that answer. Your website never gets visited. Your SEO ranking never gets rewarded. You were simply not mentioned.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">What zero-click means for local businesses</h2>
-          <p>Local businesses are hit hardest. &ldquo;Best dentist near me,&rdquo; &ldquo;top-rated plumber in [city],&rdquo; &ldquo;who should I hire for kitchen renovation&rdquo; — these are exactly the high-intent queries that used to drive calls and bookings through Google. Now they increasingly go to AI assistants, which give confident, specific answers. If you’re not in those answers, you’re losing customers you never knew you were losing.</p>
+          <p>Local businesses are hit hardest. &ldquo;Best dentist near me,&rdquo; &ldquo;top-rated plumber in [city],&rdquo; &ldquo;who should I hire for kitchen renovation&rdquo; — these are exactly the high-intent queries that used to drive calls and bookings through Google. Now they increasingly go to AI assistants, which give confident, specific answers. If you&apos;re not in those answers, you&apos;re losing customers you never knew you were losing.</p>
+
+          {/* MID-ARTICLE CTA */}
+          <BlogMidCta
+            topic="AI Mention Rate Optimization"
+            hook="The playbook is built around one metric: your AI mention rate. It gives you 10 copy-paste prompts to measure it today, and a 27-point system to increase it — so you show up when your highest-intent customers ask AI for a recommendation."
+          />
+
           <h2 className="text-xl font-bold text-foreground mt-4">The new success metric: mentions, not clicks</h2>
           <p>In the AI era, the metric that matters is how often AI assistants mention your business when asked relevant questions. Not your Google ranking. Not your organic traffic. Your AI mention rate. This is what GEO (Generative Engine Optimization) measures and improves.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">The window of opportunity</h2>
-          <p>Most businesses haven’t figured this out yet. The ones that act now — building the entity signals, structured data, and content that AI models use — will own the AI recommendation landscape for their category before competitors realize what happened. This window will not stay open forever.</p>
+          <p>Most businesses haven&apos;t figured this out yet. The ones that act now — building the entity signals, structured data, and content that AI models use — will own the AI recommendation landscape for their category before competitors realize what happened. This window will not stay open forever.</p>
         </div>
         <BlogCta />
       </article>

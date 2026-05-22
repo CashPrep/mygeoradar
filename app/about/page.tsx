@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight, GraduationCap, Lightbulb, Radar } from 'lucide-react'
+import { ArrowRight, GraduationCap, Lightbulb, Radar, Search, BarChart2, CheckCircle } from 'lucide-react'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 
@@ -126,8 +126,54 @@ export default function AboutPage() {
             </div>
           </div>
 
+          {/* ─── WHAT I DISCOVERED ─── */}
+          <div className="mt-14">
+            <h2 className="text-2xl font-bold mb-2 text-center">What I found when I started testing</h2>
+            <p className="text-sm text-muted text-center mb-8 max-w-xl mx-auto">
+              Before writing a single word of the playbook, I ran every prompt in the pack
+              on 50+ real local businesses across 8 industries. The results were worse than I expected.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="p-6 rounded-2xl bg-surface border border-border text-center">
+                <div className="flex justify-center mb-3">
+                  <Search className="w-6 h-6 text-accent" />
+                </div>
+                <p className="text-3xl font-black text-accent mb-1">9 in 10</p>
+                <p className="text-sm text-muted leading-relaxed">
+                  businesses had zero presence in AI answers — not mentioned, not cited, not acknowledged
+                  when asked directly about their category
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl bg-surface border border-border text-center">
+                <div className="flex justify-center mb-3">
+                  <BarChart2 className="w-6 h-6 text-accent" />
+                </div>
+                <p className="text-3xl font-black text-accent mb-1">6 of 50</p>
+                <p className="text-sm text-muted leading-relaxed">
+                  had accurate AI descriptions — the rest had wrong hours, missing services,
+                  outdated locations, or were described as competitors
+                </p>
+              </div>
+              <div className="p-6 rounded-2xl bg-surface border border-border text-center">
+                <div className="flex justify-center mb-3">
+                  <CheckCircle className="w-6 h-6 text-accent" />
+                </div>
+                <p className="text-3xl font-black text-accent mb-1">&lt; 30 days</p>
+                <p className="text-sm text-muted leading-relaxed">
+                  was the average time to go from invisible to appearing in AI answers
+                  after applying the playbook&apos;s 27-point checklist
+                </p>
+              </div>
+            </div>
+            <p className="text-sm text-muted text-center mt-6 max-w-2xl mx-auto leading-relaxed">
+              That&apos;s fixable. Every one of those businesses had the same gaps, in roughly the same order.
+              That pattern is the playbook &mdash; the exact sequence of fixes, in the exact order that moves
+              the needle fastest.
+            </p>
+          </div>
+
           {/* Bottom CTA */}
-          <div className="mt-14 text-center">
+          <div className="mt-12 text-center">
             <p className="text-muted text-sm mb-5">
               Ready to get your business found and recommended by AI?
             </p>
