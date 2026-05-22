@@ -39,44 +39,45 @@ export default async function AccountPage() {
               <div className="rounded-xl border border-accent/30 bg-surface p-6">
                 <div className="flex items-center gap-3 mb-5">
                   <ShoppingBag className="w-5 h-5 text-accent" />
-                  <h2 className="font-semibold">Found by AI — The AI Visibility Playbook</h2>
+                  <h2 className="font-semibold">Found by AI - The AI Visibility Playbook</h2>
                 </div>
                 <div className="flex flex-col gap-3">
                   {[
                     { label: 'The Complete AI Visibility Playbook', file: 'found-by-ai-playbook.html' },
                     { label: 'The 27-Point AI Visibility Checklist', file: 'ai-visibility-checklist.html' },
-                    { label: 'Prompt Pack — 10 Copy-Paste Prompts',  file: 'prompt-pack.html' },
-                    { label: '30-Day Action Plan Calendar',           file: '30-day-action-plan.html' },
+                    { label: 'Prompt Pack - 10 Copy-Paste Prompts',  file: 'prompt-pack.html' },
+                    { label: '30-Day Action Plan Calendar',          file: '30-day-action-plan.html' },
                   ].map(({ label, file }) => (
                     <a
                       key={file}
-                      href={`/downloads/${file}`}
-                      download
-                      className="flex items-center justify-between p-3 rounded-lg bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-colors group"
+                      href={`/api/downloads?file=${file}`}
+                      className="flex items-center justify-between rounded-lg border border-border bg-background px-4 py-3 text-sm font-medium hover:bg-surface transition-colors"
                     >
-                      <span className="text-sm font-medium">{label}</span>
-                      <Download className="w-4 h-4 text-accent group-hover:scale-110 transition-transform" />
+                      <span className="flex items-center gap-2">
+                        <Download className="w-4 h-4 text-accent" />
+                        {label}
+                      </span>
+                      <ArrowRight className="w-4 h-4 text-muted" />
                     </a>
                   ))}
                 </div>
+                <p className="text-xs text-muted mt-4">
+                  Having trouble downloading? Email{' '}
+                  <a href="mailto:hello@mygeoradar.com" className="underline">hello@mygeoradar.com</a>.
+                </p>
               </div>
-              <p className="text-xs text-muted">
-                Having trouble downloading? Email{' '}
-                <a href="mailto:hello@mygeoradar.com" className="text-accent hover:underline">hello@mygeoradar.com</a>.
-              </p>
             </div>
           ) : (
-            <div className="rounded-xl border border-border bg-surface p-8 text-center">
-              <ShoppingBag className="w-10 h-10 text-muted mx-auto mb-4" />
+            <div className="rounded-xl border border-border bg-surface p-6">
               <h2 className="font-semibold mb-2">No purchases yet</h2>
-              <p className="text-sm text-muted mb-6">
+              <p className="text-muted text-sm mb-4">
                 Pick up the Found by AI Playbook and get your business recognized by AI assistants today.
               </p>
               <Link
                 href="/playbook"
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent/90 text-white font-semibold px-5 py-2.5 rounded-lg text-sm transition-colors"
+                className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent/90 transition-colors"
               >
-                Get the Playbook — $27 <ArrowRight className="w-4 h-4" />
+                Get the Playbook - $27 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           )}
