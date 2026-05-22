@@ -37,46 +37,46 @@ export default function SuccessPage() {
             </h2>
             <div className="flex flex-col gap-4">
               <a
-                href="/downloads/found-by-ai-playbook.pdf"
+                href="/downloads/found-by-ai-playbook.html"
                 download
                 className="flex items-center justify-between p-4 rounded-xl bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-colors group"
               >
                 <div>
                   <p className="font-medium text-sm">The Complete AI Visibility Playbook</p>
-                  <p className="text-xs text-muted mt-0.5">PDF &middot; Full guide with all sections</p>
+                  <p className="text-xs text-muted mt-0.5">HTML &middot; Full guide with all sections</p>
                 </div>
                 <Download className="w-4 h-4 text-accent group-hover:scale-110 transition-transform" />
               </a>
               <a
-                href="/downloads/ai-visibility-checklist.pdf"
+                href="/downloads/ai-visibility-checklist.html"
                 download
                 className="flex items-center justify-between p-4 rounded-xl bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-colors group"
               >
                 <div>
                   <p className="font-medium text-sm">The 27-Point AI Visibility Checklist</p>
-                  <p className="text-xs text-muted mt-0.5">PDF &middot; Print or fill digitally</p>
+                  <p className="text-xs text-muted mt-0.5">HTML &middot; Print or open in browser</p>
                 </div>
                 <Download className="w-4 h-4 text-accent group-hover:scale-110 transition-transform" />
               </a>
               <a
-                href="/downloads/prompt-pack.pdf"
+                href="/downloads/prompt-pack.html"
                 download
                 className="flex items-center justify-between p-4 rounded-xl bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-colors group"
               >
                 <div>
                   <p className="font-medium text-sm">Prompt Pack — 10 Copy-Paste Prompts</p>
-                  <p className="text-xs text-muted mt-0.5">PDF &middot; Use with any AI assistant</p>
+                  <p className="text-xs text-muted mt-0.5">HTML &middot; Use with any AI assistant</p>
                 </div>
                 <Download className="w-4 h-4 text-accent group-hover:scale-110 transition-transform" />
               </a>
               <a
-                href="/downloads/30-day-action-plan.pdf"
+                href="/downloads/30-day-action-plan.html"
                 download
                 className="flex items-center justify-between p-4 rounded-xl bg-accent/5 border border-accent/20 hover:bg-accent/10 transition-colors group"
               >
                 <div>
                   <p className="font-medium text-sm">30-Day Action Plan Calendar</p>
-                  <p className="text-xs text-muted mt-0.5">PDF &middot; Day-by-day implementation calendar</p>
+                  <p className="text-xs text-muted mt-0.5">HTML &middot; Day-by-day implementation calendar</p>
                 </div>
                 <Download className="w-4 h-4 text-accent group-hover:scale-110 transition-transform" />
               </a>
@@ -98,7 +98,7 @@ export default function SuccessPage() {
             <p className="text-sm text-muted mb-4">Not sure where to start?</p>
             <p className="font-medium mb-2">Start with the Prompt Pack.</p>
             <p className="text-sm text-muted mb-6">
-              Open the Prompt Pack PDF, paste the first prompt into ChatGPT, and see exactly how AI currently describes your business.
+              Open the Prompt Pack file, paste the first prompt into ChatGPT, and see exactly how AI currently describes your business.
               That&apos;s your baseline — everything in the playbook improves from there.
             </p>
             <Link
