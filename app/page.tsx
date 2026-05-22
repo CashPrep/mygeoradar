@@ -159,7 +159,7 @@ export default function HomePage() {
       <main className="min-h-screen bg-background">
         <Navbar />
 
-        {/* ─── HERO ─── */}
+        {/* HERO */}
         <section className="pt-32 pb-20 px-4 md:px-8 text-center">
           <div className="max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6">
@@ -192,7 +192,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── TRUST BAR ─── */}
+        {/* TRUST BAR */}
         <section className="py-6 px-4 border-y border-border bg-surface/40">
           <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10 text-center">
             {[
@@ -210,7 +210,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── PAIN SECTION ─── */}
+        {/* PAIN SECTION */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium mb-6">
@@ -272,7 +272,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── WHAT YOU GET ─── */}
+        {/* WHAT YOU GET */}
         <section id="what-you-get" className="py-20 px-4 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
@@ -298,7 +298,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── PEEK INSIDE ─── */}
+        {/* PEEK INSIDE */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -314,12 +314,12 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-              {/* ── CHECKLIST PREVIEW ── */}
+              {/* CHECKLIST PREVIEW */}
               <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-lg">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
                   <FileText className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">27-Point AI Visibility Checklist</span>
-                  <span className="ml-auto text-xs text-muted">Items 1–8 of 27</span>
+                  <span className="ml-auto text-xs text-muted">Items 1-8 of 27</span>
                 </div>
                 <div className="p-5 flex flex-col gap-3">
                   {previewChecklist.map(({ done, text }) => (
@@ -335,12 +335,12 @@ export default function HomePage() {
                     </div>
                   ))}
                   <div className="mt-2 flex items-center gap-2 text-xs text-muted italic border-t border-border pt-3">
-                    <span>+ 19 more items inside the full checklist…</span>
+                    <span>+ 19 more items inside the full checklist...</span>
                   </div>
                 </div>
               </div>
 
-              {/* ── PROMPT PACK PREVIEW ── */}
+              {/* PROMPT PACK PREVIEW */}
               <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-lg">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
                   <Zap className="w-4 h-4 text-accent" />
@@ -359,7 +359,7 @@ export default function HomePage() {
                     </p>
                   </div>
                   <div className="border-t border-border pt-4">
-                    <p className="text-xs text-muted italic">+ 9 more prompts covering brand accuracy, competitor gap analysis, hallucination detection, and citation sourcing…</p>
+                    <p className="text-xs text-muted italic">+ 9 more prompts covering brand accuracy, competitor gap analysis, hallucination detection, and citation sourcing...</p>
                   </div>
                 </div>
               </div>
@@ -377,7 +377,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── HOW IT WORKS ─── */}
+        {/* HOW IT WORKS */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-14">How it works</h2>
@@ -416,7 +416,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── TESTIMONIALS ─── */}
+        {/* TESTIMONIALS */}
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
@@ -442,7 +442,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── URGENCY / COMPETITOR FEAR ─── */}
+        {/* URGENCY */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6">
@@ -454,7 +454,7 @@ export default function HomePage() {
             </h2>
             <p className="text-muted leading-relaxed mb-4">
               GEO — Generative Engine Optimization — is the fastest-growing discipline in digital marketing in 2026.
-              Agencies are starting to charge $2,000–$5,000/month for this exact work. Early movers are quietly
+              Agencies are starting to charge $2,000-$5,000/month for this exact work. Early movers are quietly
               locking in AI recommendations before the rest of the market wakes up.
             </p>
             <p className="text-muted leading-relaxed mb-10">
@@ -471,16 +471,16 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── WHO THIS IS FOR ─── */}
+        {/* WHO THIS IS FOR */}
         <section className="py-16 px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8">This is for you if…</h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-8">This is for you if...</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
               {[
                 'You own or market a local or online business',
-                'You've noticed AI assistants don't mention your business at all',
-                'You've read GEO articles but still don\'t know what to actually do',
-                'You don\'t want to pay $100+/month for a tracking tool',
+                "You've noticed AI assistants don't mention your business at all",
+                "You've read GEO articles but still don't know what to actually do",
+                "You don't want to pay $100+/month for a tracking tool",
                 'You want a clear, done-for-you action plan — not more theory',
                 'You want to act before your competitors figure this out',
               ].map((item) => (
@@ -493,7 +493,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── PRICING ─── */}
+        {/* PRICING */}
         <section id="pricing" className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-md mx-auto">
             <div className="rounded-2xl border-2 border-accent bg-surface p-8 text-center shadow-xl shadow-accent/10">
@@ -527,7 +527,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── FAQ ─── */}
+        {/* FAQ */}
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Common questions</h2>
@@ -542,7 +542,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── FINAL CTA ─── */}
+        {/* FINAL CTA */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
