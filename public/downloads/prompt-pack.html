@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prompt Pack &mdash; 10 Copy-Paste AI Audit Prompts &mdash; MyGeoRadar</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.7; color: #1a1a2e; background: #fff; }
+  .page { max-width: 760px; margin: 0 auto; padding: 60px 48px; }
+  /* Cover */
+  .cover { padding-bottom: 60px; border-bottom: 3px solid #6c47ff; margin-bottom: 48px; }
+  .cover-badge { display: inline-block; background: #f0ecff; color: #6c47ff; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; margin-bottom: 24px; }
+  .cover h1 { font-size: 40px; font-weight: 800; line-height: 1.1; margin-bottom: 12px; }
+  .cover h1 span { color: #6c47ff; }
+  .cover p { color: #555; font-size: 15px; }
+  .cover-meta { font-size: 11px; color: #aaa; margin-top: 40px; }
+  /* Prompt card */
+  .prompt-card { border: 1.5px solid #e8e8f0; border-radius: 12px; margin-bottom: 28px; overflow: hidden; page-break-inside: avoid; }
+  .prompt-header { background: #6c47ff; color: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; }
+  .prompt-num { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; opacity: .8; }
+  .prompt-title { font-size: 16px; font-weight: 700; margin-top: 2px; }
+  .prompt-use-for { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; background: rgba(255,255,255,.2); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
+  .prompt-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+  /* Where to use chips */
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; border-radius: 99px; }
+  .chip-chatgpt  { background: #e7f5ee; color: #1a7f4e; }
+  .chip-perplexity { background: #e6f0ff; color: #1a4fa8; }
+  .chip-gemini   { background: #fff8e6; color: #b45309; }
+  .chip-claude   { background: #fdeee8; color: #c04020; }
+  /* Prompt text box */
+  .prompt-text { background: #f7f7ff; border: 1px solid #ddddf5; border-radius: 8px; padding: 16px 18px; font-family: 'Courier New', monospace; font-size: 12.5px; line-height: 1.65; color: #2a2a4a; white-space: pre-wrap; word-break: break-word; position: relative; }
+  .prompt-text .placeholder { color: #6c47ff; font-weight: 700; }
+  /* Look for / Do this */
+  .meta-row { display: flex; flex-direction: column; gap: 8px; }
+  .meta-item { font-size: 12.5px; }
+  .meta-item .meta-label { font-weight: 700; color: #1a1a2e; }
+  .meta-item p { color: #555; margin-top: 2px; }
+  /* Callout */
+  .callout { background: #f0ecff; border-left: 4px solid #6c47ff; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 28px 0; }
+  .callout p { margin: 0; color: #3b2e8a; font-size: 13px; }
+  /* Divider */
+  .divider { border: none; border-top: 1px solid #ebebeb; margin: 32px 0; }
+  /* Doc footer */
+  .doc-footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid #ebebeb; font-size: 11px; color: #aaa; display: flex; justify-content: space-between; }
+  .break { page-break-before: always; }
+  @media print {
+    body { font-size: 12.5px; }
+    .page { padding: 36px 32px; }
+    .prompt-card { border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <span class="cover-badge">MyGeoRadar &mdash; mygeoradar.com</span>
+  <h1>Prompt <span>Pack</span></h1>
+  <p style="font-size:18px;font-weight:600;color:#1a1a2e;margin-bottom:8px;">10 Copy-Paste AI Audit Prompts</p>
+  <p>Paste these into ChatGPT, Perplexity, Gemini, and Claude to instantly see how AI assistants describe your business &mdash; and find exactly what to fix.</p>
+  <p style="font-size:13px;color:#888;margin-top:12px;">Run the full set quarterly. Takes under 30 minutes. Tells you more than any SEO tool.</p>
+  <p class="cover-meta">Version 1.0 &mdash; May 2026 &mdash; &copy; MyGeoRadar. For personal business use only.</p>
+</div>
+
+<!-- HOW TO USE -->
+<div class="callout"><p><strong>How to use this pack:</strong> For each prompt, replace the placeholders in <span style="color:#6c47ff;font-weight:700;">[brackets]</span> with your business details. Run each prompt in the AI assistants listed on the card. Screenshot every response and compare against your last audit. The goal isn&rsquo;t a perfect score &mdash; it&rsquo;s knowing exactly where you stand so you can prioritize.</p></div>
+
+<!-- PROMPT 1 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 01</div>
+      <div class="prompt-title">Entity Awareness Check</div>
+    </div>
+    <span class="prompt-use-for">Run first</span>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-perplexity">Perplexity</span>
+      <span class="chip chip-gemini">Gemini</span>
+      <span class="chip chip-claude">Claude</span>
+    </div>
+    <div class="prompt-text">Tell me everything you know about <span class="placeholder">[Business Name]</span> in <span class="placeholder">[City, State]</span>. Include their address, phone number, website, services, hours, and anything else you have on file.</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Does the AI know your business exists? Is the information accurate? Are key details missing or wrong? Note every incorrect fact.</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>Any wrong or missing fact becomes a priority fix. Update GBP, schema, and your /facts page to correct it. Re-run in 30 days.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT 2 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 02</div>
+      <div class="prompt-title">Recommendation Position Check</div>
+    </div>
+    <span class="prompt-use-for">Most important</span>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-perplexity">Perplexity</span>
+      <span class="chip chip-gemini">Gemini</span>
+      <span class="chip chip-claude">Claude</span>
+    </div>
+    <div class="prompt-text">I&apos;m in <span class="placeholder">[City]</span> and I need a <span class="placeholder">[service/business type]</span>. Which specific businesses would you recommend and why?</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Are you mentioned? Where in the list? What reasons does the AI give for recommending others? Are any facts about competitors wrong (potential opportunity)?</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>If you&rsquo;re not mentioned at all, entity and citation work is your priority. If you&rsquo;re mentioned but low, credibility signals (reviews, editorial mentions) need work.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT 3 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 03</div>
+      <div class="prompt-title">Facts Accuracy Audit</div>
+    </div>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-perplexity">Perplexity</span>
+      <span class="chip chip-gemini">Gemini</span>
+      <span class="chip chip-claude">Claude</span>
+    </div>
+    <div class="prompt-text">For <span class="placeholder">[Business Name]</span> in <span class="placeholder">[City]</span>: what is their exact street address, phone number, website URL, business hours, and the full list of services they offer?</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Pinpoint factual errors. AI confidently stating wrong information is a hallucination &mdash; needs to be corrected with authoritative signal flooding.</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>For each wrong fact: correct on GBP, all directories, your schema, and your /facts page. If multiple AIs agree on a wrong fact, add a press mention with the correct info.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="break"></div>
+
+<!-- PROMPT 4 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 04</div>
+      <div class="prompt-title">Reputation &amp; Sentiment Check</div>
+    </div>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-perplexity">Perplexity</span>
+      <span class="chip chip-gemini">Gemini</span>
+    </div>
+    <div class="prompt-text">What do customer reviews and online reputation say about <span class="placeholder">[Business Name]</span> in <span class="placeholder">[City]</span>? Summarize what people commonly praise and what complaints exist.</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Is the sentiment positive? Does AI know you have reviews at all? Are any fabricated complaints being reported? Is the summary accurate?</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>If AI says &ldquo;I don&rsquo;t have review data,&rdquo; you need more reviews on more platforms. If sentiment is wrong, address the underlying review issues and ensure positive reviews are recent.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT 5 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 05</div>
+      <div class="prompt-title">Competitor Gap Analysis</div>
+    </div>
+    <span class="prompt-use-for">Strategic</span>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-perplexity">Perplexity</span>
+      <span class="chip chip-gemini">Gemini</span>
+    </div>
+    <div class="prompt-text">Compare <span class="placeholder">[Business Name]</span> to 3 other <span class="placeholder">[business type]</span> businesses in <span class="placeholder">[City]</span>. Which would you recommend and why? What does each do best?</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Who are your AI-perceived competitors? What attributes is the AI using to rank them? What are they described as doing better than you?</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>The attributes used to praise competitors are your gap list. If a competitor is praised for &ldquo;faster response time,&rdquo; build content and review signals around that attribute.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT 6 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 06</div>
+      <div class="prompt-title">Content Gap Discovery</div>
+    </div>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-gemini">Gemini</span>
+      <span class="chip chip-claude">Claude</span>
+    </div>
+    <div class="prompt-text">What questions do people most commonly ask when choosing a <span class="placeholder">[business type]</span> in <span class="placeholder">[City or region]</span>? List at least 10 specific questions.</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Every question the AI lists is a content opportunity. Does your website answer these questions clearly? Does your FAQ schema include them?</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>For any question your website doesn&rsquo;t clearly answer, add it to your FAQ page and FAQPage schema. These questions are exactly what AI is being asked about your category.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="break"></div>
+
+<!-- PROMPT 7 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 07</div>
+      <div class="prompt-title">Local Authority Opportunities</div>
+    </div>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-gemini">Gemini</span>
+      <span class="chip chip-claude">Claude</span>
+    </div>
+    <div class="prompt-text">What local organizations, publications, directories, events, or associations in <span class="placeholder">[City]</span> would be most relevant for a <span class="placeholder">[business type]</span> to get listed in or mentioned by?</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Specific names of local platforms, associations, and publications you may have overlooked. These are your next citation and editorial mention targets.</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>Add any you haven&rsquo;t pursued to your outreach list. Prioritize ones the AI mentions multiple times &mdash; that signals they&rsquo;re weighted sources for your category.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT 8 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 08</div>
+      <div class="prompt-title">Schema &amp; Structured Data Review</div>
+    </div>
+    <span class="prompt-use-for">Technical</span>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-claude">Claude</span>
+    </div>
+    <div class="prompt-text">Here is the LocalBusiness schema markup from my website. Review it for missing fields, incorrect values, or improvements I should make to maximize AI visibility:
+
+[Paste your full JSON-LD schema here]</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Missing properties (geo coordinates, areaServed, sameAs links, openingHoursSpecification), incorrect @type, incomplete address, missing priceRange.</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>Implement every suggested fix, then re-validate at search.google.com/test/rich-results. This prompt works especially well in Claude &mdash; paste your raw JSON and it will return detailed, actionable feedback.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PROMPT 9 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 09</div>
+      <div class="prompt-title">About Page AI Readability Audit</div>
+    </div>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-claude">Claude</span>
+    </div>
+    <div class="prompt-text">Here is the About page copy from my <span class="placeholder">[business type]</span> website. Review it as if you were an AI assistant trying to learn about this business. What key facts are missing, unclear, or buried? What would make this page more likely to be cited as a source?
+
+[Paste your About page text here]</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Vague statements, missing facts (founding year, location, team, licenses), promotional language that lacks substance, missing FAQs, buried credentials.</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>Rewrite your About page addressing every gap identified. Then re-run Prompt 01 in 30 days to see if AI&rsquo;s description of you has improved.</p></div>
+    </div>
+  </div>
+</div>
+
+<div class="break"></div>
+
+<!-- PROMPT 10 -->
+<div class="prompt-card">
+  <div class="prompt-header">
+    <div>
+      <div class="prompt-num">Prompt 10</div>
+      <div class="prompt-title">Quarterly Weakness Summary</div>
+    </div>
+    <span class="prompt-use-for">Run last</span>
+  </div>
+  <div class="prompt-body">
+    <div class="chips">
+      <span class="chip chip-chatgpt">ChatGPT</span>
+      <span class="chip chip-perplexity">Perplexity</span>
+      <span class="chip chip-gemini">Gemini</span>
+      <span class="chip chip-claude">Claude</span>
+    </div>
+    <div class="prompt-text">Based on everything you know about <span class="placeholder">[Business Name]</span> in <span class="placeholder">[City, State]</span>, what are the top 3 weaknesses in their online presence that would make you less confident recommending them compared to competitors?</div>
+    <div class="meta-row">
+      <div class="meta-item"><span class="meta-label">&#128269; What to look for:</span><p>Specific, actionable gaps the AI identifies &mdash; &ldquo;limited review presence,&rdquo; &ldquo;unclear service area,&rdquo; &ldquo;no mentions in local press.&rdquo; These are your top priorities for the next quarter.</p></div>
+      <div class="meta-item"><span class="meta-label">&#9889; What to do with it:</span><p>Screenshot the responses from all four AIs side-by-side. Any weakness mentioned by 2 or more is a consensus priority. Make it your #1 focus for the next 30 days.</p></div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- QUARTERLY AUDIT TRACKER -->
+<h2 style="font-size:18px;font-weight:800;margin-bottom:16px;">Quarterly Audit Tracker</h2>
+<p style="font-size:13px;color:#555;margin-bottom:20px;">Use this table to track your AI mention status each quarter. Fill in Y (yes, mentioned), N (not mentioned), or W (wrong info).</p>
+<table style="width:100%;border-collapse:collapse;font-size:12px;">
+  <tr style="background:#6c47ff;color:#fff;">
+    <th style="padding:10px 12px;text-align:left;">Quarter</th>
+    <th style="padding:10px 12px;text-align:center;">ChatGPT</th>
+    <th style="padding:10px 12px;text-align:center;">Perplexity</th>
+    <th style="padding:10px 12px;text-align:center;">Gemini</th>
+    <th style="padding:10px 12px;text-align:center;">Claude</th>
+    <th style="padding:10px 12px;text-align:left;">Top priority this quarter</th>
+  </tr>
+  <tr><td style="padding:10px 12px;border-bottom:1px solid #eee;">Q1 20__</td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="border-bottom:1px solid #eee;"></td></tr>
+  <tr style="background:#fafafa;"><td style="padding:10px 12px;border-bottom:1px solid #eee;">Q2 20__</td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="border-bottom:1px solid #eee;"></td></tr>
+  <tr><td style="padding:10px 12px;border-bottom:1px solid #eee;">Q3 20__</td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="text-align:center;border-bottom:1px solid #eee;"></td><td style="border-bottom:1px solid #eee;"></td></tr>
+  <tr style="background:#fafafa;"><td style="padding:10px 12px;">Q4 20__</td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td style="text-align:center;"></td><td></td></tr>
+</table>
+
+<div class="callout" style="margin-top:28px;"><p><strong>The goal is consistent improvement, not perfection.</strong> Most businesses go from 0/4 mentioned to 2/4 mentioned in the first 90 days of implementing the playbook. Getting to 4/4 consistently mentioned for your key queries is a 6&ndash;12 month process &mdash; but every quarter compounds.</p></div>
+
+<div class="doc-footer">
+  <span>Prompt Pack &mdash; 10 Copy-Paste AI Audit Prompts</span>
+  <span>MyGeoRadar &mdash; mygeoradar.com</span>
+</div>
+
+</div><!-- .page -->
+</body>
+</html>
