@@ -43,10 +43,10 @@ export default async function AccountPage() {
                 </div>
                 <div className="flex flex-col gap-3">
                   {[
-                    { label: 'The Complete AI Visibility Playbook', file: 'found-by-ai-playbook.pdf' },
-                    { label: 'The 27-Point AI Visibility Checklist', file: 'ai-visibility-checklist.pdf' },
-                    { label: 'Prompt Pack — 10 Copy-Paste Prompts',  file: 'prompt-pack.pdf' },
-                    { label: '30-Day Action Plan Calendar',           file: '30-day-action-plan.pdf' },
+                    { label: 'The Complete AI Visibility Playbook', file: 'found-by-ai-playbook.html' },
+                    { label: 'The 27-Point AI Visibility Checklist', file: 'ai-visibility-checklist.html' },
+                    { label: 'Prompt Pack — 10 Copy-Paste Prompts',  file: 'prompt-pack.html' },
+                    { label: '30-Day Action Plan Calendar',           file: '30-day-action-plan.html' },
                   ].map(({ label, file }) => (
                     <a
                       key={file}
