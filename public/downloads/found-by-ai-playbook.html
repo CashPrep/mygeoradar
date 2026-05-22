@@ -1,379 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Found by AI — The Complete AI Visibility Playbook</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', system-ui, sans-serif; font-size: 10.5pt; line-height: 1.65; color: #1a1a2e; background: #fff; }
-  @page { size: letter; margin: 0.75in 0.85in; }
-  @media print { body { font-size: 10pt; } .no-print { display: none; } }
-
-  /* Layout */
-  .cover { display: flex; flex-direction: column; justify-content: center; align-items: flex-start; min-height: 9in; padding: 1in 0 0.5in; break-after: page; }
-  .cover-badge { font-size: 8pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #4f8ef7; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 100px; padding: 4px 14px; display: inline-block; margin-bottom: 28px; }
-  .cover-title { font-size: 44pt; font-weight: 900; line-height: 1.05; color: #0f172a; margin-bottom: 12px; letter-spacing: -0.02em; }
-  .cover-subtitle { font-size: 16pt; font-weight: 600; color: #4f8ef7; margin-bottom: 24px; }
-  .cover-desc { font-size: 11pt; color: #475569; max-width: 480px; line-height: 1.7; margin-bottom: 48px; }
-  .cover-meta { font-size: 9pt; color: #94a3b8; }
-  .cover-line { width: 60px; height: 4px; background: #4f8ef7; border-radius: 2px; margin-bottom: 40px; }
-
-  /* TOC */
-  .toc { break-after: page; padding-bottom: 40px; }
-  .toc h2 { font-size: 18pt; font-weight: 800; color: #0f172a; margin-bottom: 24px; }
-  .toc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px dotted #e2e8f0; font-size: 10pt; }
-  .toc-item .part { font-weight: 600; color: #0f172a; }
-  .toc-item .page { color: #94a3b8; font-size: 9pt; }
-  .toc-section { margin-left: 16px; color: #475569; }
-
-  /* Typography */
-  h1 { font-size: 20pt; font-weight: 800; color: #0f172a; margin: 32px 0 12px; line-height: 1.2; letter-spacing: -0.01em; }
-  h2 { font-size: 14pt; font-weight: 700; color: #0f172a; margin: 28px 0 10px; padding-bottom: 6px; border-bottom: 2px solid #e2e8f0; }
-  h3 { font-size: 11.5pt; font-weight: 700; color: #1e293b; margin: 22px 0 8px; }
-  h4 { font-size: 10.5pt; font-weight: 600; color: #334155; margin: 16px 0 6px; }
-  p { margin-bottom: 12px; color: #334155; }
-  strong { color: #0f172a; }
-  em { color: #475569; font-style: italic; }
-  a { color: #4f8ef7; text-decoration: none; }
-
-  /* Part break */
-  .part-break { break-before: page; }
-  .part-label { font-size: 9pt; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #4f8ef7; margin-bottom: 6px; }
-
-  /* Callout boxes */
-  .callout { border-left: 4px solid #4f8ef7; background: #f0f7ff; border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 18px 0; }
-  .callout.green { border-color: #22c55e; background: #f0fdf4; }
-  .callout.amber { border-color: #f59e0b; background: #fffbeb; }
-  .callout.red { border-color: #ef4444; background: #fff1f2; }
-  .callout-title { font-size: 9pt; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; color: #4f8ef7; }
-  .callout.green .callout-title { color: #16a34a; }
-  .callout.amber .callout-title { color: #d97706; }
-  .callout.red .callout-title { color: #dc2626; }
-
-  /* Code blocks */
-  pre { background: #0f172a; color: #e2e8f0; font-family: 'Courier New', monospace; font-size: 8.5pt; line-height: 1.6; padding: 16px 18px; border-radius: 8px; margin: 16px 0; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
-  code { background: #f1f5f9; color: #0f172a; font-family: 'Courier New', monospace; font-size: 8.5pt; padding: 2px 5px; border-radius: 3px; }
-
-  /* Lists */
-  ul, ol { margin: 10px 0 14px 22px; }
-  li { margin-bottom: 7px; color: #334155; }
-  li strong { color: #0f172a; }
-
-  /* Tables */
-  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 9.5pt; }
-  th { background: #0f172a; color: #fff; font-weight: 600; padding: 8px 12px; text-align: left; }
-  td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; color: #334155; }
-  tr:nth-child(even) td { background: #f8fafc; }
-
-  /* Step blocks */
-  .step { display: flex; gap: 16px; margin: 20px 0; }
-  .step-num { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: #4f8ef7; color: #fff; font-weight: 800; font-size: 10pt; display: flex; align-items: center; justify-content: center; }
-  .step-body { flex: 1; }
-  .step-body h3 { margin-top: 4px; }
-
-  /* Formula box */
-  .formula { background: #fafafa; border: 1.5px dashed #cbd5e1; border-radius: 8px; padding: 16px 20px; margin: 16px 0; font-size: 10pt; }
-  .formula-title { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; margin-bottom: 8px; }
-
-  /* Divider */
-  hr { border: none; border-top: 1px solid #e2e8f0; margin: 24px 0; }
-
-  /* Footer */
-  .page-footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 8pt; color: #94a3b8; }
+  body { font-family: 'Inter', sans-serif; font-size: 13px; line-height: 1.75; color: #1a1a2e; background: #fff; max-width: 780px; margin: 0 auto; padding: 48px 56px; }
+  @media print { body { padding: 32px 48px; } }
+  .cover { min-height: 96vh; display: flex; flex-direction: column; justify-content: center; padding-bottom: 80px; border-bottom: 3px solid #6366f1; margin-bottom: 60px; }
+  .badge { display: inline-block; background: #ede9fe; color: #6366f1; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 32px; }
+  .cover h1 { font-size: 44px; font-weight: 800; line-height: 1.1; color: #0f0f1a; margin-bottom: 16px; }
+  .cover h1 span { color: #6366f1; }
+  .cover-sub { font-size: 17px; color: #555; margin-bottom: 40px; max-width: 520px; }
+  .cover-meta { font-size: 11px; color: #888; }
+  .cover-meta strong { color: #444; }
+  .toc { background: #f8f8ff; border: 1px solid #e0e0f0; border-radius: 10px; padding: 24px 28px; margin: 40px 0; }
+  .toc-title { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6366f1; margin-bottom: 14px; }
+  .toc ol { margin-left: 18px; }
+  .toc li { margin-bottom: 5px; font-size: 12.5px; color: #444; }
+  h2 { font-size: 20px; font-weight: 700; color: #0f0f1a; margin-top: 52px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid #ede9fe; }
+  h3 { font-size: 11px; font-weight: 700; color: #6366f1; margin-top: 28px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  p { margin-bottom: 14px; color: #333; }
+  ul, ol { margin: 0 0 16px 22px; }
+  li { margin-bottom: 7px; color: #333; }
+  strong { color: #0f0f1a; font-weight: 600; }
+  .callout { background: #f5f3ff; border-left: 4px solid #6366f1; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+  .callout p { margin: 0; font-size: 12.5px; }
+  .tip { background: #f0fdf4; border-left: 4px solid #22c55e; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+  .tip p { margin: 0; font-size: 12.5px; }
+  .warning { background: #fff7ed; border-left: 4px solid #f97316; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 20px 0; }
+  .warning p { margin: 0; font-size: 12.5px; }
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 11.5px; color: #4f46e5; }
+  pre { background: #0f0f1a; color: #e2e8f0; padding: 18px 20px; border-radius: 10px; font-family: 'Courier New', monospace; font-size: 11px; line-height: 1.6; margin: 16px 0; white-space: pre-wrap; word-break: break-word; }
+  .step { display: flex; gap: 16px; margin: 18px 0; align-items: flex-start; }
+  .num { flex-shrink: 0; width: 26px; height: 26px; background: #6366f1; color: white; font-size: 11px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .step-body p { margin: 4px 0 0; font-size: 12.5px; }
+  .step-body strong { font-size: 13px; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 22px; font-size: 12px; }
+  th { background: #6366f1; color: white; padding: 8px 12px; text-align: left; font-weight: 600; }
+  td { padding: 8px 12px; border-bottom: 1px solid #e8e8f0; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8f8ff; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  .card { background: #f8f8ff; border: 1px solid #e0e0f0; border-radius: 8px; padding: 14px; }
+  .card strong { display: block; margin-bottom: 6px; font-size: 12.5px; }
+  .card p { font-size: 12px; color: #555; margin: 0; }
+  .formula { background: #0f0f1a; color: #a78bfa; padding: 14px 18px; border-radius: 8px; font-family: 'Courier New', monospace; font-size: 12px; margin: 16px 0; }
+  .divider { border: none; border-top: 1px solid #e8e8f0; margin: 36px 0; }
+  .page-break { page-break-before: always; }
+  .section-intro { font-size: 13.5px; color: #666; margin-bottom: 10px; font-style: italic; }
+  .footer { margin-top: 48px; padding-top: 24px; border-top: 2px solid #ede9fe; text-align: center; color: #888; font-size: 11px; }
+  .footer strong { color: #6366f1; }
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════════ COVER -->
+<!-- COVER -->
 <div class="cover">
-  <div class="cover-badge">MyGeoRadar &bull; mygeoradar.com</div>
-  <div class="cover-title">Found<br>by AI</div>
-  <div class="cover-subtitle">The Complete AI Visibility Playbook</div>
-  <div class="cover-line"></div>
-  <div class="cover-desc">
-    The step-by-step system to get your business recognized, trusted,
-    and recommended by ChatGPT, Perplexity, Gemini, and Claude.
-    No technical background required.
+  <div class="badge">MyGeoRadar — Digital Playbook</div>
+  <h1>Found by <span>AI</span></h1>
+  <p class="cover-sub">The complete, concise system to get your business recognized and recommended by ChatGPT, Perplexity, Gemini, and Claude. No tech skills required.</p>
+  <div class="cover-meta">
+    <strong>Your bundle includes:</strong> Complete Playbook &nbsp;·&nbsp; 27-Point Checklist &nbsp;·&nbsp; Prompt Pack &nbsp;·&nbsp; 30-Day Calendar<br><br>
+    <strong>mygeoradar.com</strong> &nbsp;·&nbsp; hello@mygeoradar.com &nbsp;·&nbsp; © 2026 MyGeoRadar
   </div>
-  <div class="cover-meta">mygeoradar.com &nbsp;&bull;&nbsp; hello@mygeoradar.com &nbsp;&bull;&nbsp; &copy; 2026 MyGeoRadar. All rights reserved.</div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════════════════ TOC -->
+<!-- TOC -->
 <div class="toc">
-  <h2>Table of Contents</h2>
-  <div class="toc-item"><span class="part">Introduction: The Search Revolution</span><span class="page">3</span></div>
-  <div class="toc-item"><span class="part">How AI Assistants Actually Work</span><span class="page">4</span></div>
-  <div class="toc-item toc-section"><span>Why This Is Different From SEO</span></div>
-  <div class="toc-item toc-section"><span>The Three Questions Every AI Asks</span></div>
-  <div class="toc-item toc-section"><span>How ChatGPT, Perplexity, Gemini &amp; Claude Differ</span></div>
-  <div class="toc-item"><span class="part">Part 1 — The Foundation (Steps 1–3)</span><span class="page">6</span></div>
-  <div class="toc-item toc-section"><span>Step 1: Google Business Profile</span></div>
-  <div class="toc-item toc-section"><span>Step 2: Schema Markup (with copy-paste templates)</span></div>
-  <div class="toc-item toc-section"><span>Step 3: The 10 Core Directories</span></div>
-  <div class="toc-item"><span class="part">Part 2 — The Authority Layer (Steps 4–7)</span><span class="page">14</span></div>
-  <div class="toc-item toc-section"><span>Step 4: Google Search Console &amp; Sitemap</span></div>
-  <div class="toc-item toc-section"><span>Step 5: Rewrite Your About Page (with formula)</span></div>
-  <div class="toc-item toc-section"><span>Step 6: Create Your /facts Page (with template)</span></div>
-  <div class="toc-item toc-section"><span>Step 7: Build a FAQ Page with Schema</span></div>
-  <div class="toc-item"><span class="part">Part 3 — The Credibility Layer (Steps 8–10)</span><span class="page">20</span></div>
-  <div class="toc-item toc-section"><span>Step 8: Get Your First Editorial Mention</span></div>
-  <div class="toc-item toc-section"><span>Step 9: Bing Webmaster Tools (Microsoft Copilot)</span></div>
-  <div class="toc-item toc-section"><span>Step 10: Create a Wikidata Entry</span></div>
-  <div class="toc-item"><span class="part">Part 4 — Ongoing Maintenance</span><span class="page">26</span></div>
-  <div class="toc-item"><span class="part">Troubleshooting: When AI Gets You Wrong</span><span class="page">28</span></div>
-  <div class="toc-item"><span class="part">Quick-Reference Summary</span><span class="page">30</span></div>
+  <div class="toc-title">Table of Contents</div>
+  <ol>
+    <li>The Shift — Why AI Search Changes Everything</li>
+    <li>The 3-Question Framework</li>
+    <li>How Each AI Engine Actually Works</li>
+    <li>Step 1 — Google Business Profile</li>
+    <li>Step 2 — Schema Markup</li>
+    <li>Step 3 — Citation Footprint</li>
+    <li>Step 4 — About &amp; Facts Pages</li>
+    <li>Step 5 — Reviews</li>
+    <li>Step 6 — Your First Editorial Mention</li>
+    <li>Step 7 — Fixing AI Hallucinations</li>
+    <li>Step 8 — Tracking Your Progress</li>
+    <li>The 2-Hour vs 10-Hour Tracks</li>
+  </ol>
 </div>
 
-<!-- ══════════════════════════════════════════════════ INTRO -->
-<h1>Introduction: The Search Revolution Nobody Told You About</h1>
-<p>Something fundamental changed in how people find businesses — and most business owners have no idea it happened.</p>
-<p>When someone searches for <em>&ldquo;best dentist in Chicago&rdquo;</em> or <em>&ldquo;top-rated plumber near me&rdquo;</em> today, a growing percentage of them aren&rsquo;t typing that into Google. They&rsquo;re asking ChatGPT. They&rsquo;re asking Perplexity. They&rsquo;re asking Gemini or Claude. And those AI assistants don&rsquo;t give them a list of links — they give them a <strong>name</strong>. Usually two or three names. Confidently. Specifically. Without sending the user anywhere else.</p>
-<p>If your business isn&rsquo;t one of those names, you lost a customer. Silently. Without a trace in your analytics.</p>
+<hr class="divider">
 
-<div class="callout amber">
-  <div class="callout-title">The scale of the shift</div>
-  Studies tracking consumer behavior in 2025&ndash;2026 consistently show that 55&ndash;65% of consumers now use an AI assistant as part of their research process before making a purchase or hiring a service provider. For high-consideration decisions — choosing a lawyer, dentist, contractor, or accountant — that number is even higher.
+<h2>1. The Shift</h2>
+<p class="section-intro">What changed, why it matters, and why most businesses are blind to it.</p>
+<p>When someone types <strong>"best dentist near me"</strong> into ChatGPT, they don't get ten blue links. They get a name. Two or three names. With reasons. The AI sounds confident. The user acts on it.</p>
+<p>Your Google ranking doesn't matter in that moment. Your website traffic doesn't matter. What matters is one thing: <strong>did the AI mention your business?</strong></p>
+<p>This is the new customer acquisition channel — and it operates invisibly. You won't see a referral in your analytics. You'll just slowly lose customers you never knew you were competing for.</p>
+<div class="callout"><p><strong>The opportunity:</strong> Most businesses have done zero to optimize for AI visibility. The ones who act now will own AI recommendations in their category before competitors wake up.</p></div>
+
+<hr class="divider">
+
+<h2>2. The 3-Question Framework</h2>
+<p class="section-intro">Before any AI mentions your business, it silently asks three questions.</p>
+<div class="step"><div class="num">1</div><div class="step-body"><strong>Does this business clearly exist?</strong><p>Entity clarity. The AI needs consistent, structured data confirming you're a real operating business — not a duplicate or closed listing. Solved by GBP + schema + citations.</p></div></div>
+<div class="step"><div class="num">2</div><div class="step-body"><strong>Is this business credible?</strong><p>Trust signals. Reviews, press mentions, directory listings. Volume and source quality both matter.</p></div></div>
+<div class="step"><div class="num">3</div><div class="step-body"><strong>Is this business relevant to this query?</strong><p>Attribute matching. Does what AI knows about you match what the user asked — right category, location, specialty? Vague descriptions get skipped. Specific ones get cited.</p></div></div>
+<p>Everything in this playbook answers "yes" to all three. That's the whole game.</p>
+
+<hr class="divider">
+
+<h2>3. How Each AI Engine Actually Works</h2>
+<p class="section-intro">They're not the same. Knowing the difference changes what you prioritize.</p>
+<div class="two-col">
+  <div class="card"><strong>ChatGPT (GPT-4o)</strong><p>Primarily training data. Relies on what it learned during training. High-authority sources — Wikipedia, directories, press coverage, Google-indexed structured data — carry the most weight.</p></div>
+  <div class="card"><strong>Perplexity</strong><p>Live web search every query. Your current website, recent reviews, and new press mentions show up quickly. Being well-indexed by Google and Bing is critical here.</p></div>
+  <div class="card"><strong>Gemini (Google)</strong><p>Deeply integrated with Google's Knowledge Graph. Your GBP, Google Maps data, and Google-indexed content are primary signals. Gemini has near-direct access to everything Google knows about you.</p></div>
+  <div class="card"><strong>Claude (Anthropic)</strong><p>Training data focused. More conservative — prefers authoritative long-form content. Industry publications, detailed About pages, and structured guides help most here.</p></div>
 </div>
+<div class="tip"><p><strong>One system covers all four:</strong> GBP + schema covers Gemini. Directory citations + press mentions cover ChatGPT and Claude. Fresh indexed content covers Perplexity.</p></div>
 
-<p>Traditional SEO took years to master and even longer to see results. The good news about AI visibility is that the signals are <strong>far more fixable, far faster</strong>. A business with zero AI presence today can have meaningful AI visibility within 30 days of following the steps in this playbook. We&rsquo;ve seen businesses go from never being mentioned to being the first recommendation in their category within 6 weeks.</p>
-<p>This playbook covers every signal AI assistants use to decide which businesses to mention, in exactly the order you should tackle them, with copy-paste templates and zero vague advice. Let&rsquo;s get started.</p>
+<hr class="divider">
 
-<!-- ══════════════════════════════════════════════════ HOW AI WORKS -->
-<h1 class="part-break">How AI Assistants Actually Work</h1>
+<div class="page-break"></div>
+<h2>Step 1 — Google Business Profile</h2>
+<p class="section-intro">The single highest-leverage action. Do this before anything else.</p>
+<p>Google's Knowledge Graph feeds Gemini directly, shapes ChatGPT's training data, and is a top source for Perplexity's live results. A complete, claimed GBP is non-negotiable.</p>
 
-<h2>Why This Is Completely Different From SEO</h2>
-<p>Traditional SEO is a ranking game. You optimize a webpage, Google&rsquo;s algorithm assigns it a position for a given keyword, and users click through to your site. The entire model depends on the click.</p>
-<p>AI search has no ranking and no click. When someone asks ChatGPT <em>&ldquo;who should I hire for kitchen renovation in Denver?&rdquo;</em> the model generates a response from its internal knowledge and (in some cases) live web data. That response names businesses. The user acts on it. Your website may never be visited at all. You were either mentioned — or you weren&rsquo;t.</p>
+<h3>Exactly What To Do</h3>
+<div class="step"><div class="num">1</div><div class="step-body"><strong>Claim your listing at business.google.com</strong><p>Search your business name. Claim it if it exists, create it if not. Verify via postcard, phone, or video.</p></div></div>
+<div class="step"><div class="num">2</div><div class="step-body"><strong>Set your primary category precisely</strong><p>"Family Law Attorney" not "Lawyer." "Italian Restaurant" not "Restaurant." Specificity determines which AI queries you appear in.</p></div></div>
+<div class="step"><div class="num">3</div><div class="step-body"><strong>Add 2–3 secondary categories</strong><p>Expands query types you're matched to without diluting your primary signal.</p></div></div>
+<div class="step"><div class="num">4</div><div class="step-body"><strong>Write your description using this formula:</strong></div></div>
+<div class="formula">[Business Name] is a [specific type] in [City, State] specializing in [service 1], [service 2], and [service 3]. We serve [customer type] across [service area]. [One sentence on what makes you notable: years, award, certification].</div>
+<p><strong>Example:</strong> <em>Riverside Legal is a family law firm in Austin, Texas specializing in divorce, child custody, and adoption. We serve individuals and families throughout Travis and Williamson County. Our attorneys have 20+ combined years of experience and are board-certified by the Texas Board of Legal Specialization.</em></p>
+<div class="step"><div class="num">5</div><div class="step-body"><strong>Fill every single field</strong><p>Address, local phone number, website, hours (including holidays), services list, attributes (wheelchair accessible, woman-owned, etc.), and at least 10 photos.</p></div></div>
+<div class="warning"><p><strong>Watch for duplicates:</strong> Search your business name + city on Google Maps. If more than one listing appears, the duplicate splits your authority and confuses AI. Request removal via Google Business support chat.</p></div>
 
-<table>
-  <tr><th>Traditional SEO</th><th>AI Visibility (GEO)</th></tr>
-  <tr><td>Optimize for keyword rankings</td><td>Optimize for entity recognition</td></tr>
-  <tr><td>Success = Page 1 ranking</td><td>Success = Being mentioned in answers</td></tr>
-  <tr><td>Measured in rankings &amp; traffic</td><td>Measured in AI mention rate</td></tr>
-  <tr><td>Results in weeks to months</td><td>Foundation results in days to weeks</td></tr>
-  <tr><td>Google-centric</td><td>Multi-engine (ChatGPT, Perplexity, Gemini, Claude)</td></tr>
-  <tr><td>Link building is core</td><td>Entity clarity &amp; citation consistency is core</td></tr>
-</table>
+<hr class="divider">
 
-<h2>The Three Questions Every AI Asks About Your Business</h2>
-<p>Before any AI assistant will confidently mention your business, it needs to answer three questions from the data it has access to:</p>
+<h2>Step 2 — Schema Markup</h2>
+<p class="section-intro">The code that tells AI exactly who you are. Copy, fill, paste.</p>
+<p>Schema converts your webpage into machine-readable facts. AI crawlers read it directly — no inference needed. Without schema, AI is guessing. With it, AI reads a source you control.</p>
 
-<div class="step">
-  <div class="step-num">1</div>
-  <div class="step-body">
-    <h3>Does this business clearly exist?</h3>
-    <p><strong>Entity clarity.</strong> The AI needs to know your business is a distinct, real, currently operating entity — not ambiguous, not defunct, not a duplicate. Structured data, a claimed GBP, and consistent directory listings are the primary signals here. Without clarity, the AI won&rsquo;t risk mentioning you.</p>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">2</div>
-  <div class="step-body">
-    <h3>Is this business credible?</h3>
-    <p><strong>Trust signals.</strong> Has this business been mentioned in authoritative, independent sources? Does it have verified reviews? Is it cited consistently across multiple platforms? AI models weight businesses that appear in editorial sources, review platforms, and established directories. Volume and source quality both matter.</p>
-  </div>
-</div>
-
-<div class="step">
-  <div class="step-num">3</div>
-  <div class="step-body">
-    <h3>Is this business relevant to this query?</h3>
-    <p><strong>Attribute matching.</strong> Does what the AI knows about your business match what the user is asking for — the right category, location, specialty, and service type? A plumber who specializes in emergency services needs that specialty clearly documented — not just implied on a homepage.</p>
-  </div>
-</div>
-
-<h2>How ChatGPT, Perplexity, Gemini, and Claude Each Work Differently</h2>
-<p>Not all AI assistants are equal when it comes to how they find and cite businesses. Understanding the differences helps you prioritize which signals matter most.</p>
-
-<h3>ChatGPT (OpenAI)</h3>
-<p>ChatGPT&rsquo;s base model relies primarily on its training data — a snapshot of the internet that OpenAI updates periodically. When ChatGPT (without browsing enabled) mentions a business, it&rsquo;s drawing on information that was on the web during its last training cutoff. This means <strong>older but authoritative sources</strong> — long-established directory listings, press mentions, Wikipedia/Wikidata entries — carry significant weight. ChatGPT with browsing enabled behaves more like Perplexity. The key for ChatGPT: establish a deep, consistent, long-term entity footprint across authoritative sources.</p>
-
-<h3>Perplexity</h3>
-<p>Perplexity performs a live web search before generating every response. This means it&rsquo;s pulling fresh data — your current website, recent reviews, live directory listings. <strong>This makes Perplexity the fastest to respond to changes you make.</strong> If you fix your GBP and add schema today, Perplexity can reflect that change within days to weeks. The key for Perplexity: have clean, crawlable, well-structured current web presence.</p>
-
-<h3>Gemini (Google)</h3>
-<p>Gemini has direct access to Google&rsquo;s Knowledge Graph — arguably the most comprehensive business entity database in the world. Your Google Business Profile data feeds directly into what Gemini knows about you. <strong>This makes GBP optimization the single highest-leverage action for Gemini visibility.</strong> Gemini also blends training data with live search, similar to Perplexity. The key for Gemini: GBP completeness, Google reviews, and Google-indexed structured data.</p>
-
-<h3>Claude (Anthropic)</h3>
-<p>Claude relies primarily on training data and is generally the most conservative of the four — it will often decline to make specific local business recommendations rather than risk being wrong. <strong>To appear in Claude&rsquo;s responses, you need authoritative written sources</strong> — editorial mentions, clearly written content on your own website, and Wikidata entries. The key for Claude: editorial credibility and clearly written, factual website content.</p>
-
-<div class="callout green">
-  <div class="callout-title">The unified strategy</div>
-  The good news: the actions in this playbook improve your visibility across all four engines simultaneously. You don&rsquo;t need a different strategy for each one. The foundation (GBP, schema, directories) helps all of them. The authority layer (About page, /facts page, editorial mentions) pushes Claude and ChatGPT. The freshness layer (GSC, active GBP, new content) helps Perplexity and Gemini.
-</div>
-
-<!-- ══════════════════════════════════════════════════ PART 1 -->
-<h1 class="part-break">
-  <div class="part-label">Part 1 &mdash; The Foundation</div>
-  Steps 1&ndash;3: Entity Clarity
-</h1>
-<p>These three steps are non-negotiable. Do not skip ahead to the authority layer without completing these first. The foundation is what makes you <em>findable</em>. Everything else makes you <em>recommendable</em>.</p>
-
-<!-- STEP 1 -->
-<h2>Step 1: Claim and Complete Your Google Business Profile</h2>
-<p><strong>Impact: Very High &mdash; affects Gemini directly, and all others indirectly through the Knowledge Graph.</strong></p>
-<p>Google&rsquo;s Knowledge Graph is the foundational data layer that multiple AI systems draw from. A fully completed, verified GBP is the single highest-leverage action most local businesses can take for AI visibility.</p>
-
-<h3>How to claim your GBP</h3>
-<ol>
-  <li>Go to <strong>business.google.com</strong> and sign in with a Google account</li>
-  <li>Search for your business name — if it exists as an unverified listing, claim it; if it doesn&rsquo;t, create a new one</li>
-  <li>Choose your primary business category (be specific — see guidance below)</li>
-  <li>Verify via the method Google offers (postcard, phone call, video, or instant verification for some categories)</li>
-</ol>
-
-<h3>Every field you must complete (and exactly how)</h3>
-
-<h4>Business Name</h4>
-<p>Use your exact legal business name. Do not add keywords (e.g., &ldquo;Best Denver Plumber — Peak Plumbing Co.&rdquo;) — Google will suspend listings that keyword-stuff the name field, and keyword stuffing actually confuses AI entity matching.</p>
-
-<h4>Primary Category</h4>
-<p>This is the single most important field in your GBP for AI relevance matching. Choose the most specific category that accurately describes your primary service. Examples:</p>
-<ul>
-  <li>Not &ldquo;Contractor&rdquo; → use &ldquo;General Contractor&rdquo; or &ldquo;Kitchen Remodeler&rdquo;</li>
-  <li>Not &ldquo;Doctor&rdquo; → use &ldquo;Family Practice Physician&rdquo; or &ldquo;Pediatrician&rdquo;</li>
-  <li>Not &ldquo;Lawyer&rdquo; → use &ldquo;Personal Injury Attorney&rdquo; or &ldquo;Family Law Attorney&rdquo;</li>
-  <li>Not &ldquo;Restaurant&rdquo; → use &ldquo;Italian Restaurant&rdquo; or &ldquo;Sushi Restaurant&rdquo;</li>
-</ul>
-
-<h4>Secondary Categories</h4>
-<p>Add 2&ndash;4 secondary categories that represent services you actually offer. These expand the queries you can match. A dental practice might add: Cosmetic Dentist, Orthodontist, Emergency Dental Service.</p>
-
-<h4>Business Description (750 characters — use all of them)</h4>
-<p>This is the field AI systems are most likely to quote. Use this exact formula:</p>
-<div class="formula">
-  <div class="formula-title">GBP Description Formula</div>
-  <p>[Business name] is a [specific business type] in [city, state] specializing in [primary service], [secondary service], and [tertiary service]. We serve [customer type/demographic] in [specific service area or neighborhoods]. [One sentence on what makes you distinctly credible — years in business, certifications, awards, or notable specialization.] [One sentence on your approach or values if space permits.]</p>
-</div>
-
-<p><strong>Example:</strong> <em>Lakeview Dental is a family and cosmetic dental practice in Chicago, Illinois specializing in Invisalign, dental implants, and emergency dental care. We serve families and adults throughout the Lincoln Park, Lakeview, and Wrigleyville neighborhoods. Dr. Sarah Chen has 18 years of experience and is a certified Invisalign Diamond Provider with over 800 completed cases. We offer same-day emergency appointments six days a week.</em></p>
-
-<h4>Phone Number</h4>
-<p>Use a local phone number, not an 800 number. The area code is an entity signal that confirms your geographic location to AI systems.</p>
-
-<h4>Website</h4>
-<p>Link to your homepage, not a tracking URL or landing page. The domain should match your business name or be a clear brand domain.</p>
-
-<h4>Address</h4>
-<p>Enter exactly as it appears on official documents. Write down this exact format — you&rsquo;ll use it on every directory in Step 3.</p>
-
-<h4>Hours</h4>
-<p>Enter your real hours. Keep them updated. Outdated hours are one of the most common causes of AI hallucinations (AI reporting wrong hours to potential customers).</p>
-
-<h4>Services / Products Section</h4>
-<p>Add every service you offer. For each service, write a 1&ndash;2 sentence description. This section significantly expands the range of queries you can match in AI answers.</p>
-
-<h4>Photos</h4>
-<p>Upload minimum 10 photos. AI systems do not &ldquo;see&rdquo; photos, but photo completeness is a proxy signal for listing quality. Include: exterior (2), interior (2), team/owner (2), work samples or products (3+), logo (1).</p>
-
-<h4>Reviews</h4>
-<p>You cannot fake this — but you can ask for it. After every completed job or service, send a follow-up text or email with your direct GBP review link (find it in your GBP dashboard under &ldquo;Get more reviews&rdquo;). A business with 50+ recent, positive reviews is dramatically more likely to be recommended by AI than one with 5 reviews from 3 years ago.</p>
-
-<div class="callout">
-  <div class="callout-title">After completing your GBP</div>
-  Wait 48&ndash;72 hours before moving to Step 3 (directories). This gives Google time to propagate your updated information. Submitting directories before GBP is indexed can create conflicting data.
-</div>
-
-<!-- STEP 2 -->
-<h2>Step 2: Add Schema Markup to Your Website</h2>
-<p><strong>Impact: High &mdash; affects all four AI engines. Provides machine-readable structured data that AI crawlers consume directly.</strong></p>
-<p>Schema markup is JSON-LD code you add to your website that tells AI crawlers exactly who you are, what you do, where you are, and what you offer. Without it, AI systems infer your business details from unstructured text on your pages. With it, they read structured facts from a source you control.</p>
-
-<h3>How to add schema markup (no coding required)</h3>
-<p>Every schema block is a <code>&lt;script type=&quot;application/ld+json&quot;&gt;</code> tag you paste inside the <code>&lt;head&gt;</code> of the relevant page. On most platforms:</p>
-<ul>
-  <li><strong>WordPress:</strong> Install the free &ldquo;Schema &amp; Structured Data for WP &amp; AMP&rdquo; plugin, or paste into your theme&rsquo;s <code>header.php</code></li>
-  <li><strong>Squarespace:</strong> Settings &rarr; Advanced &rarr; Code Injection &rarr; Header</li>
-  <li><strong>Wix:</strong> Settings &rarr; Custom Code &rarr; Add to &lt;head&gt;</li>
-  <li><strong>Shopify:</strong> Online Store &rarr; Themes &rarr; Edit Code &rarr; <code>theme.liquid</code>, paste before <code>&lt;/head&gt;</code></li>
-  <li><strong>Webflow:</strong> Page Settings &rarr; Custom Code &rarr; Head Code</li>
-</ul>
-
-<h3>Schema 1: LocalBusiness (paste on your Homepage)</h3>
-<p>Replace every ALL-CAPS field with your real information. Delete any lines that don&rsquo;t apply.</p>
+<h3>LocalBusiness Schema — paste into homepage head</h3>
 <pre>{
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
-  "name": "YOUR EXACT BUSINESS NAME",
-  "description": "YOUR GBP DESCRIPTION (copy it word-for-word)",
+  "name": "YOUR BUSINESS NAME",
+  "description": "YOUR GBP DESCRIPTION",
   "url": "https://yourwebsite.com",
   "telephone": "+1-XXX-XXX-XXXX",
-  "email": "your@email.com",
-  "priceRange": "$$",
-  "address": {
-    "@type": "PostalAddress",
-    "streetAddress": "123 Main Street, Suite 100",
-    "addressLocality": "Your City",
-    "addressRegion": "XX",
-    "postalCode": "00000",
-    "addressCountry": "US"
-  },
-  "geo": {
-    "@type": "GeoCoordinates",
-    "latitude": 00.000000,
-    "longitude": -00.000000
-  },
-  "openingHoursSpecification": [
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
-      "opens": "09:00",
-      "closes": "17:00"
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Saturday"],
-      "opens": "10:00",
-      "closes": "14:00"
-    }
-  ],
-  "areaServed": [
-    {"@type": "City", "name": "Your City"},
-    {"@type": "City", "name": "Nearby City 1"},
-    {"@type": "City", "name": "Nearby City 2"}
-  ],
-  "hasMap": "https://maps.google.com/?cid=YOUR_CID",
-  "image": "https://yourwebsite.com/images/storefront.jpg",
-  "logo": "https://yourwebsite.com/images/logo.png",
-  "sameAs": [
-    "https://www.facebook.com/yourbusiness",
-    "https://www.yelp.com/biz/your-business",
-    "https://g.page/your-business",
-    "https://www.linkedin.com/company/yourbusiness"
-  ]
-}</pre>
-
-<div class="callout amber">
-  <div class="callout-title">Choose the right @type</div>
-  Replace &ldquo;LocalBusiness&rdquo; with the most specific subtype that fits your business. Common types: <strong>Restaurant, MedicalBusiness, Dentist, Lawyer, LegalService, HomeAndConstructionBusiness, Plumber, Electrician, AutomotiveBusiness, HealthAndBeautyBusiness, HairSalon, SpaOrBeautyService, FitnessCenter, AccountingService, FinancialService, RealEstateAgent, TravelAgency</strong>. Full list at schema.org/LocalBusiness.
-</div>
-
-<h3>Schema 2: Organization (paste on your About page)</h3>
-<pre>{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "YOUR BUSINESS NAME",
-  "legalName": "YOUR LEGAL ENTITY NAME (if different)",
-  "url": "https://yourwebsite.com",
-  "logo": "https://yourwebsite.com/images/logo.png",
-  "foundingDate": "YYYY",
-  "numberOfEmployees": {
-    "@type": "QuantitativeValue",
-    "value": NUMBER
-  },
-  "description": "YOUR DESCRIPTION",
-  "founder": {
-    "@type": "Person",
-    "name": "FOUNDER FULL NAME"
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "telephone": "+1-XXX-XXX-XXXX",
-    "contactType": "customer service",
-    "availableLanguage": "English"
-  },
+  "email": "hello@yoursite.com",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "123 Main Street",
@@ -382,431 +156,210 @@
     "postalCode": "00000",
     "addressCountry": "US"
   },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 00.0000,
+    "longitude": -00.0000
+  },
+  "openingHoursSpecification": [{
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+    "opens": "09:00",
+    "closes": "17:00"
+  }],
+  "priceRange": "$$",
+  "areaServed": "Your City, Your State",
   "sameAs": [
-    "https://www.linkedin.com/company/yourbusiness",
-    "https://twitter.com/yourbusiness",
-    "https://en.wikipedia.org/wiki/Your_Business_IF_EXISTS",
-    "https://www.wikidata.org/wiki/YOUR_WIKIDATA_ID_IF_EXISTS"
+    "https://www.facebook.com/yourbusiness",
+    "https://www.yelp.com/biz/your-business"
   ]
 }</pre>
 
-<h3>Schema 3: FAQPage (paste on your FAQ or About page)</h3>
-<p>Write at least 5 questions. Make them the real questions people ask about your business — not generic ones.</p>
+<div class="tip"><p><strong>Use your specific type</strong> instead of "LocalBusiness" for stronger signals: <code>Restaurant</code>, <code>MedicalBusiness</code>, <code>LegalService</code>, <code>HomeAndConstructionBusiness</code>, <code>HealthAndBeautyBusiness</code>, <code>AutomotiveBusiness</code>, <code>FinancialService</code>, <code>RealEstateAgent</code>. Full list at schema.org/LocalBusiness</p></div>
+
+<h3>FAQPage Schema — paste into About or FAQ page</h3>
 <pre>{
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What services does [Business Name] offer?",
+      "name": "What services does [Business] offer?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "[Business Name] offers [list all major services]. We serve [service area]."
+        "text": "[Business] offers [list your services clearly]."
       }
     },
     {
       "@type": "Question",
-      "name": "Where is [Business Name] located?",
+      "name": "Where is [Business] located and what areas do you serve?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "[Business Name] is located at [full address]. We serve clients throughout [service area]."
+        "text": "We are located at [address] and serve [cities/regions]."
       }
     },
     {
       "@type": "Question",
-      "name": "How long has [Business Name] been in business?",
+      "name": "How long has [Business] been in business?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "[Business Name] was founded in [year] and has been serving [city] for [X] years."
+        "text": "[Business] has been serving [city] since [year]."
       }
     },
     {
       "@type": "Question",
-      "name": "Is [Business Name] licensed and insured?",
+      "name": "How do I contact [Business]?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Yes. [Business Name] is fully licensed [license number if applicable] and insured in [state]."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How do I get a quote from [Business Name]?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "You can reach [Business Name] by calling [phone] or emailing [email]. We respond to all inquiries within [timeframe]."
+        "text": "Call us at [phone], email [email], or visit [website]."
       }
     }
   ]
 }</pre>
 
-<div class="callout green">
-  <div class="callout-title">Validate before moving on</div>
-  After adding any schema, test it at <strong>search.google.com/test/rich-results</strong>. Enter your page URL and verify there are zero errors. Errors mean the schema is malformed and AI crawlers may ignore it entirely.
-</div>
+<h3>How To Add It (No Developer Needed)</h3>
+<ul>
+  <li><strong>WordPress:</strong> Install free plugin "Schema &amp; Structured Data for WP &amp; AMP" — paste JSON directly</li>
+  <li><strong>Squarespace / Wix:</strong> Settings → Advanced → Code Injection → paste in the head block</li>
+  <li><strong>Shopify:</strong> Online Store → Themes → Edit Code → theme.liquid → paste before &lt;/head&gt;</li>
+  <li><strong>Any site:</strong> Wrap in <code>&lt;script type="application/ld+json"&gt;...&lt;/script&gt;</code> in your page head</li>
+</ul>
+<div class="tip"><p><strong>Validate:</strong> search.google.com/test/rich-results — paste your URL. Zero critical errors = you're good.</p></div>
 
-<!-- STEP 3 -->
-<h2>Step 3: Submit to the 10 Core Directories</h2>
-<p><strong>Impact: High &mdash; builds your citation footprint. AI systems cross-reference multiple sources to verify entity authenticity.</strong></p>
-<p>The #1 rule before you start: write down your exact NAP (Name, Address, Phone) and use it <em>identically</em> on every platform. Even small variations — &ldquo;St.&rdquo; vs &ldquo;Street,&rdquo; &ldquo;Suite&rdquo; vs &ldquo;Ste.&rdquo; — dilute the consistency signal.</p>
+<hr class="divider">
 
-<div class="formula">
-  <div class="formula-title">Your NAP Template &mdash; copy this exactly everywhere</div>
-  <p><strong>[Exact Business Name]</strong><br>
-  [Street Number] [Street Name][, Suite/Unit if applicable]<br>
-  [City], [State Abbreviation] [ZIP Code]<br>
-  [(XXX) XXX-XXXX]</p>
-</div>
+<div class="page-break"></div>
+<h2>Step 3 — Citation Footprint</h2>
+<p class="section-intro">AI verifies you're real by finding you in multiple independent sources.</p>
+<p>A citation is any online mention of your Name, Address, and Phone (NAP). The rule: <strong>every citation must be identical</strong>. "St." vs "Street" is enough variation to dilute your signal.</p>
 
+<h3>Define Your NAP Source of Truth First</h3>
+<div class="formula">[Business Legal Name]
+[Street Number] [Street Name], [Suite]
+[City], [State] [ZIP]
+Phone: (XXX) XXX-XXXX
+Website: https://yourwebsite.com</div>
+<p>Write this down. Use it everywhere. Never deviate.</p>
+
+<h3>The 10 Priority Directories</h3>
 <table>
   <tr><th>#</th><th>Directory</th><th>URL</th><th>Why It Matters</th></tr>
-  <tr><td>1</td><td>Google Business Profile</td><td>business.google.com</td><td>Already done. Verify it&rsquo;s fully complete.</td></tr>
-  <tr><td>2</td><td>Bing Places for Business</td><td>bingplaces.com</td><td>Powers Microsoft Copilot directly. Import from GBP in one click.</td></tr>
-  <tr><td>3</td><td>Apple Maps Connect</td><td>mapsconnect.apple.com</td><td>Feeds Siri and Apple Intelligence on all iOS devices.</td></tr>
-  <tr><td>4</td><td>Yelp for Business</td><td>biz.yelp.com</td><td>Major AI training data source. Widely cited by Perplexity.</td></tr>
-  <tr><td>5</td><td>Facebook Business</td><td>business.facebook.com</td><td>High-authority entity signal. Facebook Pages are widely indexed.</td></tr>
-  <tr><td>6</td><td>Better Business Bureau</td><td>bbb.org/business-registration</td><td>Strong third-party trust signal. BBB-listed businesses rank higher in credibility assessments.</td></tr>
-  <tr><td>7</td><td>Yellow Pages</td><td>yp.com/claim</td><td>Legacy authority site with high domain trust. Still weighted by AI systems.</td></tr>
-  <tr><td>8</td><td>Foursquare</td><td>business.foursquare.com</td><td>Foursquare data powers dozens of other APIs and directories downstream.</td></tr>
-  <tr><td>9</td><td>Nextdoor Business</td><td>business.nextdoor.com</td><td>High local intent. Nextdoor data is increasingly cited in local AI answers.</td></tr>
-  <tr><td>10</td><td>Hotfrog</td><td>hotfrog.com</td><td>Easy to complete, low competition, legitimate citation source.</td></tr>
+  <tr><td>1</td><td>Google Business Profile</td><td>business.google.com</td><td>Feeds Gemini directly</td></tr>
+  <tr><td>2</td><td>Bing Places</td><td>bingplaces.com</td><td>Powers Microsoft Copilot</td></tr>
+  <tr><td>3</td><td>Apple Maps</td><td>mapsconnect.apple.com</td><td>Powers Siri and iOS search</td></tr>
+  <tr><td>4</td><td>Yelp</td><td>biz.yelp.com</td><td>Major AI training data source</td></tr>
+  <tr><td>5</td><td>Facebook Business</td><td>business.facebook.com</td><td>High-authority entity signal</td></tr>
+  <tr><td>6</td><td>Better Business Bureau</td><td>bbb.org</td><td>Strong credibility signal</td></tr>
+  <tr><td>7</td><td>Yellow Pages</td><td>yp.com</td><td>Legacy; weighted in training data</td></tr>
+  <tr><td>8</td><td>Foursquare</td><td>business.foursquare.com</td><td>Powers many AI mapping APIs</td></tr>
+  <tr><td>9</td><td>Nextdoor</td><td>business.nextdoor.com</td><td>High local-intent signal</td></tr>
+  <tr><td>10</td><td>Hotfrog</td><td>hotfrog.com</td><td>Easy citation, low competition</td></tr>
 </table>
+<div class="callout"><p><strong>After 10:</strong> Use Moz Local (~$14/mo) or BrightLocal to scale to 40–60 citations automatically. Each consistent citation adds to your entity confidence score across AI systems.</p></div>
 
-<h3>Industry-specific directories to add after the core 10</h3>
-<p>After completing the core 10, add 3&ndash;5 directories specific to your industry. These dramatically increase your topical authority:</p>
-<ul>
-  <li><strong>Restaurants:</strong> OpenTable, TripAdvisor, Zomato, Grubhub Business</li>
-  <li><strong>Medical/Dental:</strong> Healthgrades, Zocdoc, Vitals, WebMD Physician Directory</li>
-  <li><strong>Legal:</strong> Avvo, FindLaw, Justia, Martindale-Hubbell</li>
-  <li><strong>Home Services:</strong> Angi (formerly Angie&rsquo;s List), HomeAdvisor, Thumbtack, Houzz</li>
-  <li><strong>Real Estate:</strong> Zillow, Realtor.com, Trulia</li>
-  <li><strong>Beauty/Wellness:</strong> StyleSeat, Vagaro, Fresha</li>
-  <li><strong>Automotive:</strong> CarGurus, Cars.com, Edmunds</li>
-  <li><strong>Hospitality:</strong> TripAdvisor, Booking.com, Expedia Partner Central</li>
-</ul>
+<hr class="divider">
 
-<!-- ══════════════════════════════════════════════════ PART 2 -->
-<h1 class="part-break">
-  <div class="part-label">Part 2 &mdash; The Authority Layer</div>
-  Steps 4&ndash;7: Credibility &amp; Content
-</h1>
-<p>The foundation makes you findable. The authority layer makes you <em>recommendable</em>. These steps create the content and signals that AI systems quote directly when describing your business.</p>
+<h2>Step 4 — About &amp; Facts Pages</h2>
+<p class="section-intro">AI crawls your About page looking for quotable facts. Most About pages fail completely.</p>
 
-<!-- STEP 4 -->
-<h2>Step 4: Set Up Google Search Console and Submit Your Sitemap</h2>
-<p><strong>Impact: Medium-High &mdash; accelerates indexing, surfaces crawl errors, ensures AI systems can read your site.</strong></p>
-
-<h3>Setup (10 minutes)</h3>
+<h3>Rewrite Your About Page With These 5 Paragraphs</h3>
 <ol>
-  <li>Go to <strong>search.google.com/search-console</strong> and sign in</li>
-  <li>Click &ldquo;Add property&rdquo; and enter your domain (e.g., <code>yourwebsite.com</code>)</li>
-  <li>Verify ownership using the HTML tag method: copy the meta tag, paste it into your homepage <code>&lt;head&gt;</code>, then click Verify in GSC</li>
-  <li>Once verified, go to <strong>Sitemaps</strong> in the left menu</li>
-  <li>Enter your sitemap URL (usually <code>yourwebsite.com/sitemap.xml</code>) and click Submit</li>
-  <li>Request indexing of your most important pages: go to URL Inspection, enter each key page URL, and click &ldquo;Request Indexing&rdquo;</li>
+  <li><strong>The What:</strong> One sentence. What your business is, what it does, where. Be specific and factual. Write for a machine first, a human second.</li>
+  <li><strong>The Who:</strong> Named customer types, named locations. "We serve homeowners in the Seattle metro area" beats "we serve clients across the region."</li>
+  <li><strong>The Services:</strong> Bullet list of exact services. Named, specific, no jargon.</li>
+  <li><strong>The Credentials:</strong> Years in business, certifications, awards, licenses, associations. Numbers and named credentials only.</li>
+  <li><strong>The Contact:</strong> Full address, phone, email, website in plain text — yes, on a webpage. AI reads it as structured fact.</li>
 </ol>
 
-<h3>If you don&rsquo;t have a sitemap</h3>
+<h3>Create a /facts Page</h3>
+<p>This is the most underused GEO tactic. Create <code>yourwebsite.com/facts</code> structured like a Wikipedia entry for your business:</p>
 <ul>
-  <li><strong>WordPress:</strong> Install Yoast SEO (free) — it creates a sitemap automatically at <code>yoursite.com/sitemap_index.xml</code></li>
-  <li><strong>Squarespace / Wix / Webflow:</strong> Auto-generated at <code>yourdomain.com/sitemap.xml</code></li>
-  <li><strong>Other:</strong> Generate one free at xml-sitemaps.com</li>
+  <li>Business name (legal and DBA)</li>
+  <li>Founded: [year], by [founder name]</li>
+  <li>Location: [full address]</li>
+  <li>Service area: [cities/regions]</li>
+  <li>Primary services: [bulleted list]</li>
+  <li>Team size / number of employees</li>
+  <li>Licenses and certifications with issuing bodies</li>
+  <li>Awards and recognitions with years</li>
+  <li>Media mentions with publication names and dates</li>
+  <li>Social profiles (linked)</li>
+</ul>
+<div class="tip"><p><strong>Why it works:</strong> Perplexity and ChatGPT with browsing frequently cite /facts-style pages when generating business summaries because the information is dense, specific, and clearly structured. This becomes the "source of record" AI systems prefer over vague homepage copy.</p></div>
+
+<hr class="divider">
+
+<h2>Step 5 — Reviews</h2>
+<p class="section-intro">Reviews are a credibility signal for AI — not just for humans.</p>
+<p>AI treats review volume and recency as trust signals. 47 reviews at 4.3 stars signals more confidence than 4 reviews at 5.0 stars. More data = more confident recommendation.</p>
+
+<div class="step"><div class="num">1</div><div class="step-body"><strong>Build your direct review link</strong><p>GBP dashboard → "Get more reviews" → copy the short link. Use it everywhere.</p></div></div>
+<div class="step"><div class="num">2</div><div class="step-body"><strong>Ask at the right moment</strong><p>Immediately after a positive interaction. Text works best: <em>"Thanks for choosing us — if you have 30 seconds, an honest Google review helps others find us: [link]"</em></p></div></div>
+<div class="step"><div class="num">3</div><div class="step-body"><strong>Spread across platforms</strong><p>Google first, then Yelp, then Facebook. Don't mass-ask everyone on the same day — Google may filter reviews it suspects are coordinated.</p></div></div>
+
+<div class="callout"><p><strong>Target:</strong> 25+ Google reviews at 4.2+ average. That's the threshold where AI systems begin treating you as confidently recommendable rather than an unknown quantity.</p></div>
+
+<hr class="divider">
+
+<div class="page-break"></div>
+<h2>Step 6 — Your First Editorial Mention</h2>
+<p class="section-intro">This separates consistently recommended businesses from occasionally cited ones.</p>
+<p>An editorial mention is when an independent, non-paid source references your business. AI weights these heavily because they represent third-party validation you can't fake with structured data alone.</p>
+
+<h3>5 Easiest Ways To Get Your First One</h3>
+<div class="step"><div class="num">1</div><div class="step-body"><strong>Local newspaper or news site</strong><p>Pitch a genuine story: anniversary, unique service, community involvement. Email the local business reporter directly — not the general inbox.</p></div></div>
+<div class="step"><div class="num">2</div><div class="step-body"><strong>Chamber of Commerce spotlight</strong><p>Most chambers publish member spotlights on their website and newsletter. Join and proactively request a feature. Strong local authority signal.</p></div></div>
+<div class="step"><div class="num">3</div><div class="step-body"><strong>Connectively (formerly HARO) — free</strong><p>Sign up at connectively.us. Journalists post daily source requests. Filter for your industry. Respond with expert quotes. One national placement is worth dozens of directory citations for AI credibility.</p></div></div>
+<div class="step"><div class="num">4</div><div class="step-body"><strong>Industry association listing</strong><p>Trade associations publish member directories on high-authority domains. Join your relevant association and ensure your listing is complete. (NAR for real estate, NAHB for contractors, ADA for dentists, ABA for lawyers, etc.)</p></div></div>
+<div class="step"><div class="num">5</div><div class="step-body"><strong>Guest post on a local or industry blog</strong><p>Write a genuinely useful 600-word article. Include a byline with your name and business. This creates an authoritative, indexed citation AI can reference.</p></div></div>
+
+<hr class="divider">
+
+<h2>Step 7 — Fixing AI Hallucinations</h2>
+<p class="section-intro">When AI says something wrong about your business, here's the exact fix.</p>
+<p>AI hallucinates when conflicting or incomplete data exists in your citation footprint. You can't edit what AI says directly — but you can flood the web with accurate signals until correct information dominates.</p>
+
+<div class="step"><div class="num">1</div><div class="step-body"><strong>Audit what each AI says</strong><p>Use Prompt #1 from your Prompt Pack: "Tell me everything you know about [Business Name] in [City]." Run in all four assistants. Screenshot every incorrect fact.</p></div></div>
+<div class="step"><div class="num">2</div><div class="step-body"><strong>Find the source of bad data</strong><p>Search your business name + the incorrect detail on Google. Find the citation with old/wrong information — usually an old Yelp or Yellow Pages entry.</p></div></div>
+<div class="step"><div class="num">3</div><div class="step-body"><strong>Fix or remove the source</strong><p>Log in and correct it. If you can't claim it, flag it for removal or contact the site directly.</p></div></div>
+<div class="step"><div class="num">4</div><div class="step-body"><strong>Flood with correct information</strong><p>Update GBP, schema, /facts page, and website footer with the accurate details. Correct information needs to outnumber the incorrect source by at least 5:1.</p></div></div>
+
+<div class="callout"><p><strong>Timeline:</strong> Perplexity updates within days to weeks. ChatGPT and Claude take longer. Most hallucinations are corrected within 30–60 days of consistent signal work.</p></div>
+
+<hr class="divider">
+
+<h2>Step 8 — Tracking Your Progress</h2>
+<p class="section-intro">30 minutes per month. No expensive tools required.</p>
+
+<h3>One-Time Setup</h3>
+<ul>
+  <li><strong>Google Search Console:</strong> search.google.com/search-console → add your domain → verify ownership → submit sitemap at yoursite.com/sitemap.xml</li>
+  <li><strong>Bing Webmaster Tools:</strong> bing.com/webmasters → import from Google Search Console (2 minutes) → activates Microsoft Copilot data sourcing</li>
 </ul>
 
-<h3>What to monitor monthly</h3>
+<h3>Monthly 30-Minute AI Audit</h3>
+<p>On the first of every month, run these in ChatGPT and Perplexity:</p>
 <ul>
-  <li><strong>Coverage report:</strong> Check for pages marked &ldquo;Excluded&rdquo; or &ldquo;Error&rdquo; — these pages are invisible to AI</li>
-  <li><strong>Core Web Vitals:</strong> Slow pages get crawled less frequently</li>
-  <li><strong>Security issues:</strong> A hacked or flagged site will be deprioritized or removed from AI sources entirely</li>
+  <li>"What can you tell me about [Business Name] in [City]?"</li>
+  <li>"Who would you recommend for [your service] in [your city]?"</li>
+  <li>"Is [Business Name] a reputable choice for [your service] in [your city]?"</li>
 </ul>
+<p>Log responses in a simple spreadsheet. Track: mentioned? accurate? recommended over competitors? This 30-minute habit shows you clearly whether your AI visibility is improving month over month.</p>
 
-<!-- STEP 5 -->
-<h2>Step 5: Rewrite Your About Page So AI Can Quote It</h2>
-<p><strong>Impact: High for ChatGPT and Claude &mdash; these engines heavily weight your About page for entity information.</strong></p>
-<p>Most About pages are written for humans and are full of vague claims like &ldquo;we&rsquo;re passionate about our customers&rdquo; and &ldquo;we&rsquo;ve been serving the community for years.&rdquo; AI systems need dense, quotable facts — specific numbers, dates, names, and credentials.</p>
+<hr class="divider">
 
-<div class="formula">
-  <div class="formula-title">The AI-Optimized About Page Structure</div>
-  <p><strong>Paragraph 1 — The What (2&ndash;3 sentences):</strong> State exactly what your business is, where it is, and what it primarily does. Include city, state, founding year, and primary service. This is what AI will quote directly.</p>
-  <p style="margin-top:10px"><strong>Paragraph 2 — The Who (2&ndash;3 sentences):</strong> Name the founder or key person, their credentials, years of experience, and relevant background. First and last name. Specific certifications. Specific numbers.</p>
-  <p style="margin-top:10px"><strong>Paragraph 3 — The Proof (2&ndash;3 sentences):</strong> Specific achievements — number of clients served, years in operation, awards, publications, notable projects, or affiliations with recognized organizations.</p>
-  <p style="margin-top:10px"><strong>Paragraph 4 — The Service Detail (3&ndash;5 sentences):</strong> A complete list of your services, service area, customer types, and any specializations. The more specific, the better.</p>
-  <p style="margin-top:10px"><strong>Paragraph 5 — The Contact Summary:</strong> Address, phone, email, and hours in plain text — not just in a contact form. AI crawlers often can&rsquo;t read form fields.</p>
+<h2>The 2-Hour vs 10-Hour Tracks</h2>
+<div class="two-col">
+  <div class="card"><strong>2 Hours/Week (Slow &amp; Steady)</strong><p>Week 1: GBP complete + NAP defined<br>Week 2: Schema added + validated<br>Week 3: Top 5 directories submitted<br>Week 4: About + /facts page written<br>Month 2+: Reviews + editorial mention</p></div>
+  <div class="card"><strong>10 Hours Total (Blitz Mode)</strong><p>Day 1 (2h): GBP + schema + validate<br>Day 2 (2h): All 10 directory submissions<br>Day 3 (2h): About + /facts page<br>Day 4 (2h): Review campaign + GSC setup<br>Day 5 (2h): Prompt Pack AI audit + fix list</p></div>
 </div>
+<div class="callout"><p><strong>Most businesses see measurable AI visibility improvement within 30–45 days of completing Steps 1–4.</strong> The editorial mention (Step 6) pushes you from "occasionally mentioned" to "consistently recommended." Don't let it block you from starting the rest.</p></div>
 
-<h3>Example of a bad About page (before)</h3>
-<div class="callout red">
-  <div class="callout-title">Before &mdash; AI cannot quote this</div>
-  <em>&ldquo;We&rsquo;re a family-owned business that truly cares about our customers. Our team of dedicated professionals has years of experience helping people in the local area. We pride ourselves on quality work and excellent service. Contact us today to learn more!&rdquo;</em>
-</div>
-
-<h3>Example of a good About page (after)</h3>
-<div class="callout green">
-  <div class="callout-title">After &mdash; AI can quote every sentence</div>
-  <em>&ldquo;Peak Plumbing Co. is a licensed residential and commercial plumbing company founded in 2009 in Denver, Colorado. The company specializes in emergency pipe repair, water heater installation, and whole-home repiping, serving homeowners and property managers throughout the Denver metro area. Owner and master plumber David Reyes holds Colorado State License #MP-00124 and has completed over 4,200 plumbing projects in 15 years of operation. Peak Plumbing is a member of the Plumbing-Heating-Cooling Contractors Association and has maintained an A+ rating with the Better Business Bureau since 2012. The company serves Denver, Aurora, Lakewood, Englewood, and Littleton.&rdquo;</em>
-</div>
-
-<!-- STEP 6 -->
-<h2>Step 6: Create a /facts Page — Your AI Knowledge Base</h2>
-<p><strong>Impact: High for all engines &mdash; gives AI a single structured source of ground truth about your business.</strong></p>
-<p>This is one of the most underutilized GEO tactics. Create a page at <code>yourwebsite.com/facts</code> (or <code>/about/facts</code>) that reads like a structured fact sheet about your business. AI systems love this kind of content because it is dense, unambiguous, and easy to quote.</p>
-
-<h3>The /facts page template</h3>
-<p>Structure your /facts page using these sections. Use plain <code>&lt;h2&gt;</code> headings and bullet points — no fancy design needed.</p>
-
-<div class="formula">
-  <div class="formula-title">/facts page structure</div>
-  <p><strong>Business Basics</strong></p>
-  <ul style="margin-top:6px">
-    <li>Full legal name: [Name]</li>
-    <li>Founded: [Year], [City, State]</li>
-    <li>Business type: [LLC / Corp / Sole Proprietor]</li>
-    <li>Industry: [Specific industry]</li>
-    <li>Primary services: [List each service]</li>
-    <li>Service area: [All cities/regions you serve]</li>
-    <li>Hours: [Days and times]</li>
-    <li>Phone: [Number]</li>
-    <li>Email: [Address]</li>
-    <li>Address: [Full address]</li>
-  </ul>
-  <p style="margin-top:12px"><strong>Leadership</strong></p>
-  <ul style="margin-top:6px">
-    <li>Founder/Owner: [Full name], [Title]</li>
-    <li>Credentials: [All licenses, certifications, degrees]</li>
-    <li>Years of experience: [Number]</li>
-  </ul>
-  <p style="margin-top:12px"><strong>Credentials &amp; Accreditations</strong></p>
-  <ul style="margin-top:6px">
-    <li>State license: [License number and type]</li>
-    <li>Certifications: [List each with issuing body]</li>
-    <li>Memberships: [Professional associations]</li>
-    <li>Awards: [Any awards with year]</li>
-    <li>Insurance: [Type and coverage]</li>
-    <li>BBB rating: [Rating, year joined]</li>
-  </ul>
-  <p style="margin-top:12px"><strong>Track Record</strong></p>
-  <ul style="margin-top:6px">
-    <li>Years in operation: [Number]</li>
-    <li>Clients/projects served: [Number]</li>
-    <li>Review count: [Total across platforms]</li>
-    <li>Average rating: [X.X/5.0]</li>
-  </ul>
-  <p style="margin-top:12px"><strong>Media &amp; Press</strong></p>
-  <ul style="margin-top:6px">
-    <li>[Link to any press mention, interview, or publication]</li>
-  </ul>
-</div>
-
-<p>This page should be linked from your footer and your About page. You do not need to promote it heavily — you just need it to exist and be crawlable.</p>
-
-<!-- STEP 7 -->
-<h2>Step 7: Build a FAQ Page with FAQPage Schema</h2>
-<p><strong>Impact: High &mdash; FAQPage schema is one of the most directly cited data sources across all AI engines.</strong></p>
-<p>A properly structured FAQ page with FAQPage schema is one of the highest-value pages you can have for AI visibility. AI assistants are literally trained to answer questions — and your FAQ page gives them pre-formatted, authoritative answers attributed to your business.</p>
-
-<h3>What makes a great AI-optimized FAQ page</h3>
-<ul>
-  <li>Minimum 8 questions (10&ndash;15 is ideal)</li>
-  <li>Questions should match what people actually ask an AI about businesses in your category</li>
-  <li>Answers should be 2&ndash;4 complete sentences — long enough to be informative, short enough to quote directly</li>
-  <li>Include your business name, city, and specific services in the answers themselves</li>
-  <li>Use FAQPage schema (from Step 2 template) so AI crawlers can read the Q&amp;A structure directly</li>
-</ul>
-
-<h3>Question starters to use</h3>
-<ul>
-  <li>&ldquo;What does [Business Name] specialize in?&rdquo;</li>
-  <li>&ldquo;Is [Business Name] licensed and insured?&rdquo;</li>
-  <li>&ldquo;How much does [primary service] typically cost?&rdquo;</li>
-  <li>&ldquo;What areas does [Business Name] serve?&rdquo;</li>
-  <li>&ldquo;How long has [Business Name] been in business?&rdquo;</li>
-  <li>&ldquo;What makes [Business Name] different from other [business type]s?&rdquo;</li>
-  <li>&ldquo;Do you offer emergency/same-day service?&rdquo;</li>
-  <li>&ldquo;What are your payment options?&rdquo;</li>
-  <li>&ldquo;How do I get a quote from [Business Name]?&rdquo;</li>
-  <li>&ldquo;Are your [staff/products/ingredients] [licensed/certified/local/organic]?&rdquo;</li>
-</ul>
-
-<!-- ══════════════════════════════════════════════════ PART 3 -->
-<h1 class="part-break">
-  <div class="part-label">Part 3 &mdash; The Credibility Layer</div>
-  Steps 8&ndash;10: Authority Signals
-</h1>
-<p>The credibility layer is what separates businesses that are occasionally mentioned by AI from businesses that are consistently recommended. These steps build the third-party authority signals that AI systems use to make confident, positive endorsements.</p>
-
-<!-- STEP 8 -->
-<h2>Step 8: Get Your First Editorial Mention</h2>
-<p><strong>Impact: Very High for ChatGPT and Claude &mdash; editorial mentions from established publications are weighted heavily as credibility signals.</strong></p>
-<p>An &ldquo;editorial mention&rdquo; means your business is named in an article, blog post, podcast, or news story by a third party — not paid advertising, not a directory listing you control. It&rsquo;s someone else saying you exist and are worth mentioning.</p>
-
-<h3>The 5 best sources for a first editorial mention</h3>
-
-<h4>1. Local newspaper or news website</h4>
-<p>Most cities have a local newspaper or news site that covers business openings, community stories, and local profiles. Email their business desk with a genuine story angle — a business anniversary, a community initiative, an unusual service, a local hiring expansion. News sites have high domain authority and are widely indexed by AI systems.</p>
-
-<div class="formula">
-  <div class="formula-title">Local press pitch email template</div>
-  <p>Subject: Story idea: [Business Name] — [brief compelling angle]<br><br>
-  Hi [Reporter&rsquo;s Name],<br><br>
-  I&rsquo;m [Your Name], owner of [Business Name] in [City]. I wanted to share a story that might interest your readers: [1&ndash;2 sentence story angle — why is this interesting or relevant to your community right now?].<br><br>
-  [Business Name] [one key fact that makes the story newsworthy — years in business, community contribution, unique service, milestone].<br><br>
-  Happy to provide photos, background information, or a quick phone call. Would this be a fit for [Publication Name]?<br><br>
-  Best,<br>
-  [Your Name]<br>
-  [Business Name] | [Phone] | [Email]</p>
-</div>
-
-<h4>2. Industry blog or trade publication</h4>
-<p>Most industries have trade publications or popular blogs that accept guest posts or feature member businesses. A 600&ndash;800 word guest article that provides genuine value to their readers is a high-authority editorial mention that will be indexed by AI systems for years.</p>
-
-<h4>3. Local business journal</h4>
-<p>Business journals like the <em>Denver Business Journal</em>, <em>Chicago Business</em>, or <em>Nashville Business Journal</em> regularly feature local business profiles. These have exceptionally high domain authority and are widely cited by AI systems when asked about local business recommendations.</p>
-
-<h4>4. Podcast interview</h4>
-<p>A podcast episode where you are the expert guest counts as an editorial mention if the episode has show notes on a website (which nearly all do). The key is that the show notes are indexed and link to your business. Find podcasts in your industry or local business podcasts and pitch yourself as a guest expert.</p>
-
-<h4>5. Chamber of Commerce or Association feature</h4>
-<p>If you&rsquo;re a member of your local Chamber of Commerce, many chambers feature member businesses in their newsletter, blog, or website directory. This is easy to obtain and creates a high-trust citation from an established organization.</p>
-
-<!-- STEP 9 -->
-<h2>Step 9: Index Your Site in Bing Webmaster Tools</h2>
-<p><strong>Impact: Medium-High specifically for Microsoft Copilot &mdash; Bing&rsquo;s index directly powers Copilot answers.</strong></p>
-<p>Most businesses focus on Google and completely ignore Bing. This is a mistake in the AI era because Microsoft Copilot — integrated into Windows, Edge, and Microsoft 365 — draws directly from Bing&rsquo;s index. Copilot has hundreds of millions of users.</p>
-
-<h3>Setup (15 minutes)</h3>
-<ol>
-  <li>Go to <strong>bing.com/webmasters</strong> and sign in with a Microsoft account</li>
-  <li>Add your site and verify ownership (use the XML file method or meta tag — both work)</li>
-  <li>Submit your sitemap URL</li>
-  <li>Go to <strong>URL Submission</strong> and submit your most important pages manually (homepage, About, FAQ, /facts)</li>
-  <li>Make sure your Bing Places listing (Step 3) is linked to the same domain</li>
-</ol>
-
-<h3>Bonus: Also submit to IndexNow</h3>
-<p>IndexNow is a protocol supported by Bing, Yandex, and several other engines that lets you instantly notify them when a page is created or updated. Submitting to IndexNow after any website change means your updates reach Bing (and Copilot) within hours instead of weeks. Instructions at indexnow.org.</p>
-
-<!-- STEP 10 -->
-<h2>Step 10: Create a Wikidata Entry</h2>
-<p><strong>Impact: High for ChatGPT and Claude &mdash; Wikidata is one of the most trusted structured knowledge sources that AI systems draw from.</strong></p>
-<p>Wikidata is a free, open-access knowledge base maintained by the Wikimedia Foundation (the same organization behind Wikipedia). Unlike Wikipedia, which requires articles about &ldquo;notable&rdquo; subjects, Wikidata accepts entries for any business or organization. It is structured data — exactly the kind of authoritative, machine-readable information that AI systems prioritize.</p>
-
-<h3>How to create your Wikidata entry</h3>
-<ol>
-  <li>Create a free account at <strong>wikidata.org</strong></li>
-  <li>Click &ldquo;Create a new item&rdquo; in the left menu</li>
-  <li>Add your business name as the label (in English) and a 1-sentence description (e.g., &ldquo;plumbing company based in Denver, Colorado&rdquo;)</li>
-  <li>Add the following statements (properties):<br><br>
-    <ul>
-      <li><strong>instance of (P31):</strong> business (Q4830453) or the most specific applicable type</li>
-      <li><strong>country (P17):</strong> United States of America (Q30)</li>
-      <li><strong>located in (P131):</strong> Your city (search for it)</li>
-      <li><strong>official website (P856):</strong> Your URL</li>
-      <li><strong>inception (P571):</strong> Your founding year</li>
-      <li><strong>industry (P452):</strong> Your industry</li>
-      <li><strong>Google Knowledge Graph ID (P2671):</strong> Find yours by searching your business on Google and inspecting the URL that appears when you click &ldquo;Feedback&rdquo; on the knowledge panel</li>
-    </ul>
-  </li>
-  <li>Save. Your entry will be reviewed and live within 24&ndash;48 hours.</li>
-</ol>
-
-<div class="callout">
-  <div class="callout-title">Why this matters so much</div>
-  AI systems like ChatGPT are specifically trained to use Wikidata as a structured facts source. A Wikidata entry is the closest thing to &ldquo;registering&rdquo; your business in an AI directory. Many businesses that appear in ChatGPT answers have Wikidata entries. Most businesses that are completely absent from ChatGPT answers do not.
-</div>
-
-<!-- ══════════════════════════════════════════════════ PART 4 -->
-<h1 class="part-break">
-  <div class="part-label">Part 4</div>
-  Ongoing Maintenance: Staying Found
-</h1>
-<p>AI visibility is not a one-time project. These are the monthly and quarterly habits that maintain and improve your standing over time.</p>
-
-<h2>Monthly Tasks (30&ndash;45 minutes/month)</h2>
-<ul>
-  <li><strong>Respond to every GBP review</strong> — both positive and negative. Active review engagement signals to Google (and Gemini) that your listing is monitored and legitimate. Use the customer&rsquo;s first name in your reply when possible.</li>
-  <li><strong>Post one update to your GBP</strong> — a photo, a service update, an announcement. GBP posts keep your listing marked as &ldquo;active&rdquo; and are indexed by Google.</li>
-  <li><strong>Ask 5 recent customers for a review</strong> — send the direct GBP review link. Don&rsquo;t ask all at once; a steady drip of reviews over time looks more natural and authentic.</li>
-  <li><strong>Check Search Console for new errors</strong> — a crawl error can silently remove pages from AI sources.</li>
-  <li><strong>Check what AI says about you</strong> — use the prompts in your Prompt Pack to do a quick audit. Note any new errors or missing information.</li>
-</ul>
-
-<h2>Quarterly Tasks (1&ndash;2 hours/quarter)</h2>
-<ul>
-  <li><strong>Add one new page of content</strong> — a case study, a service detail page, or an FAQ expansion. Fresh indexed content keeps your site active in Perplexity&rsquo;s live search results.</li>
-  <li><strong>Update your schema markup</strong> — if your hours, staff, services, or location changed, update all three schemas.</li>
-  <li><strong>Audit your directory listings</strong> — check the 10 core directories for outdated information, especially hours and phone numbers.</li>
-  <li><strong>Pursue one new editorial mention</strong> — a guest post, a podcast appearance, or a press mention. Each one incrementally increases your AI credibility score.</li>
-  <li><strong>Update your Wikidata entry</strong> — if any facts changed, keep it current.</li>
-</ul>
-
-<!-- ══════════════════════════════════════════════════ TROUBLESHOOTING -->
-<h1 class="part-break">Troubleshooting: When AI Gets Your Business Wrong</h1>
-<p>AI systems sometimes generate confidently wrong information about businesses — incorrect hours, outdated addresses, wrong services, or inaccurate descriptions. Here&rsquo;s how to find it and fix it.</p>
-
-<h2>Step 1: Audit What AI Is Currently Saying About You</h2>
-<p>Open each of the four AI assistants and ask these questions about your business. Screenshot every response.</p>
-<ul>
-  <li><em>&ldquo;Tell me everything you know about [Business Name] in [City, State].&rdquo;</em></li>
-  <li><em>&ldquo;What services does [Business Name] offer and what are their hours?&rdquo;</em></li>
-  <li><em>&ldquo;Is [Business Name] a reputable choice for [your service category] in [city]?&rdquo;</em></li>
-  <li><em>&ldquo;What do customers say about [Business Name]?&rdquo;</em></li>
-</ul>
-<p>Note every piece of wrong, missing, or outdated information.</p>
-
-<h2>Step 2: Identify the Source of the Wrong Information</h2>
-<p>Wrong AI information usually originates from one of three sources:</p>
-<ul>
-  <li><strong>An outdated directory listing</strong> — an old Yelp listing with a former address, a Yellow Pages entry with an old phone number</li>
-  <li><strong>Old website content</strong> — a page that used to exist and was indexed before you updated it</li>
-  <li><strong>A data aggregator</strong> — companies like Data Axle and Localeze aggregate and distribute business data to hundreds of directories. If they have wrong data, it spreads everywhere. You can submit corrections at infogroup.com and whitepages.com/business</li>
-</ul>
-
-<h2>Step 3: The Fix — Authoritative Signal Flooding</h2>
-<p>You cannot directly edit what an AI says about you. But you can flood the web with accurate, authoritative signals that overwhelm and replace the wrong data. The process:</p>
-<ol>
-  <li>Fix every directory listing (use the 10 core from Step 3 as your checklist)</li>
-  <li>Update your schema markup with accurate current information</li>
-  <li>Update your GBP, especially hours and categories</li>
-  <li>Add a &ldquo;Corrections&rdquo; note to your /facts page if the wrong information is specifically addressed there</li>
-  <li>For Perplexity: submit your corrected pages via their feedback mechanism</li>
-  <li>For ChatGPT: submit corrections through OpenAI&rsquo;s business information form (platform.openai.com/docs/contact)</li>
-</ol>
-
-<h2>How Long Does It Take to Fix?</h2>
-<table>
-  <tr><th>AI Engine</th><th>Typical Correction Timeline</th><th>Why</th></tr>
-  <tr><td>Perplexity</td><td>Days to 2 weeks</td><td>Does live web searches; picks up corrected pages quickly</td></tr>
-  <tr><td>Gemini</td><td>1&ndash;3 weeks</td><td>Google index updates rapidly once GSC re-crawls your pages</td></tr>
-  <tr><td>ChatGPT</td><td>Weeks to months</td><td>Training data updates on a cycle; live browsing updates faster</td></tr>
-  <tr><td>Claude</td><td>Weeks to months</td><td>Training data dependent; editorial sources update faster than web</td></tr>
-</table>
-
-<!-- ══════════════════════════════════════════════════ SUMMARY -->
-<h1 class="part-break">Quick-Reference Summary</h1>
-<p>Here is a one-page summary of all 10 steps and their impact, in priority order.</p>
-
-<table>
-  <tr><th>Step</th><th>Action</th><th>Impact</th><th>Time</th></tr>
-  <tr><td>1</td><td>Claim &amp; fully complete Google Business Profile</td><td>Very High</td><td>1&ndash;2 hrs</td></tr>
-  <tr><td>2</td><td>Add LocalBusiness, Organization &amp; FAQPage schema</td><td>High</td><td>1&ndash;2 hrs</td></tr>
-  <tr><td>3</td><td>Submit to 10 core directories with consistent NAP</td><td>High</td><td>2&ndash;3 hrs</td></tr>
-  <tr><td>4</td><td>Set up Google Search Console &amp; submit sitemap</td><td>Medium-High</td><td>30 min</td></tr>
-  <tr><td>5</td><td>Rewrite About page using the AI formula</td><td>High</td><td>1 hr</td></tr>
-  <tr><td>6</td><td>Create /facts page — your AI knowledge base</td><td>High</td><td>1 hr</td></tr>
-  <tr><td>7</td><td>Build FAQ page with FAQPage schema</td><td>High</td><td>1&ndash;2 hrs</td></tr>
-  <tr><td>8</td><td>Earn first editorial mention (press, blog, podcast)</td><td>Very High</td><td>2&ndash;4 hrs</td></tr>
-  <tr><td>9</td><td>Submit to Bing Webmaster Tools</td><td>Medium-High</td><td>15 min</td></tr>
-  <tr><td>10</td><td>Create Wikidata entry</td><td>High</td><td>30&ndash;60 min</td></tr>
-</table>
-
-<div class="callout green">
-  <div class="callout-title">Total investment</div>
-  Most business owners complete Steps 1&ndash;4 in a single focused afternoon. Steps 5&ndash;10 take a weekend. The full system is achievable in one week of part-time effort. The 30-Day Action Plan in your bundle breaks it into daily 30-minute tasks so you never feel overwhelmed.
-</div>
-
-<hr>
-<div class="page-footer">
-  <span>Found by AI &mdash; The Complete Playbook &copy; 2026 MyGeoRadar</span>
-  <span>mygeoradar.com &bull; hello@mygeoradar.com</span>
+<hr class="divider">
+<div class="footer">
+  <p><strong>Found by AI — The Complete AI Visibility Playbook</strong></p>
+  <p>Part of the Found by AI Bundle &nbsp;·&nbsp; mygeoradar.com &nbsp;·&nbsp; hello@mygeoradar.com</p>
+  <p style="margin-top:6px">© 2026 MyGeoRadar. All rights reserved. For personal and business use only. Do not redistribute.</p>
 </div>
 
 </body>
