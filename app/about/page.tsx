@@ -36,9 +36,9 @@ export default function AboutPage() {
         <div className="max-w-3xl mx-auto">
 
           {/* Header */}
-          <div className="text-center mb-10">
+          <div className="text-center mb-12">
             <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">About</p>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-gradient-subtle">
               Built by someone who actually cares
             </h1>
             <p className="mt-5 text-muted max-w-xl mx-auto leading-relaxed">
@@ -46,17 +46,17 @@ export default function AboutPage() {
               frustrated watching small businesses get left behind as AI replaced traditional search.
             </p>
 
-            {/* Above-fold CTA */}
+            {/* Above-fold CTAs */}
             <div className="mt-7 flex flex-col sm:flex-row items-center justify-center gap-3">
               <Link
                 href="/playbook"
-                className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent/90 transition-colors"
+                className="btn-primary text-sm px-6 py-3"
               >
                 Get the Found by AI Playbook <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 bg-surface border border-border text-foreground font-semibold text-sm px-6 py-3 rounded-xl hover:bg-surface-2 transition-colors"
+                className="btn-secondary text-sm px-6 py-3"
               >
                 Free AI visibility tips
               </Link>
@@ -64,7 +64,7 @@ export default function AboutPage() {
           </div>
 
           {/* Founder card */}
-          <div className="bg-surface border border-border rounded-2xl overflow-hidden">
+          <div className="bg-surface border border-border rounded-2xl overflow-hidden shadow-card-hover ring-1 ring-border/50">
             <div className="flex flex-col md:flex-row">
 
               {/* Photo */}
@@ -77,6 +77,8 @@ export default function AboutPage() {
                     className="object-cover object-top"
                     priority
                   />
+                  {/* Subtle overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface/20 to-transparent pointer-events-none" />
                 </div>
               </div>
 
@@ -109,15 +111,15 @@ export default function AboutPage() {
 
                 {/* Credential badges */}
                 <div className="flex flex-wrap gap-3 pt-2">
-                  <div className="flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-4 py-1.5">
+                  <div className="flex items-center gap-2 bg-accent/10 border border-accent/20 rounded-full px-4 py-1.5 hover:bg-accent/20 transition-colors">
                     <GraduationCap className="w-3.5 h-3.5 text-accent" />
                     <span className="text-xs font-medium text-accent">Elon University &mdash; AI Scholar</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-surface-2 border border-border rounded-full px-4 py-1.5">
+                  <div className="flex items-center gap-2 bg-surface-2 border border-border rounded-full px-4 py-1.5 hover:border-accent/40 transition-colors">
                     <Lightbulb className="w-3.5 h-3.5 text-foreground-dim" />
                     <span className="text-xs font-medium text-foreground-dim">Self-taught developer &amp; entrepreneur</span>
                   </div>
-                  <div className="flex items-center gap-2 bg-surface-2 border border-border rounded-full px-4 py-1.5">
+                  <div className="flex items-center gap-2 bg-surface-2 border border-border rounded-full px-4 py-1.5 hover:border-accent/40 transition-colors">
                     <Radar className="w-3.5 h-3.5 text-foreground-dim" />
                     <span className="text-xs font-medium text-foreground-dim">Builder of MyGeoRadar</span>
                   </div>
@@ -127,43 +129,43 @@ export default function AboutPage() {
           </div>
 
           {/* ─── WHAT I DISCOVERED ─── */}
-          <div className="mt-14">
+          <div className="mt-16">
             <h2 className="text-2xl font-bold mb-2 text-center">What I found when I started testing</h2>
             <p className="text-sm text-muted text-center mb-8 max-w-xl mx-auto">
               Before writing a single word of the playbook, I ran every prompt in the pack
               on 50+ real local businesses across 8 industries. The results were worse than I expected.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              <div className="p-6 rounded-2xl bg-surface border border-border text-center">
-                <div className="flex justify-center mb-3">
-                  <Search className="w-6 h-6 text-accent" />
+              {[
+                {
+                  icon: Search,
+                  stat: '9 in 10',
+                  body: 'businesses had zero presence in AI answers — not mentioned, not cited, not acknowledged when asked directly about their category',
+                },
+                {
+                  icon: BarChart2,
+                  stat: '6 of 50',
+                  body: 'had accurate AI descriptions — the rest had wrong hours, missing services, outdated locations, or were described as competitors',
+                },
+                {
+                  icon: CheckCircle,
+                  stat: '< 30 days',
+                  body: 'was the average time to go from invisible to appearing in AI answers after applying the playbook\'s 27-point checklist',
+                },
+              ].map(({ icon: Icon, stat, body }) => (
+                <div
+                  key={stat}
+                  className="p-6 rounded-2xl bg-surface border border-border border-l-4 border-l-accent/50 text-center hover:shadow-card-hover transition-all"
+                >
+                  <div className="flex justify-center mb-3">
+                    <div className="w-9 h-9 rounded-lg bg-accent/10 flex items-center justify-center">
+                      <Icon className="w-5 h-5 text-accent" />
+                    </div>
+                  </div>
+                  <p className="text-3xl font-black text-accent mb-1">{stat}</p>
+                  <p className="text-sm text-muted leading-relaxed">{body}</p>
                 </div>
-                <p className="text-3xl font-black text-accent mb-1">9 in 10</p>
-                <p className="text-sm text-muted leading-relaxed">
-                  businesses had zero presence in AI answers — not mentioned, not cited, not acknowledged
-                  when asked directly about their category
-                </p>
-              </div>
-              <div className="p-6 rounded-2xl bg-surface border border-border text-center">
-                <div className="flex justify-center mb-3">
-                  <BarChart2 className="w-6 h-6 text-accent" />
-                </div>
-                <p className="text-3xl font-black text-accent mb-1">6 of 50</p>
-                <p className="text-sm text-muted leading-relaxed">
-                  had accurate AI descriptions — the rest had wrong hours, missing services,
-                  outdated locations, or were described as competitors
-                </p>
-              </div>
-              <div className="p-6 rounded-2xl bg-surface border border-border text-center">
-                <div className="flex justify-center mb-3">
-                  <CheckCircle className="w-6 h-6 text-accent" />
-                </div>
-                <p className="text-3xl font-black text-accent mb-1">&lt; 30 days</p>
-                <p className="text-sm text-muted leading-relaxed">
-                  was the average time to go from invisible to appearing in AI answers
-                  after applying the playbook&apos;s 27-point checklist
-                </p>
-              </div>
+              ))}
             </div>
             <p className="text-sm text-muted text-center mt-6 max-w-2xl mx-auto leading-relaxed">
               That&apos;s fixable. Every one of those businesses had the same gaps, in roughly the same order.
@@ -172,18 +174,22 @@ export default function AboutPage() {
             </p>
           </div>
 
+          {/* Divider */}
+          <div className="divider my-12" />
+
           {/* Bottom CTA */}
-          <div className="mt-12 text-center">
+          <div className="text-center">
             <p className="text-muted text-sm mb-5">
               Ready to get your business found and recommended by AI?
             </p>
             <Link
               href="/playbook"
-              className="inline-flex items-center gap-2 bg-accent text-white font-semibold text-sm px-6 py-3 rounded-xl hover:bg-accent/90 transition-colors"
+              className="btn-primary text-sm px-6 py-3"
             >
               Get the Found by AI Playbook &mdash; $27
               <ArrowRight className="w-4 h-4" />
             </Link>
+            <p className="text-xs text-muted mt-4">One-time &middot; Instant download &middot; 30-day money-back guarantee</p>
           </div>
 
         </div>
