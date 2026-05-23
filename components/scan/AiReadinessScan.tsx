@@ -4,39 +4,34 @@ import { useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight, CheckCircle, AlertTriangle, XCircle,
-  Loader2, Radar, ChevronDown, ChevronUp, ExternalLink,
+  Loader2, Radar, Lock, ExternalLink,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
-// ── Types ─────────────────────────────────────────────────
 type Status = 'pass' | 'warn' | 'fail'
-interface Check {
+interface FreeCheck {
   id: string
   label: string
   status: Status
   impact: 'High' | 'Medium'
-  detail: string
-  fix: string
 }
 interface ScanResult {
+  scanId: string | null
   score: number
   url: string
-  checks: Check[]
-  meta: { title: string; description: string }
+  checks: FreeCheck[]
   scannedAt: string
 }
 
-// ── Score helpers ────────────────────────────────────────
-
 function scoreLabel(s: number) {
-  if (s >= 80) return { label: 'AI-Ready', color: 'text-emerald-600', ring: 'stroke-emerald-500' }
-  if (s >= 55) return { label: 'Partially Visible', color: 'text-amber-500', ring: 'stroke-amber-400' }
-  return { label: 'Hard to Read', color: 'text-red-500', ring: 'stroke-red-500' }
+  if (s >= 80) return { label: 'AI-Ready',         color: 'text-emerald-600', ring: 'stroke-emerald-500' }
+  if (s >= 55) return { label: 'Partially Visible', color: 'text-amber-500',   ring: 'stroke-amber-400'  }
+  return               { label: 'Hard to Read',     color: 'text-red-500',     ring: 'stroke-red-500'    }
 }
 
 function ScoreRing({ score }: { score: number }) {
   const { label, color, ring } = scoreLabel(score)
-  const r = 40
+  const r    = 40
   const circ = 2 * Math.PI * r
   const dash = (score / 100) * circ
   return (
@@ -59,77 +54,38 @@ function ScoreRing({ score }: { score: number }) {
   )
 }
 
-// ── Check row ─────────────────────────────────────────────
-
-function CheckRow({ check }: { check: Check }) {
-  const [open, setOpen] = useState(false)
-  const icon = check.status === 'pass'
-    ? <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-    : check.status === 'warn'
-    ? <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
-    : <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-
-  const rowBg = check.status === 'pass' ? 'bg-emerald-50 border-emerald-100'
-    : check.status === 'warn' ? 'bg-amber-50 border-amber-100'
-    : 'bg-red-50 border-red-100'
-
-  return (
-    <div className={clsx('rounded-lg border overflow-hidden', rowBg)}>
-      <button
-        onClick={() => setOpen(!open)}
-        className="w-full flex items-center gap-3 px-4 py-3 text-left hover:opacity-80 transition-opacity"
-      >
-        {icon}
-        <span className="flex-1 text-sm font-medium text-foreground">{check.label}</span>
-        <span className={clsx(
-          'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded',
-          check.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'
-        )}>
-          {check.impact}
-        </span>
-        {open
-          ? <ChevronUp className="w-3.5 h-3.5 text-muted flex-shrink-0" />
-          : <ChevronDown className="w-3.5 h-3.5 text-muted flex-shrink-0" />}
-      </button>
-      {open && (
-        <div className="px-4 pb-4 flex flex-col gap-2 border-t border-current/10">
-          <p className="text-xs text-foreground/80 leading-relaxed">{check.detail}</p>
-          {check.status !== 'pass' && (
-            <div className="flex items-start gap-2 bg-white/60 rounded-md p-2.5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-accent mt-0.5 flex-shrink-0">Fix</span>
-              <p className="text-xs text-foreground/70 leading-relaxed">{check.fix}</p>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  )
+function statusIcon(status: Status) {
+  if (status === 'pass') return <CheckCircle  className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+  if (status === 'warn') return <AlertTriangle className="w-4 h-4 text-amber-400  flex-shrink-0" />
+  return                        <XCircle       className="w-4 h-4 text-red-500    flex-shrink-0" />
 }
 
-// ── Main component ───────────────────────────────────────
+function statusBg(status: Status) {
+  if (status === 'pass') return 'bg-emerald-50 border-emerald-100'
+  if (status === 'warn') return 'bg-amber-50   border-amber-100'
+  return                        'bg-red-50     border-red-100'
+}
 
 export function AiReadinessScan() {
-  const [url, setUrl]           = useState('')
-  const [bizName, setBizName]   = useState('')
-  const [loading, setLoading]   = useState(false)
+  const [url,      setUrl]      = useState('')
+  const [bizName,  setBizName]  = useState('')
+  const [loading,  setLoading]  = useState(false)
   const [progress, setProgress] = useState(0)
-  const [result, setResult]     = useState<ScanResult | null>(null)
-  const [error, setError]       = useState('')
+  const [result,   setResult]   = useState<ScanResult | null>(null)
+  const [error,    setError]    = useState('')
+  const [paying,   setPaying]   = useState(false)
 
   async function runScan(e: React.FormEvent) {
     e.preventDefault()
     if (!url.trim()) return
-    setLoading(true)
-    setError('')
-    setResult(null)
-    setProgress(0)
+    setLoading(true); setError(''); setResult(null); setProgress(0)
 
     const tick = setInterval(() => {
       setProgress(p => p < 85 ? p + Math.random() * 12 : p)
     }, 400)
 
     try {
-      const res = await fetch('/api/scan', {
+      const res  = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: url.trim(), businessName: bizName.trim() }),
@@ -148,28 +104,43 @@ export function AiReadinessScan() {
     }
   }
 
+  async function unlockReport() {
+    if (!result?.scanId) return
+    setPaying(true)
+    try {
+      const res  = await fetch('/api/report-checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scanId: result.scanId }),
+      })
+      const data = await res.json()
+      if (data.url) window.location.href = data.url
+      else setError('Could not start checkout. Please try again.')
+    } catch {
+      setError('Could not start checkout. Please try again.')
+    } finally {
+      setPaying(false)
+    }
+  }
+
   const failCount = result?.checks.filter(c => c.status === 'fail').length ?? 0
   const warnCount = result?.checks.filter(c => c.status === 'warn').length ?? 0
-  const needsHelp = result && result.score < 75
 
   return (
     <div className="w-full max-w-2xl mx-auto">
 
-      {/* ─ Form ─ */}
+      {/* ── Form ── */}
       {!result && (
         <form onSubmit={runScan} className="flex flex-col gap-3">
           <div className="flex flex-col sm:flex-row gap-3">
             <input
-              type="url"
-              required
-              value={url}
+              type="url" required value={url}
               onChange={e => setUrl(e.target.value)}
               placeholder="https://yourbusiness.com"
               className="input-base flex-1"
             />
             <input
-              type="text"
-              value={bizName}
+              type="text" value={bizName}
               onChange={e => setBizName(e.target.value)}
               placeholder="Business name (optional)"
               className="input-base sm:w-52"
@@ -180,34 +151,29 @@ export function AiReadinessScan() {
             disabled={loading || !url.trim()}
             className="btn-primary w-full justify-center py-3.5 text-base"
           >
-            {loading ? (
-              <><Loader2 className="w-4 h-4 animate-spin" /> Scanning…</>
-            ) : (
-              <><Radar className="w-4 h-4" /> Run Free AI Readiness Scan</>
-            )}
+            {loading
+              ? <><Loader2 className="w-4 h-4 animate-spin" /> Scanning&hellip;</>
+              : <><Radar   className="w-4 h-4" /> Run Free AI Readiness Scan</>}
           </button>
           <p className="text-xs text-muted text-center">
-            Free, instant, no signup required · We only check publicly visible signals
+            Free &middot; Instant &middot; No signup required
           </p>
         </form>
       )}
 
-      {/* ─ Progress bar ─ */}
+      {/* ── Progress ── */}
       {loading && (
         <div className="mt-4">
           <div className="h-1.5 w-full bg-surface-2 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-accent rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
+            <div className="h-full bg-accent rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
           </div>
           <p className="text-xs text-muted text-center mt-2 animate-pulse">
-            Checking HTTPS · robots.txt · schema · meta tags · structured data…
+            Checking HTTPS &middot; robots.txt &middot; schema &middot; meta tags &middot; structured data&hellip;
           </p>
         </div>
       )}
 
-      {/* ─ Error ─ */}
+      {/* ── Error ── */}
       {error && (
         <div className="mt-4 flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200">
           <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
@@ -215,7 +181,7 @@ export function AiReadinessScan() {
         </div>
       )}
 
-      {/* ─ Results ─ */}
+      {/* ── Results ── */}
       {result && (
         <div className="flex flex-col gap-5">
 
@@ -235,40 +201,73 @@ export function AiReadinessScan() {
                 {failCount > 0 && `${failCount} critical issue${failCount > 1 ? 's' : ''} found. `}
                 {warnCount > 0 && `${warnCount} warning${warnCount > 1 ? 's' : ''} to review. `}
                 {failCount === 0 && warnCount === 0 && 'All checks passed. '}
-                Click any row below for details and a fix.
               </p>
             </div>
           </div>
 
-          {/* Checks list */}
-          <div className="flex flex-col gap-2">
-            {result.checks.map(c => <CheckRow key={c.id} check={c} />)}
+          {/* Locked checks list */}
+          <div className="relative">
+            {/* Visible rows — labels + icons only, no expandable details */}
+            <div className="flex flex-col gap-2">
+              {result.checks.map(c => (
+                <div
+                  key={c.id}
+                  className={clsx('rounded-lg border flex items-center gap-3 px-4 py-3', statusBg(c.status))}
+                >
+                  {statusIcon(c.status)}
+                  <span className="flex-1 text-sm font-medium text-foreground">{c.label}</span>
+                  <span className={clsx(
+                    'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded',
+                    c.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'
+                  )}>
+                    {c.impact}
+                  </span>
+                  <Lock className="w-3.5 h-3.5 text-muted/40 flex-shrink-0" />
+                </div>
+              ))}
+            </div>
+
+            {/* Blur + unlock overlay — only shown when there are issues */}
+            {(failCount > 0 || warnCount > 0) && (
+              <div className="absolute inset-x-0 bottom-0 h-48 flex flex-col items-center justify-end pb-4"
+                style={{ background: 'linear-gradient(to bottom, transparent 0%, var(--color-background, white) 60%)' }}
+              >
+                <div className="text-center px-4">
+                  <p className="text-sm font-semibold mb-0.5">
+                    {failCount} issue{failCount !== 1 ? 's' : ''} found — see exactly what to fix
+                  </p>
+                  <p className="text-xs text-muted mb-3">
+                    Unlock your full report: what each issue means, why it matters, and a step-by-step guide to fix it.
+                  </p>
+                  <button
+                    onClick={unlockReport}
+                    disabled={paying}
+                    className="btn-primary gap-2 text-sm px-6 py-3"
+                  >
+                    {paying
+                      ? <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting&hellip;</>
+                      : <><Lock className="w-4 h-4" /> Unlock Full Report &amp; Fix Guides — $9.99</>}
+                  </button>
+                  <p className="text-xs text-muted/60 mt-2">One-time &middot; Instant access &middot; Secure checkout</p>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* CTA — contextual */}
-          {needsHelp ? (
-            <div className="p-6 rounded-2xl bg-accent/5 border border-accent/20 text-center">
-              <p className="text-sm font-semibold mb-1">
-                {failCount} critical issue{failCount !== 1 ? 's' : ''} are holding your site back from AI visibility.
-              </p>
-              <p className="text-xs text-muted mb-4 max-w-md mx-auto">
-                The <strong className="text-foreground">Found by AI Playbook</strong> has a step-by-step fix for every one of these —
-                with a 27-point checklist, prompt pack, and 30-day plan. One-time, $27.
-              </p>
-              <Link href="/playbook" className="btn-primary text-sm px-6 py-2.5">
-                Fix these issues — Get the Playbook <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          ) : (
+          {/* If all passing — no paywall, just upsell playbook */}
+          {failCount === 0 && warnCount === 0 && (
             <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
               <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-              <p className="text-sm font-semibold text-emerald-800 mb-1">Your site's technical foundation is solid.</p>
+              <p className="text-sm font-semibold text-emerald-800 mb-1">Your site&apos;s technical foundation is solid.</p>
               <p className="text-xs text-emerald-700 mb-4 max-w-md mx-auto">
-                Technical structure is only one layer of AI visibility. The playbook covers the full picture:
-                citation building, content authority, review signals, and ongoing monitoring —
+                Technical structure is only one layer. The playbook covers citation building,
+                content authority, review signals, and ongoing monitoring —
                 the things that actually make AI recommend you over competitors.
               </p>
-              <Link href="/playbook" className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 underline underline-offset-2 hover:text-emerald-900 transition-colors">
+              <Link
+                href="/playbook"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 underline underline-offset-2 hover:text-emerald-900 transition-colors"
+              >
                 See the full AI visibility system <ExternalLink className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -279,7 +278,7 @@ export function AiReadinessScan() {
             onClick={() => { setResult(null); setProgress(0); setError('') }}
             className="text-xs text-muted hover:text-accent transition-colors text-center"
           >
-            ← Scan a different site
+            &larr; Scan a different site
           </button>
         </div>
       )}
