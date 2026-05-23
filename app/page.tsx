@@ -3,6 +3,7 @@ import Script from 'next/script'
 import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
+import { AiReadinessScan } from '@/components/scan/AiReadinessScan'
 import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, Star, AlertTriangle, TrendingUp, Clock, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
@@ -143,7 +144,7 @@ const previewChecklist = [
   { done: false, text: 'Publish at least 3 authoritative articles that cite your expertise' },
   { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
   { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
-  { done: false, text: 'Create a dedicated “About” page written to be pulled by AI overviews' },
+  { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
@@ -160,7 +161,6 @@ export default function HomePage() {
 
         {/* HERO */}
         <section className="relative pt-32 pb-20 px-4 md:px-8 text-center overflow-hidden">
-          {/* Background: grid + radial glow */}
           <div className="absolute inset-0 hero-bg opacity-60 pointer-events-none" aria-hidden="true" />
           <div className="relative max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 animate-fade-in shadow-glow-xs">
@@ -180,21 +180,52 @@ export default function HomePage() {
               step-by-step system to fix that — no tech skills, no agency, no monthly subscription.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link href="/playbook">
+              <a href="#scan">
                 <Button variant="primary" size="lg" className="gap-2 shadow-lg shadow-accent/20 ring-2 ring-accent/20 ring-offset-2">
-                  Get the Playbook — $27 <ArrowRight className="w-4 h-4" />
+                  Check Your AI Readiness — Free <ArrowRight className="w-4 h-4" />
                 </Button>
-              </Link>
+              </a>
               <Link href="/#what-you-get" className="text-sm text-muted hover:text-accent transition-colors font-medium">
                 See what’s included ↓
               </Link>
             </div>
-            <p className="text-xs text-muted mt-4">One-time payment &middot; Instant download &middot; 30-day money-back guarantee</p>
+            <p className="text-xs text-muted mt-4">Free scan · No signup · Results in seconds</p>
+          </div>
+        </section>
+
+        {/* ─── FREE AI READINESS SCAN ─── */}
+        <section id="scan" className="py-16 px-4 md:px-8 bg-surface/40 border-y border-border">
+          <div className="max-w-3xl mx-auto">
+
+            {/* Section headline */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4">
+                <Radar className="w-3.5 h-3.5" />
+                Free · Instant · No signup
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-3">
+                Is your site built so AI can read it?
+              </h2>
+              <p className="text-muted text-sm max-w-xl mx-auto leading-relaxed">
+                Before selling you anything, we want to check if you actually need it.
+                Enter your website URL and we’ll scan the technical signals AI crawlers use to
+                read, understand, and cite a business — things like structured data, meta tags,
+                schema markup, and whether AI bots are accidentally blocked.
+              </p>
+              <p className="text-xs text-muted/70 mt-2 max-w-lg mx-auto">
+                This scan checks <em>how your site is built</em>, not whether a specific AI has indexed it today.
+                A site that passes these checks is structured in a way that AI can parse, trust, and reference.
+              </p>
+            </div>
+
+            {/* The scan widget */}
+            <AiReadinessScan />
+
           </div>
         </section>
 
         {/* TRUST BAR */}
-        <section className="py-6 px-4 border-y border-border bg-surface/60 backdrop-blur-sm">
+        <section className="py-6 px-4 border-b border-border bg-surface/60 backdrop-blur-sm">
           <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10 text-center">
             {[
               { icon: CheckCircle, label: 'Covers all 4 major AI assistants' },
@@ -314,7 +345,6 @@ export default function HomePage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
               {/* CHECKLIST PREVIEW */}
               <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
@@ -364,7 +394,6 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-
             </div>
 
             <div className="text-center mt-10">
@@ -373,7 +402,7 @@ export default function HomePage() {
                   Get the full bundle — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <p className="text-xs text-muted mt-3">Instant download &middot; 30-day money-back guarantee</p>
+              <p className="text-xs text-muted mt-3">Instant download · 30-day money-back guarantee</p>
             </div>
           </div>
         </section>
@@ -498,13 +527,12 @@ export default function HomePage() {
         <section id="pricing" className="py-20 px-4 md:px-8">
           <div className="max-w-md mx-auto">
             <div className="rounded-2xl border-2 border-accent bg-surface p-8 text-center shadow-xl shadow-accent/15 relative overflow-hidden">
-              {/* Top accent glow */}
               <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent/40 via-accent to-accent/40" />
               <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4 mt-2">Found by AI — Complete Bundle</p>
               <div className="flex items-end justify-center gap-1 mb-1">
                 <span className="text-6xl font-black text-gradient">$27</span>
               </div>
-              <p className="text-sm text-muted mb-8">One-time payment &middot; No subscription &middot; Instant download</p>
+              <p className="text-sm text-muted mb-8">One-time payment · No subscription · Instant download</p>
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
                   'The Complete AI Visibility Playbook',
@@ -525,7 +553,7 @@ export default function HomePage() {
                   Get instant access — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <p className="text-xs text-muted mt-4">Secure checkout via Stripe &middot; PDF delivered instantly after payment</p>
+              <p className="text-xs text-muted mt-4">Secure checkout via Stripe · PDF delivered instantly after payment</p>
             </div>
           </div>
         </section>
@@ -562,7 +590,7 @@ export default function HomePage() {
                 Get the Found by AI Playbook — $27 <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
-            <p className="text-xs text-muted mt-4">One-time &middot; Instant download &middot; 30-day money-back guarantee</p>
+            <p className="text-xs text-muted mt-4">One-time · Instant download · 30-day money-back guarantee</p>
           </div>
         </section>
 
