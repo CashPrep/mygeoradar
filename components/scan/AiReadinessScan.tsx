@@ -124,7 +124,6 @@ export function AiReadinessScan() {
     setResult(null)
     setProgress(0)
 
-    // Fake progress animation while waiting
     const tick = setInterval(() => {
       setProgress(p => p < 85 ? p + Math.random() * 12 : p)
     }, 400)
@@ -263,7 +262,7 @@ export function AiReadinessScan() {
           ) : (
             <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
               <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
-              <p className="text-sm font-semibold text-emerald-800 mb-1">Your site\'s technical foundation is solid.</p>
+              <p className="text-sm font-semibold text-emerald-800 mb-1">Your site's technical foundation is solid.</p>
               <p className="text-xs text-emerald-700 mb-4 max-w-md mx-auto">
                 Technical structure is only one layer of AI visibility. The playbook covers the full picture:
                 citation building, content authority, review signals, and ongoing monitoring —
