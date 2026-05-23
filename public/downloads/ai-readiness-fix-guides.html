@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI Readiness Fix Guides &mdash; MyGeoRadar</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; font-size: 13.5px; line-height: 1.65; color: #1a1a2e; background: #fff; }
+  .page { max-width: 760px; margin: 0 auto; padding: 60px 48px; }
+
+  /* ── Cover ── */
+  .cover { padding-bottom: 60px; border-bottom: 3px solid #6c47ff; margin-bottom: 48px; page-break-after: always; }
+  .cover-badge { display: inline-block; background: #f0ecff; color: #6c47ff; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; margin-bottom: 24px; }
+  .cover h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin-bottom: 12px; }
+  .cover h1 span { color: #6c47ff; }
+  .cover p { color: #555; font-size: 15px; margin-bottom: 6px; }
+  .cover-sub { font-size: 13px; color: #888; margin-top: 8px; }
+  .cover-meta { font-size: 11px; color: #aaa; margin-top: 40px; }
+  .cover-toc { margin-top: 36px; border: 1.5px solid #e8e8f0; border-radius: 10px; padding: 20px 24px; }
+  .cover-toc h3 { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #6c47ff; margin-bottom: 12px; }
+  .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 24px; }
+  .toc-item { font-size: 12px; color: #444; display: flex; align-items: center; gap: 8px; }
+  .toc-num { flex-shrink: 0; width: 20px; height: 20px; background: #6c47ff; color: #fff; border-radius: 50%; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .toc-tag { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; margin-left: 4px; }
+  .toc-tag-critical { background: #fff0f0; color: #d93025; }
+  .toc-tag-rec { background: #f0ecff; color: #6c47ff; }
+
+  /* ── How-to callout ── */
+  .callout { background: #f0ecff; border-left: 4px solid #6c47ff; padding: 14px 18px; border-radius: 0 8px 8px 0; margin: 24px 0; }
+  .callout p { margin: 0; color: #3b2e8a; font-size: 13px; }
+
+  /* ── Section headers ── */
+  .section-header { margin: 48px 0 20px; }
+  .section-header .label { display: inline-block; background: #6c47ff; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; padding: 3px 10px; border-radius: 4px; margin-bottom: 8px; }
+  .section-header h2 { font-size: 20px; font-weight: 800; color: #1a1a2e; }
+  .section-header p { font-size: 13px; color: #666; margin-top: 4px; }
+
+  /* ── Guide card ── */
+  .guide { border: 1.5px solid #e8e8f0; border-radius: 14px; overflow: hidden; margin-bottom: 32px; page-break-inside: avoid; }
+  .guide-header { background: #f7f7ff; border-bottom: 1.5px solid #e8e8f0; padding: 18px 22px; display: flex; align-items: flex-start; gap: 14px; }
+  .guide-num { flex-shrink: 0; width: 32px; height: 32px; background: #6c47ff; color: #fff; border-radius: 8px; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+  .guide-header-text h3 { font-size: 15px; font-weight: 800; color: #1a1a2e; }
+  .guide-header-text .meta { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+  .tag { display: inline-block; font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 2px 7px; border-radius: 4px; }
+  .tag-critical { background: #fff0f0; color: #d93025; }
+  .tag-rec { background: #f0ecff; color: #6c47ff; }
+  .time-tag { font-size: 11px; color: #888; display: flex; align-items: center; gap: 4px; }
+
+  .guide-body { padding: 20px 22px; display: flex; flex-direction: column; gap: 18px; }
+
+  /* Why it matters */
+  .why-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #6c47ff; margin-bottom: 6px; }
+  .why-text { font-size: 13px; color: #333; line-height: 1.7; }
+
+  /* Steps */
+  .steps-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #6c47ff; margin-bottom: 10px; }
+  .steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .step-item { display: flex; gap: 12px; align-items: flex-start; }
+  .step-num { flex-shrink: 0; width: 24px; height: 24px; background: #f0ecff; border: 1.5px solid #6c47ff; color: #6c47ff; border-radius: 50%; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; margin-top: 1px; }
+  .step-text { font-size: 13px; color: #333; line-height: 1.65; white-space: pre-line; }
+
+  /* Validate */
+  .validate-box { background: #f0ecff; border: 1.5px solid #c7b8f7; border-radius: 8px; padding: 12px 16px; display: flex; gap: 10px; align-items: flex-start; }
+  .validate-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+  .validate-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: #6c47ff; margin-bottom: 3px; }
+  .validate-text { font-size: 12px; color: #3b2e8a; line-height: 1.6; }
+
+  /* ── Dividers & breaks ── */
+  .divider { border: none; border-top: 1px solid #ebebeb; margin: 32px 0; }
+  .break { page-break-before: always; }
+
+  /* ── Footer ── */
+  .doc-footer { margin-top: 60px; padding-top: 16px; border-top: 1px solid #ebebeb; font-size: 11px; color: #aaa; display: flex; justify-content: space-between; }
+
+  /* ── Disclaimer ── */
+  .disclaimer { background: #f9f9f9; border: 1px solid #e2e2e2; border-radius: 8px; padding: 14px 18px; margin-top: 24px; font-size: 11px; color: #888; line-height: 1.6; }
+
+  /* ── Quick-ref table ── */
+  .ref-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 12px; }
+  .ref-table th { background: #6c47ff; color: #fff; font-weight: 700; padding: 8px 12px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+  .ref-table td { padding: 9px 12px; border-bottom: 1px solid #e8e8f0; color: #333; vertical-align: top; }
+  .ref-table tr:nth-child(even) td { background: #f7f7ff; }
+  .ref-table td:first-child { font-weight: 600; }
+
+  @media print {
+    body { font-size: 12.5px; }
+    .page { padding: 36px 32px; }
+    .guide { border-color: #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ════════════════════════════════════════════════════
+     COVER
+     ════════════════════════════════════════════════════ -->
+<div class="cover">
+  <span class="cover-badge">MyGeoRadar &mdash; mygeoradar.com</span>
+  <h1>AI Readiness<br><span>Fix Guides</span></h1>
+  <p>Your site was scanned. Here&rsquo;s exactly how to fix every issue &mdash; step by step.</p>
+  <p class="cover-sub">11 complete guides. Each one tells you what&rsquo;s broken, why it matters to AI, and every click you need to make to fix it.</p>
+  <p class="cover-meta">Version 1.0 &mdash; May 2026 &mdash; &copy; MyGeoRadar. For personal business use only.</p>
+
+  <div class="cover-toc">
+    <h3>What&rsquo;s inside</h3>
+    <div class="toc-grid">
+      <div class="toc-item"><span class="toc-num">1</span>HTTPS <span class="toc-tag toc-tag-critical">Critical</span></div>
+      <div class="toc-item"><span class="toc-num">2</span>Site Accessibility <span class="toc-tag toc-tag-critical">Critical</span></div>
+      <div class="toc-item"><span class="toc-num">3</span>robots.txt <span class="toc-tag toc-tag-critical">Critical</span></div>
+      <div class="toc-item"><span class="toc-num">4</span>Meta Title <span class="toc-tag toc-tag-critical">Critical</span></div>
+      <div class="toc-item"><span class="toc-num">5</span>Meta Description <span class="toc-tag toc-tag-critical">Critical</span></div>
+      <div class="toc-item"><span class="toc-num">6</span>Structured Data <span class="toc-tag toc-tag-critical">Critical</span></div>
+      <div class="toc-item"><span class="toc-num">7</span>Business Name on Page <span class="toc-tag toc-tag-critical">Critical</span></div>
+      <div class="toc-item"><span class="toc-num">8</span>Open Graph Tags <span class="toc-tag toc-tag-rec">Recommended</span></div>
+      <div class="toc-item"><span class="toc-num">9</span>H1 Heading <span class="toc-tag toc-tag-rec">Recommended</span></div>
+      <div class="toc-item"><span class="toc-num">10</span>Mobile Viewport <span class="toc-tag toc-tag-rec">Recommended</span></div>
+      <div class="toc-item"><span class="toc-num">11</span>Canonical URL <span class="toc-tag toc-tag-rec">Recommended</span></div>
+    </div>
+  </div>
+
+  <div class="disclaimer">This guide is for informational and educational purposes only. Following these steps does not guarantee any specific AI visibility outcome. Results depend on your industry, competition, content quality, and how accurately you apply the fixes. All platform names referenced (including WordPress, Squarespace, Shopify, Wix, ChatGPT, and Google) are trademarks of their respective owners. MyGeoRadar is not affiliated with or endorsed by any of them.</div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     HOW TO USE
+     ════════════════════════════════════════════════════ -->
+<div class="callout">
+  <p><strong>How to use this guide:</strong> Start with the Critical issues &mdash; those have the biggest impact on whether AI crawlers can read and understand your site. Work through each guide in order, follow the numbered steps exactly, and use the &ldquo;How to Confirm It&rsquo;s Fixed&rdquo; box at the bottom of each one before moving on. Most fixes take 5&ndash;30 minutes. All of them combined take less than a day.</p>
+</div>
+
+<!-- Quick-reference table -->
+<div class="section-header" style="margin-top: 32px;">
+  <span class="label">Quick Reference</span>
+  <h2>All 11 Fixes at a Glance</h2>
+</div>
+<table class="ref-table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Fix</th>
+      <th>Priority</th>
+      <th>Time</th>
+      <th>Platform</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>Switch to HTTPS</td><td><span class="tag tag-critical">Critical</span></td><td>15&ndash;30 min</td><td>Host / Cloudflare</td></tr>
+    <tr><td>2</td><td>Make site publicly accessible</td><td><span class="tag tag-critical">Critical</span></td><td>10&ndash;60 min</td><td>Host</td></tr>
+    <tr><td>3</td><td>Fix robots.txt crawler blocks</td><td><span class="tag tag-critical">Critical</span></td><td>5&ndash;10 min</td><td>Host / Yoast</td></tr>
+    <tr><td>4</td><td>Write a strong meta title</td><td><span class="tag tag-critical">Critical</span></td><td>10&ndash;15 min</td><td>Any CMS</td></tr>
+    <tr><td>5</td><td>Write a clear meta description</td><td><span class="tag tag-critical">Critical</span></td><td>10&ndash;20 min</td><td>Any CMS</td></tr>
+    <tr><td>6</td><td>Add Schema.org structured data</td><td><span class="tag tag-critical">Critical</span></td><td>30&ndash;45 min</td><td>Any CMS</td></tr>
+    <tr><td>7</td><td>Add business name to page</td><td><span class="tag tag-critical">Critical</span></td><td>15&ndash;20 min</td><td>Any CMS</td></tr>
+    <tr><td>8</td><td>Add Open Graph tags</td><td><span class="tag tag-rec">Recommended</span></td><td>20&ndash;30 min</td><td>Any CMS</td></tr>
+    <tr><td>9</td><td>Add a clear H1 heading</td><td><span class="tag tag-rec">Recommended</span></td><td>10&ndash;15 min</td><td>Any CMS</td></tr>
+    <tr><td>10</td><td>Add mobile viewport tag</td><td><span class="tag tag-rec">Recommended</span></td><td>5 min</td><td>HTML / CMS</td></tr>
+    <tr><td>11</td><td>Add canonical URL tag</td><td><span class="tag tag-rec">Recommended</span></td><td>5&ndash;10 min</td><td>HTML / CMS</td></tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════
+     SECTION 1: CRITICAL FIXES
+     ════════════════════════════════════════════════════ -->
+<div class="break"></div>
+<div class="section-header">
+  <span class="label">Section 1 &mdash; Critical Fixes</span>
+  <h2>7 Issues AI Crawlers Cannot Ignore</h2>
+  <p>Fix these first. Each one directly determines whether AI can read, trust, and cite your site.</p>
+</div>
+
+<!-- ── Guide 1: HTTPS ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">1</div>
+    <div class="guide-header-text">
+      <h3>Switch Your Site to HTTPS</h3>
+      <div class="meta">
+        <span class="tag tag-critical">Critical</span>
+        <span class="time-tag">&#128337; 15&ndash;30 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">HTTPS is the single most basic trust signal on the web. AI crawlers like GPTBot and ClaudeBot treat HTTP sites the same way browsers do &mdash; they flag them as insecure and heavily deprioritise them. If your site is still on HTTP, AI assistants may skip it entirely when building their answers. This is the first thing to fix because everything else builds on top of it.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Log in to your hosting control panel (cPanel, Cloudflare, Vercel, Netlify, etc.).</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Find the SSL/TLS section. Most modern hosts offer a free Let&rsquo;s Encrypt certificate &mdash; look for &ldquo;Enable SSL&rdquo;, &ldquo;Force HTTPS&rdquo;, or &ldquo;Install Certificate&rdquo;.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text">Enable the certificate and turn on &ldquo;Force HTTPS&rdquo; or &ldquo;Redirect HTTP to HTTPS&rdquo;. This ensures anyone visiting http:// gets bounced to https:// automatically.</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text">If your host does not offer free SSL, add your domain to Cloudflare (free plan). Go to SSL/TLS &rarr; set mode to &ldquo;Full&rdquo;. Enable &ldquo;Always Use HTTPS&rdquo; under Edge Certificates.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text">After enabling, visit your site at https://yourdomain.com and confirm the padlock icon appears in the browser address bar.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text">Check for mixed content: open Chrome DevTools (F12) &rarr; Console tab. If you see warnings about insecure resources, those images or scripts are loading over HTTP. Update their URLs to https://.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">Update any hardcoded http:// links in your site&rsquo;s code, CMS, or page builder to use https://.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">Go to <strong>ssllabs.com/ssltest/</strong> and enter your domain. You should get an A or A+ rating. Then re-run your free scan at mygeoradar.com &mdash; the HTTPS check should turn green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Guide 2: Reachable ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">2</div>
+    <div class="guide-header-text">
+      <h3>Make Your Site Publicly Accessible</h3>
+      <div class="meta">
+        <span class="tag tag-critical">Critical</span>
+        <span class="time-tag">&#128337; 10&ndash;60 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">If AI crawlers cannot load your page, they cannot learn anything about your business. A site that times out, returns a 4xx/5xx error, or hides behind a login wall is invisible to every AI assistant &mdash; no matter how good your content is. This is the most critical check of all.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Open a fresh incognito/private browser window and visit your site URL. If it loads normally, the issue may be intermittent &mdash; check your hosting uptime monitor.</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Test externally: go to <strong>downforeveryoneorjustme.com</strong> and enter your URL. This confirms whether it&rsquo;s your server or your connection.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text">If your site is down, log in to your hosting dashboard and check for server errors, suspended accounts, or expired domains.</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text">If your site requires a login to view, add an exception for the homepage. In WordPress: Settings &rarr; Reading &rarr; uncheck &ldquo;Discourage search engines&rdquo;. Disable any Maintenance Mode or Coming Soon plugin.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text">Check server response time. If pages take over 5 seconds to load, AI crawlers will time out. Contact your host about upgrading or add Cloudflare caching.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text">Verify your domain is not expired: go to <strong>who.is</strong> and check the expiration date. Renew immediately if it&rsquo;s within 30 days.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">If you use Cloudflare, confirm &ldquo;Under Attack Mode&rdquo; is OFF &mdash; this blocks crawlers with a JavaScript challenge they cannot pass.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">Go to <strong>reqbin.com</strong>, enter your URL, and click Send. You should see &ldquo;200 OK&rdquo; in the response status. Re-run your free scan &mdash; the reachable check should turn green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Guide 3: robots.txt ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">3</div>
+    <div class="guide-header-text">
+      <h3>Stop Blocking AI Crawlers in robots.txt</h3>
+      <div class="meta">
+        <span class="tag tag-critical">Critical</span>
+        <span class="time-tag">&#128337; 5&ndash;10 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">Your robots.txt file tells crawlers what they&rsquo;re allowed to access. If it blocks GPTBot, ClaudeBot, or all bots with a wildcard rule, AI assistants cannot read your site at all. Many business owners added these blocks years ago for privacy reasons without realising they were shutting out AI entirely. This fix takes under 5 minutes.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Visit <strong>https://yourdomain.com/robots.txt</strong> in your browser. You&rsquo;ll see a plain text file.</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Look for any of these: &ldquo;Disallow: /&rdquo; under &ldquo;User-agent: *&rdquo;, &ldquo;User-agent: GPTBot&rdquo;, &ldquo;User-agent: ClaudeBot&rdquo;, &ldquo;User-agent: Google-Extended&rdquo;, &ldquo;User-agent: CCBot&rdquo;. These are the rules blocking AI.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text">In WordPress, use the Yoast SEO plugin &rarr; SEO &rarr; Tools &rarr; File Editor to edit robots.txt. Or install the &ldquo;Robots.txt Editor&rdquo; plugin. On other platforms, find the file in your root directory via FTP or your host&rsquo;s file manager.</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text">Remove the blocking rules. The safest approach: delete the AI bot User-agent blocks entirely.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text">A clean, AI-friendly robots.txt looks like this:<br><br>User-agent: *<br>Allow: /<br><br>Sitemap: https://yourdomain.com/sitemap.xml</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text">Save the file and visit https://yourdomain.com/robots.txt again to confirm the blocking rules are gone.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">Optionally, submit your sitemap to Google Search Console &mdash; it helps AI systems discover your content faster.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">Visit your robots.txt file and confirm no &ldquo;Disallow: /&rdquo; rules exist for * or AI bot user agents. Re-run your free scan &mdash; the robots.txt check should turn green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="break"></div>
+
+<!-- ── Guide 4: Meta Title ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">4</div>
+    <div class="guide-header-text">
+      <h3>Write a Strong Meta Title</h3>
+      <div class="meta">
+        <span class="tag tag-critical">Critical</span>
+        <span class="time-tag">&#128337; 10&ndash;15 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">The meta title is the first thing AI crawlers read to understand what your page is about. A title that&rsquo;s too short, too generic, or missing entirely means AI cannot confidently categorise your business &mdash; so it won&rsquo;t mention you when someone asks about your industry. A well-written title takes 10 minutes to fix and has an immediate impact.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Use this formula: <strong>[Business Name] &mdash; [Primary Service] | [City or Niche]</strong>. Example: &ldquo;Riverside HVAC &mdash; Heating &amp; Cooling Repair | Austin, TX&rdquo;</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Keep it between <strong>30 and 65 characters</strong>. Shorter is too vague. Longer gets cut off in search results and AI summaries.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text">Include your most important keyword naturally &mdash; what would a customer type into ChatGPT to find you? That phrase should be in your title.</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text"><strong>WordPress:</strong> Open Yoast SEO or RankMath on the page. Scroll to the SEO section and update the &ldquo;SEO Title&rdquo; field.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text"><strong>Squarespace:</strong> Pages &rarr; click your page &rarr; gear icon &rarr; SEO &rarr; &ldquo;SEO Title&rdquo;.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text"><strong>Shopify:</strong> Online Store &rarr; Preferences &rarr; Homepage title. For other pages: edit the page &rarr; scroll to &ldquo;Search engine listing preview&rdquo; &rarr; Edit.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text"><strong>Custom HTML:</strong> find &lt;title&gt; in your &lt;head&gt; and update the text. Every page should have a unique title.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">Right-click your page &rarr; View Page Source &rarr; search for &ldquo;&lt;title&gt;&rdquo;. Confirm your new title appears. Re-run your free scan &mdash; the meta title check should be green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Guide 5: Meta Description ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">5</div>
+    <div class="guide-header-text">
+      <h3>Write a Clear Meta Description</h3>
+      <div class="meta">
+        <span class="tag tag-critical">Critical</span>
+        <span class="time-tag">&#128337; 10&ndash;20 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">The meta description is a 1&ndash;2 sentence summary AI crawlers use to understand what your business does and who it serves. A missing or weak description means AI has to guess &mdash; and it will often get it wrong or skip you in favour of a competitor who explains themselves clearly.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Write a <strong>120&ndash;155 character</strong> description that answers: What do you do? Who do you serve? Where are you (if local)?</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text"><strong>Local example:</strong> &ldquo;Riverside HVAC provides heating, cooling, and air quality services to homeowners in Austin, TX. Licensed, same-day service available.&rdquo; (152 chars)</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text"><strong>Online example:</strong> &ldquo;PromptBase is a marketplace where you can buy and sell high-quality AI prompts for ChatGPT, Midjourney, DALL-E, and Stable Diffusion.&rdquo; (143 chars)</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text">Avoid keyword stuffing. Write it as if explaining your business to a smart friend. Natural language gets pulled by AI better than a keyword list.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text"><strong>WordPress:</strong> Open Yoast SEO or RankMath on the page, find the &ldquo;Meta Description&rdquo; field, and paste your description.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text"><strong>Squarespace:</strong> Pages &rarr; gear icon &rarr; SEO &rarr; &ldquo;SEO Description&rdquo;.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text"><strong>Custom HTML:</strong> add inside &lt;head&gt;: &lt;meta name=&ldquo;description&rdquo; content=&ldquo;Your description here.&rdquo;&gt;</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">View page source and search for &ldquo;meta name=&ldquo;description&rdquo;&ldquo;. Confirm your text appears in the content attribute. Re-run your free scan &mdash; meta description check should be green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="break"></div>
+
+<!-- ── Guide 6: Schema ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">6</div>
+    <div class="guide-header-text">
+      <h3>Add Schema.org Structured Data</h3>
+      <div class="meta">
+        <span class="tag tag-critical">Critical</span>
+        <span class="time-tag">&#128337; 30&ndash;45 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">Schema.org structured data is JSON code you add to your page that explicitly tells AI crawlers: this is what my business is, this is where it is, this is what it does. Without it, AI has to infer everything from your text &mdash; which leads to vague or incorrect descriptions. With it, AI gets a machine-readable fact sheet about your business. This is one of the highest-impact fixes you can make.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Decide your schema type: <strong>Organization</strong> (any business), <strong>LocalBusiness</strong> (if you serve a geographic area), <strong>Product</strong> (if you sell a product), or <strong>Service</strong>. You can use more than one.</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Go to <strong>technicalseo.com/tools/schema-markup-generator/</strong> and select your type. Fill in your business name, URL, description, address, phone, logo URL, and social media links.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text">The tool generates a JSON-LD code block: &lt;script type=&ldquo;application/ld+json&rdquo;&gt;{ &ldquo;@context&rdquo;: &ldquo;https://schema.org&rdquo;, &hellip; }&lt;/script&gt;. Copy the entire block.</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text"><strong>WordPress:</strong> Install &ldquo;Schema &amp; Structured Data for WP&rdquo; plugin (free). Or paste directly into your theme&rsquo;s header.php inside the &lt;head&gt; tag.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text"><strong>Next.js:</strong> Add a &lt;Script&gt; component with type=&ldquo;application/ld+json&rdquo; and dangerouslySetInnerHTML.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text"><strong>Squarespace or Wix:</strong> Settings &rarr; Advanced &rarr; Code Injection &rarr; Header, and paste the full &lt;script&gt; block.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">Validate at <strong>search.google.com/test/rich-results</strong> &mdash; paste your URL and confirm your schema type is detected with no errors.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">Run your URL through <strong>search.google.com/test/rich-results</strong>. Confirm your schema type appears with no critical errors. Re-run your free scan &mdash; the structured data check should turn green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Guide 7: Business Name ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">7</div>
+    <div class="guide-header-text">
+      <h3>Make Sure Your Business Name Appears on the Page</h3>
+      <div class="meta">
+        <span class="tag tag-critical">Critical</span>
+        <span class="time-tag">&#128337; 15&ndash;20 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">AI assistants learn your business name by reading it repeatedly in consistent contexts across the web. If your own homepage doesn&rsquo;t mention your business name clearly, AI cannot build a confident association between your URL and your brand. The fix is simple: make sure your exact business name appears in your header, H1, and body text.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Check your page for your <strong>exact</strong> business name &mdash; the same name you use on Google Business Profile, Yelp, LinkedIn, and other directories. Inconsistent names confuse AI.</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Your business name should appear in at least <strong>3 places</strong>: (1) your logo alt text, (2) your H1 or a prominent headline, and (3) your &ldquo;About&rdquo; or intro paragraph.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text">Update your logo image alt text: in HTML find your &lt;img&gt; tag for the logo and add alt=&ldquo;[Business Name] logo&rdquo;. In WordPress, go to Media Library, click the logo, and update the Alt Text field.</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text">Update your header/navigation: make sure your business name appears as visible text, not just as an image with no alt tag.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text">Add your business name to your homepage intro naturally &mdash; &ldquo;At [Business Name], we&hellip;&rdquo; This gives AI a clear entity-to-URL mapping.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text">Check that the name is <strong>exactly consistent</strong> everywhere &mdash; same capitalisation, same spelling, no abbreviations. &ldquo;River HVAC&rdquo; and &ldquo;RiverHVAC&rdquo; are treated as two different entities.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">Add your business name to your &lt;title&gt; tag and meta description if it isn&rsquo;t already there.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">Use Ctrl+F on your homepage to search for your business name. It should appear at least 3 times. Re-run your free scan with your business name in the optional field &mdash; the check should turn green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SECTION 2: RECOMMENDED FIXES
+     ════════════════════════════════════════════════════ -->
+<div class="break"></div>
+<div class="section-header">
+  <span class="label">Section 2 &mdash; Recommended Fixes</span>
+  <h2>4 Improvements That Strengthen Your Signal</h2>
+  <p>Not urgent, but each one adds a meaningful layer of credibility that AI crawlers reward.</p>
+</div>
+
+<!-- ── Guide 8: OG Tags ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">8</div>
+    <div class="guide-header-text">
+      <h3>Add Open Graph Tags</h3>
+      <div class="meta">
+        <span class="tag tag-rec">Recommended</span>
+        <span class="time-tag">&#128337; 20&ndash;30 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">Open Graph tags (og:title, og:description, og:image) were created for social media sharing, but AI crawlers also use them as a secondary layer of context. When all three are present, AI has multiple consistent signals confirming what your business is. Missing OG tags is a fast fix that improves your trustworthiness signal with AI systems.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">You need 3 OG tags: <strong>og:title</strong> (same as your meta title), <strong>og:description</strong> (same as your meta description), <strong>og:image</strong> (a 1200&times;630px brand image).</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Create your og:image: use Canva (free) &mdash; search &ldquo;Facebook Link Preview&rdquo; which is 1200&times;630px. Add your logo, business name, and a clean background. Export as PNG.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text">Upload your og:image to your website and copy the full URL (e.g. https://yourdomain.com/og-image.png).</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text"><strong>WordPress with Yoast:</strong> Go to Yoast &rarr; Social &rarr; Facebook and upload your og:image there. Yoast sets og:title and og:description automatically from your SEO fields.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text"><strong>Custom HTML:</strong> add these 3 lines inside your &lt;head&gt;:<br>&lt;meta property=&ldquo;og:title&rdquo; content=&ldquo;Your Business Name &mdash; Service&rdquo;&gt;<br>&lt;meta property=&ldquo;og:description&rdquo; content=&ldquo;What you do, who you serve.&rdquo;&gt;<br>&lt;meta property=&ldquo;og:image&rdquo; content=&ldquo;https://yourdomain.com/og-image.png&rdquo;&gt;</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text"><strong>Next.js:</strong> Add to your page&rsquo;s metadata export with the openGraph key containing title, description, and images array.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">Test at <strong>opengraph.xyz</strong> &mdash; paste your URL and confirm all three preview correctly.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">View page source and search for &ldquo;og:title&rdquo;, &ldquo;og:description&rdquo;, &ldquo;og:image&rdquo; &mdash; all three should appear. Re-run your free scan to confirm the check turns green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Guide 9: H1 ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">9</div>
+    <div class="guide-header-text">
+      <h3>Add a Clear H1 Heading to Your Page</h3>
+      <div class="meta">
+        <span class="tag tag-rec">Recommended</span>
+        <span class="time-tag">&#128337; 10&ndash;15 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">The H1 is the main headline of your page &mdash; it&rsquo;s the first human-readable signal AI uses to understand what the page is about. A missing H1 means AI has to guess your page&rsquo;s purpose. A strong H1 that includes your business name and what you do gives AI a clear, immediate answer. This is one of the fastest fixes with one of the most direct impacts on how AI describes you.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Use this formula: <strong>[What you do] for [who you serve] in [where, if local]</strong>. Example: &ldquo;Trusted HVAC Repair for Austin Homeowners&rdquo;. Be clear, not clever.</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">You should have <strong>exactly one H1</strong> per page. Multiple H1s confuse crawlers &mdash; they don&rsquo;t know which one is the primary topic.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text"><strong>WordPress:</strong> Edit the page in Gutenberg. Click the title block and confirm it is set to H1 in the block settings. Or in the text editor, ensure one line is wrapped in &lt;h1&gt; tags.</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text"><strong>Squarespace:</strong> Click the main text block on your homepage. Highlight the top line and set it to &ldquo;Heading 1&rdquo; in the text formatting toolbar.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text"><strong>Custom HTML:</strong> Find your main headline and change the tag to &lt;h1&gt;. Make sure only this one heading uses &lt;h1&gt;.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text">Make the H1 <strong>visible</strong>. Do not hide it with CSS (display:none or visibility:hidden). Hidden H1s are flagged as deceptive by AI crawlers.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">Check your heading hierarchy: one H1, then H2 for major sections, H3 for subsections. AI reads this hierarchy to understand your content structure.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">View page source and search for &ldquo;&lt;h1&rdquo;. Confirm exactly one H1 tag exists with descriptive text. Re-run your free scan &mdash; the H1 check should turn green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Guide 10: Viewport ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">10</div>
+    <div class="guide-header-text">
+      <h3>Add a Mobile Viewport Tag</h3>
+      <div class="meta">
+        <span class="tag tag-rec">Recommended</span>
+        <span class="time-tag">&#128337; 5 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">The viewport meta tag tells browsers and crawlers that your site is designed to work on mobile devices. AI crawlers use mobile-friendliness as a proxy for site quality and maintenance. A missing viewport tag doesn&rsquo;t just hurt mobile users &mdash; it signals to AI systems that your site may be outdated or poorly maintained. This is a one-line fix.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Open your site&rsquo;s HTML source or template file.</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Find the &lt;head&gt; section.</span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text">Add this line inside the &lt;head&gt; block:<br><strong>&lt;meta name=&ldquo;viewport&rdquo; content=&ldquo;width=device-width, initial-scale=1&rdquo;&gt;</strong></span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text"><strong>WordPress:</strong> Go to Appearance &rarr; Theme File Editor &rarr; header.php. Look for an existing viewport tag &mdash; if missing, add the line above just after the opening &lt;head&gt; tag.</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text"><strong>Squarespace / Wix / Shopify:</strong> This is handled automatically by the platform. If this check failed, a theme customisation likely removed it &mdash; contact their support.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text"><strong>Next.js:</strong> Add viewport to your metadata export:<br>export const metadata = { viewport: &lsquo;width=device-width, initial-scale=1&rsquo; }</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">Save and publish your changes.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">View page source and search for &ldquo;viewport&rdquo;. Confirm the tag appears in the &lt;head&gt;. Re-run your free scan &mdash; the viewport check should turn green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Guide 11: Canonical ── -->
+<div class="guide">
+  <div class="guide-header">
+    <div class="guide-num">11</div>
+    <div class="guide-header-text">
+      <h3>Add a Canonical URL Tag</h3>
+      <div class="meta">
+        <span class="tag tag-rec">Recommended</span>
+        <span class="time-tag">&#128337; 5&ndash;10 minutes</span>
+      </div>
+    </div>
+  </div>
+  <div class="guide-body">
+    <div>
+      <div class="why-label">Why This Matters</div>
+      <div class="why-text">A canonical tag tells search engines and AI crawlers: &ldquo;This is the definitive version of this page.&rdquo; Without it, if your site is accessible at multiple URLs (with/without www, HTTP and HTTPS), AI crawlers may split their attention between them &mdash; weakening your authority signal. A canonical tag consolidates everything to one URL. This is a one-line fix.</div>
+    </div>
+    <div>
+      <div class="steps-label">How to Fix It &mdash; Step by Step</div>
+      <ol class="steps-list">
+        <li class="step-item"><span class="step-num">1</span><span class="step-text">Decide your canonical URL: the single &ldquo;true&rdquo; version of your homepage. Best practice: <strong>https://yourdomain.com/</strong> (HTTPS, without www, with trailing slash).</span></li>
+        <li class="step-item"><span class="step-num">2</span><span class="step-text">Add this tag inside your page&rsquo;s &lt;head&gt;:<br><strong>&lt;link rel=&ldquo;canonical&rdquo; href=&ldquo;https://yourdomain.com/&rdquo;&gt;</strong></span></li>
+        <li class="step-item"><span class="step-num">3</span><span class="step-text"><strong>WordPress with Yoast SEO:</strong> This is set automatically from your site URL. Go to Settings &rarr; General &rarr; WordPress Address (URL) and confirm it matches your canonical URL.</span></li>
+        <li class="step-item"><span class="step-num">4</span><span class="step-text"><strong>Next.js:</strong> Add to your metadata export:<br>export const metadata = { alternates: { canonical: &lsquo;https://yourdomain.com/&rsquo; } }</span></li>
+        <li class="step-item"><span class="step-num">5</span><span class="step-text"><strong>Custom HTML:</strong> Paste the &lt;link rel=&ldquo;canonical&rdquo;&gt; tag directly inside your &lt;head&gt; block.</span></li>
+        <li class="step-item"><span class="step-num">6</span><span class="step-text">Make sure every page on your site has its own canonical tag pointing to itself &mdash; not just the homepage.</span></li>
+        <li class="step-item"><span class="step-num">7</span><span class="step-text">If you have duplicate pages (e.g. products in multiple category paths in Shopify), use canonical tags on duplicates pointing to the primary version.</span></li>
+      </ol>
+    </div>
+    <div class="validate-box">
+      <div class="validate-icon">&#9989;</div>
+      <div>
+        <div class="validate-label">How to Confirm It&rsquo;s Fixed</div>
+        <div class="validate-text">View page source and search for &ldquo;canonical&rdquo;. Confirm the tag appears pointing to your primary URL. Re-run your free scan &mdash; the canonical check should turn green.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     CLOSING
+     ════════════════════════════════════════════════════ -->
+<hr class="divider" />
+
+<div class="callout">
+  <p><strong>After you fix these issues:</strong> Re-run the free scan at <strong>mygeoradar.com</strong> to confirm your score has improved. Technical fixes are the foundation &mdash; for the full picture on citations, content authority, review signals, and the 30-day plan to get AI assistants actually recommending your business, see the Found by AI Playbook at <strong>mygeoradar.com/playbook</strong>.</p>
+</div>
+
+<div class="doc-footer">
+  <span>AI Readiness Fix Guides &mdash; 11 Complete Guides</span>
+  <span>MyGeoRadar &mdash; mygeoradar.com</span>
+</div>
+
+</div><!-- .page -->
+</body>
+</html>
