@@ -95,7 +95,7 @@ const deliverables = [
 const testimonials = [
   {
     quote:
-      'I typed my business into ChatGPT and it recommended three competitors. My business wasn\'t mentioned once. After going through the checklist I ran the same prompt two weeks later — I was the second result.',
+      "I typed my business into ChatGPT and it recommended three competitors. My business wasn't mentioned once. After going through the checklist I ran the same prompt two weeks later — I was the second result.",
     name: 'Marcus T.',
     role: 'HVAC Business Owner',
   },
@@ -107,7 +107,7 @@ const testimonials = [
   },
   {
     quote:
-      'Paid $27. Spent a weekend on the checklist. Two weeks later a client told me they found me by asking Perplexity. First time that\'s ever happened.',
+      "Paid $27. Spent a weekend on the checklist. Two weeks later a client told me they found me by asking Perplexity. First time that's ever happened.",
     name: 'James R.',
     role: 'Independent Financial Advisor',
   },
@@ -120,7 +120,7 @@ const previewChecklist = [
   { done: false, text: 'Publish at least 3 authoritative articles that cite your expertise' },
   { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
   { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
-  { done: false, text: 'Create a dedicated “About” page written to be pulled by AI overviews' },
+  { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
@@ -219,10 +219,10 @@ export default function PlaybookPage() {
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold mb-3">What’s inside — in detail</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3">What&apos;s inside — in detail</h2>
               <p className="text-muted max-w-xl mx-auto">
-                Most digital products tell you the names of what’s included. Here’s exactly what each asset
-                contains so you know precisely what you’re getting before you buy.
+                Most digital products tell you the names of what&apos;s included. Here&apos;s exactly what each asset
+                contains so you know precisely what you&apos;re getting before you buy.
               </p>
             </div>
             <div className="flex flex-col gap-6">
@@ -396,7 +396,7 @@ export default function PlaybookPage() {
                 {
                   icon: Clock,
                   heading: 'The early-mover window',
-                  body: 'GEO is where SEO was in 2005. The market hasn’t priced it in yet — your competitors almost certainly haven’t started.',
+                  body: "GEO is where SEO was in 2005. The market hasn't priced it in yet — your competitors almost certainly haven't started.",
                 },
                 {
                   icon: TrendingUp,
@@ -428,9 +428,9 @@ export default function PlaybookPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
               {[
                 'You own or market a local or online business',
-                'AI assistants don’t mention your business at all when you test them',
-                'You’ve read GEO articles but still don’t know what to actually do',
-                'You don’t want to pay $100+/month for a tracking tool',
+                "AI assistants don't mention your business at all when you test them",
+                "You've read GEO articles but still don't know what to actually do",
+                "You don't want to pay $100+/month for a tracking tool",
                 'You want a clear, done-for-you action plan — not more theory',
                 'You want to establish AI visibility before your competitors do',
               ].map((item) => (
@@ -504,7 +504,7 @@ export default function PlaybookPage() {
             </h2>
             <p className="text-muted mb-3">
               GEO is still early enough that a $27 playbook can put you ahead of 95% of your
-              competitors. That won’t be true forever.
+              competitors. That won&apos;t be true forever.
             </p>
             <p className="text-muted mb-8">
               One-time. Instant download. Everything you need to get found by AI
