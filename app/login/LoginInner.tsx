@@ -23,7 +23,6 @@ export default function LoginInner() {
     if (params.get('error')) setError('Authentication failed. Please try again.')
   }, [params])
 
-  // Keep email in sync if hint changes (e.g. navigation)
   useEffect(() => {
     if (hint) setEmail(hint)
   }, [hint])
@@ -59,15 +58,21 @@ export default function LoginInner() {
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4">
+      {/* Subtle background glow */}
+      <div className="absolute inset-0 glow-top pointer-events-none" aria-hidden="true" />
+
       {/* Logo */}
-      <Link href="/" className="flex items-center gap-2 mb-8">
+      <Link
+        href="/"
+        className="relative flex items-center gap-2 mb-8 transition-transform duration-200 hover:scale-[1.04]"
+      >
         <Radar className="w-5 h-5 text-accent" />
         <span className="font-bold text-base tracking-tight">
           my<span className="text-accent">geo</span>radar
         </span>
       </Link>
 
-      <div className="w-full max-w-sm bg-card border border-border rounded-2xl p-8">
+      <div className="relative w-full max-w-sm bg-card border border-border rounded-2xl p-8 shadow-card-hover">
         <h1 className="text-xl font-bold mb-1 text-center">Sign in</h1>
         <p className="text-sm text-muted text-center mb-6">
           {fromPurchase
@@ -77,8 +82,8 @@ export default function LoginInner() {
 
         {sent ? (
           <div className="text-center">
-            <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Mail className="w-6 h-6 text-accent" />
+            <div className="w-14 h-14 bg-accent/10 border border-accent/20 rounded-full flex items-center justify-center mx-auto mb-4 animate-bounce">
+              <Mail className="w-7 h-7 text-accent" />
             </div>
             <p className="font-semibold mb-1">Check your email</p>
             <p className="text-sm text-muted">We sent a magic link to <strong>{email}</strong></p>
@@ -94,9 +99,9 @@ export default function LoginInner() {
             <button
               onClick={handleGoogle}
               disabled={loading}
-              className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-surface-2 transition-all mb-4 disabled:opacity-50"
+              className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-border rounded-xl text-sm font-medium hover:bg-surface-2 hover:border-accent/40 transition-all mb-4 disabled:opacity-50"
             >
-              <Chrome className="w-4 h-4" />
+              <Chrome className="w-4 h-4 text-blue-500" />
               Continue with Google
             </button>
 
@@ -106,7 +111,7 @@ export default function LoginInner() {
               <div className="flex-1 h-px bg-border" />
             </div>
 
-            {/* Magic Link — email pre-filled from ?hint= */}
+            {/* Magic Link */}
             <form onSubmit={handleMagicLink} className="flex flex-col gap-3">
               <input
                 type="email"
@@ -114,7 +119,7 @@ export default function LoginInner() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full px-4 py-2.5 bg-surface border border-border rounded-xl text-sm focus:outline-none focus:border-accent transition-colors"
+                className="input-base"
               />
               <Button variant="primary" size="sm" type="submit" disabled={loading} className="w-full">
                 {loading ? 'Sending…' : 'Send magic link'}
