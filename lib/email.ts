@@ -131,7 +131,6 @@ export async function sendWelcomeEmail({
 }
 
 // ─── 3. Scan Error Email ──────────────────────────────────────────────────────
-// Sent when runGeoScan throws after a successful payment.
 
 export async function sendScanErrorEmail({
   email, businessName, scanId,
@@ -289,9 +288,6 @@ export async function sendDay7ReviewRequestEmail({
 }
 
 // ─── 6. Invisible Guide Access Email ─────────────────────────────────────────
-// Sent immediately after a successful $9.99 invisible-guide purchase.
-// Gives the buyer a permanent link back to /invisible/success so they
-// never lose access even if they close the tab.
 
 export async function sendInvisibleGuideEmail({
   email,
@@ -356,6 +352,119 @@ export async function sendInvisibleGuideEmail({
     from:    'Andrew at MyGeoRadar <andrew@mygeoradar.com>',
     to:      email,
     subject: `Your AI Visibility Guide for ${businessName} — open anytime`,
+    html,
+  })
+}
+
+// ─── 7. Report Purchase Confirmation Email ────────────────────────────────────
+// Sent immediately after a successful $9.99 report unlock payment.
+// Gives the buyer their permanent report URL so they can always find it
+// even if they close the tab or the redirect fails.
+
+export async function sendReportPurchaseEmail({
+  email,
+  scanUrl,
+  score,
+  token,
+  failCount,
+  warnCount,
+}: {
+  email: string
+  scanUrl: string
+  score: number
+  token: string
+  failCount: number
+  warnCount: number
+}) {
+  const resend     = new Resend(process.env.RESEND_API_KEY)
+  const appUrl     = process.env.NEXT_PUBLIC_APP_URL || 'https://mygeoradar.com'
+  const reportUrl  = `${appUrl}/report/${token}`
+  const downloadUrl = `${appUrl}/api/report-download?token=${token}`
+  const scoreColor = getScoreHex(score)
+  const scoreLabel =
+    score >= 80 ? 'AI-Ready' :
+    score >= 55 ? 'Partially Visible' :
+                 'Hard to Read'
+
+  const issueText =
+    failCount > 0
+      ? `${failCount} critical issue${failCount > 1 ? 's' : ''} detected`
+      : warnCount > 0
+      ? `${warnCount} warning${warnCount > 1 ? 's' : ''} to review`
+      : 'All checks passed'
+
+  const html = emailShell(`
+    <p class="label">MyGeoRadar &mdash; AI Readiness Report</p>
+    <h1 style="font-size:22px;font-weight:700;margin:0 0 8px;color:#e8e8f0;text-align:center">
+      Your full report is ready 🎉
+    </h1>
+    <p style="color:#c8c8d8;font-size:14px;text-align:center;margin-bottom:24px;line-height:1.6;font-family:monospace">
+      ${scanUrl}
+    </p>
+
+    <!-- Score badge -->
+    <div class="card" style="text-align:center">
+      <p style="font-size:13px;font-weight:600;color:#9898b0;text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px">AI Readiness Score</p>
+      <p style="font-size:52px;font-weight:800;color:${scoreColor};margin:0 0 4px">${score}<span style="font-size:18px;color:#9898b0">/100</span></p>
+      <p style="font-size:14px;font-weight:600;color:${scoreColor};margin:0 0 8px">${scoreLabel}</p>
+      <p style="font-size:13px;color:#9898b0;margin:0">${issueText} &mdash; full breakdown + fix steps inside</p>
+    </div>
+
+    <!-- What's unlocked -->
+    <div style="background:#0d0d1a;border:1px solid #1e1e3a;border-radius:12px;padding:20px;margin-bottom:20px">
+      <p style="font-size:13px;font-weight:600;color:#9898b0;text-transform:uppercase;letter-spacing:.08em;margin:0 0 12px">What&rsquo;s in your report</p>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <p style="color:#c8c8d8;font-size:14px;margin:0">🔍 Full details on every check — what it means and why it matters to AI</p>
+        <p style="color:#c8c8d8;font-size:14px;margin:0">🛠️ Step-by-step fix guide for every issue (platform-specific instructions)</p>
+        <p style="color:#c8c8d8;font-size:14px;margin:0">✅ Validation step for each fix so you know it&rsquo;s actually working</p>
+        <p style="color:#c8c8d8;font-size:14px;margin:0">📥 Downloadable HTML guide — print it or work through it offline</p>
+      </div>
+    </div>
+
+    <!-- Primary CTA -->
+    <div style="text-align:center;margin-bottom:16px">
+      <a href="${reportUrl}"
+        style="display:inline-block;padding:14px 36px;background:#6c47ff;color:#fff;font-weight:700;border-radius:12px;text-decoration:none;font-size:15px">
+        Open my full report &rarr;
+      </a>
+    </div>
+
+    <!-- Download link -->
+    <div style="text-align:center;margin-bottom:28px">
+      <a href="${downloadUrl}"
+        style="display:inline-block;padding:10px 24px;background:transparent;color:#6c47ff;font-weight:600;border-radius:10px;text-decoration:none;font-size:13px;border:1px solid #3a2a7a">
+        ↓ Download fix guides (PDF-ready)
+      </a>
+    </div>
+
+    <!-- Permanent link reminder -->
+    <div style="background:#0d0d1a;border:1px solid #1e1e3a;border-radius:10px;padding:16px;margin-bottom:24px">
+      <p style="font-size:12px;font-weight:600;color:#9898b0;text-transform:uppercase;letter-spacing:.08em;margin:0 0 8px">Your permanent report link</p>
+      <p style="font-size:12px;color:#6c47ff;word-break:break-all;margin:0;font-family:monospace">${reportUrl}</p>
+      <p style="font-size:11px;color:#4a4a6a;margin:8px 0 0">Bookmark this — your report lives here permanently.</p>
+    </div>
+
+    <!-- Playbook nudge -->
+    <div style="background:#0d0d1a;border-left:3px solid #6c47ff;border-radius:0 10px 10px 0;padding:16px 18px;margin-bottom:24px">
+      <p style="font-size:13px;font-weight:600;color:#e8e8f0;margin:0 0 6px">One more thing</p>
+      <p style="font-size:13px;color:#9898b0;margin:0 0 12px;line-height:1.6">
+        This report covers the technical signals AI uses to <em style="color:#c8c8d8">read</em> your site.
+        The Found by AI Playbook covers the full picture — citation building, review signals,
+        and the 30-day plan that gets AI to actually <em style="color:#c8c8d8">recommend</em> you.
+      </p>
+      <a href="${appUrl}/playbook"
+        style="color:#6c47ff;font-size:13px;font-weight:600;text-decoration:none">
+        See the Found by AI Playbook &rarr;
+      </a>
+    </div>
+
+    <p class="footer">&mdash; Andrew, MyGeoRadar founder &mdash; <a href="mailto:hello@mygeoradar.com" style="color:#4f8ef7;text-decoration:none">hello@mygeoradar.com</a></p>
+  `)
+
+  await resend.emails.send({
+    from:    'Andrew at MyGeoRadar <andrew@mygeoradar.com>',
+    to:      email,
+    subject: `Your AI Readiness Report for ${scanUrl} — ${score}/100`,
     html,
   })
 }
