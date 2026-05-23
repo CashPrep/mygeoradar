@@ -5,13 +5,13 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import {
   CheckCircle, AlertTriangle, XCircle, ArrowRight,
-  Clock, ExternalLink, Lock,
+  Clock, Lock, Download,
 } from 'lucide-react'
 import { FIX_GUIDES, type FixGuide } from '@/lib/fixGuides'
 
 export const dynamic = 'force-dynamic'
 
-// ── Types ────────────────────────────────────────────────────
+// ── Types ────────────────────────────────────────────────────────
 type Status = 'pass' | 'warn' | 'fail'
 interface Check {
   id: string
@@ -29,7 +29,7 @@ interface ScanRow {
   created_at: string
 }
 
-// ── Data fetching ────────────────────────────────────────────
+// ── Data fetching ────────────────────────────────────────────────
 async function getReport(token: string): Promise<ScanRow | null> {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -55,7 +55,7 @@ async function getReport(token: string): Promise<ScanRow | null> {
   return scan ?? null
 }
 
-// ── Sub-components ───────────────────────────────────────────
+// ── Sub-components ───────────────────────────────────────────────
 
 function scoreLabel(s: number) {
   if (s >= 80) return { label: 'AI-Ready',         color: 'text-emerald-600', ring: 'stroke-emerald-500', bg: 'bg-emerald-50  border-emerald-200' }
@@ -77,13 +77,13 @@ function ScoreRing({ score }: { score: number }) {
       />
       <text
         x="50" y="46" textAnchor="middle" dominantBaseline="middle"
-        className={`text-2xl font-black fill-current ${color}`}
+        className={`fill-current ${color}`}
         transform="rotate(90, 50, 50)"
         style={{ fontSize: '18px', fontWeight: 900 }}
       >{score}</text>
       <text
         x="50" y="60" textAnchor="middle"
-        style={{ fontSize: '8px', fill: '#888', transform: 'rotate(90deg)', transformOrigin: '50px 60px' }}
+        style={{ fontSize: '8px', fill: '#888' }}
         transform="rotate(90, 50, 60)"
       >/ 100</text>
     </svg>
@@ -173,7 +173,7 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
   )
 }
 
-// ── Page ─────────────────────────────────────────────────────
+// ── Page ─────────────────────────────────────────────────────────
 
 export default async function ReportPage({
   params,
@@ -210,8 +210,8 @@ export default async function ReportPage({
             <div className="text-center sm:text-left">
               <p className={`text-2xl font-black ${color}`}>{label}</p>
               <p className="text-sm text-muted mt-1">
-                {failChecks.length > 0 && <span className="text-red-600 font-semibold">{failChecks.length} critical issue{failChecks.length > 1 ? 's' : ''} &nbsp;</span>}
-                {warnChecks.length > 0 && <span className="text-amber-600 font-semibold">{warnChecks.length} warning{warnChecks.length > 1 ? 's' : ''} &nbsp;</span>}
+                {failChecks.length > 0 && <span className="text-red-600 font-semibold">{failChecks.length} critical issue{failChecks.length > 1 ? 's' : ''}&nbsp;</span>}
+                {warnChecks.length > 0 && <span className="text-amber-600 font-semibold">{warnChecks.length} warning{warnChecks.length > 1 ? 's' : ''}&nbsp;</span>}
                 {passChecks.length > 0 && <span className="text-emerald-600 font-semibold">{passChecks.length} passed</span>}
               </p>
               <p className="text-xs text-muted/60 mt-1">
@@ -219,6 +219,18 @@ export default async function ReportPage({
               </p>
             </div>
           </div>
+        </div>
+
+        {/* ── Download button ── */}
+        <div className="mb-8 flex justify-center">
+          <a
+            href={`/api/report-download?token=${token}`}
+            download="AI-Readiness-Fix-Guides-MyGeoRadar.html"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-accent/30 bg-accent/5 text-accent text-sm font-semibold hover:bg-accent/10 transition-colors"
+          >
+            <Download className="w-4 h-4" />
+            Download Fix Guides (PDF-ready)
+          </a>
         </div>
 
         {/* ── How to use this report ── */}
@@ -287,7 +299,7 @@ export default async function ReportPage({
           >
             Get the Found by AI Playbook — $27 <ArrowRight className="w-4 h-4" />
           </Link>
-          <p className="text-xs text-muted mt-3">One-time &middot; Instant download &middot; 30-day money-back guarantee</p>
+          <p className="text-xs text-muted mt-3">One-time · Instant download · 30-day money-back guarantee</p>
         </div>
 
         {/* ── Footer note ── */}
