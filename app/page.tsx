@@ -92,7 +92,7 @@ const includes = [
 const testimonials = [
   {
     quote:
-      'I typed my business into ChatGPT and it recommended three competitors. My business wasn\'t mentioned once. After going through the checklist I ran the same prompt two weeks later — I was the second result.',
+      "I typed my business into ChatGPT and it recommended three competitors. My business wasn't mentioned once. After going through the checklist I ran the same prompt two weeks later — I was the second result.",
     name: 'Marcus T.',
     role: 'HVAC Business Owner',
   },
@@ -104,7 +104,7 @@ const testimonials = [
   },
   {
     quote:
-      'Paid $27. Spent a weekend on the checklist. Two weeks later a client told me they found me by asking Perplexity. First time that\'s ever happened.',
+      "Paid $27. Spent a weekend on the checklist. Two weeks later a client told me they found me by asking Perplexity. First time that's ever happened.",
     name: 'James R.',
     role: 'Independent Financial Advisor',
   },
@@ -196,8 +196,6 @@ export default function HomePage() {
         {/* ─── FREE AI READINESS SCAN ─── */}
         <section id="scan" className="py-16 px-4 md:px-8 bg-surface/40 border-y border-border">
           <div className="max-w-3xl mx-auto">
-
-            {/* Section headline */}
             <div className="text-center mb-8">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4">
                 <Radar className="w-3.5 h-3.5" />
@@ -217,10 +215,7 @@ export default function HomePage() {
                 A site that passes these checks is structured in a way that AI can parse, trust, and reference.
               </p>
             </div>
-
-            {/* The scan widget */}
             <AiReadinessScan />
-
           </div>
         </section>
 
@@ -313,10 +308,7 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {includes.map(({ icon: Icon, title, description }) => (
-                <div
-                  key={title}
-                  className="card-hover flex gap-4 p-6"
-                >
+                <div key={title} className="card-hover flex gap-4 p-6">
                   <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center ring-1 ring-accent/10">
                     <Icon className="w-5 h-5 text-accent" />
                   </div>
@@ -343,7 +335,6 @@ export default function HomePage() {
                 Here&apos;s a real sample from two of the four assets included in the playbook bundle.
               </p>
             </div>
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* CHECKLIST PREVIEW */}
               <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
@@ -370,7 +361,6 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-
               {/* PROMPT PACK PREVIEW */}
               <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
@@ -395,7 +385,6 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-
             <div className="text-center mt-10">
               <Link href="/playbook">
                 <Button variant="primary" size="lg" className="gap-2 shadow-lg shadow-accent/20">
