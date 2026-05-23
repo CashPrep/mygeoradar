@@ -120,7 +120,7 @@ const previewChecklist = [
   { done: false, text: 'Publish at least 3 authoritative articles that cite your expertise' },
   { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
   { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
-  { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
+  { done: false, text: 'Create a dedicated “About” page written to be pulled by AI overviews' },
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
@@ -163,12 +163,13 @@ export default function PlaybookPage() {
         <Navbar />
 
         {/* ─── HERO ─── */}
-        <section className="pt-32 pb-16 px-4 md:px-8 text-center">
-          <div className="max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6">
-              <Star className="w-3 h-3" /> Digital product — instant download after payment
+        <section className="relative pt-32 pb-16 px-4 md:px-8 text-center overflow-hidden">
+          <div className="absolute inset-0 hero-bg opacity-60 pointer-events-none" aria-hidden="true" />
+          <div className="relative max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 shadow-glow-xs">
+              <Star className="w-3 h-3 fill-accent" /> Digital product — instant download after payment
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-4 text-gradient">
               Found by AI
             </h1>
             <p className="text-xl text-muted mb-5 font-medium">The AI Visibility Playbook</p>
@@ -178,9 +179,9 @@ export default function PlaybookPage() {
               10 copy-paste prompts, and a 30-day action plan. One time, $27.
             </p>
             {/* Urgency banner */}
-            <div className="flex items-center justify-center gap-2 mb-8 px-4 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20 max-w-xl mx-auto">
-              <AlertTriangle className="w-4 h-4 text-amber-400 flex-shrink-0" />
-              <p className="text-sm text-amber-300 text-left">
+            <div className="flex items-start justify-center gap-3 mb-8 px-4 py-4 rounded-xl bg-amber-500/8 border border-amber-500/25 border-l-4 border-l-amber-400 max-w-xl mx-auto text-left">
+              <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-amber-700">
                 <strong>GEO is still early.</strong> The businesses that establish AI visibility in 2026
                 will be the defaults AI recommends for years — before competitors even know this game exists.
               </p>
@@ -188,7 +189,7 @@ export default function PlaybookPage() {
             <form action="/api/checkout" method="POST">
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg shadow-accent/20"
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-9 py-4 rounded-xl text-lg transition-all shadow-lg shadow-accent/20 active:scale-[0.98] ring-2 ring-accent/20 ring-offset-2"
               >
                 Get instant access — $27 <ArrowRight className="w-5 h-5" />
               </button>
@@ -198,8 +199,8 @@ export default function PlaybookPage() {
         </section>
 
         {/* ─── SOCIAL PROOF BAR ─── */}
-        <section className="py-8 px-4 border-y border-border bg-surface/40">
-          <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-8 text-center">
+        <section className="py-6 px-4 border-y border-border bg-surface/60 backdrop-blur-sm">
+          <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 text-center">
             {[
               'Covers all 4 major AI assistants',
               'No recurring subscription — ever',
@@ -224,25 +225,25 @@ export default function PlaybookPage() {
                 contains so you know precisely what you’re getting before you buy.
               </p>
             </div>
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               {deliverables.map(({ icon: Icon, title, tagline, bullets }) => (
                 <div
                   key={title}
-                  className="rounded-2xl border border-border bg-surface p-7 hover:border-accent/40 transition-colors"
+                  className="rounded-2xl border border-border bg-surface p-7 hover:border-accent/40 hover:shadow-card-hover transition-all duration-200"
                 >
                   <div className="flex items-start gap-4 mb-5">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                    <div className="flex-shrink-0 w-11 h-11 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center ring-1 ring-accent/10">
                       <Icon className="w-5 h-5 text-accent" />
                     </div>
                     <div>
                       <h3 className="font-bold text-lg leading-tight">{title}</h3>
-                      <p className="text-sm text-accent mt-0.5">{tagline}</p>
+                      <p className="text-sm text-accent font-medium mt-0.5">{tagline}</p>
                     </div>
                   </div>
                   <ul className="flex flex-col gap-2.5">
                     {bullets.map((b) => (
                       <li key={b} className="flex items-start gap-3">
-                        <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                        <CheckCircle className="w-4 h-4 text-accent fill-accent/10 flex-shrink-0 mt-0.5" />
                         <span className="text-sm text-muted leading-relaxed">{b}</span>
                       </li>
                     ))}
@@ -257,7 +258,7 @@ export default function PlaybookPage() {
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4 shadow-glow-xs">
                 <Eye className="w-3.5 h-3.5" />
                 Live preview
               </div>
@@ -270,17 +271,17 @@ export default function PlaybookPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
               {/* CHECKLIST PREVIEW */}
-              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-lg">
+              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
                   <FileText className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">27-Point AI Visibility Checklist</span>
-                  <span className="ml-auto text-xs text-muted">Items 1–8 of 27</span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">Items 1–8 of 27</span>
                 </div>
                 <div className="p-5 flex flex-col gap-3">
                   {previewChecklist.map(({ done, text }) => (
                     <div key={text} className="flex items-start gap-3">
                       <div className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded border ${
-                        done ? 'bg-accent border-accent' : 'border-border'
+                        done ? 'bg-accent border-accent shadow-glow-xs' : 'border-border'
                       } flex items-center justify-center`}>
                         {done && (
                           <svg className="w-2.5 h-2.5 text-background" fill="none" viewBox="0 0 10 8">
@@ -301,17 +302,17 @@ export default function PlaybookPage() {
               </div>
 
               {/* PROMPT PACK PREVIEW */}
-              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-lg">
+              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
                   <Zap className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">Prompt Pack — Sample Prompt</span>
-                  <span className="ml-auto text-xs text-muted">1 of 10 prompts</span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1 of 10 prompts</span>
                 </div>
                 <div className="p-5 flex flex-col gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Prompt #1 — AI Awareness Audit</p>
                     <p className="text-xs text-muted mb-3">Paste into ChatGPT, Perplexity, Gemini, and Claude. Run each separately.</p>
-                    <div className="rounded-lg bg-surface border border-border p-4 font-mono text-xs leading-relaxed text-foreground/80 select-all">
+                    <div className="rounded-lg bg-surface-2 border border-border p-4 font-mono text-xs leading-relaxed text-foreground/80 select-all">
                       {`"I'm looking for a [your business type] in [your city/area]. Who are the most trusted and well-reviewed options you'd recommend, and why? Please be specific about what makes each one stand out."`}
                     </div>
                     <p className="text-xs text-muted mt-3">
@@ -332,7 +333,7 @@ export default function PlaybookPage() {
               <form action="/api/checkout" method="POST">
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 bg-accent hover:bg-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg shadow-accent/20"
+                  className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-9 py-4 rounded-xl text-lg transition-all shadow-lg shadow-accent/20 active:scale-[0.98]"
                 >
                   Get the full bundle — $27 <ArrowRight className="w-5 h-5" />
                 </button>
@@ -351,14 +352,14 @@ export default function PlaybookPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {testimonials.map(({ quote, name, role }) => (
-                <div key={name} className="flex flex-col p-6 rounded-xl bg-surface border border-border">
+                <div key={name} className="flex flex-col p-6 rounded-xl bg-surface border border-border border-t-2 border-t-accent/30 hover:shadow-card-hover transition-shadow">
                   <div className="flex gap-0.5 mb-4">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 text-accent fill-accent" />
                     ))}
                   </div>
                   <p className="text-sm text-muted leading-relaxed mb-5 flex-1">&ldquo;{quote}&rdquo;</p>
-                  <div>
+                  <div className="pt-3 border-t border-border">
                     <p className="font-semibold text-sm">{name}</p>
                     <p className="text-xs text-muted">{role}</p>
                   </div>
@@ -371,7 +372,7 @@ export default function PlaybookPage() {
         {/* ─── URGENCY ─── */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 shadow-glow-xs">
               <TrendingUp className="w-3.5 h-3.5" />
               Why acting in 2026 is different
             </div>
@@ -408,8 +409,10 @@ export default function PlaybookPage() {
                   body: 'Agencies charge $2,000–5,000/month for this work. This playbook gives you the same system for one flat $27.',
                 },
               ].map(({ icon: Icon, heading, body }) => (
-                <div key={heading} className="p-5 rounded-xl bg-surface border border-border text-left">
-                  <Icon className="w-5 h-5 text-accent mb-3" />
+                <div key={heading} className="p-5 rounded-xl bg-surface border border-border border-l-4 border-l-accent/40 text-left hover:shadow-card-hover transition-shadow">
+                  <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center mb-3">
+                    <Icon className="w-4 h-4 text-accent" />
+                  </div>
                   <p className="font-semibold text-sm mb-1">{heading}</p>
                   <p className="text-xs text-muted leading-relaxed">{body}</p>
                 </div>
@@ -431,7 +434,7 @@ export default function PlaybookPage() {
                 'You want a clear, done-for-you action plan — not more theory',
                 'You want to establish AI visibility before your competitors do',
               ].map((item) => (
-                <div key={item} className="flex items-start gap-3 p-4 rounded-lg bg-surface border border-border">
+                <div key={item} className="flex items-start gap-3 p-4 rounded-lg bg-surface border border-border hover:border-accent/30 transition-colors">
                   <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <span className="text-sm">{item}</span>
                 </div>
@@ -443,10 +446,11 @@ export default function PlaybookPage() {
         {/* ─── PRICING ─── */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-md mx-auto">
-            <div className="rounded-2xl border-2 border-accent bg-surface p-8 text-center shadow-xl shadow-accent/10">
-              <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4">Found by AI — Complete Bundle</p>
+            <div className="rounded-2xl border-2 border-accent bg-surface p-8 text-center shadow-xl shadow-accent/15 relative overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent/40 via-accent to-accent/40" />
+              <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4 mt-2">Found by AI — Complete Bundle</p>
               <div className="flex items-end justify-center gap-1 mb-1">
-                <span className="text-6xl font-black">$27</span>
+                <span className="text-6xl font-black text-gradient">$27</span>
               </div>
               <p className="text-sm text-muted mb-8">One-time payment &middot; No subscription &middot; Instant download</p>
               <ul className="flex flex-col gap-3 text-left mb-8">
@@ -467,7 +471,7 @@ export default function PlaybookPage() {
               <form action="/api/checkout" method="POST">
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-white font-semibold px-6 py-4 rounded-xl text-base transition-colors"
+                  className="w-full inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-6 py-4 rounded-xl text-base transition-all active:scale-[0.98]"
                 >
                   Get instant access — $27 <ArrowRight className="w-4 h-4" />
                 </button>
@@ -481,10 +485,10 @@ export default function PlaybookPage() {
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Questions answered</h2>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col divide-y divide-border">
               {faqs.map(({ q, a }) => (
-                <div key={q} className="border-b border-border pb-6">
-                  <h3 className="font-semibold mb-2">{q}</h3>
+                <div key={q} className="py-6 hover:bg-surface/50 -mx-4 px-4 rounded-lg transition-colors">
+                  <h3 className="font-semibold text-base mb-2">{q}</h3>
                   <p className="text-sm text-muted leading-relaxed">{a}</p>
                 </div>
               ))}
@@ -509,7 +513,7 @@ export default function PlaybookPage() {
             <form action="/api/checkout" method="POST">
               <button
                 type="submit"
-                className="inline-flex items-center gap-2 bg-accent hover:bg-accent/90 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg shadow-accent/20"
+                className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-9 py-4 rounded-xl text-lg transition-all shadow-lg shadow-accent/20 active:scale-[0.98] ring-2 ring-accent/20 ring-offset-2"
               >
                 Get the Found by AI Playbook — $27 <ArrowRight className="w-5 h-5" />
               </button>
