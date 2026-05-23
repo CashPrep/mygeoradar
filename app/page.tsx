@@ -136,7 +136,6 @@ const faqs = [
   },
 ]
 
-// Sample checklist items shown in the preview (first 8 of 27)
 const previewChecklist = [
   { done: true,  text: 'Claim and fully complete your Google Business Profile' },
   { done: true,  text: 'Add a clear, keyword-rich business description everywhere' },
@@ -144,7 +143,7 @@ const previewChecklist = [
   { done: false, text: 'Publish at least 3 authoritative articles that cite your expertise' },
   { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
   { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
-  { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
+  { done: false, text: 'Create a dedicated “About” page written to be pulled by AI overviews' },
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
@@ -160,15 +159,17 @@ export default function HomePage() {
         <Navbar />
 
         {/* HERO */}
-        <section className="pt-32 pb-20 px-4 md:px-8 text-center">
-          <div className="max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6">
+        <section className="relative pt-32 pb-20 px-4 md:px-8 text-center overflow-hidden">
+          {/* Background: grid + radial glow */}
+          <div className="absolute inset-0 hero-bg opacity-60 pointer-events-none" aria-hidden="true" />
+          <div className="relative max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 animate-fade-in shadow-glow-xs">
               <Radar className="w-3.5 h-3.5" />
               2026 — AI search is replacing Google for millions of buying decisions
             </div>
             <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
               When someone asks AI about your industry,{' '}
-              <span className="text-accent">do you show up?</span>
+              <span className="text-gradient-accent">do you show up?</span>
             </h1>
             <p className="text-lg md:text-xl text-muted leading-relaxed mb-4 max-w-2xl mx-auto">
               Most businesses are <strong className="text-foreground">completely invisible</strong> to
@@ -180,12 +181,12 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/playbook">
-                <Button variant="primary" size="lg" className="gap-2 shadow-lg shadow-accent/20">
+                <Button variant="primary" size="lg" className="gap-2 shadow-lg shadow-accent/20 ring-2 ring-accent/20 ring-offset-2">
                   Get the Playbook — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <Link href="/#what-you-get" className="text-sm text-muted hover:text-foreground transition-colors">
-                See what&apos;s included ↓
+              <Link href="/#what-you-get" className="text-sm text-muted hover:text-accent transition-colors font-medium">
+                See what’s included ↓
               </Link>
             </div>
             <p className="text-xs text-muted mt-4">One-time payment &middot; Instant download &middot; 30-day money-back guarantee</p>
@@ -193,7 +194,7 @@ export default function HomePage() {
         </section>
 
         {/* TRUST BAR */}
-        <section className="py-6 px-4 border-y border-border bg-surface/40">
+        <section className="py-6 px-4 border-y border-border bg-surface/60 backdrop-blur-sm">
           <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10 text-center">
             {[
               { icon: CheckCircle, label: 'Covers all 4 major AI assistants' },
@@ -213,7 +214,7 @@ export default function HomePage() {
         {/* PAIN SECTION */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-medium mb-6">
               <AlertTriangle className="w-3.5 h-3.5" />
               The problem most business owners don&apos;t know they have
             </div>
@@ -260,11 +261,11 @@ export default function HomePage() {
                 },
                 {
                   stat: 'Day 1',
-                  label: 'advantage — the businesses that fix this now will own AI recommendations before their competitors even know this exists',
+                  label: 'advantage — the businesses that fix this now will own AI recommendations before their competitors even know this game exists',
                 },
               ].map(({ stat, label }) => (
-                <div key={stat} className="p-5 rounded-xl bg-surface border border-border">
-                  <p className="text-3xl font-bold text-accent mb-2">{stat}</p>
+                <div key={stat} className="p-5 rounded-xl bg-surface border border-border border-l-4 border-l-accent/40 shadow-glow-xs hover:shadow-card-hover transition-shadow">
+                  <p className="text-3xl font-bold text-gradient-accent mb-2">{stat}</p>
                   <p className="text-sm text-muted leading-relaxed">{label}</p>
                 </div>
               ))}
@@ -283,13 +284,13 @@ export default function HomePage() {
               {includes.map(({ icon: Icon, title, description }) => (
                 <div
                   key={title}
-                  className="flex gap-4 p-6 rounded-xl bg-surface border border-border hover:border-accent/40 transition-colors"
+                  className="card-hover flex gap-4 p-6"
                 >
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center ring-1 ring-accent/10">
                     <Icon className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1">{title}</h3>
+                    <h3 className="font-semibold mb-1.5">{title}</h3>
                     <p className="text-sm text-muted leading-relaxed">{description}</p>
                   </div>
                 </div>
@@ -302,7 +303,7 @@ export default function HomePage() {
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4 shadow-glow-xs">
                 <Eye className="w-3.5 h-3.5" />
                 Peek inside
               </div>
@@ -315,16 +316,16 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
               {/* CHECKLIST PREVIEW */}
-              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-lg">
+              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
                   <FileText className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">27-Point AI Visibility Checklist</span>
-                  <span className="ml-auto text-xs text-muted">Items 1-8 of 27</span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">Items 1-8 of 27</span>
                 </div>
                 <div className="p-5 flex flex-col gap-3">
                   {previewChecklist.map(({ done, text }) => (
                     <div key={text} className="flex items-start gap-3">
-                      <div className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded border ${done ? 'bg-accent border-accent' : 'border-border'} flex items-center justify-center`}>
+                      <div className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded border ${done ? 'bg-accent border-accent shadow-glow-xs' : 'border-border'} flex items-center justify-center`}>
                         {done && (
                           <svg className="w-2.5 h-2.5 text-background" fill="none" viewBox="0 0 10 8">
                             <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -341,17 +342,17 @@ export default function HomePage() {
               </div>
 
               {/* PROMPT PACK PREVIEW */}
-              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-lg">
+              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
                 <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
                   <Zap className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">Prompt Pack — Sample Prompt</span>
-                  <span className="ml-auto text-xs text-muted">1 of 10 prompts</span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1 of 10 prompts</span>
                 </div>
                 <div className="p-5 flex flex-col gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Prompt #1 — AI Awareness Audit</p>
                     <p className="text-xs text-muted mb-3">Paste this into ChatGPT, Perplexity, Gemini, and Claude. Run it on each.</p>
-                    <div className="rounded-lg bg-surface border border-border p-4 font-mono text-xs leading-relaxed text-foreground/80 select-all">
+                    <div className="rounded-lg bg-surface-2 border border-border p-4 font-mono text-xs leading-relaxed text-foreground/80 select-all">
                       {`"I'm looking for a [your business type] in [your city/area]. Who are the most trusted and well-reviewed options you'd recommend, and why? Please be specific about what makes each one stand out."`}
                     </div>
                     <p className="text-xs text-muted mt-3">
@@ -378,7 +379,7 @@ export default function HomePage() {
         </section>
 
         {/* HOW IT WORKS */}
-        <section className="py-20 px-4 md:px-8 bg-surface/50">
+        <section className="py-20 px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-14">How it works</h2>
             <div className="flex flex-col gap-10">
@@ -404,10 +405,10 @@ export default function HomePage() {
                   body: 'Implement changes one day at a time. At the end of 30 days, re-run the prompt pack. You will see the difference — AI assistants describing and recommending your business.',
                 },
               ].map(({ step, title, body }) => (
-                <div key={step} className="flex gap-5 text-left">
-                  <span className="flex-shrink-0 text-4xl font-black text-accent/20">{step}</span>
+                <div key={step} className="flex gap-5 text-left p-5 rounded-xl bg-surface border border-border hover:border-accent/30 transition-colors">
+                  <span className="flex-shrink-0 text-4xl font-black text-accent/25 leading-none mt-1">{step}</span>
                   <div>
-                    <h3 className="font-semibold text-lg mb-1">{title}</h3>
+                    <h3 className="font-semibold text-lg mb-1.5">{title}</h3>
                     <p className="text-sm text-muted leading-relaxed">{body}</p>
                   </div>
                 </div>
@@ -417,7 +418,7 @@ export default function HomePage() {
         </section>
 
         {/* TESTIMONIALS */}
-        <section className="py-20 px-4 md:px-8">
+        <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl font-bold mb-3">Real results from real businesses</h2>
@@ -425,14 +426,14 @@ export default function HomePage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {testimonials.map(({ quote, name, role }) => (
-                <div key={name} className="flex flex-col p-6 rounded-xl bg-surface border border-border">
+                <div key={name} className="flex flex-col p-6 rounded-xl bg-surface border border-border border-t-2 border-t-accent/30 hover:shadow-card-hover transition-shadow">
                   <div className="flex gap-0.5 mb-4">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 text-accent fill-accent" />
                     ))}
                   </div>
                   <p className="text-sm text-muted leading-relaxed mb-5 flex-1">&ldquo;{quote}&rdquo;</p>
-                  <div>
+                  <div className="pt-3 border-t border-border">
                     <p className="font-semibold text-sm">{name}</p>
                     <p className="text-xs text-muted">{role}</p>
                   </div>
@@ -443,9 +444,9 @@ export default function HomePage() {
         </section>
 
         {/* URGENCY */}
-        <section className="py-20 px-4 md:px-8 bg-surface/50">
+        <section className="py-20 px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 shadow-glow-xs">
               <TrendingUp className="w-3.5 h-3.5" />
               The window is closing fast
             </div>
@@ -462,7 +463,7 @@ export default function HomePage() {
               close over time. AI assistants learn patterns — once your competitors establish themselves as the
               trusted answer, <strong className="text-foreground">displacing them gets exponentially more expensive.</strong>
             </p>
-            <div className="flex items-center justify-center gap-3 p-4 rounded-xl bg-accent/5 border border-accent/20 max-w-md mx-auto">
+            <div className="flex items-center justify-center gap-3 p-5 rounded-xl bg-accent/5 border border-accent/20 max-w-md mx-auto shadow-glow-xs">
               <Clock className="w-5 h-5 text-accent flex-shrink-0" />
               <p className="text-sm text-left">
                 <strong>The playbook is $27.</strong> One agency consultation costs $300+. You can start fixing this today.
@@ -472,7 +473,7 @@ export default function HomePage() {
         </section>
 
         {/* WHO THIS IS FOR */}
-        <section className="py-16 px-4 md:px-8">
+        <section className="py-16 px-4 md:px-8 bg-surface/50">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-8">This is for you if...</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
@@ -484,7 +485,7 @@ export default function HomePage() {
                 'You want a clear, done-for-you action plan — not more theory',
                 'You want to act before your competitors figure this out',
               ].map((item) => (
-                <div key={item} className="flex items-start gap-3 p-4 rounded-lg bg-surface border border-border">
+                <div key={item} className="flex items-start gap-3 p-4 rounded-lg bg-surface border border-border hover:border-accent/30 transition-colors">
                   <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <span className="text-sm">{item}</span>
                 </div>
@@ -494,12 +495,14 @@ export default function HomePage() {
         </section>
 
         {/* PRICING */}
-        <section id="pricing" className="py-20 px-4 md:px-8 bg-surface/50">
+        <section id="pricing" className="py-20 px-4 md:px-8">
           <div className="max-w-md mx-auto">
-            <div className="rounded-2xl border-2 border-accent bg-surface p-8 text-center shadow-xl shadow-accent/10">
-              <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4">Found by AI — Complete Bundle</p>
+            <div className="rounded-2xl border-2 border-accent bg-surface p-8 text-center shadow-xl shadow-accent/15 relative overflow-hidden">
+              {/* Top accent glow */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent/40 via-accent to-accent/40" />
+              <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4 mt-2">Found by AI — Complete Bundle</p>
               <div className="flex items-end justify-center gap-1 mb-1">
-                <span className="text-6xl font-black">$27</span>
+                <span className="text-6xl font-black text-gradient">$27</span>
               </div>
               <p className="text-sm text-muted mb-8">One-time payment &middot; No subscription &middot; Instant download</p>
               <ul className="flex flex-col gap-3 text-left mb-8">
@@ -528,13 +531,13 @@ export default function HomePage() {
         </section>
 
         {/* FAQ */}
-        <section className="py-20 px-4 md:px-8">
+        <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Common questions</h2>
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-0 divide-y divide-border">
               {faqs.map(({ q, a }) => (
-                <div key={q} className="border-b border-border pb-6">
-                  <h3 className="font-semibold mb-2">{q}</h3>
+                <div key={q} className="py-6 hover:bg-surface/50 -mx-4 px-4 rounded-lg transition-colors">
+                  <h3 className="font-semibold text-base mb-2">{q}</h3>
                   <p className="text-sm text-muted leading-relaxed">{a}</p>
                 </div>
               ))}
@@ -543,7 +546,7 @@ export default function HomePage() {
         </section>
 
         {/* FINAL CTA */}
-        <section className="py-20 px-4 md:px-8 bg-surface/50">
+        <section className="py-20 px-4 md:px-8">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Stop being invisible to AI.
@@ -555,8 +558,8 @@ export default function HomePage() {
               The playbook is <strong className="text-foreground">$27 — one time</strong>. Everything you need. Downloadable in the next two minutes.
             </p>
             <Link href="/playbook">
-              <Button variant="primary" size="lg" className="gap-2 shadow-lg shadow-accent/20">
-                Get the Found by AI Playbook — $27 <ArrowRight className="w-4 h-4" />
+              <Button variant="primary" size="xl" className="gap-2 shadow-lg shadow-accent/20">
+                Get the Found by AI Playbook — $27 <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
             <p className="text-xs text-muted mt-4">One-time &middot; Instant download &middot; 30-day money-back guarantee</p>
