@@ -11,6 +11,7 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   body {
@@ -20,9 +21,9 @@
 
   ::-webkit-scrollbar { width: 5px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #c4c4cc; border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: #a1a1aa; }
-  ::selection { background: #6d28d925; color: #09090b; }
+  ::-webkit-scrollbar-thumb { background: #c4c4cc; border-radius: 4px; transition: background 0.2s; }
+  ::-webkit-scrollbar-thumb:hover { background: #6d28d9; }
+  ::selection { background: #6d28d930; color: #09090b; }
 }
 
 @layer components {
@@ -45,12 +46,27 @@
 
   /* Top radial glow — purple tint */
   .glow-top {
-    background: radial-gradient(ellipse 70% 40% at 50% -5%, #6d28d910, transparent 70%);
+    background: radial-gradient(ellipse 80% 50% at 50% -5%, #6d28d918, transparent 70%);
   }
 
   /* Bottom fade for sections */
   .glow-bottom {
-    background: radial-gradient(ellipse 60% 40% at 50% 110%, #6d28d908, transparent 70%);
+    background: radial-gradient(ellipse 60% 40% at 50% 110%, #6d28d910, transparent 70%);
+  }
+
+  /* Hero background: grid + glow combined */
+  .hero-bg {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -5%, #6d28d918, transparent 70%),
+      linear-gradient(#e4e4e7 1px, transparent 1px),
+      linear-gradient(90deg, #e4e4e7 1px, transparent 1px);
+    background-size: 100% 100%, 48px 48px, 48px 48px;
+    background-color: #ffffff;
+  }
+
+  /* Glass card */
+  .glass {
+    @apply bg-white/60 backdrop-blur-md border border-white/40;
   }
 
   /* Cards */
@@ -58,7 +74,7 @@
     @apply bg-surface border border-border rounded-xl;
   }
   .card-hover {
-    @apply card transition-all duration-200 hover:border-border-bright hover:shadow-card-hover;
+    @apply card transition-all duration-200 hover:border-accent/40 hover:shadow-card-hover;
   }
 
   /* Badges */
@@ -71,12 +87,14 @@
     @apply inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover
            text-white font-semibold px-5 py-2.5 rounded-lg transition-all duration-150
            shadow-glow-sm hover:shadow-glow-md active:scale-[0.98]
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
   .btn-secondary {
     @apply inline-flex items-center justify-center gap-2 bg-surface-2 hover:bg-border
-           text-foreground font-medium border border-border hover:border-border-bright
-           px-5 py-2.5 rounded-lg transition-all duration-150 active:scale-[0.98];
+           text-foreground font-medium border border-border hover:border-accent/40
+           px-5 py-2.5 rounded-lg transition-all duration-150 active:scale-[0.98]
+           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50 focus-visible:ring-offset-1;
   }
 
   /* Input */
@@ -84,7 +102,7 @@
   .input-base {
     @apply w-full bg-surface-2 border border-border rounded-lg px-4 py-3
            text-foreground placeholder:text-muted text-sm
-           focus:outline-none focus:ring-2 focus:ring-accent/20 focus:border-accent
+           focus:outline-none focus:ring-2 focus:ring-accent/25 focus:border-accent
            transition-all duration-150 hover:border-border-bright;
   }
 
@@ -109,17 +127,33 @@
   .divider {
     @apply w-full h-px bg-gradient-to-r from-transparent via-border to-transparent;
   }
+
+  /* Left accent bar for cards */
+  .accent-bar {
+    @apply border-l-4 border-accent/50;
+  }
+
+  /* Stat highlight card */
+  .stat-card {
+    @apply p-5 rounded-xl bg-surface border border-border border-l-4 border-l-accent/40;
+  }
 }
 
 @layer utilities {
   .text-gradient {
-    background: linear-gradient(135deg, #09090b 0%, #6d28d9 60%, #7c3aed 100%);
+    background: linear-gradient(135deg, #09090b 0%, #6d28d9 55%, #7c3aed 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-gradient-subtle {
-    background: linear-gradient(135deg, #09090b 70%, #6d28d9 100%);
+    background: linear-gradient(135deg, #09090b 60%, #6d28d9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .text-gradient-accent {
+    background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
