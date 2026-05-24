@@ -24,10 +24,8 @@ export default async function SuccessPage({
 }) {
   const { session_id } = await searchParams
 
-  // No session_id = direct nav attempt — send them to the sales page
   if (!session_id) redirect('/playbook')
 
-  // Verify with Stripe server-side — cannot be faked
   let customerEmail: string | null = null
   try {
     const session = await stripe.checkout.sessions.retrieve(session_id)
@@ -37,11 +35,9 @@ export default async function SuccessPage({
     redirect('/playbook')
   }
 
-  // Check if already logged in
   const supabase = await createSupabaseServer()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // If logged in, verify purchase exists in Supabase
   let hasPurchase = false
   if (user) {
     const { data } = await supabase
@@ -59,7 +55,6 @@ export default async function SuccessPage({
       <section className="pt-32 pb-20 px-4 md:px-8">
         <div className="max-w-xl mx-auto text-center">
 
-          {/* Icon */}
           <div className="flex items-center justify-center mb-8">
             <div className="w-20 h-20 rounded-full bg-accent/10 border-2 border-accent/30 flex items-center justify-center">
               <CheckCircle className="w-10 h-10 text-accent" />
@@ -69,16 +64,9 @@ export default async function SuccessPage({
           <h1 className="text-3xl md:text-4xl font-bold mb-4">Payment confirmed!</h1>
           <p className="text-lg text-muted leading-relaxed mb-10">
             Your <strong className="text-foreground">Found by AI Playbook</strong> is ready.
-            {customerEmail && (
-              <>
-                {' '}A receipt has been sent to{' '}
-                <strong className="text-foreground">{customerEmail}</strong>.
-              </>
-            )}
           </p>
 
           {user && hasPurchase ? (
-            /* ── Logged in + purchase verified → go to downloads */
             <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left">
               <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-accent" /> You&apos;re all set
@@ -95,7 +83,6 @@ export default async function SuccessPage({
               </Link>
             </div>
           ) : (
-            /* ── Not logged in → prompt sign-in with checkout email */
             <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left">
               <div className="flex items-start gap-3 mb-6">
                 <Lock className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
