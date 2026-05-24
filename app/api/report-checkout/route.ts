@@ -13,7 +13,7 @@ function getSupabase() {
 }
 
 function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-04-30.basil' })
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-02-24.acacia' })
 }
 
 export async function POST(req: NextRequest) {
@@ -21,7 +21,6 @@ export async function POST(req: NextRequest) {
     const { scanId } = await req.json()
     if (!scanId) return NextResponse.json({ error: 'scanId required' }, { status: 400 })
 
-    // Verify the scan exists
     const supabase = getSupabase()
     const { data: scan, error } = await supabase
       .from('scans')
@@ -33,7 +32,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Scan not found' }, { status: 404 })
     }
 
-    // Check if already purchased
     const { data: existing } = await supabase
       .from('report_purchases')
       .select('token, paid_at')
@@ -42,14 +40,12 @@ export async function POST(req: NextRequest) {
       .maybeSingle()
 
     if (existing?.token) {
-      // Already paid — redirect straight to report
-      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://mygeoradar.com'
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://mygeoradar.com'
       return NextResponse.json({ url: `${baseUrl}/report/${existing.token}` })
     }
 
-    // Create Stripe Checkout session
     const stripe = getStripe()
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://mygeoradar.com'
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://mygeoradar.com'
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
@@ -58,7 +54,7 @@ export async function POST(req: NextRequest) {
         {
           price_data: {
             currency: 'usd',
-            unit_amount: 999, // $9.99
+            unit_amount: 999,
             product_data: {
               name: 'AI Readiness Full Report',
               description: `Full breakdown + fix guides for ${scan.url} (AI Readiness Score: ${scan.score}/100)`,
@@ -70,7 +66,7 @@ export async function POST(req: NextRequest) {
       ],
       metadata: {
         scanId: scan.id,
-        scanUrl: scan.url.slice(0, 200), // Stripe metadata has char limits
+        scanUrl: scan.url.slice(0, 200),
       },
       success_url: `${baseUrl}/report/pending?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url:  `${baseUrl}/#scan`,

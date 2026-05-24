@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 }
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-04-30.basil',
+  apiVersion: '2025-02-24.acacia',
 })
 
 export default async function SuccessPage({

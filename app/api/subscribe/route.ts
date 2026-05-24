@@ -3,7 +3,7 @@ import Stripe from 'stripe'
 import { supabase } from '@/lib/supabase'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2024-04-10',
+  apiVersion: '2025-02-24.acacia',
 })
 
 export async function POST(req: NextRequest) {
@@ -16,7 +16,6 @@ export async function POST(req: NextRequest) {
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
 
-    // Get or create Stripe price for $5/month tracking
     const prices = await stripe.prices.list({ lookup_keys: ['monthly_tracking'], expand: ['data.product'] })
     let priceId = prices.data[0]?.id
 
@@ -45,7 +44,6 @@ export async function POST(req: NextRequest) {
       metadata:       { scanId, website, email },
     })
 
-    // Pre-insert a pending subscription row — best-effort, never block the response
     try {
       await supabase.from('subscriptions').upsert({
         email,
