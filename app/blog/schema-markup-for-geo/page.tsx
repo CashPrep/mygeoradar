@@ -1,0 +1,85 @@
+import { Navbar } from '@/components/layout/Navbar'
+import { Footer } from '@/components/layout/Footer'
+import { Badge } from '@/components/ui/Badge'
+import { BlogCta } from '@/components/blog/BlogCta'
+import { BlogMidCta } from '@/components/blog/BlogMidCta'
+
+export const metadata = {
+  title: 'Schema Markup and GEO: Why Structured Data Is Critical for AI Visibility',
+  description:
+    'Schema markup is one of the most direct signals you can give AI assistants about who your business is and what it does. Here is what it is, why it matters for GEO, and which types to prioritize.',
+  openGraph: {
+    title: 'Schema Markup and GEO: Why Structured Data Matters for AI Visibility',
+    description:
+      'Schema markup is one of the most direct signals you can give AI assistants. Here is what it is, why it matters for GEO, and which types to prioritize.',
+    url: 'https://mygeoradar.com/blog/schema-markup-for-geo',
+    siteName: 'MyGeoRadar',
+    images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630, alt: 'Schema Markup & GEO — MyGeoRadar' }],
+    type: 'article',
+    publishedTime: '2026-05-23T00:00:00.000Z',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@MyGEORadar',
+    title: 'Schema Markup and GEO: Why Structured Data Matters for AI Visibility',
+    description: 'Schema markup is one of the most direct signals you can give AI assistants. Here is what it is, why it matters for GEO, and which types to prioritize.',
+    images: ['https://mygeoradar.com/og-image.png'],
+  },
+}
+
+export default function SchemaMarkupGeoPage() {
+  return (
+    <main className="min-h-screen bg-background">
+      <Navbar />
+      <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <Badge variant="accent">Technical GEO</Badge>
+            <span className="text-xs text-muted">May 23, 2026 &middot; 7 min read</span>
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-4">
+            Schema Markup and GEO: Why Structured Data Is Critical for AI Visibility
+          </h1>
+          <p className="text-lg text-muted leading-relaxed">
+            Most business websites rely on plain HTML to describe what they do. Schema markup speaks a language that machines — including AI assistants — understand far more precisely. Here is what it is and why it matters for GEO.
+          </p>
+        </div>
+
+        <div className="flex flex-col gap-6 text-muted leading-relaxed">
+
+          <h2 className="text-xl font-bold text-foreground mt-4">What schema markup actually is</h2>
+          <p>Schema markup is structured data you embed in your website’s code using a vocabulary from Schema.org. It does not change how your page looks to human visitors — it adds a hidden layer of meaning that machines can read. Instead of an AI trying to infer that the phone number on your contact page belongs to your business, schema markup tells it explicitly: this is the telephone number for this Organization, located at this address, in this city.</p>
+          <p>Search engines and AI systems have been trained to trust structured data over unstructured page content because it is deliberate, consistent, and harder to misinterpret. A paragraph on your About page might describe your business in flowing prose. A JSON-LD schema block states your business type, name, location, services, and hours in a format that requires zero interpretation.</p>
+
+          <h2 className="text-xl font-bold text-foreground mt-4">The schema types that matter most for GEO</h2>
+          {[
+            'Organization — your business name, URL, logo, description, and social profiles',
+            'LocalBusiness (or a subtype like MedicalBusiness, FoodEstablishment) — adds address, hours, geo coordinates, and service area',
+            'FAQPage — marks up Q&A content so AI can extract and cite your answers directly',
+            'Product or Service — defines what you sell with descriptions, prices, and aggregate ratings',
+            'BreadcrumbList — helps AI understand your site structure and content hierarchy',
+          ].map((item) => (
+            <div key={item} className="flex items-start gap-2">
+              <span className="text-accent mt-1 shrink-0">&#8250;</span>
+              <p className="text-sm">{item}</p>
+            </div>
+          ))}
+
+          <BlogMidCta
+            topic="Full Schema Implementation Walkthrough"
+            hook="The Found by AI Playbook includes the exact schema types to implement, in what order, and what each field should say to maximize AI readability — no guesswork."
+          />
+
+          <h2 className="text-xl font-bold text-foreground mt-4">Why most business sites get this wrong</h2>
+          <p>The most common mistake is having no schema at all, or only having generic WebPage schema that was auto-generated by a website builder. Generic schema tells AI almost nothing useful about your specific business. The second most common mistake is having schema that contradicts information on the page or in other directories — inconsistency is a trust signal in the wrong direction.</p>
+
+          <h2 className="text-xl font-bold text-foreground mt-4">Structured data vs. unstructured content</h2>
+          <p>Schema markup does not replace good content — it reinforces it. An AI reading a page with both a well-written About section and accurate Organization schema gets a double confirmation of who you are. The schema tells it the facts; the content tells it the story. Used together, they make your business far easier for AI to identify, trust, and recommend with confidence.</p>
+
+        </div>
+        <BlogCta />
+      </article>
+      <Footer />
+    </main>
+  )
+}
