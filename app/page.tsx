@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { AiReadinessScan } from '@/components/scan/AiReadinessScan'
-import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, Star, AlertTriangle, TrendingUp, Clock, Eye } from 'lucide-react'
+import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, AlertTriangle, TrendingUp, Clock, Eye, MessageSquare } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
@@ -89,27 +89,6 @@ const includes = [
   },
 ]
 
-const testimonials = [
-  {
-    quote:
-      "I typed my business into ChatGPT and it recommended three competitors. My business wasn't mentioned once. After going through the checklist I ran the same prompt two weeks later — I was the second result.",
-    name: 'Marcus T.',
-    role: 'HVAC Business Owner',
-  },
-  {
-    quote:
-      'I had no idea this was even a problem until I used the prompt pack. Perplexity had no idea my business existed. The 30-day plan made it easy to fix without hiring anyone.',
-    name: 'Priya S.',
-    role: 'Marketing Consultant',
-  },
-  {
-    quote:
-      "Paid $27. Spent a weekend on the checklist. Two weeks later a client told me they found me by asking Perplexity. First time that's ever happened.",
-    name: 'James R.',
-    role: 'Independent Financial Advisor',
-  },
-]
-
 const faqs = [
   {
     q: 'Do I need to be technical or know SEO to use this?',
@@ -186,7 +165,7 @@ export default function HomePage() {
                 </Button>
               </a>
               <Link href="/#what-you-get" className="text-sm text-muted hover:text-accent transition-colors font-medium">
-                See what’s included ↓
+                See what&apos;s included ↓
               </Link>
             </div>
             <p className="text-xs text-muted mt-4">Free scan · No signup · Results in seconds</p>
@@ -206,7 +185,7 @@ export default function HomePage() {
               </h2>
               <p className="text-muted text-sm max-w-xl mx-auto leading-relaxed">
                 Before selling you anything, we want to check if you actually need it.
-                Enter your website URL and we’ll scan the technical signals AI crawlers use to
+                Enter your website URL and we&apos;ll scan the technical signals AI crawlers use to
                 read, understand, and cite a business — things like structured data, meta tags,
                 schema markup, and whether AI bots are accidentally blocked.
               </p>
@@ -256,7 +235,7 @@ export default function HomePage() {
               If your business isn&apos;t in that answer, <strong className="text-foreground">you lost that customer before they ever found your website.</strong>{' '}
               No bounce rate. No analytics. No second chance. They just hired your competitor.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
               {[
                 {
                   stat: '58.5%',
@@ -272,16 +251,6 @@ export default function HomePage() {
                       >
                         SparkToro / Datos, 2024
                       </a>
-                    </>
-                  ),
-                },
-                {
-                  stat: '4 in 5',
-                  label: (
-                    <>
-                      business owners we surveyed had never tested what AI assistants say about them —
-                      and were shocked by the results when they did.{' '}
-                      <span className="opacity-60 text-xs">MyGeoRadar research, 2025</span>
                     </>
                   ),
                 },
@@ -435,28 +404,50 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* TESTIMONIALS */}
+        {/* WHAT YOU CAN EXPECT (replaces fabricated testimonials) */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold mb-3">Real results from real businesses</h2>
-              <p className="text-muted">Business owners who fixed their AI visibility with this exact playbook.</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3">What you can expect</h2>
+              <p className="text-muted max-w-xl mx-auto">
+                Here is what working through this playbook actually looks like — step by step.
+              </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map(({ quote, name, role }) => (
-                <div key={name} className="flex flex-col p-6 rounded-xl bg-surface border border-border border-t-2 border-t-accent/30 hover:shadow-card-hover transition-shadow">
-                  <div className="flex gap-0.5 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-accent fill-accent" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-muted leading-relaxed mb-5 flex-1">&ldquo;{quote}&rdquo;</p>
-                  <div className="pt-3 border-t border-border">
-                    <p className="font-semibold text-sm">{name}</p>
-                    <p className="text-xs text-muted">{role}</p>
-                  </div>
+              {[
+                {
+                  step: '01',
+                  heading: 'Run the audit prompts',
+                  body: 'In the first 10 minutes you will know exactly whether your business appears in ChatGPT, Perplexity, Gemini, and Claude — and what each one says about you.',
+                },
+                {
+                  step: '02',
+                  heading: 'Work the checklist',
+                  body: 'The 27-point checklist tells you precisely what to fix, in what order, starting with the highest-impact items. No guessing, no wasted effort.',
+                },
+                {
+                  step: '03',
+                  heading: 'Re-run and measure',
+                  body: 'After your 30 days, run the same audit prompts again. You will have a concrete before/after comparison showing exactly how your AI visibility changed.',
+                },
+              ].map(({ step, heading, body }) => (
+                <div key={step} className="flex flex-col p-6 rounded-xl bg-surface border border-border hover:border-accent/30 hover:shadow-card-hover transition-all">
+                  <span className="text-4xl font-black text-accent/20 mb-4 leading-none">{step}</span>
+                  <h3 className="font-semibold text-base mb-2">{heading}</h3>
+                  <p className="text-sm text-muted leading-relaxed">{body}</p>
                 </div>
               ))}
+            </div>
+            <div className="mt-10 p-6 rounded-xl bg-surface border border-border border-dashed text-center">
+              <MessageSquare className="w-6 h-6 text-muted mx-auto mb-3" />
+              <p className="text-sm font-semibold mb-1">Have you used the playbook?</p>
+              <p className="text-xs text-muted">
+                We&apos;d love to hear what happened. Email your results to{' '}
+                <a href="mailto:hello@mygeoradar.com" className="text-accent underline underline-offset-2">
+                  hello@mygeoradar.com
+                </a>{' '}
+                — genuine feedback from real customers is always welcome.
+              </p>
             </div>
           </div>
         </section>
