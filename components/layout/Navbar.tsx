@@ -12,7 +12,7 @@ import type { User as SupabaseUser } from '@supabase/supabase-js'
 const navLinks = [
   { href: '/#what-you-get', label: 'What you get' },
   { href: '/#pricing',      label: 'Pricing' },
-  { href: '/blog',          label: 'Free tips' },
+  { href: '/blog',          label: 'Blog' },
   { href: '/about',         label: 'About' },
 ]
 

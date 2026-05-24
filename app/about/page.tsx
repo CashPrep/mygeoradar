@@ -58,7 +58,7 @@ export default function AboutPage() {
                 href="/blog"
                 className="btn-secondary text-sm px-6 py-3"
               >
-                Free AI visibility tips
+                GEO Blog
               </Link>
             </div>
           </div>

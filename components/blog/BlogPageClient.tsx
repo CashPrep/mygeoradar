@@ -9,6 +9,38 @@ import { ArrowRight, BookOpen } from 'lucide-react'
 
 const posts = [
   {
+    slug:        'what-is-geo',
+    title:       "What is GEO? The Beginner's Guide to Generative Engine Optimization",
+    description: "Traditional SEO gets you on Google. GEO gets you cited in AI answers. Here's what it is, why it matters, and how to start.",
+    date:        'May 10, 2026',
+    readTime:    '5 min read',
+    tag:         'GEO Basics',
+  },
+  {
+    slug:        'geo-vs-seo',
+    title:       'GEO vs SEO: What Is the Difference?',
+    description: 'SEO and GEO both help people find your business — but they work on completely different surfaces, with different signals. Here is how they compare and why you need both.',
+    date:        'May 20, 2026',
+    readTime:    '6 min read',
+    tag:         'GEO Basics',
+  },
+  {
+    slug:        'does-my-business-need-geo',
+    title:       'Does My Business Need GEO?',
+    description: "Not every business has the same urgency around AI visibility — but most do. Here's how to tell if GEO should be a priority for you right now.",
+    date:        'May 21, 2026',
+    readTime:    '5 min read',
+    tag:         'GEO Basics',
+  },
+  {
+    slug:        'how-long-does-geo-take',
+    title:       'How Long Does GEO Take to Work?',
+    description: "GEO isn't instant — but it's also not as slow as traditional SEO. Here's a realistic timeline for when you can expect to start appearing in AI-generated answers.",
+    date:        'May 22, 2026',
+    readTime:    '5 min read',
+    tag:         'GEO Basics',
+  },
+  {
     slug:        'ai-search-guide',
     title:       'How AI Search Engines Decide Which Businesses to Mention',
     description: "ChatGPT, Perplexity and Gemini don't rank websites — they generate answers. Here's exactly how they decide who gets cited.",
@@ -41,14 +73,6 @@ const posts = [
     tag:         'Strategy',
   },
   {
-    slug:        'what-is-geo',
-    title:       "What is GEO? The Beginner's Guide to Generative Engine Optimization",
-    description: "Traditional SEO gets you on Google. GEO gets you cited in AI answers. Here's what it is, why it matters, and how to start.",
-    date:        'May 10, 2026',
-    readTime:    '5 min read',
-    tag:         'GEO Basics',
-  },
-  {
     slug:        'multi-location-geo',
     title:       'Multi-Location GEO: How Chains and Franchises Should Handle AI Visibility',
     description: "Single-location GEO is straightforward. Managing AI visibility across 10, 50, or 500 locations is a different challenge entirely. Here's the right architecture.",
@@ -78,10 +102,10 @@ export function BlogPageClient() {
       <Navbar />
       <div className="max-w-3xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-10">
-          <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Free Guides</p>
-          <h1 className="text-4xl font-bold tracking-tight">AI Visibility Tips &amp; Guides</h1>
+          <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">GEO Blog</p>
+          <h1 className="text-4xl font-bold tracking-tight">Generative Engine Optimization: Guides &amp; Insights</h1>
           <p className="mt-4 text-muted">
-            Free practical guides for business owners who want to get found by AI assistants.
+            Practical articles on GEO and AI search visibility for business owners, marketers, and founders.
           </p>
         </div>
 
@@ -90,7 +114,7 @@ export function BlogPageClient() {
           <BookOpen className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold">Want the complete system?</p>
-            <p className="text-xs text-muted mt-0.5">The Found by AI Playbook turns these guides into a single step-by-step action plan with checklists and templates.</p>
+            <p className="text-xs text-muted mt-0.5">The Found by AI Playbook turns these concepts into a single step-by-step action plan with checklists, prompts, and a 30-day calendar.</p>
           </div>
           <Link
             href="/playbook"

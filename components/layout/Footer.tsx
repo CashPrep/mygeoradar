@@ -9,7 +9,7 @@ const footerLinks = {
     { href: '/account',       label: 'My purchases' },
   ],
   Resources: [
-    { href: '/blog',   label: 'Free AI visibility tips' },
+    { href: '/blog',   label: 'GEO Blog' },
     { href: '/about',  label: 'About the founder' },
   ],
   Legal: [
