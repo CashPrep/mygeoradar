@@ -6,7 +6,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Button } from '@/components/ui/Button'
 import {
   CheckCircle, BookOpen, FileText, Zap, Shield,
-  ArrowRight, Star, Eye, TrendingUp, Clock, AlertTriangle
+  ArrowRight, Star, Eye, TrendingUp, Clock, AlertTriangle, MessageSquare
 } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -89,27 +89,6 @@ const deliverables = [
       'Week 4: Validation — re-run prompts, compare to baseline, and set your 90-day maintenance schedule',
       'Each day takes 30–90 minutes — designed to fit around running a business, not replace it',
     ],
-  },
-]
-
-const testimonials = [
-  {
-    quote:
-      "I typed my business into ChatGPT and it recommended three competitors. My business wasn't mentioned once. After going through the checklist I ran the same prompt two weeks later — I was the second result.",
-    name: 'Marcus T.',
-    role: 'HVAC Business Owner',
-  },
-  {
-    quote:
-      'I had no idea this was even a problem until I used the prompt pack. Perplexity had no idea my business existed. The 30-day plan made it easy to fix without hiring anyone.',
-    name: 'Priya S.',
-    role: 'Marketing Consultant',
-  },
-  {
-    quote:
-      "Paid $27. Spent a weekend on the checklist. Two weeks later a client told me they found me by asking Perplexity. First time that's ever happened.",
-    name: 'James R.',
-    role: 'Independent Financial Advisor',
   },
 ]
 
@@ -343,28 +322,52 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── TESTIMONIALS ─── */}
+        {/* ─── WHAT TO EXPECT (replaces fabricated testimonials) ─── */}
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold mb-3">Real results from real businesses</h2>
-              <p className="text-muted">Business owners who fixed their AI visibility with this exact playbook.</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3">What you can expect</h2>
+              <p className="text-muted max-w-xl mx-auto">
+                Here is what working through this playbook actually looks like — step by step.
+              </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map(({ quote, name, role }) => (
-                <div key={name} className="flex flex-col p-6 rounded-xl bg-surface border border-border border-t-2 border-t-accent/30 hover:shadow-card-hover transition-shadow">
-                  <div className="flex gap-0.5 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-accent fill-accent" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-muted leading-relaxed mb-5 flex-1">&ldquo;{quote}&rdquo;</p>
-                  <div className="pt-3 border-t border-border">
-                    <p className="font-semibold text-sm">{name}</p>
-                    <p className="text-xs text-muted">{role}</p>
-                  </div>
+              {[
+                {
+                  step: '01',
+                  heading: 'Run the audit prompts',
+                  body: 'In the first 10 minutes you will know exactly whether your business appears in ChatGPT, Perplexity, Gemini, and Claude — and what each one says about you.',
+                },
+                {
+                  step: '02',
+                  heading: 'Work the checklist',
+                  body: 'The 27-point checklist tells you precisely what to fix, in what order, starting with the highest-impact items. No guessing, no wasted effort.',
+                },
+                {
+                  step: '03',
+                  heading: 'Re-run and measure',
+                  body: 'After your 30 days, run the same audit prompts again. You will have a concrete before/after comparison showing exactly how your AI visibility changed.',
+                },
+              ].map(({ step, heading, body }) => (
+                <div key={step} className="flex flex-col p-6 rounded-xl bg-surface border border-border hover:border-accent/30 hover:shadow-card-hover transition-all">
+                  <span className="text-4xl font-black text-accent/20 mb-4 leading-none">{step}</span>
+                  <h3 className="font-semibold text-base mb-2">{heading}</h3>
+                  <p className="text-sm text-muted leading-relaxed">{body}</p>
                 </div>
               ))}
+            </div>
+
+            {/* Leave a review invite — shows after purchase */}
+            <div className="mt-10 p-6 rounded-xl bg-surface border border-border border-dashed text-center">
+              <MessageSquare className="w-6 h-6 text-muted mx-auto mb-3" />
+              <p className="text-sm font-semibold mb-1">Have you used the playbook?</p>
+              <p className="text-xs text-muted">
+                We&apos;d love to hear what happened. Email your results to{' '}
+                <a href="mailto:hello@mygeoradar.com" className="text-accent underline underline-offset-2">
+                  hello@mygeoradar.com
+                </a>{' '}
+                — genuine feedback from real customers is always welcome.
+              </p>
             </div>
           </div>
         </section>
