@@ -173,6 +173,7 @@ export default function HomePage() {
         </section>
 
         {/* ─── FREE AI READINESS SCAN ─── */}
+        {/* FIX #2: Heading softened; disclaimer expanded to explicitly state passing score ≠ AI recommendation */}
         <section id="scan" className="py-16 px-4 md:px-8 bg-surface/40 border-y border-border">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">
@@ -181,17 +182,18 @@ export default function HomePage() {
                 Free · Instant · No signup
               </div>
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
-                Is your site built so AI can read it?
+                Is your site structured for AI to read it?
               </h2>
               <p className="text-muted text-sm max-w-xl mx-auto leading-relaxed">
                 Before selling you anything, we want to check if you actually need it.
-                Enter your website URL and we&apos;ll scan the technical signals AI crawlers use to
-                read, understand, and cite a business — things like structured data, meta tags,
+                Enter your website URL and we&apos;ll analyze the technical signals that influence how AI systems
+                read, understand, and cite businesses — things like structured data, meta tags,
                 schema markup, and whether AI bots are accidentally blocked.
               </p>
               <p className="text-xs text-muted/70 mt-2 max-w-lg mx-auto">
-                This scan checks <em>how your site is built</em>, not whether a specific AI has indexed it today.
-                A site that passes these checks is structured in a way that AI can parse, trust, and reference.
+                This scan checks <em>how your site is built</em>, not whether a specific AI has indexed or recommended it.
+                A passing score means your site is structured in a way that makes it easier for AI to parse and reference —
+                it does not guarantee any AI will recommend your business. Visibility depends on many factors beyond technical structure.
               </p>
             </div>
             <AiReadinessScan />
@@ -235,14 +237,16 @@ export default function HomePage() {
               If your business isn&apos;t in that answer, <strong className="text-foreground">you lost that customer before they ever found your website.</strong>{' '}
               No bounce rate. No analytics. No second chance. They just hired your competitor.
             </p>
+            {/* FIX #1: Stat reframed — clarifies 58.5% covers Google featured snippets + AI Overviews,
+                not standalone AI assistants; added context sentence about ChatGPT/Perplexity trend */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
               {[
                 {
                   stat: '58.5%',
                   label: (
                     <>
-                      of US Google searches now end without a click — users get their answer directly from AI
-                      and never visit a website.{' '}
+                      of US Google searches end without a click to the open web — driven by featured snippets,
+                      Google&apos;s AI Overviews, and other zero-click results.{' '}
                       <a
                         href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-2024/"
                         target="_blank"
@@ -251,12 +255,13 @@ export default function HomePage() {
                       >
                         SparkToro / Datos, 2024
                       </a>
+                      {' '}As standalone AI assistants like ChatGPT and Perplexity grow, the same zero-click shift is accelerating beyond Google.
                     </>
                   ),
                 },
                 {
                   stat: 'Day 1',
-                  label: 'advantage — the businesses that fix this now will own AI recommendations before their competitors even know this game exists',
+                  label: 'advantage — the businesses that fix this now will build AI visibility before their competitors even know this game exists',
                 },
               ].map(({ stat, label }) => (
                 <div key={stat} className="p-5 rounded-xl bg-surface border border-border border-l-4 border-l-accent/40 shadow-glow-xs hover:shadow-card-hover transition-shadow">
@@ -453,6 +458,8 @@ export default function HomePage() {
         </section>
 
         {/* URGENCY */}
+        {/* FIX #3: Agency pricing prefixed with "Based on publicly available pricing from GEO and AI optimization agencies as of 2026" */}
+        {/* FIX #4: Added inline results disclaimer paragraph; removed speculative "own AI recommendations for years" framing */}
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 shadow-glow-xs">
@@ -464,13 +471,17 @@ export default function HomePage() {
             </h2>
             <p className="text-muted leading-relaxed mb-4">
               GEO — Generative Engine Optimization — is the fastest-growing discipline in digital marketing in 2026.
-              Agencies are starting to charge $2,000-$5,000/month for this exact work. Early movers are quietly
-              locking in AI recommendations before the rest of the market wakes up.
+              Based on publicly available pricing from GEO and AI optimization agencies as of 2026, specialist firms are
+              charging $2,000–$5,000/month for this exact work. Early movers are quietly
+              locking in AI visibility before the rest of the market wakes up.
             </p>
-            <p className="text-muted leading-relaxed mb-10">
-              The businesses that act in the next 30 days will have a compounding advantage that gets harder to
-              close over time. AI assistants learn patterns — once your competitors establish themselves as the
-              trusted answer, <strong className="text-foreground">displacing them gets exponentially more expensive.</strong>
+            <p className="text-muted leading-relaxed mb-4">
+              The businesses that act now will build a compounding advantage that gets harder to
+              close over time. AI systems weight well-cited, established sources — once your competitors
+              build that authority, <strong className="text-foreground">displacing them gets exponentially more expensive.</strong>
+            </p>
+            <p className="text-xs text-muted/60 italic mb-10 max-w-xl mx-auto">
+              AI systems are regularly retrained and change over time. Results and visibility will vary by business, market, and implementation effort. No specific outcome is guaranteed.
             </p>
             <div className="flex items-center justify-center gap-3 p-5 rounded-xl bg-accent/5 border border-accent/20 max-w-md mx-auto shadow-glow-xs">
               <Clock className="w-5 h-5 text-accent flex-shrink-0" />
