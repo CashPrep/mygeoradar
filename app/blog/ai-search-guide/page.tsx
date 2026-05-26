@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'How AI Search Engines Decide Which Businesses to Mention',
@@ -22,6 +24,12 @@ export const metadata = {
 export default function AiSearchGuidePage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="How AI Search Engines Decide Which Businesses to Mention"
+        description="ChatGPT, Perplexity and Gemini don't rank websites — they generate answers. Here's exactly how they decide who gets cited."
+        url="https://mygeoradar.com/blog/ai-search-guide"
+        publishedTime="2026-05-12T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -52,7 +60,6 @@ export default function AiSearchGuidePage() {
             </div>
           ))}
 
-          {/* MID-ARTICLE CTA */}
           <BlogMidCta
             topic="Entity Recognition & Credibility Signals"
             hook="The playbook walks through every credibility signal AI models look for — entity recognition, citation sources, review signals — with a 27-point checklist covering all three and the exact directories and schema types that move the needle."
@@ -63,6 +70,13 @@ export default function AiSearchGuidePage() {
           <h2 className="text-xl font-bold text-foreground mt-4">The practical takeaway</h2>
           <p>You cannot pay to appear in AI answers. You earn your way in by being a clearly defined, credible, well-documented entity across the web. The good news: most businesses can dramatically improve their AI visibility in 30 days with the right checklist of actions.</p>
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'what-is-geo',                       title: "What is GEO? The Beginner's Guide to Generative Engine Optimization", tag: 'GEO Basics' },
+            { slug: 'perplexity-vs-chatgpt-visibility',  title: 'Perplexity vs. ChatGPT: Do You Show Up Differently on Each?',         tag: 'AI Search'  },
+            { slug: 'ai-search-vs-google-search',        title: 'AI Search vs. Google Search: What Is Actually Changing?',            tag: 'AI Search'  },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />
