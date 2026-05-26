@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'GEO vs SEO: What Is the Difference?',
@@ -31,6 +33,12 @@ export const metadata = {
 export default function GeoVsSeoPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="GEO vs SEO: What Is the Difference?"
+        description="SEO and GEO both help people find your business — but they operate on completely different surfaces with different signals. Here is how they compare and why you need both in 2026."
+        url="https://mygeoradar.com/blog/geo-vs-seo"
+        publishedTime="2026-05-20T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -80,6 +88,13 @@ export default function GeoVsSeoPage() {
           <p>If your site has no SEO foundation at all — no indexing, no basic on-page optimization — start there. But if you already have a functioning SEO presence, GEO is where the untapped opportunity is right now. Most of your competitors have not touched it yet, which means the window to establish AI visibility before the market gets crowded is still open.</p>
 
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'what-is-geo',               title: "What is GEO? The Beginner's Guide to Generative Engine Optimization", tag: 'GEO Basics' },
+            { slug: 'ai-search-vs-google-search', title: 'AI Search vs. Google Search: What Is Actually Changing?',            tag: 'AI Search'  },
+            { slug: 'does-my-business-need-geo',  title: 'Does My Business Need GEO?',                                          tag: 'GEO Basics' },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />
