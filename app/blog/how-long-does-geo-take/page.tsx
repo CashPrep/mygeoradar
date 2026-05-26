@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'How Long Does GEO Take to Work?',
@@ -31,6 +33,12 @@ export const metadata = {
 export default function HowLongDoesGeoTakePage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="How Long Does GEO Take to Work?"
+        description="GEO is not instant — but it is also not as slow as traditional SEO. Here is a realistic timeline for when you can expect to start appearing in AI-generated answers after optimizing for GEO."
+        url="https://mygeoradar.com/blog/how-long-does-geo-take"
+        publishedTime="2026-05-22T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -78,6 +86,13 @@ export default function HowLongDoesGeoTakePage() {
           <p>The best way to track GEO progress is to run a consistent set of prompts across ChatGPT, Perplexity, Gemini, and Claude — the same prompts, every two to four weeks. If your business moves from absent to present, or from being mentioned briefly to being cited with detail and reasoning, that is measurable progress. The key is establishing your baseline before you start so you have something to compare against.</p>
 
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'does-my-business-need-geo', title: 'Does My Business Need GEO?',                             tag: 'GEO Basics' },
+            { slug: 'geo-vs-seo',                title: 'GEO vs SEO: What Is the Difference?',                    tag: 'GEO Basics' },
+            { slug: 'geo-score-benchmarks',      title: "What's a Good GEO Score? Industry Benchmarks for 2026", tag: 'Strategy'   },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />
