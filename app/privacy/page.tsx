@@ -14,7 +14,7 @@ export default function PrivacyPage() {
       <Navbar />
       <div className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
-        <p className="text-sm text-muted mb-10">Last updated: May 22, 2026</p>
+        <p className="text-sm text-muted mb-10">Last updated: May 26, 2026</p>
 
         <div className="flex flex-col gap-8 text-foreground-dim leading-relaxed text-sm">
           {[
@@ -32,11 +32,11 @@ export default function PrivacyPage() {
             },
             {
               title: '4. Cookies',
-              body: 'We use minimal, functional cookies to manage your authenticated session (so you can access your purchases after login). We do not use advertising or cross-site tracking cookies.',
+              body: 'We use two categories of cookies. (a) Functional cookies: session cookies that keep you logged in so you can access your purchases. These are required for the site to work and cannot be opted out of while using your account. (b) Analytics cookies: we use Google Analytics 4 (GA4) to collect anonymized data about how visitors use this site — pages viewed, time on site, and general traffic patterns. GA4 may set first-party and third-party cookies on your device. No personally identifiable information is sent to Google through this tool. If you wish to opt out of GA4 tracking, you may use the Google Analytics Opt-Out Browser Add-on (tools.google.com/dlpage/gaoptout) or a browser extension that blocks analytics scripts.',
             },
             {
               title: '5. Third-party services',
-              body: 'We use Stripe for payment processing, Resend for transactional email, Supabase for data storage, and Vercel for site hosting. Each of these services operates under its own privacy policy and data protection standards.',
+              body: 'We use the following third-party services, each operating under its own privacy policy: Stripe (payment processing), Resend (transactional email), Supabase (data storage, hosted on AWS us-east-2), Vercel (site hosting and edge delivery), and Google Analytics 4 (site analytics — data is processed by Google LLC and subject to Google\'s Privacy Policy at policies.google.com/privacy).',
             },
             {
               title: '6. Your rights',
