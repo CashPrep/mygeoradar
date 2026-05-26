@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live',
@@ -22,6 +24,12 @@ export const metadata = {
 export default function GeoBeforeLaunchPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="Launch Day GEO: How to Set Up AI Visibility Before Your Business Goes Live"
+        description="Most new businesses lose their first 90 days of AI visibility by doing nothing. Here's how to build your GEO foundation before you open — so you show up from day one."
+        url="https://mygeoradar.com/blog/geo-before-launch"
+        publishedTime="2026-05-09T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -54,7 +62,6 @@ export default function GeoBeforeLaunchPage() {
             </div>
           ))}
 
-          {/* MID-ARTICLE CTA */}
           <BlogMidCta
             topic="Pre-Launch GEO Foundation"
             hook="The playbook includes the complete list of the 15 directories that matter most for AI citations, the exact schema markup to add on day one, and a 30-day launch calendar so your new business shows up in AI answers from the start."
@@ -63,6 +70,13 @@ export default function GeoBeforeLaunchPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">The compound effect</h2>
           <p>Every week you delay establishing these signals is a week your competitors who do have them are building a lead. AI recommendation systems favor businesses with longer, more consistent entity histories. Starting right is dramatically easier than fixing a bad foundation later.</p>
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'google-business-profile-geo', title: 'Why Google Business Profile Is Your Most Important GEO Asset',           tag: 'Local GEO'     },
+            { slug: 'schema-markup-for-geo',       title: 'Schema Markup and GEO: Why Structured Data Is Critical for AI Visibility', tag: 'Technical GEO' },
+            { slug: 'how-long-does-geo-take',      title: 'How Long Does GEO Take to Work?',                                           tag: 'GEO Basics'    },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />

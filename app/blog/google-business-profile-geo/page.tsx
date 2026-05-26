@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'Why Google Business Profile Is Your Most Important GEO Asset',
@@ -30,6 +32,12 @@ export const metadata = {
 export default function GoogleBusinessProfileGeoPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="Why Google Business Profile Is Your Most Important GEO Asset"
+        description="AI assistants like ChatGPT and Perplexity rely heavily on Google Business Profile data when answering local business queries. Here is why it matters and what it needs to say."
+        url="https://mygeoradar.com/blog/google-business-profile-geo"
+        publishedTime="2026-05-23T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -76,9 +84,16 @@ export default function GoogleBusinessProfileGeoPage() {
           <p>Review volume and recency are among the strongest trust signals AI uses when deciding which businesses to recommend. A business with 12 reviews from three years ago looks dormant to an AI. A business with 80 reviews spread across the last 18 months looks active, trusted, and worth recommending. The content of reviews matters too — reviews that naturally mention your services, location, and business type reinforce what you do in a way AI can extract and cite.</p>
 
           <h2 className="text-xl font-bold text-foreground mt-4">One profile, multiple AI surfaces</h2>
-          <p>Optimizing your GBP is one of the highest-leverage GEO actions because it improves your visibility across multiple AI surfaces simultaneously. ChatGPT with Browse, Perplexity, Google’s own AI Overviews, and Apple Intelligence all draw from the same underlying data ecosystem that GBP feeds into. Fix it once, benefit across all of them.</p>
+          <p>Optimizing your GBP is one of the highest-leverage GEO actions because it improves your visibility across multiple AI surfaces simultaneously. ChatGPT with Browse, Perplexity, Google&apos;s own AI Overviews, and Apple Intelligence all draw from the same underlying data ecosystem that GBP feeds into. Fix it once, benefit across all of them.</p>
 
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'schema-markup-for-geo',  title: 'Schema Markup and GEO: Why Structured Data Is Critical for AI Visibility', tag: 'Technical GEO' },
+            { slug: 'multi-location-geo',     title: 'Multi-Location GEO: How Chains and Franchises Should Handle AI Visibility', tag: 'Local GEO'     },
+            { slug: 'geo-score-benchmarks',   title: "What's a Good GEO Score? Industry Benchmarks for 2026",                   tag: 'Strategy'     },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />

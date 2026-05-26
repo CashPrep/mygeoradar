@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'Schema Markup and GEO: Why Structured Data Is Critical for AI Visibility',
@@ -30,6 +32,12 @@ export const metadata = {
 export default function SchemaMarkupGeoPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="Schema Markup and GEO: Why Structured Data Is Critical for AI Visibility"
+        description="Schema markup is one of the most direct signals you can give AI assistants about who your business is and what it does. Here is what it is, why it matters for GEO, and which types to prioritize."
+        url="https://mygeoradar.com/blog/schema-markup-for-geo"
+        publishedTime="2026-05-23T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -48,7 +56,7 @@ export default function SchemaMarkupGeoPage() {
         <div className="flex flex-col gap-6 text-muted leading-relaxed">
 
           <h2 className="text-xl font-bold text-foreground mt-4">What schema markup actually is</h2>
-          <p>Schema markup is structured data you embed in your website’s code using a vocabulary from Schema.org. It does not change how your page looks to human visitors — it adds a hidden layer of meaning that machines can read. Instead of an AI trying to infer that the phone number on your contact page belongs to your business, schema markup tells it explicitly: this is the telephone number for this Organization, located at this address, in this city.</p>
+          <p>Schema markup is structured data you embed in your website&apos;s code using a vocabulary from Schema.org. It does not change how your page looks to human visitors — it adds a hidden layer of meaning that machines can read. Instead of an AI trying to infer that the phone number on your contact page belongs to your business, schema markup tells it explicitly: this is the telephone number for this Organization, located at this address, in this city.</p>
           <p>Search engines and AI systems have been trained to trust structured data over unstructured page content because it is deliberate, consistent, and harder to misinterpret. A paragraph on your About page might describe your business in flowing prose. A JSON-LD schema block states your business type, name, location, services, and hours in a format that requires zero interpretation.</p>
 
           <h2 className="text-xl font-bold text-foreground mt-4">The schema types that matter most for GEO</h2>
@@ -77,6 +85,13 @@ export default function SchemaMarkupGeoPage() {
           <p>Schema markup does not replace good content — it reinforces it. An AI reading a page with both a well-written About section and accurate Organization schema gets a double confirmation of who you are. The schema tells it the facts; the content tells it the story. Used together, they make your business far easier for AI to identify, trust, and recommend with confidence.</p>
 
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'google-business-profile-geo', title: 'Why Google Business Profile Is Your Most Important GEO Asset',     tag: 'Local GEO'     },
+            { slug: 'ai-hallucination-fix',        title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations', tag: 'Technical GEO' },
+            { slug: 'what-is-geo',                 title: "What is GEO? The Beginner's Guide to Generative Engine Optimization", tag: 'GEO Basics' },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />

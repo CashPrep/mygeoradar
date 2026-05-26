@@ -88,9 +88,9 @@ export default function DoesMyBusinessNeedGeoPage() {
         </div>
         <RelatedPosts
           posts={[
-            { slug: 'what-is-geo',           title: "What is GEO? The Beginner's Guide to Generative Engine Optimization", tag: 'GEO Basics' },
+            { slug: 'what-is-geo',          title: "What is GEO? The Beginner's Guide to Generative Engine Optimization", tag: 'GEO Basics' },
             { slug: 'how-long-does-geo-take', title: 'How Long Does GEO Take to Work?',                                     tag: 'GEO Basics' },
-            { slug: 'geo-score-benchmarks',   title: "What's a Good GEO Score? Industry Benchmarks for 2026",             tag: 'Strategy'   },
+            { slug: 'geo-score-benchmarks',  title: "What's a Good GEO Score? Industry Benchmarks for 2026",             tag: 'Strategy'   },
           ]}
         />
         <BlogCta />

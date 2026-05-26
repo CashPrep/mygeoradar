@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'Perplexity vs. ChatGPT: Do You Show Up Differently on Each?',
@@ -30,6 +32,12 @@ export const metadata = {
 export default function PerplexityVsChatgptPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="Perplexity vs. ChatGPT: Do You Show Up Differently on Each?"
+        description="Your business may appear in ChatGPT answers but not Perplexity — or vice versa. Here is why the two platforms surface different results and what you can do about it."
+        url="https://mygeoradar.com/blog/perplexity-vs-chatgpt-visibility"
+        publishedTime="2026-05-23T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -49,7 +57,7 @@ export default function PerplexityVsChatgptPage() {
 
           <h2 className="text-xl font-bold text-foreground mt-4">Why results differ between platforms</h2>
           <p>ChatGPT (with Browse or GPT-4o web access) and Perplexity are both AI assistants, but they retrieve and weight information differently. Perplexity is built around real-time web retrieval — it is essentially a search-first AI that pulls current pages and synthesizes them. ChatGPT blends retrieval with a large trained knowledge base that has a knowledge cutoff. The sources they trust, the recency they weigh, and the way they reconcile conflicting data are all different.</p>
-          <p>The result is that a business with strong recent web presence — active directory listings, recent press, live pages — tends to show up better on Perplexity. A business with deep historical data and citations in well-established sources may have an edge in ChatGPT’s base model responses. And Gemini draws more heavily from Google’s own data ecosystem, meaning Google Business Profile and Maps are especially influential there.</p>
+          <p>The result is that a business with strong recent web presence — active directory listings, recent press, live pages — tends to show up better on Perplexity. A business with deep historical data and citations in well-established sources may have an edge in ChatGPT&apos;s base model responses. And Gemini draws more heavily from Google&apos;s own data ecosystem, meaning Google Business Profile and Maps are especially influential there.</p>
 
           <h2 className="text-xl font-bold text-foreground mt-4">The most common gap patterns</h2>
           {[
@@ -76,6 +84,13 @@ export default function PerplexityVsChatgptPage() {
           <p>If you only test one AI assistant, you are missing most of the picture. A business can look great on Perplexity and be almost invisible on ChatGPT — and those represent very different user populations. The only way to know your true AI visibility is to run consistent audits across all four major assistants: ChatGPT, Perplexity, Gemini, and Claude.</p>
 
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'ai-search-guide',          title: 'How AI Search Engines Decide Which Businesses to Mention',  tag: 'AI Search'  },
+            { slug: 'ai-search-vs-google-search', title: 'AI Search vs. Google Search: What Is Actually Changing?',  tag: 'AI Search'  },
+            { slug: 'ai-hallucination-fix',      title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations', tag: 'Technical GEO' },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />

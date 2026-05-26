@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer',
@@ -22,6 +24,12 @@ export const metadata = {
 export default function ZeroClickPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="The Zero-Click AI Era: Why Getting Traffic Now Requires Being the Answer"
+        description="AI search doesn't send clicks — it gives answers. If your business isn't mentioned in those answers, you're invisible to an entire generation of searchers."
+        url="https://mygeoradar.com/blog/ai-search-zero-click"
+        publishedTime="2026-05-11T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -42,7 +50,6 @@ export default function ZeroClickPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">What zero-click means for local businesses</h2>
           <p>Local businesses are hit hardest. &ldquo;Best dentist near me,&rdquo; &ldquo;top-rated plumber in [city],&rdquo; &ldquo;who should I hire for kitchen renovation&rdquo; — these are exactly the high-intent queries that used to drive calls and bookings through Google. Now they increasingly go to AI assistants, which give confident, specific answers. If you&apos;re not in those answers, you&apos;re losing customers you never knew you were losing.</p>
 
-          {/* MID-ARTICLE CTA */}
           <BlogMidCta
             topic="AI Mention Rate Optimization"
             hook="The playbook is built around one metric: your AI mention rate. It gives you 10 copy-paste prompts to measure it today, and a 27-point system to increase it — so you show up when your highest-intent customers ask AI for a recommendation."
@@ -53,6 +60,13 @@ export default function ZeroClickPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">The window of opportunity</h2>
           <p>Most businesses haven&apos;t figured this out yet. The ones that act now — building the entity signals, structured data, and content that AI models use — will own the AI recommendation landscape for their category before competitors realize what happened. This window will not stay open forever.</p>
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'ai-search-vs-google-search',   title: 'AI Search vs. Google Search: What Is Actually Changing?',              tag: 'AI Search'  },
+            { slug: 'ai-search-guide',              title: 'How AI Search Engines Decide Which Businesses to Mention',              tag: 'AI Search'  },
+            { slug: 'does-my-business-need-geo',    title: 'Does My Business Need GEO?',                                            tag: 'GEO Basics' },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />

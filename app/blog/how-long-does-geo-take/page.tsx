@@ -88,9 +88,9 @@ export default function HowLongDoesGeoTakePage() {
         </div>
         <RelatedPosts
           posts={[
-            { slug: 'does-my-business-need-geo', title: 'Does My Business Need GEO?',                             tag: 'GEO Basics' },
-            { slug: 'geo-vs-seo',                title: 'GEO vs SEO: What Is the Difference?',                    tag: 'GEO Basics' },
-            { slug: 'geo-score-benchmarks',      title: "What's a Good GEO Score? Industry Benchmarks for 2026", tag: 'Strategy'   },
+            { slug: 'does-my-business-need-geo', title: 'Does My Business Need GEO?',                                            tag: 'GEO Basics'    },
+            { slug: 'geo-score-benchmarks',      title: "What's a Good GEO Score? Industry Benchmarks for 2026",               tag: 'Strategy'      },
+            { slug: 'ai-hallucination-fix',      title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',      tag: 'Technical GEO' },
           ]}
         />
         <BlogCta />

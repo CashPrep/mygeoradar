@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'GEO for SaaS: How Software Companies Should Think About AI Visibility',
@@ -30,6 +32,12 @@ export const metadata = {
 export default function GeoForSaasPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="GEO for SaaS: How Software Companies Should Think About AI Visibility"
+        description="When someone asks ChatGPT to recommend a project management tool or CRM, which software gets named? Here is how SaaS companies can build AI visibility and earn those recommendations."
+        url="https://mygeoradar.com/blog/geo-for-saas"
+        publishedTime="2026-05-23T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -78,6 +86,13 @@ export default function GeoForSaasPage() {
           <p>Most SaaS companies — including well-funded ones — have not started thinking about GEO yet. The ones that build AI visibility now will compound those recommendations as AI search grows. The ones that wait will face a much harder task trying to displace already-established products from AI answers.</p>
 
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'schema-markup-for-geo',      title: 'Schema Markup and GEO: Why Structured Data Is Critical for AI Visibility', tag: 'Technical GEO' },
+            { slug: 'geo-vs-seo',                 title: 'GEO vs SEO: What Is the Difference?',                                        tag: 'GEO Basics'    },
+            { slug: 'perplexity-vs-chatgpt-visibility', title: 'Perplexity vs. ChatGPT: Do You Show Up Differently on Each?',          tag: 'AI Search'     },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />

@@ -3,13 +3,15 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
-  description: 'AI engines sometimes generate confidently wrong information about businesses. Here’s how to find it and fix it before it costs you customers.',
+  description: 'AI engines sometimes generate confidently wrong information about businesses. Here\'s how to find it and fix it before it costs you customers.',
   openGraph: {
     title: 'When AI Gets Your Business Wrong: How to Fix AI Hallucinations',
-    description: 'AI engines sometimes generate confidently wrong information about businesses. Here’s how to find it and fix it.',
+    description: 'AI engines sometimes generate confidently wrong information about businesses. Here\'s how to find it and fix it.',
     url: 'https://mygeoradar.com/blog/ai-hallucination-fix',
     siteName: 'MyGeoRadar',
     images: [{ url: 'https://mygeoradar.com/og-image.png', width: 1200, height: 630 }],
@@ -22,6 +24,12 @@ export const metadata = {
 export default function HallucinationFixPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="When AI Gets Your Business Wrong: How to Fix AI Hallucinations"
+        description="AI engines sometimes generate confidently wrong information about businesses. Here's how to find it and fix it before it costs you customers."
+        url="https://mygeoradar.com/blog/ai-hallucination-fix"
+        publishedTime="2026-05-05T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -38,7 +46,7 @@ export default function HallucinationFixPage() {
         </div>
         <div className="flex flex-col gap-6 text-muted leading-relaxed">
           <h2 className="text-xl font-bold text-foreground mt-4">Why AI hallucinates about businesses</h2>
-          <p>AI models don’t fabricate from nothing — they extrapolate from incomplete or outdated data. If your business has inconsistent information across directories, an old address on a citation site, or a sparse web presence, the model fills gaps with educated guesses. Those guesses become confident-sounding wrong answers that cost you customers.</p>
+          <p>AI models don&apos;t fabricate from nothing — they extrapolate from incomplete or outdated data. If your business has inconsistent information across directories, an old address on a citation site, or a sparse web presence, the model fills gaps with educated guesses. Those guesses become confident-sounding wrong answers that cost you customers.</p>
           <h2 className="text-xl font-bold text-foreground mt-4">How to find what AI is saying about you</h2>
           <p>Start by asking each major AI assistant directly. Use these prompts in ChatGPT, Perplexity, Gemini, and Claude:</p>
           {[
@@ -52,7 +60,6 @@ export default function HallucinationFixPage() {
           ))}
           <p>Screenshot every response. Look for incorrect facts, outdated information, or missing details. This is your fix list.</p>
 
-          {/* MID-ARTICLE CTA */}
           <BlogMidCta
             topic="Hallucination Detection & Fix"
             hook="The playbook includes a full section on finding and correcting AI misinformation about your business — including the exact signal-flooding sequence that overrides bad data within 30–60 days."
@@ -63,6 +70,13 @@ export default function HallucinationFixPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">How long does it take to fix?</h2>
           <p>Perplexity (which does live searches) updates within days to weeks. ChatGPT and Claude (training-data dependent) can take longer — but fresh web signals from Perplexity citations feed back into the broader AI ecosystem faster than most people realize. Most corrections are reflected within 30–60 days of consistent signal work.</p>
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'schema-markup-for-geo',  title: 'Schema Markup and GEO: Why Structured Data Is Critical for AI Visibility', tag: 'Technical GEO' },
+            { slug: 'how-long-does-geo-take', title: 'How Long Does GEO Take to Work?',                                           tag: 'GEO Basics'    },
+            { slug: 'ai-search-guide',        title: 'How AI Search Engines Decide Which Businesses to Mention',                  tag: 'AI Search'     },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />
