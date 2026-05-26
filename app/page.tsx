@@ -123,7 +123,7 @@ const previewChecklist = [
   { done: false, text: 'Publish at least 3 authoritative articles that cite your expertise' },
   { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
   { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
-  { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
+  { done: false, text: 'Create a dedicated \"About\" page written to be pulled by AI overviews' },
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
@@ -243,8 +243,8 @@ export default function HomePage() {
               {[
                 {
                   stat: '58.5%',
-                  {/* FIX #1: Stat reframed — clarifies this covers Google featured snippets + AI Overviews,
-                      not standalone AI assistants; added context sentence about ChatGPT/Perplexity trend */}
+                  // FIX #1: Stat reframed — clarifies this covers Google featured snippets + AI Overviews,
+                  // not standalone AI assistants; added context sentence about ChatGPT/Perplexity trend
                   label: (
                     <>
                       of US Google searches end without a click to the open web — driven by featured snippets,
