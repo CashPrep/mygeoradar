@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'What is GEO? Generative Engine Optimization Explained',
@@ -28,6 +30,12 @@ export const metadata = {
 export default function WhatIsGeoPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="What is GEO? Generative Engine Optimization Explained"
+        description="GEO is the practice of optimizing your business to appear in AI-generated answers from ChatGPT, Perplexity, Gemini, and Claude. Here's what it is, why it matters, and how to start."
+        url="https://mygeoradar.com/blog/what-is-geo"
+        publishedTime="2026-05-10T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -49,7 +57,6 @@ export default function WhatIsGeoPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">Why this matters now</h2>
           <p>AI search usage has grown from a curiosity to a primary research channel for a meaningful share of consumers &mdash; especially for high-consideration purchases. People are using ChatGPT to pick lawyers, dentists, contractors, and software tools. If you&apos;re not showing up, a competitor is.</p>
 
-          {/* MID-ARTICLE CTA */}
           <BlogMidCta
             topic="Complete GEO Implementation System"
             hook="Reading about GEO is step one. The playbook gives you the exact checklist, prompts, and 30-day plan to actually implement it — no guesswork, no piecing together blog posts."
@@ -66,6 +73,13 @@ export default function WhatIsGeoPage() {
           <h2 className="text-xl font-bold text-foreground mt-4">Where to start</h2>
           <p>The fastest path is a structured, step-by-step checklist that walks you through every signal in priority order. Most businesses can move from invisible to occasionally cited within 30 to 60 days of focused effort on the right things.</p>
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'geo-vs-seo',               title: 'GEO vs SEO: What Is the Difference?',                      tag: 'GEO Basics'    },
+            { slug: 'ai-search-guide',           title: 'How AI Search Engines Decide Which Businesses to Mention', tag: 'AI Search'     },
+            { slug: 'does-my-business-need-geo', title: 'Does My Business Need GEO?',                              tag: 'GEO Basics'    },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />
