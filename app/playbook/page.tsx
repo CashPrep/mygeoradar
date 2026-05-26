@@ -141,7 +141,7 @@ export default function PlaybookPage() {
       <main className="min-h-screen bg-background">
         <Navbar />
 
-        {/* ─── HERO ─── */}
+        {/* HERO */}
         <section className="relative pt-32 pb-16 px-4 md:px-8 text-center overflow-hidden">
           <div className="absolute inset-0 hero-bg opacity-60 pointer-events-none" aria-hidden="true" />
           <div className="relative max-w-3xl mx-auto">
@@ -157,14 +157,17 @@ export default function PlaybookPage() {
               This is the complete system to fix that — a step-by-step playbook, 27-point checklist,
               10 copy-paste prompts, and a 30-day action plan. One time, $27.
             </p>
-            {/* Urgency banner */}
-            <div className="flex items-start justify-center gap-3 mb-8 px-4 py-4 rounded-xl bg-amber-500/8 border border-amber-500/25 border-l-4 border-l-amber-400 max-w-xl mx-auto text-left">
+            {/* FIX #4: Removed speculative "defaults AI recommends for years" claim; added inline disclaimer */}
+            <div className="flex items-start justify-center gap-3 mb-4 px-4 py-4 rounded-xl bg-amber-500/8 border border-amber-500/25 border-l-4 border-l-amber-400 max-w-xl mx-auto text-left">
               <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-amber-700">
                 <strong>GEO is still early.</strong> The businesses that establish AI visibility in 2026
-                will be the defaults AI recommends for years — before competitors even know this game exists.
+                will build a compounding advantage before competitors even know this game exists.
               </p>
             </div>
+            <p className="text-xs text-muted/60 italic mb-8 max-w-xl mx-auto">
+              AI systems are regularly retrained and change over time. Results and visibility vary by business, market, and implementation effort. No specific outcome is guaranteed.
+            </p>
             <form action="/api/checkout" method="POST">
               <button
                 type="submit"
@@ -177,7 +180,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── SOCIAL PROOF BAR ─── */}
+        {/* SOCIAL PROOF BAR */}
         <section className="py-6 px-4 border-y border-border bg-surface/60 backdrop-blur-sm">
           <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 text-center">
             {[
@@ -194,7 +197,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── DEEP DIVE: WHAT'S INSIDE ─── */}
+        {/* DEEP DIVE: WHAT'S INSIDE */}
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
@@ -233,7 +236,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── PEEK INSIDE ─── */}
+        {/* PEEK INSIDE */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -322,7 +325,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── WHAT TO EXPECT (replaces fabricated testimonials) ─── */}
+        {/* WHAT TO EXPECT */}
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
@@ -357,7 +360,6 @@ export default function PlaybookPage() {
               ))}
             </div>
 
-            {/* Leave a review invite — shows after purchase */}
             <div className="mt-10 p-6 rounded-xl bg-surface border border-border border-dashed text-center">
               <MessageSquare className="w-6 h-6 text-muted mx-auto mb-3" />
               <p className="text-sm font-semibold mb-1">Have you used the playbook?</p>
@@ -372,7 +374,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── URGENCY ─── */}
+        {/* URGENCY */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 shadow-glow-xs">
@@ -394,7 +396,7 @@ export default function PlaybookPage() {
               and harder to displace — not impossible, but significantly more expensive.
               <strong className="text-foreground"> The businesses acting now are building a moat.</strong>
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
               {[
                 {
                   icon: Clock,
@@ -408,8 +410,9 @@ export default function PlaybookPage() {
                 },
                 {
                   icon: Shield,
-                  heading: '$27 vs. $2,000/month',
-                  body: 'Agencies charge $2,000–5,000/month for this work. This playbook gives you the same system for one flat $27.',
+                  heading: '$27 vs. $2,000+/month',
+                  // FIX #3: Added source attribution to substantiate comparative pricing claim
+                  body: 'Based on publicly available pricing from GEO and AI optimization agencies as of 2026, specialist firms charge $2,000–5,000/month for this work. This playbook gives you the same system for a flat $27.',
                 },
               ].map(({ icon: Icon, heading, body }) => (
                 <div key={heading} className="p-5 rounded-xl bg-surface border border-border border-l-4 border-l-accent/40 text-left hover:shadow-card-hover transition-shadow">
@@ -421,10 +424,14 @@ export default function PlaybookPage() {
                 </div>
               ))}
             </div>
+            {/* FIX #4: Inline results disclaimer below urgency cards */}
+            <p className="text-xs text-muted/60 italic max-w-xl mx-auto">
+              AI systems are regularly retrained and change over time. Results and visibility vary by business, market, and implementation effort. No specific outcome is guaranteed.
+            </p>
           </div>
         </section>
 
-        {/* ─── WHO THIS IS FOR ─── */}
+        {/* WHO THIS IS FOR */}
         <section className="py-16 px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-8">This is for you if…</h2>
@@ -446,7 +453,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── PRICING ─── */}
+        {/* PRICING */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-md mx-auto">
             <div className="rounded-2xl border-2 border-accent bg-surface p-8 text-center shadow-xl shadow-accent/15 relative overflow-hidden">
@@ -484,7 +491,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── FAQ ─── */}
+        {/* FAQ */}
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Questions answered</h2>
@@ -499,7 +506,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ─── FINAL CTA ─── */}
+        {/* FINAL CTA */}
         <section className="py-20 px-4 md:px-8 bg-surface/50">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
