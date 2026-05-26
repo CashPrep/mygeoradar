@@ -172,8 +172,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ─── FREE AI READINESS SCAN ─── */}
-        {/* FIX #2: Heading softened; disclaimer expanded to explicitly state passing score ≠ AI recommendation */}
+        {/* FREE AI READINESS SCAN */}
         <section id="scan" className="py-16 px-4 md:px-8 bg-surface/40 border-y border-border">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">
@@ -181,6 +180,7 @@ export default function HomePage() {
                 <Radar className="w-3.5 h-3.5" />
                 Free · Instant · No signup
               </div>
+              {/* FIX #2: Heading softened from "built so AI can read it" to avoid implying a live AI crawler connection */}
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
                 Is your site structured for AI to read it?
               </h2>
@@ -190,10 +190,12 @@ export default function HomePage() {
                 read, understand, and cite businesses — things like structured data, meta tags,
                 schema markup, and whether AI bots are accidentally blocked.
               </p>
+              {/* FIX #2: Expanded disclaimer — explicitly states passing score does not guarantee AI recommendation */}
               <p className="text-xs text-muted/70 mt-2 max-w-lg mx-auto">
                 This scan checks <em>how your site is built</em>, not whether a specific AI has indexed or recommended it.
                 A passing score means your site is structured in a way that makes it easier for AI to parse and reference —
-                it does not guarantee any AI will recommend your business. Visibility depends on many factors beyond technical structure.
+                it does not guarantee any AI will recommend your business.
+                Visibility depends on many factors beyond technical structure.
               </p>
             </div>
             <AiReadinessScan />
@@ -237,12 +239,12 @@ export default function HomePage() {
               If your business isn&apos;t in that answer, <strong className="text-foreground">you lost that customer before they ever found your website.</strong>{' '}
               No bounce rate. No analytics. No second chance. They just hired your competitor.
             </p>
-            {/* FIX #1: Stat reframed — clarifies 58.5% covers Google featured snippets + AI Overviews,
-                not standalone AI assistants; added context sentence about ChatGPT/Perplexity trend */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
               {[
                 {
                   stat: '58.5%',
+                  {/* FIX #1: Stat reframed — clarifies this covers Google featured snippets + AI Overviews,
+                      not standalone AI assistants; added context sentence about ChatGPT/Perplexity trend */}
                   label: (
                     <>
                       of US Google searches end without a click to the open web — driven by featured snippets,
@@ -458,8 +460,6 @@ export default function HomePage() {
         </section>
 
         {/* URGENCY */}
-        {/* FIX #3: Agency pricing prefixed with "Based on publicly available pricing from GEO and AI optimization agencies as of 2026" */}
-        {/* FIX #4: Added inline results disclaimer paragraph; removed speculative "own AI recommendations for years" framing */}
         <section className="py-20 px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 shadow-glow-xs">
@@ -469,19 +469,22 @@ export default function HomePage() {
             <h2 className="text-2xl md:text-3xl font-bold mb-6">
               Your competitors are figuring this out right now
             </h2>
+            {/* FIX #3: Agency pricing prefixed with source attribution to substantiate comparative claim */}
             <p className="text-muted leading-relaxed mb-4">
               GEO — Generative Engine Optimization — is the fastest-growing discipline in digital marketing in 2026.
               Based on publicly available pricing from GEO and AI optimization agencies as of 2026, specialist firms are
               charging $2,000–$5,000/month for this exact work. Early movers are quietly
               locking in AI visibility before the rest of the market wakes up.
             </p>
+            {/* FIX #4: Removed speculative "own AI recommendations for years" framing */}
             <p className="text-muted leading-relaxed mb-4">
               The businesses that act now will build a compounding advantage that gets harder to
               close over time. AI systems weight well-cited, established sources — once your competitors
               build that authority, <strong className="text-foreground">displacing them gets exponentially more expensive.</strong>
             </p>
+            {/* FIX #4: Inline results disclaimer */}
             <p className="text-xs text-muted/60 italic mb-10 max-w-xl mx-auto">
-              AI systems are regularly retrained and change over time. Results and visibility will vary by business, market, and implementation effort. No specific outcome is guaranteed.
+              AI systems are regularly retrained and change over time. Results and visibility vary by business, market, and implementation effort. No specific outcome is guaranteed.
             </p>
             <div className="flex items-center justify-center gap-3 p-5 rounded-xl bg-accent/5 border border-accent/20 max-w-md mx-auto shadow-glow-xs">
               <Clock className="w-5 h-5 text-accent flex-shrink-0" />
