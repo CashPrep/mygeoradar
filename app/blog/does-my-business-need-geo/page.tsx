@@ -3,6 +3,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Badge } from '@/components/ui/Badge'
 import { BlogCta } from '@/components/blog/BlogCta'
 import { BlogMidCta } from '@/components/blog/BlogMidCta'
+import { BlogArticleSchema } from '@/components/blog/BlogArticleSchema'
+import { RelatedPosts } from '@/components/blog/RelatedPosts'
 
 export const metadata = {
   title: 'Does My Business Need GEO?',
@@ -31,6 +33,12 @@ export const metadata = {
 export default function DoesMyBusinessNeedGeoPage() {
   return (
     <main className="min-h-screen bg-background">
+      <BlogArticleSchema
+        title="Does My Business Need GEO?"
+        description="Not every business has the same urgency around AI visibility — but most do. Here is how to tell if Generative Engine Optimization should be a priority for you right now."
+        url="https://mygeoradar.com/blog/does-my-business-need-geo"
+        publishedTime="2026-05-21T00:00:00.000Z"
+      />
       <Navbar />
       <article className="max-w-2xl mx-auto px-4 pt-28 pb-20">
         <div className="mb-8">
@@ -78,6 +86,13 @@ export default function DoesMyBusinessNeedGeoPage() {
           <p>Open ChatGPT or Perplexity and type: &ldquo;Who are the best [your business type] in [your city or category]?&rdquo; If you do not appear and a competitor does, that is your answer. You need GEO, and the sooner you start, the easier it is to establish presence before the window closes.</p>
 
         </div>
+        <RelatedPosts
+          posts={[
+            { slug: 'what-is-geo',           title: "What is GEO? The Beginner's Guide to Generative Engine Optimization", tag: 'GEO Basics' },
+            { slug: 'how-long-does-geo-take', title: 'How Long Does GEO Take to Work?',                                     tag: 'GEO Basics' },
+            { slug: 'geo-score-benchmarks',   title: "What's a Good GEO Score? Industry Benchmarks for 2026",             tag: 'Strategy'   },
+          ]}
+        />
         <BlogCta />
       </article>
       <Footer />
