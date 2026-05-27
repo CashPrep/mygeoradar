@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
     const supabase = getSupabase()
     const { data: scan, error } = await supabase
       .from('scans')
-      .select('id, url, score')
+      .select('id, url, score, checks')
       .eq('id', scanId)
       .single()
 
@@ -47,6 +47,13 @@ export async function POST(req: NextRequest) {
     const stripe = getStripe()
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://mygeoradar.com'
 
+    // Count issues so product name is specific
+    const checks = (scan.checks ?? []) as Array<{ status: string }>
+    const issueCount = checks.filter(c => c.status === 'fail' || c.status === 'warn').length
+    const issueLabel = issueCount > 0
+      ? `${issueCount} issue${issueCount > 1 ? 's' : ''} found`
+      : 'full breakdown'
+
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
       payment_method_types: ['card'],
@@ -56,8 +63,8 @@ export async function POST(req: NextRequest) {
             currency: 'usd',
             unit_amount: 999,
             product_data: {
-              name: 'AI Readiness Full Report',
-              description: `Full breakdown + fix guides for ${scan.url} (AI Readiness Score: ${scan.score}/100)`,
+              name: `AI Visibility Fix Guides — ${issueLabel} for ${new URL(scan.url).hostname}`,
+              description: `Step-by-step fix guide for each of the ${issueLabel} on your site. Score: ${scan.score}/100.`,
               images: ['https://mygeoradar.com/og-image.png'],
             },
           },

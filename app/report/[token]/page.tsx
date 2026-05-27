@@ -11,7 +11,6 @@ import { FIX_GUIDES, type FixGuide } from '@/lib/fixGuides'
 
 export const dynamic = 'force-dynamic'
 
-// ── Types ────────────────────────────────────────────────────────
 type Status = 'pass' | 'warn' | 'fail'
 interface Check {
   id: string
@@ -29,7 +28,6 @@ interface ScanRow {
   created_at: string
 }
 
-// ── Data fetching ────────────────────────────────────────────────
 async function getReport(token: string): Promise<ScanRow | null> {
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -54,8 +52,6 @@ async function getReport(token: string): Promise<ScanRow | null> {
 
   return scan ?? null
 }
-
-// ── Sub-components ───────────────────────────────────────────────
 
 function scoreLabel(s: number) {
   if (s >= 80) return { label: 'AI-Ready',         color: 'text-emerald-600', ring: 'stroke-emerald-500', bg: 'bg-emerald-50  border-emerald-200' }
@@ -121,14 +117,10 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
       {/* Fix guide — only for non-passing checks */}
       {check.status !== 'pass' && guide && (
         <div className="border-t border-current/10 px-5 py-5 bg-white/60 flex flex-col gap-5">
-
-          {/* Why it matters */}
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-accent mb-2">Why This Matters</p>
             <p className="text-sm text-foreground/80 leading-relaxed">{guide.why}</p>
           </div>
-
-          {/* Step-by-step fix */}
           <div>
             <p className="text-xs font-bold uppercase tracking-wider text-accent mb-3">How to Fix It — Step by Step</p>
             <ol className="flex flex-col gap-3">
@@ -142,8 +134,6 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
               ))}
             </ol>
           </div>
-
-          {/* Validate */}
           <div className="flex items-start gap-3 p-3 rounded-lg bg-accent/5 border border-accent/15">
             <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
             <div>
@@ -151,8 +141,6 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
               <p className="text-xs text-foreground/70 leading-relaxed">{guide.validate}</p>
             </div>
           </div>
-
-          {/* Time estimate */}
           <div className="flex items-center gap-2 text-xs text-muted">
             <Clock className="w-3.5 h-3.5" />
             <span>Estimated time: <strong className="text-foreground">{guide.timeEstimate}</strong></span>
@@ -160,7 +148,7 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
         </div>
       )}
 
-      {/* Passing check — brief confirmation */}
+      {/* Passing check — no guide needed */}
       {check.status === 'pass' && (
         <div className="border-t border-emerald-100 px-5 py-3 bg-white/40">
           <p className="text-xs text-emerald-700 flex items-center gap-1.5">
@@ -172,8 +160,6 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
     </div>
   )
 }
-
-// ── Page ─────────────────────────────────────────────────────────
 
 export default async function ReportPage({
   params,
@@ -188,6 +174,8 @@ export default async function ReportPage({
   const failChecks = scan.checks.filter(c => c.status === 'fail')
   const warnChecks = scan.checks.filter(c => c.status === 'warn')
   const passChecks = scan.checks.filter(c => c.status === 'pass')
+  const issueCount = failChecks.length + warnChecks.length
+  const hostname   = new URL(scan.url).hostname
 
   return (
     <main className="min-h-screen bg-background">
@@ -199,12 +187,11 @@ export default async function ReportPage({
         <div className="mb-10 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6">
             <Lock className="w-3.5 h-3.5" />
-            Full AI Readiness Report — Unlocked
+            {issueCount} custom fix guide{issueCount !== 1 ? 's' : ''} for {hostname}
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-3">Your AI Readiness Report</h1>
           <p className="text-muted font-mono text-sm break-all mb-6">{scan.url}</p>
 
-          {/* Score card */}
           <div className={`inline-flex flex-col sm:flex-row items-center gap-6 px-8 py-6 rounded-2xl border ${bg} shadow-card-hover`}>
             <ScoreRing score={scan.score} />
             <div className="text-center sm:text-left">
@@ -221,7 +208,7 @@ export default async function ReportPage({
           </div>
         </div>
 
-        {/* ── Download button ── */}
+        {/* ── Download ── */}
         <div className="mb-8 flex justify-center">
           <a
             href={`/api/report-download?token=${token}`}
@@ -233,15 +220,15 @@ export default async function ReportPage({
           </a>
         </div>
 
-        {/* ── How to use this report ── */}
+        {/* ── How to use ── */}
         <div className="mb-10 p-5 rounded-xl bg-surface border border-border">
           <p className="text-xs font-bold uppercase tracking-wider text-accent mb-2">How to Use This Report</p>
           <p className="text-sm text-muted leading-relaxed">
-            Start with the <strong className="text-foreground">Critical Issues</strong> — fix those first, in order. Each card below includes a full explanation of why the issue matters and a numbered step-by-step guide to fix it. Follow the validation step at the bottom of each guide to confirm the fix worked, then re-run the free scan to watch your score improve.
+            This report contains {issueCount > 0 ? `${issueCount} fix guide${issueCount !== 1 ? 's' : ''} — one for each issue found on ${hostname}` : 'a full breakdown of your site'}. Start with <strong className="text-foreground">Critical Issues</strong> first. Each card has a full explanation of why the issue matters, a numbered step-by-step guide to fix it, and a validation step to confirm it worked. When you&apos;re done, re-run the free scan to watch your score improve.
           </p>
         </div>
 
-        {/* ── Critical issues first ── */}
+        {/* ── Critical issues ── */}
         {failChecks.length > 0 && (
           <section className="mb-8">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -254,6 +241,19 @@ export default async function ReportPage({
               ))}
             </div>
           </section>
+        )}
+
+        {/* ── Mid-page playbook upsell (shown after critical issues, before warnings) ── */}
+        {failChecks.length > 0 && warnChecks.length > 0 && (
+          <div className="my-8 p-6 rounded-2xl border border-accent/20 bg-accent/3 text-center">
+            <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-1">While you&apos;re fixing things</p>
+            <p className="text-sm text-muted mb-3 max-w-md mx-auto">
+              Technical fixes are only one layer. The Found by AI Playbook covers the full picture — citation building, content authority, and the 30-day plan that makes AI actually recommend you.
+            </p>
+            <Link href="/playbook" className="btn-primary inline-flex text-sm px-5 py-2.5 rounded-lg shadow-glow-xs gap-2">
+              See the full playbook — $27 <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
         )}
 
         {/* ── Warnings ── */}
@@ -286,25 +286,22 @@ export default async function ReportPage({
           </section>
         )}
 
-        {/* ── Playbook upsell ── */}
-        <div className="p-7 rounded-2xl bg-accent/5 border border-accent/20 text-center">
+        {/* ── Bottom playbook upsell ── */}
+        <div className="p-7 rounded-2xl border border-accent/30 bg-white shadow-card-accent text-center relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
           <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-3">Next step</p>
           <h3 className="text-xl font-bold mb-2">Technical fixes are just the beginning</h3>
           <p className="text-sm text-muted leading-relaxed mb-5 max-w-lg mx-auto">
             This report covers the technical signals AI uses to <em>read</em> your site. The Found by AI Playbook covers the full picture — citation building, content authority, review signals, and the 30-day plan that gets AI assistants to actually <em>recommend</em> your business.
           </p>
-          <Link
-            href="/playbook"
-            className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white font-semibold px-6 py-3 rounded-xl text-sm transition-all shadow-lg shadow-accent/20 active:scale-[0.98]"
-          >
+          <Link href="/playbook" className="btn-primary inline-flex text-sm px-6 py-3 rounded-xl shadow-glow-sm gap-2">
             Get the Found by AI Playbook — $27 <ArrowRight className="w-4 h-4" />
           </Link>
-          <p className="text-xs text-muted mt-3">One-time · Instant download · 30-day money-back guarantee</p>
+          <p className="text-xs text-muted mt-3">One-time &middot; Instant download &middot; 30-day money-back guarantee</p>
         </div>
 
-        {/* ── Footer note ── */}
         <p className="text-xs text-muted/50 text-center mt-8">
-          Bookmark this page — your report lives here permanently at this URL.
+          Bookmark this page — your report lives here permanently.
           Questions? <a href="mailto:hello@mygeoradar.com" className="underline hover:text-accent transition-colors">hello@mygeoradar.com</a>
         </p>
 

@@ -125,6 +125,7 @@ export function AiReadinessScan() {
 
   const failCount = result?.checks.filter(c => c.status === 'fail').length ?? 0
   const warnCount = result?.checks.filter(c => c.status === 'warn').length ?? 0
+  const issueCount = failCount + warnCount
 
   return (
     <div className="w-full max-w-2xl mx-auto">
@@ -198,16 +199,15 @@ export function AiReadinessScan() {
                   : 'AI crawlers are likely struggling to read your site.'}
               </h3>
               <p className="text-sm text-muted">
-                {failCount > 0 && `${failCount} critical issue${failCount > 1 ? 's' : ''} found. `}
-                {warnCount > 0 && `${warnCount} warning${warnCount > 1 ? 's' : ''} to review. `}
+                {failCount > 0 && <span className="text-red-600 font-semibold">{failCount} critical issue{failCount > 1 ? 's' : ''}{warnCount > 0 ? ' · ' : ''}</span>}
+                {warnCount > 0 && <span className="text-amber-500 font-semibold">{warnCount} warning{warnCount > 1 ? 's' : ''}{' '}</span>}
                 {failCount === 0 && warnCount === 0 && 'All checks passed. '}
               </p>
             </div>
           </div>
 
-          {/* Locked checks list */}
+          {/* Checks list */}
           <div className="relative">
-            {/* Visible rows — labels + icons only, no expandable details */}
             <div className="flex flex-col gap-2">
               {result.checks.map(c => (
                 <div
@@ -222,22 +222,25 @@ export function AiReadinessScan() {
                   )}>
                     {c.impact}
                   </span>
-                  <Lock className="w-3.5 h-3.5 text-muted/40 flex-shrink-0" />
+                  {c.status !== 'pass' && (
+                    <Lock className="w-3.5 h-3.5 text-muted/40 flex-shrink-0" />
+                  )}
                 </div>
               ))}
             </div>
 
-            {/* Blur + unlock overlay — only shown when there are issues */}
-            {(failCount > 0 || warnCount > 0) && (
-              <div className="absolute inset-x-0 bottom-0 h-48 flex flex-col items-center justify-end pb-4"
+            {/* Blur + unlock overlay — only when there are issues */}
+            {issueCount > 0 && (
+              <div
+                className="absolute inset-x-0 bottom-0 h-48 flex flex-col items-center justify-end pb-4"
                 style={{ background: 'linear-gradient(to bottom, transparent 0%, var(--color-background, white) 60%)' }}
               >
                 <div className="text-center px-4">
                   <p className="text-sm font-semibold mb-0.5">
-                    {failCount} issue{failCount !== 1 ? 's' : ''} found — see exactly what to fix
+                    {issueCount} issue{issueCount !== 1 ? 's' : ''} found on <span className="font-mono">{new URL(result.url).hostname}</span>
                   </p>
                   <p className="text-xs text-muted mb-3">
-                    Unlock your full report: what each issue means, why it matters, and a step-by-step guide to fix it.
+                    Get a step-by-step fix guide for each of your {issueCount} specific issue{issueCount !== 1 ? 's' : ''} — exactly what to do, in what order, with validation steps.
                   </p>
                   <button
                     onClick={unlockReport}
@@ -246,15 +249,15 @@ export function AiReadinessScan() {
                   >
                     {paying
                       ? <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting&hellip;</>
-                      : <><Lock className="w-4 h-4" /> Unlock Full Report &amp; Fix Guides — $9.99</>}
+                      : <><Lock className="w-4 h-4" /> Get My {issueCount} Fix Guide{issueCount !== 1 ? 's' : ''} &mdash; $9.99</>}
                   </button>
-                  <p className="text-xs text-muted/60 mt-2">One-time &middot; Instant access &middot; Secure checkout</p>
+                  <p className="text-xs text-muted/60 mt-2">One-time &middot; Instant access &middot; Only the fixes your site needs</p>
                 </div>
               </div>
             )}
           </div>
 
-          {/* If all passing — no paywall, just upsell playbook */}
+          {/* All passing — no paywall, upsell playbook */}
           {failCount === 0 && warnCount === 0 && (
             <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
               <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
