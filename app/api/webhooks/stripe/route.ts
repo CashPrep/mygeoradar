@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import { supabaseAdmin } from '@/lib/supabase-admin'
-import { sendPlaybookPurchaseEmail } from '@/lib/email'
 import { randomUUID } from 'crypto'
 
 export const runtime = 'nodejs'
@@ -62,11 +61,6 @@ export async function POST(req: NextRequest) {
       } catch (dbErr) {
         console.error('[playbook webhook] DB upsert failed:', dbErr)
       }
-
-      // Fire-and-forget confirmation email with download link
-      sendPlaybookPurchaseEmail(customerEmail).catch(err =>
-        console.error('[playbook webhook] Resend email failed:', err)
-      )
 
       return NextResponse.json({ ok: true })
     }

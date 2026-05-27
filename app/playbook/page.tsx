@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer'
 import { CheckoutButton } from '@/components/playbook/CheckoutButton'
 import {
   CheckCircle, BookOpen, FileText, Zap, Shield,
-  Star, Eye, Clock, AlertTriangle, Quote,
+  Star, Eye, Clock, AlertTriangle,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -102,27 +102,6 @@ const previewChecklist = [
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
-const testimonials = [
-  {
-    quote:
-      'I ran the prompt audit on day one and saw exactly which competitors Perplexity was recommending instead of me. Two weeks after working through the checklist, my business started showing up. At $27 I would have paid ten times this.',
-    name: 'Marcus T.',
-    role: 'Owner, residential HVAC company',
-  },
-  {
-    quote:
-      'I had read every GEO article I could find and still had no idea what to actually do first. The 30-day calendar removed all of the guesswork. This is the only resource that gave me a concrete action, not just a concept.',
-    name: 'Priya S.',
-    role: 'Founder, B2B SaaS startup',
-  },
-  {
-    quote:
-      'The prompt pack alone was worth it. I pasted Prompt #1 into ChatGPT and discovered it was recommending a competitor I had never even heard of. Fixed three things from the checklist that same week.',
-    name: 'Daniel R.',
-    role: 'Marketing director, regional law firm',
-  },
-]
-
 const faqs = [
   {
     q: 'Do I need to be technical or know SEO to use this?',
@@ -142,7 +121,7 @@ const faqs = [
   },
   {
     q: 'How do I receive the playbook after purchase?',
-    a: 'After checkout you will be redirected to a download page and receive a download link by email. The PDF is yours to keep forever.',
+    a: 'After checkout you will be redirected to a download page. Sign in with the email you used at checkout — we send a magic link, no password needed. Your files are then available instantly.',
   },
   {
     q: 'What if I am not satisfied?',
@@ -187,16 +166,6 @@ export default function PlaybookPage() {
               10 copy-paste prompts, and a 30-day action plan. One time, $27.
             </p>
 
-            {/* Social proof stars */}
-            <div className="flex items-center justify-center gap-2 mb-6">
-              <div className="flex">
-                {[1,2,3,4,5].map(i => (
-                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                ))}
-              </div>
-              <span className="text-sm text-muted font-medium">Trusted by 180+ founders &amp; marketers</span>
-            </div>
-
             <div className="flex items-start gap-3 mb-4 px-4 py-4 rounded-xl bg-amber-50 border border-amber-200 max-w-xl mx-auto text-left">
               <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-amber-800">
@@ -213,35 +182,6 @@ export default function PlaybookPage() {
             <p className="text-xs text-muted mt-4">
               One-time payment · Instant PDF download · 30-day money-back guarantee
             </p>
-          </div>
-        </section>
-
-        {/* ── SOCIAL PROOF ──────────────────────────────────────────── */}
-        <section className="py-20 px-4 md:px-8 border-t border-border bg-surface/40">
-          <div className="max-w-5xl mx-auto">
-            <p className="text-center text-xs font-semibold uppercase tracking-widest text-muted mb-10">
-              What buyers are saying
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {testimonials.map(({ quote, name, role }) => (
-                <div
-                  key={name}
-                  className="relative rounded-2xl border border-border bg-white p-6 flex flex-col gap-4 shadow-card-lift hover:border-accent/25 transition-all"
-                >
-                  <Quote className="w-6 h-6 text-accent/25 absolute top-5 right-5" />
-                  <div className="flex">
-                    {[1,2,3,4,5].map(i => (
-                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-foreground/80 leading-relaxed flex-1">&ldquo;{quote}&rdquo;</p>
-                  <div>
-                    <p className="text-sm font-semibold">{name}</p>
-                    <p className="text-xs text-muted">{role}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 

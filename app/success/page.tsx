@@ -35,7 +35,6 @@ export default async function SuccessPage({
     redirect('/playbook')
   }
 
-  // Check if already authed — lets us show the direct download button
   const supabase = await createSupabaseServer()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -68,7 +67,7 @@ export default async function SuccessPage({
           </p>
 
           {user && hasPurchase ? (
-            /* ── Already signed in: direct download ── */
+            /* Already signed in — direct download */
             <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left">
               <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-accent" /> You&apos;re all set
@@ -85,20 +84,18 @@ export default async function SuccessPage({
               </Link>
             </div>
           ) : (
-            /* ── Not signed in: show download options without forcing magic-link wall ── */
+            /* Not signed in — magic link path, no blocking wall */
             <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left flex flex-col gap-5">
-
-              {/* Primary: direct account link */}
               <div>
                 <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
-                  <Download className="w-5 h-5 text-accent" /> Access your downloads
+                  <Mail className="w-5 h-5 text-accent" /> One step to unlock your downloads
                 </h2>
                 <p className="text-sm text-muted leading-relaxed mb-4">
-                  Your files are waiting at your account page. Sign in with{' '}
+                  Sign in with{' '}
                   {customerEmail
                     ? <strong className="text-foreground">{customerEmail}</strong>
                     : <>the email you used at checkout</>}{' '}
-                  — we&apos;ll send a one-click magic link, no password needed.
+                  to access your files. We&apos;ll send a magic link — no password needed.
                 </p>
                 <Link
                   href={`/login?next=/account&hint=${encodeURIComponent(customerEmail ?? '')}`}
@@ -106,28 +103,6 @@ export default async function SuccessPage({
                 >
                   <ArrowRight className="w-4 h-4" /> Sign in &amp; download now
                 </Link>
-              </div>
-
-              {/* Divider */}
-              <div className="flex items-center gap-3">
-                <div className="flex-1 h-px bg-border" />
-                <span className="text-xs text-muted">or</span>
-                <div className="flex-1 h-px bg-border" />
-              </div>
-
-              {/* Secondary: email fallback */}
-              <div className="flex items-start gap-3 p-4 rounded-xl bg-surface-2 border border-border">
-                <Mail className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="text-sm font-semibold mb-1">Check your email</p>
-                  <p className="text-sm text-muted leading-relaxed">
-                    A confirmation email with your download link was sent to{' '}
-                    {customerEmail
-                      ? <strong className="text-foreground">{customerEmail}</strong>
-                      : <>your checkout email</>}.
-                    Check your spam folder if you don&apos;t see it within a minute.
-                  </p>
-                </div>
               </div>
 
               <p className="text-xs text-muted text-center">
