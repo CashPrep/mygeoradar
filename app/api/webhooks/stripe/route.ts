@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
 import { supabaseAdmin } from '@/lib/supabase-admin'
+import { randomUUID } from 'crypto'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
 
-    // ── Handler A: Found by AI Playbook ───────────────────────────────────────
+    // ── Handler A: Found by AI Playbook ──────────────────────────────────────
     if (session.metadata?.product === 'found-by-ai-playbook') {
       const customerEmail = session.customer_details?.email
       const customerId    = session.customer as string | null
@@ -64,13 +65,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true })
     }
 
-    // ── Handler B: AI Readiness Report Unlock ─────────────────────────────────
+    // ── Handler B: AI Readiness Report Unlock ────────────────────────────────
     if (session.metadata?.scanId && session.payment_status === 'paid') {
       const scanId        = session.metadata.scanId
       const sessionId     = session.id
       const customerEmail = session.customer_details?.email ?? null
       const supabase      = getSupabase()
 
+      // Check if already processed (idempotency)
       const { data: existing } = await supabase
         .from('report_purchases')
         .select('id, token')
@@ -78,12 +80,15 @@ export async function POST(req: NextRequest) {
         .maybeSingle()
 
       if (!existing) {
+        const token = randomUUID()
+
         const { error } = await supabase
           .from('report_purchases')
           .insert({
             scan_id:           scanId,
             stripe_session_id: sessionId,
             email:             customerEmail,
+            token,
             paid_at:           new Date().toISOString(),
           })
 
