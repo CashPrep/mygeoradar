@@ -10,6 +10,7 @@ interface Props {
 
 export function CheckoutButton({ label = 'Get instant access — $27', className }: Props) {
   const [loading, setLoading] = useState(false)
+  const [gone,    setGone]    = useState(false)
   const [error,   setError]   = useState('')
 
   async function handleClick() {
@@ -18,21 +19,23 @@ export function CheckoutButton({ label = 'Get instant access — $27', className
     try {
       const res = await fetch('/api/checkout', { method: 'POST' })
       if (!res.ok) throw new Error('non-2xx')
-      // API returns a redirect — follow the Location header the browser received,
-      // or parse JSON if we ever switch to returning { url }
-      // With NextResponse.redirect the browser follows automatically for fetch,
-      // but we need to grab the final URL from res.url
-      if (res.redirected) {
-        window.location.href = res.url
-        return
-      }
-      const data = await res.json()
-      if (data.url) { window.location.href = data.url; return }
-      throw new Error('no redirect url')
+      const redirectUrl = res.redirected ? res.url : (await res.json()).url
+      if (!redirectUrl) throw new Error('no url')
+      setGone(true)
+      window.location.href = redirectUrl
     } catch {
       setError('Checkout unavailable — please try again in a moment.')
       setLoading(false)
     }
+  }
+
+  if (gone) {
+    return (
+      <div className="flex items-center justify-center gap-2 text-sm text-muted py-3">
+        <Loader2 className="w-4 h-4 animate-spin text-accent" />
+        <span>Redirecting to checkout&hellip;</span>
+      </div>
+    )
   }
 
   return (
@@ -43,7 +46,7 @@ export function CheckoutButton({ label = 'Get instant access — $27', className
         className={className ?? 'btn-primary text-base px-8 py-3.5 rounded-xl shadow-glow-sm'}
       >
         {loading
-          ? <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting to checkout&hellip;</>
+          ? <><Loader2 className="w-4 h-4 animate-spin" /> One moment&hellip;</>
           : <>{label} <ArrowRight className="w-5 h-5" /></>}
       </button>
       {error && (

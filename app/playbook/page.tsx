@@ -141,8 +141,10 @@ export default function PlaybookPage() {
         <Navbar />
 
         {/* ── URGENCY BANNER ─────────────────────────────────────────── */}
-        <div className="bg-accent text-white text-center text-xs font-semibold py-2 px-4 tracking-wide">
-          🚀 Launch price: $27 — price increases once the first 200 copies are sold
+        <div className="bg-accent/10 border-b border-accent/20 text-center py-2.5 px-4">
+          <p className="text-xs font-medium text-accent tracking-wide">
+            Launch price · <strong className="font-semibold">$27</strong> · Increases after the first 200 copies
+          </p>
         </div>
 
         {/* ── HERO ──────────────────────────────────────────────────── */}
@@ -257,6 +259,7 @@ export default function PlaybookPage() {
                           <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
                             <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
+
                         )}
                       </div>
                       <span className={`text-sm leading-snug ${
@@ -396,7 +399,7 @@ export default function PlaybookPage() {
               </div>
               <p className="text-sm text-muted mb-2">One-time · No subscription · Instant download</p>
               <p className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 inline-block mb-6">
-                🚀 Launch price — limited to first 200 copies
+                Launch price — limited to first 200 copies
               </p>
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
