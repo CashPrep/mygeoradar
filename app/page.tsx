@@ -67,19 +67,19 @@ const includes = [
     icon: BookOpen,
     title: 'The Complete AI Visibility Playbook',
     description:
-      'A no-fluff, step-by-step guide covering every fix that makes AI assistants recognize, trust, and recommend your business. You know exactly where to start and what to do next.',
+      'A no-fluff, step-by-step guide covering every fix that makes AI assistants recognize, trust, and recommend your business.',
   },
   {
     icon: FileText,
     title: 'The 27-Point AI Visibility Checklist',
     description:
-      '27 actionable checkboxes — run through them once and know exactly where you stand. Each item is a concrete action, not vague advice. Mark them off as you go.',
+      '27 actionable checkboxes — run through them once and know exactly where you stand. Each item is a concrete action, not vague advice.',
   },
   {
     icon: Zap,
     title: 'Prompt Pack — 10 Copy-Paste Prompts',
     description:
-      'Paste these into ChatGPT, Perplexity, Gemini, and Claude to instantly see how AI assistants describe your business right now. You will know the truth in 10 minutes.',
+      'Paste these into ChatGPT, Perplexity, Gemini, and Claude to instantly see how AI assistants describe your business right now.',
   },
   {
     icon: Shield,
@@ -138,73 +138,81 @@ export default function HomePage() {
       <main className="min-h-screen bg-background">
         <Navbar />
 
-        {/* ── HERO ──────────────────────────────────────────────────── */}
-        <section className="relative pt-32 pb-24 px-4 md:px-8 text-center overflow-hidden">
+        {/* ── HERO + SCAN (above the fold, scan is the centerpiece) ── */}
+        <section className="relative pt-28 pb-0 px-4 md:px-8 overflow-hidden">
           <div className="absolute inset-0 hero-bg opacity-70 pointer-events-none" aria-hidden="true" />
-          <div className="relative max-w-3xl mx-auto">
-            {/* Single badge — hero only */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/8 border border-accent/20 text-accent text-xs font-medium mb-8 animate-fade-in">
-              <Radar className="w-3 h-3" />
-              AI search is replacing Google for buying decisions — 2026
+
+          <div className="relative max-w-6xl mx-auto">
+
+            {/* Badge */}
+            <div className="flex justify-center mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/8 border border-accent/20 text-accent text-xs font-medium animate-fade-in">
+                <Radar className="w-3 h-3" />
+                AI search is replacing Google for buying decisions — 2026
+              </div>
             </div>
 
-            <h1 className="text-4xl md:text-[3.5rem] font-bold tracking-tight leading-[1.1] mb-6 text-balance">
-              When someone asks AI about your industry,{' '}
-              <span className="text-gradient-accent">do you show up?</span>
-            </h1>
+            {/* 2-col layout: headline left, scan right */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start pb-16">
 
-            <p className="text-lg text-muted leading-relaxed mb-10 max-w-2xl mx-auto text-pretty">
-              Most businesses are{' '}
-              <strong className="text-foreground font-semibold">completely invisible</strong> to
-              ChatGPT, Perplexity, Gemini, and Claude. The{' '}
-              <strong className="text-foreground font-semibold">Found by AI Playbook</strong> gives you
-              the exact system to fix that — no tech skills, no agency, no subscription.
-            </p>
+              {/* Left — headline + context */}
+              <div className="flex flex-col justify-center pt-4">
+                <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-5 text-balance">
+                  When someone asks AI about your industry,{' '}
+                  <span className="text-gradient-accent">do you show up?</span>
+                </h1>
+                <p className="text-base text-muted leading-relaxed mb-8 text-pretty">
+                  Most businesses are{' '}
+                  <strong className="text-foreground font-semibold">completely invisible</strong> to
+                  ChatGPT, Perplexity, Gemini, and Claude — while their competitors get recommended
+                  every day. Run the free scan and find out where you stand in 30 seconds.
+                </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a href="#scan">
-                <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  Check Your AI Readiness — Free <ArrowRight className="w-4 h-4" />
-                </Button>
-              </a>
-              <Link
-                href="/#what-you-get"
-                className="text-sm text-muted hover:text-foreground transition-colors font-medium"
-              >
-                See what&apos;s included ↓
-              </Link>
+                {/* Trust signals — inline under headline */}
+                <div className="flex flex-wrap gap-x-5 gap-y-2">
+                  {[
+                    'Free — no signup',
+                    'Results in seconds',
+                    'No credit card',
+                  ].map((label) => (
+                    <div key={label} className="flex items-center gap-1.5">
+                      <CheckCircle className="w-3.5 h-3.5 text-accent flex-shrink-0" />
+                      <span className="text-xs text-muted">{label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Scroll link for those who want more context first */}
+                <div className="mt-8">
+                  <Link
+                    href="/#what-you-get"
+                    className="text-sm text-muted hover:text-foreground transition-colors"
+                  >
+                    See what the full playbook includes ↓
+                  </Link>
+                </div>
+              </div>
+
+              {/* Right — scan input, visually elevated */}
+              <div id="scan" className="rounded-2xl border border-border bg-white shadow-card-accent p-6 md:p-8">
+                <div className="mb-5">
+                  <p className="font-semibold text-[15px] mb-1">Check your AI readiness — free</p>
+                  <p className="text-sm text-muted leading-relaxed">
+                    Enter your website URL. We’ll analyze the technical signals that influence
+                    whether AI systems can read, understand, and cite your business.
+                  </p>
+                  <p className="text-xs text-muted/60 mt-2">
+                    Checks site structure only — does not guarantee AI recommendation.
+                  </p>
+                </div>
+                <AiReadinessScan />
+              </div>
             </div>
-
-            <p className="text-xs text-muted/70 mt-5">Free scan · No signup · Results in seconds</p>
-          </div>
-        </section>
-
-        {/* ── FREE AI READINESS SCAN ────────────────────────────────── */}
-        <section id="scan" className="py-16 px-4 md:px-8 border-y border-border bg-surface/50">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-8">
-              <h2 className="text-2xl md:text-3xl font-bold mb-3">
-                Is your site structured for AI to read it?
-              </h2>
-              <p className="text-muted text-sm max-w-xl mx-auto leading-relaxed">
-                Before selling you anything, we want to check if you actually need it. Enter your URL
-                and we&apos;ll analyze the technical signals that influence how AI systems read,
-                understand, and cite businesses — structured data, meta tags, schema markup, and
-                whether AI bots are accidentally blocked.
-              </p>
-              <p className="text-xs text-muted/60 mt-2 max-w-lg mx-auto">
-                This scan checks <em>how your site is built</em>, not whether a specific AI has
-                indexed or recommended it. A passing score means your site is structured in a way
-                that makes it easier for AI to parse — it does not guarantee any AI will recommend
-                your business.
-              </p>
-            </div>
-            <AiReadinessScan />
           </div>
         </section>
 
         {/* ── THE PROBLEM ───────────────────────────────────────────── */}
-        <section className="py-24 px-4 md:px-8">
+        <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
               AI assistants are the new first impression —{' '}
@@ -212,18 +220,14 @@ export default function HomePage() {
             </h2>
             <p className="text-muted leading-relaxed mb-4 text-pretty">
               When a potential customer asks ChatGPT &ldquo;who&apos;s the best [your type of
-              business]?&rdquo; or Perplexity &ldquo;recommend someone for [your service]&rdquo; — AI
-              gives them a confident, specific answer. Right now.
-            </p>
-            <p className="text-muted leading-relaxed mb-12 text-pretty">
-              If your business isn&apos;t in that answer,{' '}
+              business]?&rdquo; — AI gives them a confident, specific answer. Right now. If your
+              business isn’t in that answer,{' '}
               <strong className="text-foreground">
                 you lost that customer before they ever found your website.
-              </strong>{' '}
-              No bounce rate. No analytics. No second chance.
+              </strong>
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left mt-10">
               <div className="p-6 rounded-2xl bg-surface border border-border">
                 <p className="text-4xl font-black text-gradient-accent mb-3 tracking-tight">58.5%</p>
                 <p className="text-sm text-muted leading-relaxed">
@@ -237,10 +241,8 @@ export default function HomePage() {
                   >
                     SparkToro / Datos, 2024
                   </a>
-                  {' '}As standalone AI assistants grow, this shift is accelerating far beyond Google.
                 </p>
               </div>
-
               <div className="p-6 rounded-2xl bg-surface border border-border">
                 <p className="text-4xl font-black text-gradient-accent mb-3 tracking-tight">Day 1</p>
                 <p className="text-sm text-muted leading-relaxed">
@@ -257,9 +259,13 @@ export default function HomePage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
-                Everything you need to get found by AI
+                The free scan shows you the gaps.
+                <br />
+                <span className="text-gradient-accent">The playbook closes them.</span>
               </h2>
-              <p className="text-muted">One purchase. Four assets. Nothing missing.</p>
+              <p className="text-muted max-w-xl mx-auto">
+                One purchase. Four assets. The complete system to go from invisible to recommended.
+              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -275,11 +281,19 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+
+            <div className="text-center mt-10">
+              <Link href="/playbook">
+                <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
+                  See everything that’s included <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
           </div>
         </section>
 
         {/* ── PEEK INSIDE ───────────────────────────────────────────── */}
-        <section className="py-24 px-4 md:px-8">
+        <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
@@ -310,21 +324,11 @@ export default function HomePage() {
                       >
                         {done && (
                           <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
-                            <path
-                              d="M1 4l3 3 5-6"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
+                            <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         )}
                       </div>
-                      <span
-                        className={`text-sm leading-snug ${
-                          done ? 'line-through text-muted/50' : 'text-foreground'
-                        }`}
-                      >
+                      <span className={`text-sm leading-snug ${done ? 'line-through text-muted/50' : 'text-foreground'}`}>
                         {text}
                       </span>
                     </div>
@@ -390,23 +394,23 @@ export default function HomePage() {
               {[
                 {
                   step: '01',
-                  title: 'Buy once, download instantly',
-                  body: 'Pay $27 and get immediate access to all four assets — the playbook, checklist, prompt pack, and 30-day plan. Everything is in your inbox in under two minutes.',
+                  title: 'Run the free scan — see where you stand',
+                  body: 'Enter your URL above. In seconds you’ll see how your site is structured for AI systems — what’s working, what’s broken, and where the biggest gaps are.',
                 },
                 {
                   step: '02',
-                  title: 'Run the prompt pack — see the truth in 10 minutes',
-                  body: 'Use the 10 included prompts across ChatGPT, Perplexity, Gemini, and Claude. You will see exactly how AI assistants currently describe your business — or if they skip you entirely.',
+                  title: 'Get the playbook — $27, one time',
+                  body: 'The playbook gives you the complete system to fix every gap the scan surfaces — a 27-point checklist, 10 copy-paste audit prompts, and a 30-day action plan.',
                 },
                 {
                   step: '03',
-                  title: 'Work through the 27-point checklist',
+                  title: 'Work through the checklist',
                   body: 'Go item by item. Each checkbox is a concrete action with clear instructions. No guessing, no jargon. Most items take under an hour.',
                 },
                 {
                   step: '04',
-                  title: 'Follow the 30-day plan, then re-run and measure',
-                  body: 'Implement one task per day. At the end of 30 days, re-run the same prompts and compare your before/after. You will see the shift.',
+                  title: 'Re-run the scan and measure your shift',
+                  body: 'After 30 days, run the scan again and compare your score. You’ll have a concrete before/after showing exactly how your AI visibility changed.',
                 },
               ].map(({ step, title, body }) => (
                 <div
@@ -425,7 +429,7 @@ export default function HomePage() {
         </section>
 
         {/* ── WHY NOW ───────────────────────────────────────────────── */}
-        <section className="py-24 px-4 md:px-8">
+        <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
               Your competitors are figuring this out right now
@@ -485,21 +489,17 @@ export default function HomePage() {
         </section>
 
         {/* ── PRICING ───────────────────────────────────────────────── */}
-        <section id="pricing" className="py-24 px-4 md:px-8">
+        <section id="pricing" className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-md mx-auto">
             <div className="relative rounded-2xl border border-accent/40 bg-white p-8 text-center shadow-card-accent overflow-hidden">
-              {/* Top accent line */}
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
-
               <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent mb-5 mt-1">
                 Found by AI — Complete Bundle
               </p>
-
               <div className="mb-1">
                 <span className="text-6xl font-black text-gradient tracking-tight">$27</span>
               </div>
               <p className="text-sm text-muted mb-8">One-time · No subscription · Instant download</p>
-
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
                   'The Complete AI Visibility Playbook',
@@ -515,7 +515,6 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-
               <Link href="/playbook">
                 <Button variant="primary" size="lg" className="w-full gap-2 shadow-glow-sm">
                   Get instant access — $27 <ArrowRight className="w-4 h-4" />
@@ -544,7 +543,7 @@ export default function HomePage() {
         </section>
 
         {/* ── FINAL CTA ─────────────────────────────────────────────── */}
-        <section className="py-24 px-4 md:px-8">
+        <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight text-balance">
               Stop being invisible to AI.
