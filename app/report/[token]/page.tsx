@@ -11,6 +11,10 @@ import { FIX_GUIDES, type FixGuide } from '@/lib/fixGuides'
 
 export const dynamic = 'force-dynamic'
 
+export const metadata = {
+  robots: { index: false, follow: false },
+}
+
 type Status = 'pass' | 'warn' | 'fail'
 interface Check {
   id: string
@@ -26,6 +30,10 @@ interface ScanRow {
   business_name: string | null
   checks: Check[]
   created_at: string
+}
+
+function safeHostname(url: string): string {
+  try { return new URL(url).hostname } catch { return url }
 }
 
 async function getReport(token: string): Promise<ScanRow | null> {
@@ -100,7 +108,6 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
 
   return (
     <div className={`rounded-2xl border overflow-hidden ${rowBg}`}>
-      {/* Header row */}
       <div className="flex items-center gap-3 px-5 py-4">
         <StatusIcon status={check.status} />
         <div className="flex-1">
@@ -114,7 +121,6 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
         </span>
       </div>
 
-      {/* Fix guide — only for non-passing checks */}
       {check.status !== 'pass' && guide && (
         <div className="border-t border-current/10 px-5 py-5 bg-white/60 flex flex-col gap-5">
           <div>
@@ -148,7 +154,6 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
         </div>
       )}
 
-      {/* Passing check — no guide needed */}
       {check.status === 'pass' && (
         <div className="border-t border-emerald-100 px-5 py-3 bg-white/40">
           <p className="text-xs text-emerald-700 flex items-center gap-1.5">
@@ -175,7 +180,7 @@ export default async function ReportPage({
   const warnChecks = scan.checks.filter(c => c.status === 'warn')
   const passChecks = scan.checks.filter(c => c.status === 'pass')
   const issueCount = failChecks.length + warnChecks.length
-  const hostname   = new URL(scan.url).hostname
+  const hostname   = safeHostname(scan.url)
 
   return (
     <main className="min-h-screen bg-background">
@@ -183,7 +188,6 @@ export default async function ReportPage({
 
       <div className="max-w-3xl mx-auto px-4 py-24">
 
-        {/* ── Hero header ── */}
         <div className="mb-10 text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6">
             <Lock className="w-3.5 h-3.5" />
@@ -208,7 +212,6 @@ export default async function ReportPage({
           </div>
         </div>
 
-        {/* ── Download ── */}
         <div className="mb-8 flex justify-center">
           <a
             href={`/api/report-download?token=${token}`}
@@ -220,7 +223,6 @@ export default async function ReportPage({
           </a>
         </div>
 
-        {/* ── How to use ── */}
         <div className="mb-10 p-5 rounded-xl bg-surface border border-border">
           <p className="text-xs font-bold uppercase tracking-wider text-accent mb-2">How to Use This Report</p>
           <p className="text-sm text-muted leading-relaxed">
@@ -228,7 +230,6 @@ export default async function ReportPage({
           </p>
         </div>
 
-        {/* ── Critical issues ── */}
         {failChecks.length > 0 && (
           <section className="mb-8">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -243,7 +244,6 @@ export default async function ReportPage({
           </section>
         )}
 
-        {/* ── Mid-page playbook upsell (shown after critical issues, before warnings) ── */}
         {failChecks.length > 0 && warnChecks.length > 0 && (
           <div className="my-8 p-6 rounded-2xl border border-accent/20 bg-accent/3 text-center">
             <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-1">While you&apos;re fixing things</p>
@@ -256,7 +256,6 @@ export default async function ReportPage({
           </div>
         )}
 
-        {/* ── Warnings ── */}
         {warnChecks.length > 0 && (
           <section className="mb-8">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -271,7 +270,6 @@ export default async function ReportPage({
           </section>
         )}
 
-        {/* ── Passing checks ── */}
         {passChecks.length > 0 && (
           <section className="mb-10">
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
@@ -286,7 +284,6 @@ export default async function ReportPage({
           </section>
         )}
 
-        {/* ── Bottom playbook upsell ── */}
         <div className="p-7 rounded-2xl border border-accent/30 bg-white shadow-card-accent text-center relative overflow-hidden">
           <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
           <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-3">Next step</p>

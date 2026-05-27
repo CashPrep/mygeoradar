@@ -23,6 +23,10 @@ interface ScanResult {
   scannedAt: string
 }
 
+function safeHostname(url: string): string {
+  try { return new URL(url).hostname } catch { return url }
+}
+
 function scoreLabel(s: number) {
   if (s >= 80) return { label: 'AI-Ready',         color: 'text-emerald-600', ring: 'stroke-emerald-500' }
   if (s >= 55) return { label: 'Partially Visible', color: 'text-amber-500',   ring: 'stroke-amber-400'  }
@@ -123,8 +127,8 @@ export function AiReadinessScan() {
     }
   }
 
-  const failCount = result?.checks.filter(c => c.status === 'fail').length ?? 0
-  const warnCount = result?.checks.filter(c => c.status === 'warn').length ?? 0
+  const failCount  = result?.checks.filter(c => c.status === 'fail').length ?? 0
+  const warnCount  = result?.checks.filter(c => c.status === 'warn').length ?? 0
   const issueCount = failCount + warnCount
 
   return (
@@ -165,7 +169,14 @@ export function AiReadinessScan() {
       {/* ── Progress ── */}
       {loading && (
         <div className="mt-4">
-          <div className="h-1.5 w-full bg-surface-2 rounded-full overflow-hidden">
+          <div
+            role="progressbar"
+            aria-valuenow={progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Scan progress"
+            className="h-1.5 w-full bg-surface-2 rounded-full overflow-hidden"
+          >
             <div className="h-full bg-accent rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
           </div>
           <p className="text-xs text-muted text-center mt-2 animate-pulse">
@@ -233,11 +244,11 @@ export function AiReadinessScan() {
             {issueCount > 0 && (
               <div
                 className="absolute inset-x-0 bottom-0 h-48 flex flex-col items-center justify-end pb-4"
-                style={{ background: 'linear-gradient(to bottom, transparent 0%, var(--color-background, white) 60%)' }}
+                style={{ background: 'linear-gradient(to bottom, transparent 0%, white 60%)' }}
               >
                 <div className="text-center px-4">
                   <p className="text-sm font-semibold mb-0.5">
-                    {issueCount} issue{issueCount !== 1 ? 's' : ''} found on <span className="font-mono">{new URL(result.url).hostname}</span>
+                    {issueCount} issue{issueCount !== 1 ? 's' : ''} found on <span className="font-mono">{safeHostname(result.url)}</span>
                   </p>
                   <p className="text-xs text-muted mb-3">
                     Get a step-by-step fix guide for each of your {issueCount} specific issue{issueCount !== 1 ? 's' : ''} — exactly what to do, in what order, with validation steps.

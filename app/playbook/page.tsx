@@ -1,8 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 import Script from 'next/script'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
+import { CheckoutButton } from '@/components/playbook/CheckoutButton'
 import {
   CheckCircle, BookOpen, FileText, Zap, Shield,
   ArrowRight, Star, Eye, Clock, AlertTriangle
@@ -145,7 +145,6 @@ export default function PlaybookPage() {
           <div className="absolute inset-0 hero-bg opacity-70 pointer-events-none" aria-hidden="true" />
           <div className="relative max-w-3xl mx-auto">
 
-            {/* Single hero badge only */}
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/8 border border-accent/20 text-accent text-xs font-medium mb-8">
               <Star className="w-3 h-3 fill-accent" />
               Digital product — instant download after payment
@@ -162,7 +161,6 @@ export default function PlaybookPage() {
               10 copy-paste prompts, and a 30-day action plan. One time, $27.
             </p>
 
-            {/* Early-mover note */}
             <div className="flex items-start gap-3 mb-4 px-4 py-4 rounded-xl bg-amber-50 border border-amber-200 max-w-xl mx-auto text-left">
               <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-amber-800">
@@ -175,14 +173,7 @@ export default function PlaybookPage() {
               business, market, and implementation effort. No specific outcome is guaranteed.
             </p>
 
-            <form action="/api/checkout" method="POST">
-              <button
-                type="submit"
-                className="btn-primary text-base px-8 py-3.5 rounded-xl shadow-glow-sm"
-              >
-                Get instant access — $27 <ArrowRight className="w-5 h-5" />
-              </button>
-            </form>
+            <CheckoutButton />
             <p className="text-xs text-muted mt-4">
               One-time payment · Instant PDF download · 30-day money-back guarantee
             </p>
@@ -324,14 +315,7 @@ export default function PlaybookPage() {
             </div>
 
             <div className="text-center mt-10">
-              <form action="/api/checkout" method="POST">
-                <button
-                  type="submit"
-                  className="btn-primary text-base px-8 py-3.5 rounded-xl shadow-glow-sm"
-                >
-                  Get the full bundle — $27 <ArrowRight className="w-5 h-5" />
-                </button>
-              </form>
+              <CheckoutButton label="Get the full bundle — $27" />
               <p className="text-xs text-muted mt-3">
                 Instant download · 30-day money-back guarantee
               </p>
@@ -339,7 +323,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ── HOW IT WORKS / WHAT TO EXPECT ─────────────────────────── */}
+        {/* ── HOW IT WORKS ─────────────────────────────────────────── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-14">
@@ -356,7 +340,7 @@ export default function PlaybookPage() {
                 {
                   step: '01',
                   heading: 'Run the prompt pack — see the truth in 10 minutes',
-                  body: 'Paste the 10 included prompts into ChatGPT, Perplexity, Gemini, and Claude. You will know exactly whether your business appears, how it’s described, and where the gaps are.',
+                  body: 'Paste the 10 included prompts into ChatGPT, Perplexity, Gemini, and Claude. You will know exactly whether your business appears, how it\u2019s described, and where the gaps are.',
                 },
                 {
                   step: '02',
@@ -366,7 +350,7 @@ export default function PlaybookPage() {
                 {
                   step: '03',
                   heading: 'Follow the 30-day plan — one task per day',
-                  body: 'A structured day-by-day calendar for your first 30 days. Each task takes 30–90 minutes and is designed to fit around running a business, not replace it.',
+                  body: 'A structured day-by-day calendar for your first 30 days. Each task takes 30\u201390 minutes and is designed to fit around running a business, not replace it.',
                 },
                 {
                   step: '04',
@@ -428,7 +412,7 @@ export default function PlaybookPage() {
                 {
                   icon: Shield,
                   heading: '$27 vs. $2,000+/month',
-                  body: 'Based on publicly available agency pricing as of 2026, specialist firms charge $2,000–5,000/month for this work. This is a flat $27.',
+                  body: 'Based on publicly available agency pricing as of 2026, specialist firms charge $2,000\u20135,000/month for this work. This is a flat $27.',
                 },
               ].map(({ icon: Icon, heading, body }) => (
                 <div
@@ -477,7 +461,6 @@ export default function PlaybookPage() {
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-md mx-auto">
             <div className="relative rounded-2xl border border-accent/40 bg-white p-8 text-center shadow-card-accent overflow-hidden">
-              {/* Top accent bar */}
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
 
               <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent mb-5 mt-1">
@@ -507,14 +490,7 @@ export default function PlaybookPage() {
                 ))}
               </ul>
 
-              <form action="/api/checkout" method="POST">
-                <button
-                  type="submit"
-                  className="btn-primary w-full text-base px-6 py-3.5 rounded-xl shadow-glow-sm"
-                >
-                  Get instant access — $27 <ArrowRight className="w-4 h-4" />
-                </button>
-              </form>
+              <CheckoutButton className="btn-primary w-full text-base px-6 py-3.5 rounded-xl shadow-glow-sm" />
               <p className="text-xs text-muted mt-4">
                 Secure checkout via Stripe · PDF delivered instantly
               </p>
@@ -548,14 +524,7 @@ export default function PlaybookPage() {
               competitors. One-time. Instant download. Everything you need to get found by AI before
               the businesses around you figure out this game exists.
             </p>
-            <form action="/api/checkout" method="POST">
-              <button
-                type="submit"
-                className="btn-primary text-base px-8 py-3.5 rounded-xl shadow-glow-sm"
-              >
-                Get the Found by AI Playbook — $27 <ArrowRight className="w-5 h-5" />
-              </button>
-            </form>
+            <CheckoutButton label="Get the Found by AI Playbook — $27" />
             <p className="text-xs text-muted mt-4">
               30-day money-back guarantee · Instant download · No subscription
             </p>
