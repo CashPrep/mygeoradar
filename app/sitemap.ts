@@ -1,24 +1,7 @@
 import { MetadataRoute } from 'next'
+import { BLOG_POSTS } from '@/lib/blog-posts'
 
 const BASE = 'https://mygeoradar.com'
-
-const BLOG_POSTS = [
-  { slug: 'what-is-geo',                      lastMod: '2026-05-10' },
-  { slug: 'ai-search-guide',                  lastMod: '2026-05-12' },
-  { slug: 'ai-search-zero-click',             lastMod: '2026-05-12' },
-  { slug: 'geo-score-benchmarks',             lastMod: '2026-05-13' },
-  { slug: 'geo-before-launch',                lastMod: '2026-05-09' },
-  { slug: 'ai-hallucination-fix',             lastMod: '2026-05-05' },
-  { slug: 'multi-location-geo',               lastMod: '2026-05-07' },
-  { slug: 'geo-vs-seo',                       lastMod: '2026-05-20' },
-  { slug: 'does-my-business-need-geo',        lastMod: '2026-05-21' },
-  { slug: 'how-long-does-geo-take',           lastMod: '2026-05-22' },
-  { slug: 'google-business-profile-geo',      lastMod: '2026-05-23' },
-  { slug: 'schema-markup-for-geo',            lastMod: '2026-05-23' },
-  { slug: 'geo-for-saas',                     lastMod: '2026-05-23' },
-  { slug: 'ai-search-vs-google-search',       lastMod: '2026-05-23' },
-  { slug: 'perplexity-vs-chatgpt-visibility', lastMod: '2026-05-23' },
-]
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const corePages: MetadataRoute.Sitemap = [
