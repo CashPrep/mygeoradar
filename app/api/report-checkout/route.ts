@@ -16,6 +16,10 @@ function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-02-24.acacia' })
 }
 
+function safeHostname(url: string): string {
+  try { return new URL(url).hostname } catch { return url.slice(0, 50) }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { scanId } = await req.json()
@@ -44,10 +48,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ url: `${baseUrl}/report/${existing.token}` })
     }
 
-    const stripe = getStripe()
+    const stripe  = getStripe()
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://mygeoradar.com'
+    const hostname = safeHostname(scan.url)
 
-    // Count issues so product name is specific
     const checks = (scan.checks ?? []) as Array<{ status: string }>
     const issueCount = checks.filter(c => c.status === 'fail' || c.status === 'warn').length
     const issueLabel = issueCount > 0
@@ -63,7 +67,7 @@ export async function POST(req: NextRequest) {
             currency: 'usd',
             unit_amount: 999,
             product_data: {
-              name: `AI Visibility Fix Guides — ${issueLabel} for ${new URL(scan.url).hostname}`,
+              name: `AI Visibility Fix Guides — ${issueLabel} for ${hostname}`,
               description: `Step-by-step fix guide for each of the ${issueLabel} on your site. Score: ${scan.score}/100.`,
               images: ['https://mygeoradar.com/og-image.png'],
             },
