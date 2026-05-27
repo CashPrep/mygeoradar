@@ -205,17 +205,18 @@ export function AiReadinessScan() {
       {result && (
         <div className="flex flex-col gap-5">
 
-          {/* ── Scan-again bar — prominent, always visible at top ── */}
+          {/* Scan-again bar */}
           <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-surface border border-border">
             <p className="text-sm text-muted">
-              Showing results for <span className="font-mono font-medium text-foreground">{safeHostname(result.url)}</span>
+              Results for{' '}
+              <span className="font-mono font-medium text-foreground">{safeHostname(result.url)}</span>
             </p>
             <button
               onClick={reset}
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent/80 transition-colors flex-shrink-0"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              Scan a different site
+              Scan another site
             </button>
           </div>
 
@@ -232,9 +233,18 @@ export function AiReadinessScan() {
                   : 'AI crawlers are likely struggling to read your site.'}
               </h3>
               <p className="text-sm text-muted">
-                {failCount > 0 && <span className="text-red-600 font-semibold">{failCount} critical issue{failCount > 1 ? 's' : ''}{warnCount > 0 ? ' &middot; ' : ''}</span>}
-                {warnCount > 0 && <span className="text-amber-500 font-semibold">{warnCount} warning{warnCount > 1 ? 's' : ''}{' '}</span>}
-                {failCount === 0 && warnCount === 0 && 'All checks passed. '}
+                {failCount > 0 && (
+                  <span className="text-red-600 font-semibold">
+                    {failCount} critical issue{failCount > 1 ? 's' : ''}
+                    {warnCount > 0 ? ' · ' : ''}
+                  </span>
+                )}
+                {warnCount > 0 && (
+                  <span className="text-amber-500 font-semibold">
+                    {warnCount} warning{warnCount > 1 ? 's' : ''}
+                  </span>
+                )}
+                {failCount === 0 && warnCount === 0 && 'All checks passed.'}
               </p>
             </div>
           </div>
@@ -245,46 +255,50 @@ export function AiReadinessScan() {
               {result.checks.map(c => (
                 <div
                   key={c.id}
-                  className={clsx('rounded-lg border flex items-center gap-3 px-4 py-3', statusBg(c.status))}
+                  className={clsx(
+                    'rounded-lg border flex items-center gap-3 px-4 py-3',
+                    statusBg(c.status),
+                  )}
                 >
                   {statusIcon(c.status)}
                   <span className="flex-1 text-sm font-medium text-foreground">{c.label}</span>
                   <span className={clsx(
-                    'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded',
-                    c.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500'
+                    'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded flex-shrink-0',
+                    c.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500',
                   )}>
                     {c.impact}
                   </span>
-                  {c.status !== 'pass' && (
-                    <Lock className="w-3.5 h-3.5 text-muted/40 flex-shrink-0" />
-                  )}
                 </div>
               ))}
             </div>
 
-            {/* Blur + unlock overlay */}
+            {/* Blur + unlock CTA — sits below the list, not overlapping it */}
             {issueCount > 0 && (
-              <div
-                className="absolute inset-x-0 bottom-0 h-48 flex flex-col items-center justify-end pb-4"
-                style={{ background: 'linear-gradient(to bottom, transparent 0%, white 60%)' }}
-              >
-                <div className="text-center px-4">
-                  <p className="text-sm font-semibold mb-0.5">
-                    {issueCount} issue{issueCount !== 1 ? 's' : ''} found on <span className="font-mono">{safeHostname(result.url)}</span>
+              <div className="mt-4 rounded-xl border border-accent/25 bg-white shadow-card-accent overflow-hidden">
+                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent" />
+                <div className="p-5 text-center">
+                  <div className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-accent/8 border border-accent/15 mb-3">
+                    <Lock className="w-4 h-4 text-accent" />
+                  </div>
+                  <p className="text-sm font-semibold mb-1">
+                    {issueCount} issue{issueCount !== 1 ? 's' : ''} found on{' '}
+                    <span className="font-mono">{safeHostname(result.url)}</span>
                   </p>
-                  <p className="text-xs text-muted mb-3">
+                  <p className="text-xs text-muted mb-4 max-w-xs mx-auto">
                     Get a step-by-step fix guide for each issue &mdash; exactly what to do, in what order, with validation steps.
                   </p>
                   <button
                     onClick={unlockReport}
                     disabled={paying}
-                    className="btn-primary gap-2 text-sm px-6 py-3"
+                    className="btn-primary gap-2 text-sm px-6 py-2.5"
                   >
                     {paying
                       ? <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting&hellip;</>
-                      : <><Lock className="w-4 h-4" /> Get My {issueCount} Fix Guide{issueCount !== 1 ? 's' : ''} &mdash; $9.99</>}
+                      : <>Get My {issueCount} Fix Guide{issueCount !== 1 ? 's' : ''} &mdash; $9.99 <ArrowRight className="w-4 h-4" /></>}
                   </button>
-                  <p className="text-xs text-muted/60 mt-2">One-time &middot; Instant access &middot; Only the fixes your site needs</p>
+                  <p className="text-xs text-muted/60 mt-2.5">
+                    One-time &middot; Instant access &middot; Only the fixes your site needs
+                  </p>
                 </div>
               </div>
             )}
