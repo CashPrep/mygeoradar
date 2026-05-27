@@ -40,17 +40,24 @@ const config: Config = {
       },
       boxShadow: {
         'xs':          '0 1px 2px rgba(0,0,0,0.05)',
+        'sm':          '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04)',
+        'glow-xs':     '0 0 12px #6d28d910',
         'glow-sm':     '0 0 20px #6d28d912',
         'glow-md':     '0 0 40px #6d28d920',
         'glow-lg':     '0 0 80px #6d28d918',
         'glow-xl':     '0 0 120px #6d28d922',
-        'card-hover':  '0 0 0 1px #c4c4cc, 0 8px 32px rgba(0,0,0,0.08)',
+        'card-hover':  '0 0 0 1px #c4c4cc, 0 8px 32px rgba(0,0,0,0.07)',
         'card-accent': '0 0 0 1px #6d28d930, 0 8px 32px rgba(109,40,217,0.10)',
+        'card-lift':   '0 4px 16px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04)',
       },
       borderRadius: {
         '2xl': '1rem',
         '3xl': '1.5rem',
         '4xl': '2rem',
+      },
+      letterSpacing: {
+        tighter: '-0.03em',
+        tight:   '-0.02em',
       },
       keyframes: {
         fadeUp: {

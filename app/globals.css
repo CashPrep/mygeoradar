@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -11,108 +11,138 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
   }
 
   body {
     background-color: #ffffff;
     color: #09090b;
+    /* Prevent layout shift from scrollbar */
+    scrollbar-gutter: stable;
   }
 
-  ::-webkit-scrollbar { width: 5px; }
+  /* Thin, elegant scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
   ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: #c4c4cc; border-radius: 4px; transition: background 0.2s; }
+  ::-webkit-scrollbar-thumb { background: #d4d4d8; border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: #6d28d9; }
-  ::selection { background: #6d28d930; color: #09090b; }
+
+  /* Selection */
+  ::selection { background: #6d28d922; color: #09090b; }
+
+  /* Smooth focus ring — only on keyboard nav */
+  :focus-visible {
+    outline: 2px solid #6d28d9;
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
 }
 
 @layer components {
 
-  /* Subtle noise texture overlay */
+  /* ── Backgrounds ────────────────────────────────── */
+
+  /* Subtle noise texture */
   .bg-noise {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.018'/%3E%3C/svg%3E");
     background-repeat: repeat;
     background-size: 128px 128px;
   }
 
-  /* Very faint grid */
+  /* Faint dot grid — cleaner than lines */
   .bg-grid {
-    background-image:
-      linear-gradient(#e4e4e7 1px, transparent 1px),
-      linear-gradient(90deg, #e4e4e7 1px, transparent 1px);
-    background-size: 48px 48px;
-    opacity: 0.5;
+    background-image: radial-gradient(circle, #d4d4d8 1px, transparent 1px);
+    background-size: 28px 28px;
   }
 
-  /* Top radial glow — purple tint */
+  /* Top radial glow */
   .glow-top {
-    background: radial-gradient(ellipse 80% 50% at 50% -5%, #6d28d918, transparent 70%);
+    background: radial-gradient(ellipse 80% 50% at 50% -5%, #6d28d914, transparent 70%);
   }
 
-  /* Bottom fade for sections */
-  .glow-bottom {
-    background: radial-gradient(ellipse 60% 40% at 50% 110%, #6d28d908, transparent 70%);
-  }
-
-  /* Hero combined background */
+  /* Hero combined background — dot grid + top glow */
   .hero-bg {
     background:
-      radial-gradient(ellipse 80% 50% at 50% -5%, #6d28d918, transparent 70%),
-      linear-gradient(#e4e4e740 1px, transparent 1px),
-      linear-gradient(90deg, #e4e4e740 1px, transparent 1px);
-    background-size: auto, 48px 48px, 48px 48px;
+      radial-gradient(ellipse 80% 55% at 50% -10%, #6d28d914, transparent 65%),
+      radial-gradient(circle, #d4d4d840 1px, transparent 1px);
+    background-size: auto, 28px 28px;
   }
 
-  /* Glass card */
+  /* ── Cards ──────────────────────────────────────── */
+
   .glass {
     @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-sm;
   }
 
-  /* Cards */
   .card {
     @apply bg-surface border border-border rounded-xl;
   }
+
+  /* Hover lift — subtle translate + border brightens */
   .card-hover {
-    @apply card transition-all duration-200 hover:border-accent/40 hover:shadow-card-hover hover:-translate-y-0.5;
+    @apply card transition-all duration-200
+           hover:border-accent/35 hover:shadow-card-hover hover:-translate-y-px;
   }
 
-  /* Badges */
+  /* ── Badges ─────────────────────────────────────── */
+
+  /* Use sparingly — hero and 1-2 key sections only */
   .badge {
     @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
   }
+  .badge-accent {
+    @apply badge bg-accent/8 border border-accent/20 text-accent;
+  }
 
-  /* Buttons */
+  /* ── Buttons ────────────────────────────────────── */
+
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-hover
-           text-white font-semibold px-5 py-2.5 rounded-lg transition-all duration-150
+    @apply inline-flex items-center justify-center gap-2
+           bg-accent hover:bg-accent-hover text-white font-semibold
+           px-5 py-2.5 rounded-lg transition-all duration-150
            shadow-glow-sm hover:shadow-glow-md active:scale-[0.98]
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2
+           focus-visible:outline-none focus-visible:ring-2
+           focus-visible:ring-accent focus-visible:ring-offset-2
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
+
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 bg-surface-2 hover:bg-border
-           text-foreground font-medium border border-border hover:border-accent/40
-           px-5 py-2.5 rounded-lg transition-all duration-150 active:scale-[0.98]
-           focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2;
+    @apply inline-flex items-center justify-center gap-2
+           bg-surface-2 hover:bg-surface-3 text-foreground font-medium
+           border border-border hover:border-accent/40
+           px-5 py-2.5 rounded-lg transition-all duration-150
+           active:scale-[0.98]
+           focus-visible:outline-none focus-visible:ring-2
+           focus-visible:ring-accent focus-visible:ring-offset-2;
   }
 
-  /* Input */
+  /* ── Inputs ─────────────────────────────────────── */
+
   .input,
   .input-base {
-    @apply w-full bg-surface-2 border border-border rounded-lg px-4 py-3
+    @apply w-full bg-white border border-border rounded-lg px-4 py-3
            text-foreground placeholder:text-muted text-sm
-           focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent
-           transition-all duration-150 hover:border-accent/40;
+           focus:outline-none focus:ring-2 focus:ring-accent/25 focus:border-accent
+           transition-all duration-150 hover:border-accent/40
+           shadow-xs;
   }
 
-  /* Section */
+  /* ── Sections ───────────────────────────────────── */
+
   .section {
-    @apply py-20 px-4 md:px-8 max-w-6xl mx-auto;
+    @apply py-24 px-4 md:px-8 max-w-6xl mx-auto;
   }
 
-  /* Shimmer skeleton */
+  /* Clean horizontal rule with fade */
+  .divider {
+    @apply w-full h-px bg-gradient-to-r from-transparent via-border to-transparent;
+  }
+
+  /* ── Skeleton shimmer ───────────────────────────── */
+
   .shimmer {
-    background: linear-gradient(90deg, #f3f3f7 25%, #e9e9ef 50%, #f3f3f7 75%);
+    background: linear-gradient(90deg, #f4f4f8 25%, #eaeaf0 50%, #f4f4f8 75%);
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
   }
@@ -122,29 +152,62 @@
     100% { background-position: -200% 0; }
   }
 
-  /* Divider line with fade */
-  .divider {
-    @apply w-full h-px bg-gradient-to-r from-transparent via-border to-transparent;
+  /* ── Step numbers ───────────────────────────────── */
+
+  /* Large decorative step number used in How-It-Works etc */
+  .step-num {
+    @apply text-5xl font-black leading-none tabular-nums;
+    color: transparent;
+    -webkit-text-stroke: 1.5px #6d28d930;
   }
 }
 
 @layer utilities {
+
+  /* ── Text gradients ─────────────────────────────── */
+
+  /* Dark → purple (used on $27 price + final headline) */
   .text-gradient {
     background: linear-gradient(135deg, #09090b 0%, #6d28d9 60%, #7c3aed 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* Dark → faint purple (hero h1 default) */
   .text-gradient-subtle {
-    background: linear-gradient(135deg, #09090b 70%, #6d28d9 100%);
+    background: linear-gradient(135deg, #09090b 60%, #6d28d9 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-  .text-gradient-vivid {
+
+  /* Pure purple (accent spans in hero) */
+  .text-gradient-accent {
     background: linear-gradient(135deg, #6d28d9 0%, #7c3aed 50%, #a78bfa 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* Vivid purple (used sparingly) */
+  .text-gradient-vivid {
+    background: linear-gradient(135deg, #5b21b6 0%, #7c3aed 50%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ── Spacing helpers ────────────────────────────── */
+
+  /* Consistent section inner container widths */
+  .container-sm  { @apply max-w-2xl  mx-auto px-4 md:px-6; }
+  .container-md  { @apply max-w-3xl  mx-auto px-4 md:px-6; }
+  .container-lg  { @apply max-w-5xl  mx-auto px-4 md:px-8; }
+  .container-xl  { @apply max-w-6xl  mx-auto px-4 md:px-8; }
+
+  /* ── Balance text ───────────────────────────────── */
+
+  .text-balance { text-wrap: balance; }
+  .text-pretty  { text-wrap: pretty; }
 }
