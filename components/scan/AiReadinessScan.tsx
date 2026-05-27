@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight, CheckCircle, AlertTriangle, XCircle,
-  Loader2, Radar, Lock, ExternalLink,
+  Loader2, Radar, Lock, ExternalLink, RotateCcw,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 
@@ -78,6 +78,14 @@ export function AiReadinessScan() {
   const [result,   setResult]   = useState<ScanResult | null>(null)
   const [error,    setError]    = useState('')
   const [paying,   setPaying]   = useState(false)
+
+  function reset() {
+    setResult(null)
+    setProgress(0)
+    setError('')
+    setUrl('')
+    setBizName('')
+  }
 
   async function runScan(e: React.FormEvent) {
     e.preventDefault()
@@ -197,6 +205,20 @@ export function AiReadinessScan() {
       {result && (
         <div className="flex flex-col gap-5">
 
+          {/* ── Scan-again bar — prominent, always visible at top ── */}
+          <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-surface border border-border">
+            <p className="text-sm text-muted">
+              Showing results for <span className="font-mono font-medium text-foreground">{safeHostname(result.url)}</span>
+            </p>
+            <button
+              onClick={reset}
+              className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent/80 transition-colors flex-shrink-0"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Scan a different site
+            </button>
+          </div>
+
           {/* Score header */}
           <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-surface border border-border shadow-card-hover">
             <ScoreRing score={result.score} />
@@ -210,7 +232,7 @@ export function AiReadinessScan() {
                   : 'AI crawlers are likely struggling to read your site.'}
               </h3>
               <p className="text-sm text-muted">
-                {failCount > 0 && <span className="text-red-600 font-semibold">{failCount} critical issue{failCount > 1 ? 's' : ''}{warnCount > 0 ? ' · ' : ''}</span>}
+                {failCount > 0 && <span className="text-red-600 font-semibold">{failCount} critical issue{failCount > 1 ? 's' : ''}{warnCount > 0 ? ' &middot; ' : ''}</span>}
                 {warnCount > 0 && <span className="text-amber-500 font-semibold">{warnCount} warning{warnCount > 1 ? 's' : ''}{' '}</span>}
                 {failCount === 0 && warnCount === 0 && 'All checks passed. '}
               </p>
@@ -240,7 +262,7 @@ export function AiReadinessScan() {
               ))}
             </div>
 
-            {/* Blur + unlock overlay — only when there are issues */}
+            {/* Blur + unlock overlay */}
             {issueCount > 0 && (
               <div
                 className="absolute inset-x-0 bottom-0 h-48 flex flex-col items-center justify-end pb-4"
@@ -251,7 +273,7 @@ export function AiReadinessScan() {
                     {issueCount} issue{issueCount !== 1 ? 's' : ''} found on <span className="font-mono">{safeHostname(result.url)}</span>
                   </p>
                   <p className="text-xs text-muted mb-3">
-                    Get a step-by-step fix guide for each of your {issueCount} specific issue{issueCount !== 1 ? 's' : ''} — exactly what to do, in what order, with validation steps.
+                    Get a step-by-step fix guide for each issue &mdash; exactly what to do, in what order, with validation steps.
                   </p>
                   <button
                     onClick={unlockReport}
@@ -268,14 +290,14 @@ export function AiReadinessScan() {
             )}
           </div>
 
-          {/* All passing — no paywall, upsell playbook */}
+          {/* All passing — upsell playbook */}
           {failCount === 0 && warnCount === 0 && (
             <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
               <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
               <p className="text-sm font-semibold text-emerald-800 mb-1">Your site&apos;s technical foundation is solid.</p>
               <p className="text-xs text-emerald-700 mb-4 max-w-md mx-auto">
                 Technical structure is only one layer. The playbook covers citation building,
-                content authority, review signals, and ongoing monitoring —
+                content authority, review signals, and ongoing monitoring &mdash;
                 the things that actually make AI recommend you over competitors.
               </p>
               <Link
@@ -286,14 +308,6 @@ export function AiReadinessScan() {
               </Link>
             </div>
           )}
-
-          {/* Scan again */}
-          <button
-            onClick={() => { setResult(null); setProgress(0); setError('') }}
-            className="text-xs text-muted hover:text-accent transition-colors text-center"
-          >
-            &larr; Scan a different site
-          </button>
         </div>
       )}
     </div>

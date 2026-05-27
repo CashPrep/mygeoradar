@@ -4,12 +4,12 @@ import Link from 'next/link'
 import Stripe from 'stripe'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import { CheckCircle, Lock, ArrowRight, Mail } from 'lucide-react'
+import { CheckCircle, ArrowRight, Mail, Download } from 'lucide-react'
 import { createSupabaseServer } from '@/lib/supabase-server'
 
 export const metadata: Metadata = {
   title: 'Purchase Complete — Found by AI Playbook | MyGeoRadar',
-  description: 'Your purchase is confirmed. Sign in to download the Found by AI Playbook.',
+  description: 'Your purchase is confirmed. Download the Found by AI Playbook.',
   robots: { index: false, follow: false },
 }
 
@@ -35,6 +35,7 @@ export default async function SuccessPage({
     redirect('/playbook')
   }
 
+  // Check if already authed — lets us show the direct download button
   const supabase = await createSupabaseServer()
   const { data: { user } } = await supabase.auth.getUser()
 
@@ -67,6 +68,7 @@ export default async function SuccessPage({
           </p>
 
           {user && hasPurchase ? (
+            /* ── Already signed in: direct download ── */
             <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left">
               <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-accent" /> You&apos;re all set
@@ -79,36 +81,57 @@ export default async function SuccessPage({
                 href="/account"
                 className="inline-flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent/90 text-white font-semibold px-6 py-4 rounded-xl text-base transition-colors"
               >
-                Go to My Downloads <ArrowRight className="w-4 h-4" />
+                <Download className="w-4 h-4" /> Go to My Downloads <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           ) : (
-            <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left">
-              <div className="flex items-start gap-3 mb-6">
-                <Lock className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+            /* ── Not signed in: show download options without forcing magic-link wall ── */
+            <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left flex flex-col gap-5">
+
+              {/* Primary: direct account link */}
+              <div>
+                <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
+                  <Download className="w-5 h-5 text-accent" /> Access your downloads
+                </h2>
+                <p className="text-sm text-muted leading-relaxed mb-4">
+                  Your files are waiting at your account page. Sign in with{' '}
+                  {customerEmail
+                    ? <strong className="text-foreground">{customerEmail}</strong>
+                    : <>the email you used at checkout</>}{' '}
+                  — we&apos;ll send a one-click magic link, no password needed.
+                </p>
+                <Link
+                  href={`/login?next=/account&hint=${encodeURIComponent(customerEmail ?? '')}`}
+                  className="inline-flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent/90 text-white font-semibold px-6 py-4 rounded-xl text-base transition-colors"
+                >
+                  <ArrowRight className="w-4 h-4" /> Sign in &amp; download now
+                </Link>
+              </div>
+
+              {/* Divider */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px bg-border" />
+                <span className="text-xs text-muted">or</span>
+                <div className="flex-1 h-px bg-border" />
+              </div>
+
+              {/* Secondary: email fallback */}
+              <div className="flex items-start gap-3 p-4 rounded-xl bg-surface-2 border border-border">
+                <Mail className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                 <div>
-                  <h2 className="text-lg font-semibold mb-1">One step to unlock your downloads</h2>
+                  <p className="text-sm font-semibold mb-1">Check your email</p>
                   <p className="text-sm text-muted leading-relaxed">
-                    Sign in with{' '}
-                    {customerEmail ? (
-                      <strong className="text-foreground">{customerEmail}</strong>
-                    ) : (
-                      <>the email you used at checkout</>
-                    )}{' '}
-                    to access your files. We&apos;ll send you a magic link — no password needed.
+                    A confirmation email with your download link was sent to{' '}
+                    {customerEmail
+                      ? <strong className="text-foreground">{customerEmail}</strong>
+                      : <>your checkout email</>}.
+                    Check your spam folder if you don&apos;t see it within a minute.
                   </p>
                 </div>
               </div>
 
-              <Link
-                href={`/login?next=/account&hint=${encodeURIComponent(customerEmail ?? '')}`}
-                className="inline-flex items-center justify-center gap-2 w-full bg-accent hover:bg-accent/90 text-white font-semibold px-6 py-4 rounded-xl text-base transition-colors mb-4"
-              >
-                <Mail className="w-4 h-4" /> Sign in to get your downloads
-              </Link>
-
               <p className="text-xs text-muted text-center">
-                Your purchase is saved. You can sign in any time at{' '}
+                Your purchase is saved permanently. Sign in any time at{' '}
                 <Link href="/account" className="text-accent hover:underline">mygeoradar.com/account</Link>.
               </p>
             </div>

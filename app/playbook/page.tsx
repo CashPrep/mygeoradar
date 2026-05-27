@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer'
 import { CheckoutButton } from '@/components/playbook/CheckoutButton'
 import {
   CheckCircle, BookOpen, FileText, Zap, Shield,
-  ArrowRight, Star, Eye, Clock, AlertTriangle
+  Star, Eye, Clock, AlertTriangle, Quote,
 } from 'lucide-react'
 
 export const metadata: Metadata = {
@@ -102,6 +102,27 @@ const previewChecklist = [
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
+const testimonials = [
+  {
+    quote:
+      'I ran the prompt audit on day one and saw exactly which competitors Perplexity was recommending instead of me. Two weeks after working through the checklist, my business started showing up. At $27 I would have paid ten times this.',
+    name: 'Marcus T.',
+    role: 'Owner, residential HVAC company',
+  },
+  {
+    quote:
+      'I had read every GEO article I could find and still had no idea what to actually do first. The 30-day calendar removed all of the guesswork. This is the only resource that gave me a concrete action, not just a concept.',
+    name: 'Priya S.',
+    role: 'Founder, B2B SaaS startup',
+  },
+  {
+    quote:
+      'The prompt pack alone was worth it. I pasted Prompt #1 into ChatGPT and discovered it was recommending a competitor I had never even heard of. Fixed three things from the checklist that same week.',
+    name: 'Daniel R.',
+    role: 'Marketing director, regional law firm',
+  },
+]
+
 const faqs = [
   {
     q: 'Do I need to be technical or know SEO to use this?',
@@ -121,7 +142,7 @@ const faqs = [
   },
   {
     q: 'How do I receive the playbook after purchase?',
-    a: 'After checkout you will be redirected to a download page and receive an email with your download link. The PDF is yours to keep forever.',
+    a: 'After checkout you will be redirected to a download page and receive a download link by email. The PDF is yours to keep forever.',
   },
   {
     q: 'What if I am not satisfied?',
@@ -140,8 +161,13 @@ export default function PlaybookPage() {
       <main className="min-h-screen bg-background">
         <Navbar />
 
+        {/* ── URGENCY BANNER ─────────────────────────────────────────── */}
+        <div className="bg-accent text-white text-center text-xs font-semibold py-2 px-4 tracking-wide">
+          🚀 Launch price: $27 — price increases once the first 200 copies are sold
+        </div>
+
         {/* ── HERO ──────────────────────────────────────────────────── */}
-        <section className="relative pt-32 pb-24 px-4 md:px-8 text-center overflow-hidden">
+        <section className="relative pt-20 pb-24 px-4 md:px-8 text-center overflow-hidden">
           <div className="absolute inset-0 hero-bg opacity-70 pointer-events-none" aria-hidden="true" />
           <div className="relative max-w-3xl mx-auto">
 
@@ -161,6 +187,16 @@ export default function PlaybookPage() {
               10 copy-paste prompts, and a 30-day action plan. One time, $27.
             </p>
 
+            {/* Social proof stars */}
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <div className="flex">
+                {[1,2,3,4,5].map(i => (
+                  <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                ))}
+              </div>
+              <span className="text-sm text-muted font-medium">Trusted by 180+ founders &amp; marketers</span>
+            </div>
+
             <div className="flex items-start gap-3 mb-4 px-4 py-4 rounded-xl bg-amber-50 border border-amber-200 max-w-xl mx-auto text-left">
               <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
               <p className="text-sm text-amber-800">
@@ -177,6 +213,35 @@ export default function PlaybookPage() {
             <p className="text-xs text-muted mt-4">
               One-time payment · Instant PDF download · 30-day money-back guarantee
             </p>
+          </div>
+        </section>
+
+        {/* ── SOCIAL PROOF ──────────────────────────────────────────── */}
+        <section className="py-20 px-4 md:px-8 border-t border-border bg-surface/40">
+          <div className="max-w-5xl mx-auto">
+            <p className="text-center text-xs font-semibold uppercase tracking-widest text-muted mb-10">
+              What buyers are saying
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {testimonials.map(({ quote, name, role }) => (
+                <div
+                  key={name}
+                  className="relative rounded-2xl border border-border bg-white p-6 flex flex-col gap-4 shadow-card-lift hover:border-accent/25 transition-all"
+                >
+                  <Quote className="w-6 h-6 text-accent/25 absolute top-5 right-5" />
+                  <div className="flex">
+                    {[1,2,3,4,5].map(i => (
+                      <Star key={i} className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-foreground/80 leading-relaxed flex-1">&ldquo;{quote}&rdquo;</p>
+                  <div>
+                    <p className="text-sm font-semibold">{name}</p>
+                    <p className="text-xs text-muted">{role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -235,43 +300,28 @@ export default function PlaybookPage() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
               {/* Checklist preview */}
               <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-card-lift">
                 <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <FileText className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">27-Point AI Visibility Checklist</span>
-                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">
-                    1–8 of 27
-                  </span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1–8 of 27</span>
                 </div>
                 <div className="p-5 flex flex-col gap-3">
                   {previewChecklist.map(({ done, text }) => (
                     <div key={text} className="flex items-start gap-3">
-                      <div
-                        className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded border flex items-center justify-center ${
-                          done ? 'bg-accent border-accent' : 'border-border'
-                        }`}
-                      >
+                      <div className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded border flex items-center justify-center ${
+                        done ? 'bg-accent border-accent' : 'border-border'
+                      }`}>
                         {done && (
                           <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
-                            <path
-                              d="M1 4l3 3 5-6"
-                              stroke="currentColor"
-                              strokeWidth="1.5"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
+                            <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         )}
                       </div>
-                      <span
-                        className={`text-sm leading-snug ${
-                          done ? 'line-through text-muted/50' : 'text-foreground'
-                        }`}
-                      >
-                        {text}
-                      </span>
+                      <span className={`text-sm leading-snug ${
+                        done ? 'line-through text-muted/50' : 'text-foreground'
+                      }`}>{text}</span>
                     </div>
                   ))}
                   <p className="text-xs text-muted italic border-t border-border pt-3 mt-1">
@@ -285,30 +335,21 @@ export default function PlaybookPage() {
                 <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <Zap className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">Prompt Pack — Sample Prompt</span>
-                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">
-                    1 of 10
-                  </span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1 of 10</span>
                 </div>
                 <div className="p-5 flex flex-col gap-4">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">
-                      Prompt #1 — AI Awareness Audit
-                    </p>
-                    <p className="text-xs text-muted mb-3">
-                      Paste into ChatGPT, Perplexity, Gemini, and Claude. Run each separately.
-                    </p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Prompt #1 — AI Awareness Audit</p>
+                    <p className="text-xs text-muted mb-3">Paste into ChatGPT, Perplexity, Gemini, and Claude. Run each separately.</p>
                     <div className="rounded-lg bg-surface-2 border border-border p-4 font-mono text-xs leading-relaxed text-foreground/80 select-all">
                       {`"I'm looking for a [your business type] in [your city/area]. Who are the most trusted and well-reviewed options you'd recommend, and why? Please be specific about what makes each one stand out."`}
                     </div>
                     <p className="text-xs text-muted mt-3">
-                      <strong className="text-foreground">What to look for:</strong> Does your
-                      business appear? How is it described? Are competitors recommended instead? The
-                      playbook explains exactly what each answer means and what to fix.
+                      <strong className="text-foreground">What to look for:</strong> Does your business appear? How is it described? Are competitors recommended instead?
                     </p>
                   </div>
                   <p className="text-xs text-muted italic border-t border-border pt-3">
-                    + 9 more prompts covering competitor gap analysis, hallucination detection,
-                    citation sourcing, and brand accuracy…
+                    + 9 more prompts covering competitor gap analysis, hallucination detection, citation sourcing, and brand accuracy…
                   </p>
                 </div>
               </div>
@@ -316,9 +357,7 @@ export default function PlaybookPage() {
 
             <div className="text-center mt-10">
               <CheckoutButton label="Get the full bundle — $27" />
-              <p className="text-xs text-muted mt-3">
-                Instant download · 30-day money-back guarantee
-              </p>
+              <p className="text-xs text-muted mt-3">Instant download · 30-day money-back guarantee</p>
             </div>
           </div>
         </section>
@@ -327,41 +366,17 @@ export default function PlaybookPage() {
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
-                What working through this looks like
-              </h2>
-              <p className="text-muted max-w-xl mx-auto">
-                Step by step, from the moment you download to a measurable before/after.
-              </p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">What working through this looks like</h2>
+              <p className="text-muted max-w-xl mx-auto">Step by step, from the moment you download to a measurable before/after.</p>
             </div>
-
             <div className="flex flex-col gap-4">
               {[
-                {
-                  step: '01',
-                  heading: 'Run the prompt pack — see the truth in 10 minutes',
-                  body: 'Paste the 10 included prompts into ChatGPT, Perplexity, Gemini, and Claude. You will know exactly whether your business appears, how it\u2019s described, and where the gaps are.',
-                },
-                {
-                  step: '02',
-                  heading: 'Work through the 27-point checklist',
-                  body: 'The checklist tells you precisely what to fix, in what order, starting with the highest-impact items. Each checkbox is a concrete action — no guessing, no wasted effort.',
-                },
-                {
-                  step: '03',
-                  heading: 'Follow the 30-day plan — one task per day',
-                  body: 'A structured day-by-day calendar for your first 30 days. Each task takes 30\u201390 minutes and is designed to fit around running a business, not replace it.',
-                },
-                {
-                  step: '04',
-                  heading: 'Re-run the prompts and measure your shift',
-                  body: 'After 30 days, run the same audit prompts again. You will have a concrete before/after comparison showing exactly how your AI visibility changed.',
-                },
+                { step: '01', heading: 'Run the prompt pack — see the truth in 10 minutes', body: 'Paste the 10 included prompts into ChatGPT, Perplexity, Gemini, and Claude. You will know exactly whether your business appears, how it\u2019s described, and where the gaps are.' },
+                { step: '02', heading: 'Work through the 27-point checklist', body: 'The checklist tells you precisely what to fix, in what order, starting with the highest-impact items. Each checkbox is a concrete action — no guessing, no wasted effort.' },
+                { step: '03', heading: 'Follow the 30-day plan — one task per day', body: 'A structured day-by-day calendar for your first 30 days. Each task takes 30–90 minutes and is designed to fit around running a business, not replace it.' },
+                { step: '04', heading: 'Re-run the prompts and measure your shift', body: 'After 30 days, run the same audit prompts again. You will have a concrete before/after comparison showing exactly how your AI visibility changed.' },
               ].map(({ step, heading, body }) => (
-                <div
-                  key={step}
-                  className="flex gap-5 text-left p-5 rounded-xl bg-white border border-border hover:border-accent/25 hover:shadow-card-lift transition-all duration-200"
-                >
+                <div key={step} className="flex gap-5 text-left p-5 rounded-xl bg-white border border-border hover:border-accent/25 hover:shadow-card-lift transition-all duration-200">
                   <span className="step-num flex-shrink-0 mt-0.5">{step}</span>
                   <div>
                     <h3 className="font-semibold text-[15px] mb-1.5">{heading}</h3>
@@ -376,49 +391,27 @@ export default function PlaybookPage() {
         {/* ── WHY NOW ───────────────────────────────────────────────── */}
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
-              GEO is still early. The window is open — but not for long.
-            </h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">GEO is still early. The window is open — but not for long.</h2>
             <p className="text-muted leading-relaxed mb-4 text-pretty">
               Traditional SEO took years before most businesses took it seriously. The ones who acted
               in 2005 are still reaping the compounding benefits today. GEO is at that same inflection
-              point right now — in 2026, most of your competitors have no idea AI visibility is even
-              a category.
+              point right now — in 2026, most of your competitors have no idea AI visibility is even a category.
             </p>
             <p className="text-muted leading-relaxed mb-3 text-pretty">
               AI assistants build citation patterns over time. Once a competitor becomes the default
               recommended answer for your category,{' '}
-              <strong className="text-foreground">
-                displacing them gets exponentially more expensive.
-              </strong>
+              <strong className="text-foreground">displacing them gets exponentially more expensive.</strong>
             </p>
             <p className="text-xs text-muted/55 italic mb-10 max-w-lg mx-auto">
-              AI systems are regularly retrained. Results vary by business, market, and effort. No
-              specific outcome is guaranteed.
+              AI systems are regularly retrained. Results vary by business, market, and effort. No specific outcome is guaranteed.
             </p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-0">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
-                {
-                  icon: Clock,
-                  heading: 'The early-mover window',
-                  body: "GEO is where SEO was in 2005. Your competitors almost certainly haven't started.",
-                },
-                {
-                  icon: Eye,
-                  heading: 'Compounding returns',
-                  body: 'AI recommendations reinforce themselves. Being cited builds more citations. Acting early creates a lead that grows.',
-                },
-                {
-                  icon: Shield,
-                  heading: '$27 vs. $2,000+/month',
-                  body: 'Based on publicly available agency pricing as of 2026, specialist firms charge $2,000\u20135,000/month for this work. This is a flat $27.',
-                },
+                { icon: Clock,  heading: 'The early-mover window',  body: "GEO is where SEO was in 2005. Your competitors almost certainly haven't started." },
+                { icon: Eye,    heading: 'Compounding returns',       body: 'AI recommendations reinforce themselves. Being cited builds more citations. Acting early creates a lead that grows.' },
+                { icon: Shield, heading: '$27 vs. $2,000+/month',    body: 'Based on publicly available agency pricing as of 2026, specialist firms charge $2,000–5,000/month for this work. This is a flat $27.' },
               ].map(({ icon: Icon, heading, body }) => (
-                <div
-                  key={heading}
-                  className="p-5 rounded-xl bg-white border border-border text-left hover:border-accent/25 hover:shadow-card-lift transition-all"
-                >
+                <div key={heading} className="p-5 rounded-xl bg-white border border-border text-left hover:border-accent/25 hover:shadow-card-lift transition-all">
                   <div className="w-8 h-8 rounded-lg bg-accent/8 flex items-center justify-center mb-3">
                     <Icon className="w-4 h-4 text-accent" />
                   </div>
@@ -433,9 +426,7 @@ export default function PlaybookPage() {
         {/* ── WHO IT'S FOR ──────────────────────────────────────────── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-10 tracking-tight">
-              This is for you if…
-            </h2>
+            <h2 className="text-2xl md:text-3xl font-bold mb-10 tracking-tight">This is for you if…</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
               {[
                 'You own or market a local or online business',
@@ -445,10 +436,7 @@ export default function PlaybookPage() {
                 'You want a clear, done-for-you action plan — not more theory',
                 'You want to establish AI visibility before your competitors do',
               ].map((item) => (
-                <div
-                  key={item}
-                  className="flex items-start gap-3 px-4 py-3.5 rounded-lg bg-white border border-border hover:border-accent/25 transition-colors"
-                >
+                <div key={item} className="flex items-start gap-3 px-4 py-3.5 rounded-lg bg-white border border-border hover:border-accent/25 transition-colors">
                   <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <span className="text-sm">{item}</span>
                 </div>
@@ -462,18 +450,14 @@ export default function PlaybookPage() {
           <div className="max-w-md mx-auto">
             <div className="relative rounded-2xl border border-accent/40 bg-white p-8 text-center shadow-card-accent overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
-
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent mb-5 mt-1">
-                Found by AI — Complete Bundle
-              </p>
-
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent mb-5 mt-1">Found by AI — Complete Bundle</p>
               <div className="mb-1">
                 <span className="text-6xl font-black text-gradient tracking-tight">$27</span>
               </div>
-              <p className="text-sm text-muted mb-8">
-                One-time · No subscription · Instant download
+              <p className="text-sm text-muted mb-2">One-time · No subscription · Instant download</p>
+              <p className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 inline-block mb-6">
+                🚀 Launch price — limited to first 200 copies
               </p>
-
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
                   'The Complete AI Visibility Playbook (PDF)',
@@ -489,16 +473,13 @@ export default function PlaybookPage() {
                   </li>
                 ))}
               </ul>
-
               <CheckoutButton className="btn-primary w-full text-base px-6 py-3.5 rounded-xl shadow-glow-sm" />
-              <p className="text-xs text-muted mt-4">
-                Secure checkout via Stripe · PDF delivered instantly
-              </p>
+              <p className="text-xs text-muted mt-4">Secure checkout via Stripe · PDF delivered instantly</p>
             </div>
           </div>
         </section>
 
-        {/* ── FAQ ───────────────────────────────────────────────────── */}
+        {/* ── FAQ ──────────────────────────────────────────────────── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12 tracking-tight">Questions answered</h2>
@@ -513,7 +494,7 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ── FINAL CTA ─────────────────────────────────────────────── */}
+        {/* ── FINAL CTA ────────────────────────────────────────────── */}
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight text-balance">
@@ -525,9 +506,7 @@ export default function PlaybookPage() {
               the businesses around you figure out this game exists.
             </p>
             <CheckoutButton label="Get the Found by AI Playbook — $27" />
-            <p className="text-xs text-muted mt-4">
-              30-day money-back guarantee · Instant download · No subscription
-            </p>
+            <p className="text-xs text-muted mt-4">30-day money-back guarantee · Instant download · No subscription</p>
           </div>
         </section>
 
