@@ -6,9 +6,9 @@ import { useEffect, useState } from 'react'
 import { Radar, Menu, X } from 'lucide-react'
 
 const navLinks = [
-  { href: '/#scan',        label: 'Free Scan' },
-  { href: '/#what-you-get', label: 'What\'s Included' },
-  { href: '/playbook',     label: 'Get the Playbook' },
+  { href: '/#scan',         label: 'Free Scan' },
+  { href: '/#what-you-get', label: "What's Included" },
+  { href: '/blog',          label: 'Blog' },
 ]
 
 export function Navbar() {
@@ -23,10 +23,8 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close mobile menu on route change
   useEffect(() => { setMobileOpen(false) }, [pathname])
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -58,11 +56,16 @@ export function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-1" aria-label="Main navigation">
-          {navLinks.slice(0, 2).map(({ href, label }) => (
+          {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className="px-3 py-1.5 rounded-md text-sm text-muted hover:text-foreground hover:bg-surface-2 transition-all duration-150"
+              className={[
+                'px-3 py-1.5 rounded-md text-sm transition-all duration-150',
+                pathname === href || (href === '/blog' && pathname.startsWith('/blog'))
+                  ? 'text-foreground bg-surface-2 font-medium'
+                  : 'text-muted hover:text-foreground hover:bg-surface-2',
+              ].join(' ')}
             >
               {label}
             </Link>
