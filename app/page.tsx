@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { AiReadinessScan } from '@/components/scan/AiReadinessScan'
-import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, AlertTriangle, TrendingUp, Clock, Eye, MessageSquare } from 'lucide-react'
+import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, AlertTriangle, Clock, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
@@ -123,7 +123,7 @@ const previewChecklist = [
   { done: false, text: 'Publish at least 3 authoritative articles that cite your expertise' },
   { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
   { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
-  { done: false, text: 'Create a dedicated \"About\" page written to be pulled by AI overviews' },
+  { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
@@ -138,158 +138,138 @@ export default function HomePage() {
       <main className="min-h-screen bg-background">
         <Navbar />
 
-        {/* HERO */}
-        <section className="relative pt-32 pb-20 px-4 md:px-8 text-center overflow-hidden">
-          <div className="absolute inset-0 hero-bg opacity-60 pointer-events-none" aria-hidden="true" />
+        {/* ── HERO ──────────────────────────────────────────────────── */}
+        <section className="relative pt-32 pb-24 px-4 md:px-8 text-center overflow-hidden">
+          <div className="absolute inset-0 hero-bg opacity-70 pointer-events-none" aria-hidden="true" />
           <div className="relative max-w-3xl mx-auto">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 animate-fade-in shadow-glow-xs">
-              <Radar className="w-3.5 h-3.5" />
-              2026 — AI search is replacing Google for millions of buying decisions
+            {/* Single badge — hero only */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/8 border border-accent/20 text-accent text-xs font-medium mb-8 animate-fade-in">
+              <Radar className="w-3 h-3" />
+              AI search is replacing Google for buying decisions — 2026
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-6">
+
+            <h1 className="text-4xl md:text-[3.5rem] font-bold tracking-tight leading-[1.1] mb-6 text-balance">
               When someone asks AI about your industry,{' '}
               <span className="text-gradient-accent">do you show up?</span>
             </h1>
-            <p className="text-lg md:text-xl text-muted leading-relaxed mb-4 max-w-2xl mx-auto">
-              Most businesses are <strong className="text-foreground">completely invisible</strong> to
-              ChatGPT, Perplexity, Gemini, and Claude — while their competitors get recommended every day.
+
+            <p className="text-lg text-muted leading-relaxed mb-10 max-w-2xl mx-auto text-pretty">
+              Most businesses are{' '}
+              <strong className="text-foreground font-semibold">completely invisible</strong> to
+              ChatGPT, Perplexity, Gemini, and Claude. The{' '}
+              <strong className="text-foreground font-semibold">Found by AI Playbook</strong> gives you
+              the exact system to fix that — no tech skills, no agency, no subscription.
             </p>
-            <p className="text-base text-muted leading-relaxed mb-10 max-w-2xl mx-auto">
-              The <strong className="text-foreground">Found by AI Playbook</strong> gives you the exact,
-              step-by-step system to fix that — no tech skills, no agency, no monthly subscription.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a href="#scan">
-                <Button variant="primary" size="lg" className="gap-2 shadow-lg shadow-accent/20 ring-2 ring-accent/20 ring-offset-2">
+                <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
                   Check Your AI Readiness — Free <ArrowRight className="w-4 h-4" />
                 </Button>
               </a>
-              <Link href="/#what-you-get" className="text-sm text-muted hover:text-accent transition-colors font-medium">
+              <Link
+                href="/#what-you-get"
+                className="text-sm text-muted hover:text-foreground transition-colors font-medium"
+              >
                 See what&apos;s included ↓
               </Link>
             </div>
-            <p className="text-xs text-muted mt-4">Free scan · No signup · Results in seconds</p>
+
+            <p className="text-xs text-muted/70 mt-5">Free scan · No signup · Results in seconds</p>
           </div>
         </section>
 
-        {/* FREE AI READINESS SCAN */}
-        <section id="scan" className="py-16 px-4 md:px-8 bg-surface/40 border-y border-border">
+        {/* ── FREE AI READINESS SCAN ────────────────────────────────── */}
+        <section id="scan" className="py-16 px-4 md:px-8 border-y border-border bg-surface/50">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4">
-                <Radar className="w-3.5 h-3.5" />
-                Free · Instant · No signup
-              </div>
-              {/* FIX #2: Heading softened from "built so AI can read it" to avoid implying a live AI crawler connection */}
               <h2 className="text-2xl md:text-3xl font-bold mb-3">
                 Is your site structured for AI to read it?
               </h2>
               <p className="text-muted text-sm max-w-xl mx-auto leading-relaxed">
-                Before selling you anything, we want to check if you actually need it.
-                Enter your website URL and we&apos;ll analyze the technical signals that influence how AI systems
-                read, understand, and cite businesses — things like structured data, meta tags,
-                schema markup, and whether AI bots are accidentally blocked.
+                Before selling you anything, we want to check if you actually need it. Enter your URL
+                and we&apos;ll analyze the technical signals that influence how AI systems read,
+                understand, and cite businesses — structured data, meta tags, schema markup, and
+                whether AI bots are accidentally blocked.
               </p>
-              {/* FIX #2: Expanded disclaimer — explicitly states passing score does not guarantee AI recommendation */}
-              <p className="text-xs text-muted/70 mt-2 max-w-lg mx-auto">
-                This scan checks <em>how your site is built</em>, not whether a specific AI has indexed or recommended it.
-                A passing score means your site is structured in a way that makes it easier for AI to parse and reference —
-                it does not guarantee any AI will recommend your business.
-                Visibility depends on many factors beyond technical structure.
+              <p className="text-xs text-muted/60 mt-2 max-w-lg mx-auto">
+                This scan checks <em>how your site is built</em>, not whether a specific AI has
+                indexed or recommended it. A passing score means your site is structured in a way
+                that makes it easier for AI to parse — it does not guarantee any AI will recommend
+                your business.
               </p>
             </div>
             <AiReadinessScan />
           </div>
         </section>
 
-        {/* TRUST BAR */}
-        <section className="py-6 px-4 border-b border-border bg-surface/60 backdrop-blur-sm">
-          <div className="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-6 md:gap-10 text-center">
-            {[
-              { icon: CheckCircle, label: 'Covers all 4 major AI assistants' },
-              { icon: CheckCircle, label: 'No recurring subscription — ever' },
-              { icon: CheckCircle, label: '30-day money-back guarantee' },
-              { icon: CheckCircle, label: 'Future updates included free' },
-              { icon: CheckCircle, label: 'Instant download after payment' },
-            ].map(({ icon: Icon, label }) => (
-              <div key={label} className="flex items-center gap-2">
-                <Icon className="w-4 h-4 text-accent flex-shrink-0" />
-                <span className="text-sm text-muted">{label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* PAIN SECTION */}
-        <section className="py-20 px-4 md:px-8 bg-surface/50">
+        {/* ── THE PROBLEM ───────────────────────────────────────────── */}
+        <section className="py-24 px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-medium mb-6">
-              <AlertTriangle className="w-3.5 h-3.5" />
-              The problem most business owners don&apos;t know they have
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-6">
-              AI assistants are the new first impression — and most businesses fail it
+            <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
+              AI assistants are the new first impression —{' '}
+              <span className="text-muted font-medium">and most businesses fail it</span>
             </h2>
-            <p className="text-muted leading-relaxed mb-4">
-              When a potential customer asks ChatGPT &ldquo;who&apos;s the best [your type of business]?&rdquo;
-              or Perplexity &ldquo;recommend someone for [your service]&rdquo; — AI gives them a confident,
-              specific answer. Right now.
+            <p className="text-muted leading-relaxed mb-4 text-pretty">
+              When a potential customer asks ChatGPT &ldquo;who&apos;s the best [your type of
+              business]?&rdquo; or Perplexity &ldquo;recommend someone for [your service]&rdquo; — AI
+              gives them a confident, specific answer. Right now.
             </p>
-            <p className="text-muted leading-relaxed mb-10">
-              If your business isn&apos;t in that answer, <strong className="text-foreground">you lost that customer before they ever found your website.</strong>{' '}
-              No bounce rate. No analytics. No second chance. They just hired your competitor.
+            <p className="text-muted leading-relaxed mb-12 text-pretty">
+              If your business isn&apos;t in that answer,{' '}
+              <strong className="text-foreground">
+                you lost that customer before they ever found your website.
+              </strong>{' '}
+              No bounce rate. No analytics. No second chance.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-              {[
-                {
-                  stat: '58.5%',
-                  // FIX #1: Stat reframed — clarifies this covers Google featured snippets + AI Overviews,
-                  // not standalone AI assistants; added context sentence about ChatGPT/Perplexity trend
-                  label: (
-                    <>
-                      of US Google searches end without a click to the open web — driven by featured snippets,
-                      Google&apos;s AI Overviews, and other zero-click results.{' '}
-                      <a
-                        href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-2024/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="underline underline-offset-2 opacity-60 hover:opacity-100 transition-opacity text-xs"
-                      >
-                        SparkToro / Datos, 2024
-                      </a>
-                      {' '}As standalone AI assistants like ChatGPT and Perplexity grow, the same zero-click shift is accelerating beyond Google.
-                    </>
-                  ),
-                },
-                {
-                  stat: 'Day 1',
-                  label: 'advantage — the businesses that fix this now will build AI visibility before their competitors even know this game exists',
-                },
-              ].map(({ stat, label }) => (
-                <div key={stat} className="p-5 rounded-xl bg-surface border border-border border-l-4 border-l-accent/40 shadow-glow-xs hover:shadow-card-hover transition-shadow">
-                  <p className="text-3xl font-bold text-gradient-accent mb-2">{stat}</p>
-                  <p className="text-sm text-muted leading-relaxed">{label}</p>
-                </div>
-              ))}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left">
+              <div className="p-6 rounded-2xl bg-surface border border-border">
+                <p className="text-4xl font-black text-gradient-accent mb-3 tracking-tight">58.5%</p>
+                <p className="text-sm text-muted leading-relaxed">
+                  of US Google searches end without a click to the open web — driven by featured
+                  snippets and AI Overviews.{' '}
+                  <a
+                    href="https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-2024/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 opacity-50 hover:opacity-80 transition-opacity text-xs"
+                  >
+                    SparkToro / Datos, 2024
+                  </a>
+                  {' '}As standalone AI assistants grow, this shift is accelerating far beyond Google.
+                </p>
+              </div>
+
+              <div className="p-6 rounded-2xl bg-surface border border-border">
+                <p className="text-4xl font-black text-gradient-accent mb-3 tracking-tight">Day 1</p>
+                <p className="text-sm text-muted leading-relaxed">
+                  advantage — the businesses that establish AI visibility now will build a compounding
+                  lead before their competitors even know this game exists.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* WHAT YOU GET */}
-        <section id="what-you-get" className="py-20 px-4 md:px-8">
+        {/* ── WHAT YOU GET ──────────────────────────────────────────── */}
+        <section id="what-you-get" className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything you need to get found by AI</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
+                Everything you need to get found by AI
+              </h2>
               <p className="text-muted">One purchase. Four assets. Nothing missing.</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {includes.map(({ icon: Icon, title, description }) => (
                 <div key={title} className="card-hover flex gap-4 p-6">
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/10 border border-accent/20 flex items-center justify-center ring-1 ring-accent/10">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent/8 border border-accent/15 flex items-center justify-center">
                     <Icon className="w-5 h-5 text-accent" />
                   </div>
                   <div>
-                    <h3 className="font-semibold mb-1.5">{title}</h3>
+                    <h3 className="font-semibold mb-1.5 text-[15px]">{title}</h3>
                     <p className="text-sm text-muted leading-relaxed">{description}</p>
                   </div>
                 </div>
@@ -298,72 +278,100 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* PEEK INSIDE */}
-        <section className="py-20 px-4 md:px-8 bg-surface/50">
+        {/* ── PEEK INSIDE ───────────────────────────────────────────── */}
+        <section className="py-24 px-4 md:px-8">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-4 shadow-glow-xs">
-                <Eye className="w-3.5 h-3.5" />
-                Peek inside
-              </div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-3">See exactly what you&apos;re getting</h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
+                See exactly what you&apos;re getting
+              </h2>
               <p className="text-muted max-w-xl mx-auto">
-                Here&apos;s a real sample from two of the four assets included in the playbook bundle.
+                A real sample from two of the four assets — the checklist and the prompt pack.
               </p>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* CHECKLIST PREVIEW */}
-              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
-                <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Checklist preview */}
+              <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-card-lift">
+                <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <FileText className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">27-Point AI Visibility Checklist</span>
-                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">Items 1-8 of 27</span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">
+                    1–8 of 27
+                  </span>
                 </div>
                 <div className="p-5 flex flex-col gap-3">
                   {previewChecklist.map(({ done, text }) => (
                     <div key={text} className="flex items-start gap-3">
-                      <div className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded border ${done ? 'bg-accent border-accent shadow-glow-xs' : 'border-border'} flex items-center justify-center`}>
+                      <div
+                        className={`flex-shrink-0 w-4 h-4 mt-0.5 rounded border flex items-center justify-center ${
+                          done ? 'bg-accent border-accent' : 'border-border'
+                        }`}
+                      >
                         {done && (
-                          <svg className="w-2.5 h-2.5 text-background" fill="none" viewBox="0 0 10 8">
-                            <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
+                            <path
+                              d="M1 4l3 3 5-6"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
                           </svg>
                         )}
                       </div>
-                      <span className={`text-sm leading-snug ${done ? 'line-through text-muted/50' : 'text-foreground'}`}>{text}</span>
+                      <span
+                        className={`text-sm leading-snug ${
+                          done ? 'line-through text-muted/50' : 'text-foreground'
+                        }`}
+                      >
+                        {text}
+                      </span>
                     </div>
                   ))}
-                  <div className="mt-2 flex items-center gap-2 text-xs text-muted italic border-t border-border pt-3">
-                    <span>+ 19 more items inside the full checklist...</span>
-                  </div>
+                  <p className="text-xs text-muted italic border-t border-border pt-3 mt-1">
+                    + 19 more items inside the full checklist…
+                  </p>
                 </div>
               </div>
-              {/* PROMPT PACK PREVIEW */}
-              <div className="rounded-2xl border border-border bg-background overflow-hidden shadow-card-hover">
-                <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-surface">
+
+              {/* Prompt pack preview */}
+              <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-card-lift">
+                <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <Zap className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">Prompt Pack — Sample Prompt</span>
-                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1 of 10 prompts</span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">
+                    1 of 10
+                  </span>
                 </div>
                 <div className="p-5 flex flex-col gap-4">
                   <div>
-                    <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">Prompt #1 — AI Awareness Audit</p>
-                    <p className="text-xs text-muted mb-3">Paste this into ChatGPT, Perplexity, Gemini, and Claude. Run it on each.</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">
+                      Prompt #1 — AI Awareness Audit
+                    </p>
+                    <p className="text-xs text-muted mb-3">
+                      Paste into ChatGPT, Perplexity, Gemini, and Claude. Run each separately.
+                    </p>
                     <div className="rounded-lg bg-surface-2 border border-border p-4 font-mono text-xs leading-relaxed text-foreground/80 select-all">
-                      {`"I'm looking for a [your business type] in [your city/area]. Who are the most trusted and well-reviewed options you'd recommend, and why? Please be specific about what makes each one stand out."`}
+                      {`"I'm looking for a [your business type] in [your city/area]. Who are the most trusted and well-reviewed options you'd recommend, and why?"`}
                     </div>
                     <p className="text-xs text-muted mt-3">
-                      <strong className="text-foreground">What to look for:</strong> Does your business appear? How is it described? Are competitors mentioned instead? The playbook walks you through exactly what each answer means and what to fix.
+                      <strong className="text-foreground">What to look for:</strong> Does your
+                      business appear? How is it described? The playbook walks you through exactly
+                      what each answer means and what to fix.
                     </p>
                   </div>
-                  <div className="border-t border-border pt-4">
-                    <p className="text-xs text-muted italic">+ 9 more prompts covering brand accuracy, competitor gap analysis, hallucination detection, and citation sourcing...</p>
-                  </div>
+                  <p className="text-xs text-muted italic border-t border-border pt-3">
+                    + 9 more prompts covering competitor gaps, hallucination detection, citation
+                    sourcing, and brand accuracy…
+                  </p>
                 </div>
               </div>
             </div>
+
             <div className="text-center mt-10">
               <Link href="/playbook">
-                <Button variant="primary" size="lg" className="gap-2 shadow-lg shadow-accent/20">
+                <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
                   Get the full bundle — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
@@ -372,37 +380,42 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* HOW IT WORKS */}
-        <section className="py-20 px-4 md:px-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-14">How it works</h2>
-            <div className="flex flex-col gap-10">
+        {/* ── HOW IT WORKS ──────────────────────────────────────────── */}
+        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 tracking-tight">
+              How it works
+            </h2>
+            <div className="flex flex-col gap-4">
               {[
                 {
                   step: '01',
                   title: 'Buy once, download instantly',
-                  body: 'Pay $27 and get immediate access to all four assets — the playbook, checklist, prompt pack, and 30-day plan. Everything downloads in the next two minutes.',
+                  body: 'Pay $27 and get immediate access to all four assets — the playbook, checklist, prompt pack, and 30-day plan. Everything is in your inbox in under two minutes.',
                 },
                 {
                   step: '02',
-                  title: 'Run the prompt pack first — see the truth',
-                  body: 'Use the 10 included prompts across ChatGPT, Perplexity, Gemini, and Claude. In 10 minutes you will see exactly how AI assistants currently describe your business — or if they skip you entirely.',
+                  title: 'Run the prompt pack — see the truth in 10 minutes',
+                  body: 'Use the 10 included prompts across ChatGPT, Perplexity, Gemini, and Claude. You will see exactly how AI assistants currently describe your business — or if they skip you entirely.',
                 },
                 {
                   step: '03',
                   title: 'Work through the 27-point checklist',
-                  body: 'Go item by item. Each checkbox is a concrete action with clear instructions. No guessing, no technical jargon. Most items take under an hour to complete.',
+                  body: 'Go item by item. Each checkbox is a concrete action with clear instructions. No guessing, no jargon. Most items take under an hour.',
                 },
                 {
                   step: '04',
-                  title: 'Follow the 30-day plan and watch the shift',
-                  body: 'Implement changes one day at a time. At the end of 30 days, re-run the prompt pack. You will see the difference — AI assistants describing and recommending your business.',
+                  title: 'Follow the 30-day plan, then re-run and measure',
+                  body: 'Implement one task per day. At the end of 30 days, re-run the same prompts and compare your before/after. You will see the shift.',
                 },
               ].map(({ step, title, body }) => (
-                <div key={step} className="flex gap-5 text-left p-5 rounded-xl bg-surface border border-border hover:border-accent/30 transition-colors">
-                  <span className="flex-shrink-0 text-4xl font-black text-accent/25 leading-none mt-1">{step}</span>
+                <div
+                  key={step}
+                  className="flex gap-5 text-left p-5 rounded-xl bg-white border border-border hover:border-accent/25 hover:shadow-card-lift transition-all duration-200"
+                >
+                  <span className="step-num flex-shrink-0 mt-0.5">{step}</span>
                   <div>
-                    <h3 className="font-semibold text-lg mb-1.5">{title}</h3>
+                    <h3 className="font-semibold text-[15px] mb-1.5">{title}</h3>
                     <p className="text-sm text-muted leading-relaxed">{body}</p>
                   </div>
                 </div>
@@ -411,104 +424,58 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* WHAT YOU CAN EXPECT (replaces fabricated testimonials) */}
-        <section className="py-20 px-4 md:px-8 bg-surface/50">
-          <div className="max-w-5xl mx-auto">
-            <div className="text-center mb-14">
-              <h2 className="text-3xl md:text-4xl font-bold mb-3">What you can expect</h2>
-              <p className="text-muted max-w-xl mx-auto">
-                Here is what working through this playbook actually looks like — step by step.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  step: '01',
-                  heading: 'Run the audit prompts',
-                  body: 'In the first 10 minutes you will know exactly whether your business appears in ChatGPT, Perplexity, Gemini, and Claude — and what each one says about you.',
-                },
-                {
-                  step: '02',
-                  heading: 'Work the checklist',
-                  body: 'The 27-point checklist tells you precisely what to fix, in what order, starting with the highest-impact items. No guessing, no wasted effort.',
-                },
-                {
-                  step: '03',
-                  heading: 'Re-run and measure',
-                  body: 'After your 30 days, run the same audit prompts again. You will have a concrete before/after comparison showing exactly how your AI visibility changed.',
-                },
-              ].map(({ step, heading, body }) => (
-                <div key={step} className="flex flex-col p-6 rounded-xl bg-surface border border-border hover:border-accent/30 hover:shadow-card-hover transition-all">
-                  <span className="text-4xl font-black text-accent/20 mb-4 leading-none">{step}</span>
-                  <h3 className="font-semibold text-base mb-2">{heading}</h3>
-                  <p className="text-sm text-muted leading-relaxed">{body}</p>
-                </div>
-              ))}
-            </div>
-            <div className="mt-10 p-6 rounded-xl bg-surface border border-border border-dashed text-center">
-              <MessageSquare className="w-6 h-6 text-muted mx-auto mb-3" />
-              <p className="text-sm font-semibold mb-1">Have you used the playbook?</p>
-              <p className="text-xs text-muted">
-                We&apos;d love to hear what happened. Email your results to{' '}
-                <a href="mailto:hello@mygeoradar.com" className="text-accent underline underline-offset-2">
-                  hello@mygeoradar.com
-                </a>{' '}
-                — genuine feedback from real customers is always welcome.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* URGENCY */}
-        <section className="py-20 px-4 md:px-8">
+        {/* ── WHY NOW ───────────────────────────────────────────────── */}
+        <section className="py-24 px-4 md:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-medium mb-6 shadow-glow-xs">
-              <TrendingUp className="w-3.5 h-3.5" />
-              The window is closing fast
-            </div>
-            <h2 className="text-2xl md:text-3xl font-bold mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
               Your competitors are figuring this out right now
             </h2>
-            {/* FIX #3: Agency pricing prefixed with source attribution to substantiate comparative claim */}
-            <p className="text-muted leading-relaxed mb-4">
-              GEO — Generative Engine Optimization — is the fastest-growing discipline in digital marketing in 2026.
-              Based on publicly available pricing from GEO and AI optimization agencies as of 2026, specialist firms are
-              charging $2,000–$5,000/month for this exact work. Early movers are quietly
-              locking in AI visibility before the rest of the market wakes up.
+            <p className="text-muted leading-relaxed mb-4 text-pretty">
+              GEO — Generative Engine Optimization — is the fastest-growing discipline in digital
+              marketing in 2026. Based on publicly available agency pricing, specialist firms charge
+              $2,000–$5,000/month for this exact work. Early movers are quietly building AI
+              visibility before the rest of the market wakes up.
             </p>
-            {/* FIX #4: Removed speculative "own AI recommendations for years" framing */}
-            <p className="text-muted leading-relaxed mb-4">
-              The businesses that act now will build a compounding advantage that gets harder to
-              close over time. AI systems weight well-cited, established sources — once your competitors
-              build that authority, <strong className="text-foreground">displacing them gets exponentially more expensive.</strong>
+            <p className="text-muted leading-relaxed mb-3 text-pretty">
+              AI systems weight well-cited, established sources. Once your competitors build that
+              authority,{' '}
+              <strong className="text-foreground">
+                displacing them gets exponentially more expensive.
+              </strong>
             </p>
-            {/* FIX #4: Inline results disclaimer */}
-            <p className="text-xs text-muted/60 italic mb-10 max-w-xl mx-auto">
-              AI systems are regularly retrained and change over time. Results and visibility vary by business, market, and implementation effort. No specific outcome is guaranteed.
+            <p className="text-xs text-muted/55 italic mb-10 max-w-lg mx-auto">
+              AI systems are regularly retrained and results vary by business, market, and effort. No
+              specific outcome is guaranteed.
             </p>
-            <div className="flex items-center justify-center gap-3 p-5 rounded-xl bg-accent/5 border border-accent/20 max-w-md mx-auto shadow-glow-xs">
+            <div className="inline-flex items-center gap-3 px-5 py-4 rounded-xl bg-accent/5 border border-accent/15 text-left max-w-sm mx-auto">
               <Clock className="w-5 h-5 text-accent flex-shrink-0" />
-              <p className="text-sm text-left">
-                <strong>The playbook is $27.</strong> One agency consultation costs $300+. You can start fixing this today.
+              <p className="text-sm">
+                <strong>The playbook is $27.</strong> One agency consultation costs $300+. You can
+                start fixing this today.
               </p>
             </div>
           </div>
         </section>
 
-        {/* WHO THIS IS FOR */}
-        <section className="py-16 px-4 md:px-8 bg-surface/50">
+        {/* ── WHO IT'S FOR ──────────────────────────────────────────── */}
+        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl md:text-3xl font-bold mb-8">This is for you if...</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+            <h2 className="text-2xl md:text-3xl font-bold mb-10 tracking-tight">
+              This is for you if…
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
               {[
                 'You own or market a local or online business',
-                "You've noticed AI assistants don't mention your business at all",
+                "AI assistants don't mention your business when you test them",
                 "You've read GEO articles but still don't know what to actually do",
                 "You don't want to pay $100+/month for a tracking tool",
                 'You want a clear, done-for-you action plan — not more theory',
                 'You want to act before your competitors figure this out',
               ].map((item) => (
-                <div key={item} className="flex items-start gap-3 p-4 rounded-lg bg-surface border border-border hover:border-accent/30 transition-colors">
+                <div
+                  key={item}
+                  className="flex items-start gap-3 px-4 py-3.5 rounded-lg bg-white border border-border hover:border-accent/25 transition-colors"
+                >
                   <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <span className="text-sm">{item}</span>
                 </div>
@@ -517,16 +484,22 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* PRICING */}
-        <section id="pricing" className="py-20 px-4 md:px-8">
+        {/* ── PRICING ───────────────────────────────────────────────── */}
+        <section id="pricing" className="py-24 px-4 md:px-8">
           <div className="max-w-md mx-auto">
-            <div className="rounded-2xl border-2 border-accent bg-surface p-8 text-center shadow-xl shadow-accent/15 relative overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent/40 via-accent to-accent/40" />
-              <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-4 mt-2">Found by AI — Complete Bundle</p>
-              <div className="flex items-end justify-center gap-1 mb-1">
-                <span className="text-6xl font-black text-gradient">$27</span>
+            <div className="relative rounded-2xl border border-accent/40 bg-white p-8 text-center shadow-card-accent overflow-hidden">
+              {/* Top accent line */}
+              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
+
+              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent mb-5 mt-1">
+                Found by AI — Complete Bundle
+              </p>
+
+              <div className="mb-1">
+                <span className="text-6xl font-black text-gradient tracking-tight">$27</span>
               </div>
-              <p className="text-sm text-muted mb-8">One-time payment · No subscription · Instant download</p>
+              <p className="text-sm text-muted mb-8">One-time · No subscription · Instant download</p>
+
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
                   'The Complete AI Visibility Playbook',
@@ -542,24 +515,27 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
+
               <Link href="/playbook">
-                <Button variant="primary" size="lg" className="w-full gap-2">
+                <Button variant="primary" size="lg" className="w-full gap-2 shadow-glow-sm">
                   Get instant access — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <p className="text-xs text-muted mt-4">Secure checkout via Stripe · PDF delivered instantly after payment</p>
+              <p className="text-xs text-muted mt-4">
+                Secure checkout via Stripe · PDF delivered instantly
+              </p>
             </div>
           </div>
         </section>
 
-        {/* FAQ */}
-        <section className="py-20 px-4 md:px-8 bg-surface/50">
+        {/* ── FAQ ───────────────────────────────────────────────────── */}
+        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12">Common questions</h2>
-            <div className="flex flex-col gap-0 divide-y divide-border">
+            <h2 className="text-3xl font-bold text-center mb-12 tracking-tight">Common questions</h2>
+            <div className="divide-y divide-border">
               {faqs.map(({ q, a }) => (
-                <div key={q} className="py-6 hover:bg-surface/50 -mx-4 px-4 rounded-lg transition-colors">
-                  <h3 className="font-semibold text-base mb-2">{q}</h3>
+                <div key={q} className="py-6">
+                  <h3 className="font-semibold text-[15px] mb-2">{q}</h3>
                   <p className="text-sm text-muted leading-relaxed">{a}</p>
                 </div>
               ))}
@@ -567,24 +543,26 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* FINAL CTA */}
-        <section className="py-20 px-4 md:px-8">
+        {/* ── FINAL CTA ─────────────────────────────────────────────── */}
+        <section className="py-24 px-4 md:px-8">
           <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight text-balance">
               Stop being invisible to AI.
             </h2>
-            <p className="text-muted mb-3">
-              Every day you wait, the competitors who act first are getting recommended by AI assistants instead of you.
-            </p>
-            <p className="text-muted mb-8">
-              The playbook is <strong className="text-foreground">$27 — one time</strong>. Everything you need. Downloadable in the next two minutes.
+            <p className="text-muted mb-8 text-pretty">
+              Every day you wait, the competitors who act first get recommended instead of you. The
+              playbook is{' '}
+              <strong className="text-foreground">$27 — one time</strong>. Everything you need,
+              downloadable in the next two minutes.
             </p>
             <Link href="/playbook">
-              <Button variant="primary" size="xl" className="gap-2 shadow-lg shadow-accent/20">
+              <Button variant="primary" size="xl" className="gap-2 shadow-glow-sm">
                 Get the Found by AI Playbook — $27 <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
-            <p className="text-xs text-muted mt-4">One-time · Instant download · 30-day money-back guarantee</p>
+            <p className="text-xs text-muted mt-4">
+              One-time · Instant download · 30-day money-back guarantee
+            </p>
           </div>
         </section>
 
