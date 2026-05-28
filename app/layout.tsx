@@ -15,17 +15,20 @@ export const metadata: Metadata = {
     template: '%s | MyGeoRadar',
   },
   description:
-    'Most businesses are invisible to AI assistants like ChatGPT, Perplexity, and Gemini. The Found by AI Playbook gives you the exact step-by-step system to fix that — one time, $27.',
+    'Businesses invisible to ChatGPT, Perplexity & Gemini. The Found by AI Playbook fixes that — step-by-step, one time, $27.',
   keywords: [
     'AI visibility', 'get found by AI', 'ChatGPT business visibility',
     'Perplexity business listing', 'GEO optimization', 'generative engine optimization',
     'AI search guide', 'how to show up on ChatGPT', 'found by AI playbook',
   ],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://mygeoradar.com'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.mygeoradar.com'),
+  alternates: {
+    canonical: 'https://www.mygeoradar.com',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://mygeoradar.com',
+    url: 'https://www.mygeoradar.com',
     title: 'MyGeoRadar — Get Found by AI',
     description: 'Most businesses are invisible to AI assistants. The Found by AI Playbook shows you exactly how to fix that — step by step, one time, $27.',
     siteName: 'MyGeoRadar',
@@ -64,8 +67,8 @@ const organizationSchema = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'MyGeoRadar',
-  url: 'https://mygeoradar.com',
-  logo: 'https://mygeoradar.com/icon-512.png',
+  url: 'https://www.mygeoradar.com',
+  logo: 'https://www.mygeoradar.com/icon-512.png',
   description: 'MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude.',
   founder: {
     '@type': 'Person',
@@ -80,8 +83,29 @@ const websiteSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'MyGeoRadar',
-  url: 'https://mygeoradar.com',
+  url: 'https://www.mygeoradar.com',
   description: 'Get your business found and recommended by AI assistants — ChatGPT, Perplexity, Gemini, and Claude.',
+}
+
+const softwareAppSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'MyGeoRadar',
+  url: 'https://www.mygeoradar.com',
+  applicationCategory: 'BusinessApplication',
+  operatingSystem: 'Web',
+  description: 'Scan your website and get a free AI visibility score. See how ChatGPT, Perplexity, Gemini & Claude crawl your site — and get a step-by-step action plan to show up more.',
+  offers: {
+    '@type': 'Offer',
+    price: '27',
+    priceCurrency: 'USD',
+    name: 'Found by AI Playbook',
+  },
+  provider: {
+    '@type': 'Organization',
+    name: 'MyGeoRadar',
+    url: 'https://www.mygeoradar.com',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -97,6 +121,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           id="schema-website"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <Script
+          id="schema-software"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
         />
       </head>
       <body className="bg-background text-foreground font-sans antialiased min-h-screen">
