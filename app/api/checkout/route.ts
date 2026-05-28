@@ -14,16 +14,7 @@ export async function POST(req: NextRequest) {
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'usd',
-            unit_amount: 2700,
-            product_data: {
-              name: 'Found by AI — The AI Visibility Playbook',
-              description:
-                'Complete playbook (PDF), 27-point checklist, 10-prompt prompt pack, and 30-day action plan. Instant download.',
-              images: [`${appUrl}/og-image.png`],
-            },
-          },
+          price: 'price_1Tbyn0DqLWpsdFlMnHQTzkO9',
           quantity: 1,
         },
       ],
