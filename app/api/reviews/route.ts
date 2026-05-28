@@ -1,28 +1,32 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 
-// POST /api/reviews — anyone can submit a review
+// POST /api/reviews — anyone can submit
 export async function POST(req: NextRequest) {
   try {
-    const { name, email, rating, body } = await req.json()
+    const { name, business_name, business_type, website, rating, review_text } = await req.json()
 
-    if (!name || !rating || !body) {
-      return NextResponse.json({ error: 'Name, rating, and review text are required.' }, { status: 400 })
+    if (!name || !rating || !review_text) {
+      return NextResponse.json({ error: 'Name, rating, and review are required.' }, { status: 400 })
     }
     if (rating < 1 || rating > 5) {
       return NextResponse.json({ error: 'Rating must be between 1 and 5.' }, { status: 400 })
     }
-    if (body.trim().length < 10) {
+    if (review_text.trim().length < 10) {
       return NextResponse.json({ error: 'Review must be at least 10 characters.' }, { status: 400 })
     }
 
     const supabase = await createClient()
-    const { error } = await supabase
-      .from('reviews')
-      .insert({ name: name.trim(), email: email?.trim() || null, rating, body: body.trim() })
+    const { error } = await supabase.from('reviews').insert({
+      name: name.trim(),
+      business_name: business_name?.trim() || null,
+      business_type: business_type?.trim() || null,
+      website: website?.trim() || null,
+      rating,
+      review_text: review_text.trim(),
+    })
 
     if (error) throw error
-
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('Review submit error:', err)
@@ -30,19 +34,18 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// GET /api/reviews — returns only published (4-5 star) reviews for public display
+// GET /api/reviews — public: only approved (4-5 star) reviews
 export async function GET() {
   try {
     const supabase = await createClient()
     const { data, error } = await supabase
       .from('reviews')
-      .select('id, name, rating, body, created_at')
-      .eq('published', true)
+      .select('id, name, business_name, business_type, rating, review_text, created_at')
+      .eq('approved', true)
       .order('created_at', { ascending: false })
       .limit(20)
 
     if (error) throw error
-
     return NextResponse.json({ reviews: data })
   } catch (err) {
     console.error('Review fetch error:', err)

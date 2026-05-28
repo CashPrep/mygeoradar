@@ -8,8 +8,10 @@ export function ReviewForm() {
   const [rating, setRating] = useState(0)
   const [hovered, setHovered] = useState(0)
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [body, setBody] = useState('')
+  const [businessName, setBusinessName] = useState('')
+  const [businessType, setBusinessType] = useState('')
+  const [website, setWebsite] = useState('')
+  const [reviewText, setReviewText] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState('')
@@ -23,7 +25,14 @@ export function ReviewForm() {
       const res = await fetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, rating, body }),
+        body: JSON.stringify({
+          name,
+          business_name: businessName,
+          business_type: businessType,
+          website,
+          rating,
+          review_text: reviewText,
+        }),
       })
       const json = await res.json()
       if (!res.ok) { setError(json.error || 'Something went wrong.'); return }
@@ -74,45 +83,48 @@ export function ReviewForm() {
 
       {/* Name */}
       <div>
-        <label htmlFor="review-name" className="block text-sm font-medium mb-1.5">Your Name *</label>
-        <input
-          id="review-name"
-          type="text"
-          required
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+        <label htmlFor="r-name" className="block text-sm font-medium mb-1.5">Your Name *</label>
+        <input id="r-name" type="text" required value={name} onChange={(e) => setName(e.target.value)}
           placeholder="Jane Smith"
-          className="w-full px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
-        />
+          className="w-full px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors" />
       </div>
 
-      {/* Email (optional) */}
+      {/* Business Name (optional) */}
       <div>
-        <label htmlFor="review-email" className="block text-sm font-medium mb-1.5">
-          Email <span className="text-muted font-normal">(optional, never shown)</span>
+        <label htmlFor="r-biz" className="block text-sm font-medium mb-1.5">
+          Business Name <span className="text-muted font-normal">(optional)</span>
         </label>
-        <input
-          id="review-email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="jane@example.com"
-          className="w-full px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors"
-        />
+        <input id="r-biz" type="text" value={businessName} onChange={(e) => setBusinessName(e.target.value)}
+          placeholder="Acme Plumbing"
+          className="w-full px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors" />
+      </div>
+
+      {/* Business Type (optional) */}
+      <div>
+        <label htmlFor="r-type" className="block text-sm font-medium mb-1.5">
+          Business Type <span className="text-muted font-normal">(optional)</span>
+        </label>
+        <input id="r-type" type="text" value={businessType} onChange={(e) => setBusinessType(e.target.value)}
+          placeholder="Local service, e-commerce, SaaS…"
+          className="w-full px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors" />
+      </div>
+
+      {/* Website (optional) */}
+      <div>
+        <label htmlFor="r-web" className="block text-sm font-medium mb-1.5">
+          Your Website <span className="text-muted font-normal">(optional)</span>
+        </label>
+        <input id="r-web" type="url" value={website} onChange={(e) => setWebsite(e.target.value)}
+          placeholder="https://yourbusiness.com"
+          className="w-full px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors" />
       </div>
 
       {/* Review Body */}
       <div>
-        <label htmlFor="review-body" className="block text-sm font-medium mb-1.5">Your Review *</label>
-        <textarea
-          id="review-body"
-          required
-          rows={4}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          placeholder="Share your experience with MyGeoRadar..."
-          className="w-full px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none"
-        />
+        <label htmlFor="r-body" className="block text-sm font-medium mb-1.5">Your Review *</label>
+        <textarea id="r-body" required rows={4} value={reviewText} onChange={(e) => setReviewText(e.target.value)}
+          placeholder="Share your experience with MyGeoRadar…"
+          className="w-full px-3 py-2 rounded-lg border border-border bg-white text-sm focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-colors resize-none" />
       </div>
 
       {error && <p className="text-sm text-red-500">{error}</p>}
