@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server'
+import { createSupabaseServer } from '@/lib/supabase-server'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Review must be at least 10 characters.' }, { status: 400 })
     }
 
-    const supabase = await createClient()
+    const supabase = await createSupabaseServer()
     const { error } = await supabase.from('reviews').insert({
       name: name.trim(),
       business_name: business_name?.trim() || null,
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   try {
-    const supabase = await createClient()
+    const supabase = await createSupabaseServer()
     const { data, error } = await supabase
       .from('reviews')
       .select('id, name, business_name, business_type, rating, review_text, created_at')

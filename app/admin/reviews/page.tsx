@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase-server'
+import { createSupabaseServer } from '@/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
 import { Star, AlertTriangle, CheckCircle } from 'lucide-react'
@@ -19,7 +19,7 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 export default async function AdminReviewsPage() {
-  const supabase = await createClient()
+  const supabase = await createSupabaseServer()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
