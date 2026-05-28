@@ -8,6 +8,7 @@ import { Radar, Menu, X } from 'lucide-react'
 const navLinks = [
   { href: '/#scan',         label: 'Free Scan' },
   { href: '/#what-you-get', label: "What's Included" },
+  { href: '/reviews',       label: 'Reviews' },
   { href: '/blog',          label: 'Blog' },
 ]
 
@@ -62,7 +63,7 @@ export function Navbar() {
               href={href}
               className={[
                 'px-3 py-1.5 rounded-md text-sm transition-all duration-150',
-                pathname === href || (href === '/blog' && pathname.startsWith('/blog'))
+                pathname === href || (href === '/blog' && pathname.startsWith('/blog')) || (href === '/reviews' && pathname.startsWith('/reviews'))
                   ? 'text-foreground bg-surface-2 font-medium'
                   : 'text-muted hover:text-foreground hover:bg-surface-2',
               ].join(' ')}
@@ -76,14 +77,12 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-3">
           <Link
             href="/playbook"
-            className={
-              [
-                'inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150',
-                pathname === '/playbook'
-                  ? 'bg-accent text-white shadow-glow-xs'
-                  : 'bg-accent text-white hover:bg-accent-hover shadow-glow-xs hover:shadow-glow-sm',
-              ].join(' ')
-            }
+            className={[
+              'inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-150',
+              pathname === '/playbook'
+                ? 'bg-accent text-white shadow-glow-xs'
+                : 'bg-accent text-white hover:bg-accent-hover shadow-glow-xs hover:shadow-glow-sm',
+            ].join(' ')}
           >
             Get the Playbook — $27
           </Link>
