@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { AiReadinessScan } from '@/components/scan/AiReadinessScan'
+import { HomepageReviews } from '@/components/reviews/HomepageReviews'
 import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, AlertTriangle, Clock, Eye } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
@@ -198,7 +199,7 @@ export default function HomePage() {
                 <div className="mb-5">
                   <p className="font-semibold text-[15px] mb-1">Check your AI readiness — free</p>
                   <p className="text-sm text-muted leading-relaxed">
-                    Enter your website URL. We’ll analyze the technical signals that influence
+                    Enter your website URL. We'll analyze the technical signals that influence
                     whether AI systems can read, understand, and cite your business.
                   </p>
                   <p className="text-xs text-muted/60 mt-2">
@@ -221,7 +222,7 @@ export default function HomePage() {
             <p className="text-muted leading-relaxed mb-4 text-pretty">
               When a potential customer asks ChatGPT &ldquo;who&apos;s the best [your type of
               business]?&rdquo; — AI gives them a confident, specific answer. Right now. If your
-              business isn’t in that answer,{' '}
+              business isn't in that answer,{' '}
               <strong className="text-foreground">
                 you lost that customer before they ever found your website.
               </strong>
@@ -285,7 +286,7 @@ export default function HomePage() {
             <div className="text-center mt-10">
               <Link href="/playbook">
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  See everything that’s included <ArrowRight className="w-4 h-4" />
+                  See everything that's included <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </div>
@@ -395,7 +396,7 @@ export default function HomePage() {
                 {
                   step: '01',
                   title: 'Run the free scan — see where you stand',
-                  body: 'Enter your URL above. In seconds you’ll see how your site is structured for AI systems — what’s working, what’s broken, and where the biggest gaps are.',
+                  body: 'Enter your URL above. In seconds you'll see how your site is structured for AI systems — what's working, what's broken, and where the biggest gaps are.',
                 },
                 {
                   step: '02',
@@ -410,7 +411,7 @@ export default function HomePage() {
                 {
                   step: '04',
                   title: 'Re-run the scan and measure your shift',
-                  body: 'After 30 days, run the scan again and compare your score. You’ll have a concrete before/after showing exactly how your AI visibility changed.',
+                  body: 'After 30 days, run the scan again and compare your score. You'll have a concrete before/after showing exactly how your AI visibility changed.',
                 },
               ].map(({ step, title, body }) => (
                 <div
@@ -541,6 +542,9 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+
+        {/* ── CUSTOMER REVIEWS ──────────────────────────────────────── */}
+        <HomepageReviews />
 
         {/* ── FINAL CTA ─────────────────────────────────────────────── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
