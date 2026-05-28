@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         {
           price_data: {
             currency: 'usd',
-            unit_amount: 999,
+            unit_amount: 1000,
             product_data: {
               name: `AI Visibility Fix Guides — ${issueLabel} for ${hostname}`,
               description: `Step-by-step fix guide for each of the ${issueLabel} on your site. Score: ${scan.score}/100.`,
@@ -77,16 +77,20 @@ export async function POST(req: NextRequest) {
       ],
       metadata: {
         scanId: scan.id,
-        scanUrl: scan.url.slice(0, 200),
       },
+      customer_creation: 'always',
+      billing_address_collection: 'auto',
       success_url: `${baseUrl}/report/pending?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url:  `${baseUrl}/#scan`,
+      cancel_url: `${baseUrl}/report/preview/${scanId}`,
       allow_promotion_codes: true,
     })
 
     return NextResponse.json({ url: session.url })
   } catch (err) {
-    console.error('Checkout error:', err)
-    return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 })
+    console.error('[report-checkout] Stripe session creation failed:', err)
+    return NextResponse.json(
+      { error: 'Failed to create checkout session. Please try again.' },
+      { status: 500 }
+    )
   }
 }
