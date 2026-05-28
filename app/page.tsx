@@ -5,7 +5,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { AiReadinessScan } from '@/components/scan/AiReadinessScan'
 import { HomepageReviews } from '@/components/reviews/HomepageReviews'
-import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, AlertTriangle, Clock, Eye } from 'lucide-react'
+import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
@@ -128,6 +128,29 @@ const previewChecklist = [
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
+const howItWorks = [
+  {
+    step: '01',
+    title: 'Run the free scan — see where you stand',
+    body: 'Enter your URL above. In seconds you will see how your site is structured for AI systems — what is working, what is broken, and where the biggest gaps are.',
+  },
+  {
+    step: '02',
+    title: 'Get the playbook — $27, one time',
+    body: 'The playbook gives you the complete system to fix every gap the scan surfaces — a 27-point checklist, 10 copy-paste audit prompts, and a 30-day action plan.',
+  },
+  {
+    step: '03',
+    title: 'Work through the checklist',
+    body: 'Go item by item. Each checkbox is a concrete action with clear instructions. No guessing, no jargon. Most items take under an hour.',
+  },
+  {
+    step: '04',
+    title: 'Re-run the scan and measure your shift',
+    body: 'After 30 days, run the scan again and compare your score. You will have a concrete before/after showing exactly how your AI visibility changed.',
+  },
+]
+
 export default function HomePage() {
   return (
     <>
@@ -139,13 +162,11 @@ export default function HomePage() {
       <main className="min-h-screen bg-background">
         <Navbar />
 
-        {/* ── HERO + SCAN (above the fold, scan is the centerpiece) ── */}
+        {/* ── HERO + SCAN ── */}
         <section className="relative pt-28 pb-0 px-4 md:px-8 overflow-hidden">
           <div className="absolute inset-0 hero-bg opacity-70 pointer-events-none" aria-hidden="true" />
 
           <div className="relative max-w-6xl mx-auto">
-
-            {/* Badge */}
             <div className="flex justify-center mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/8 border border-accent/20 text-accent text-xs font-medium animate-fade-in">
                 <Radar className="w-3 h-3" />
@@ -153,10 +174,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* 2-col layout: headline left, scan right */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start pb-16">
-
-              {/* Left — headline + context */}
               <div className="flex flex-col justify-center pt-4">
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-5 text-balance">
                   When someone asks AI about your industry,{' '}
@@ -168,38 +186,26 @@ export default function HomePage() {
                   ChatGPT, Perplexity, Gemini, and Claude — while their competitors get recommended
                   every day. Run the free scan and find out where you stand in 30 seconds.
                 </p>
-
-                {/* Trust signals — inline under headline */}
                 <div className="flex flex-wrap gap-x-5 gap-y-2">
-                  {[
-                    'Free — no signup',
-                    'Results in seconds',
-                    'No credit card',
-                  ].map((label) => (
+                  {['Free — no signup', 'Results in seconds', 'No credit card'].map((label) => (
                     <div key={label} className="flex items-center gap-1.5">
                       <CheckCircle className="w-3.5 h-3.5 text-accent flex-shrink-0" />
                       <span className="text-xs text-muted">{label}</span>
                     </div>
                   ))}
                 </div>
-
-                {/* Scroll link for those who want more context first */}
                 <div className="mt-8">
-                  <Link
-                    href="/#what-you-get"
-                    className="text-sm text-muted hover:text-foreground transition-colors"
-                  >
+                  <Link href="/#what-you-get" className="text-sm text-muted hover:text-foreground transition-colors">
                     See what the full playbook includes ↓
                   </Link>
                 </div>
               </div>
 
-              {/* Right — scan input, visually elevated */}
               <div id="scan" className="rounded-2xl border border-border bg-white shadow-card-accent p-6 md:p-8">
                 <div className="mb-5">
                   <p className="font-semibold text-[15px] mb-1">Check your AI readiness — free</p>
                   <p className="text-sm text-muted leading-relaxed">
-                    Enter your website URL. We'll analyze the technical signals that influence
+                    Enter your website URL. We&apos;ll analyze the technical signals that influence
                     whether AI systems can read, understand, and cite your business.
                   </p>
                   <p className="text-xs text-muted/60 mt-2">
@@ -212,7 +218,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── THE PROBLEM ───────────────────────────────────────────── */}
+        {/* ── THE PROBLEM ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
@@ -222,12 +228,11 @@ export default function HomePage() {
             <p className="text-muted leading-relaxed mb-4 text-pretty">
               When a potential customer asks ChatGPT &ldquo;who&apos;s the best [your type of
               business]?&rdquo; — AI gives them a confident, specific answer. Right now. If your
-              business isn't in that answer,{' '}
+              business isn&apos;t in that answer,{' '}
               <strong className="text-foreground">
                 you lost that customer before they ever found your website.
               </strong>
             </p>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-left mt-10">
               <div className="p-6 rounded-2xl bg-surface border border-border">
                 <p className="text-4xl font-black text-gradient-accent mb-3 tracking-tight">58.5%</p>
@@ -255,7 +260,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── WHAT YOU GET ──────────────────────────────────────────── */}
+        {/* ── WHAT YOU GET ── */}
         <section id="what-you-get" className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
@@ -268,7 +273,6 @@ export default function HomePage() {
                 One purchase. Four assets. The complete system to go from invisible to recommended.
               </p>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {includes.map(({ icon: Icon, title, description }) => (
                 <div key={title} className="card-hover flex gap-4 p-6">
@@ -282,18 +286,17 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-
             <div className="text-center mt-10">
               <Link href="/playbook">
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  See everything that's included <ArrowRight className="w-4 h-4" />
+                  See everything that&apos;s included <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </div>
           </div>
         </section>
 
-        {/* ── PEEK INSIDE ───────────────────────────────────────────── */}
+        {/* ── PEEK INSIDE ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
@@ -304,16 +307,13 @@ export default function HomePage() {
                 A real sample from two of the four assets — the checklist and the prompt pack.
               </p>
             </div>
-
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Checklist preview */}
               <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-card-lift">
                 <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <FileText className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">27-Point AI Visibility Checklist</span>
-                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">
-                    1–8 of 27
-                  </span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1–8 of 27</span>
                 </div>
                 <div className="p-5 flex flex-col gap-3">
                   {previewChecklist.map(({ done, text }) => (
@@ -335,7 +335,7 @@ export default function HomePage() {
                     </div>
                   ))}
                   <p className="text-xs text-muted italic border-t border-border pt-3 mt-1">
-                    + 19 more items inside the full checklist…
+                    + 19 more items inside the full checklist&hellip;
                   </p>
                 </div>
               </div>
@@ -345,9 +345,7 @@ export default function HomePage() {
                 <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <Zap className="w-4 h-4 text-accent" />
                   <span className="font-semibold text-sm">Prompt Pack — Sample Prompt</span>
-                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">
-                    1 of 10
-                  </span>
+                  <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1 of 10</span>
                 </div>
                 <div className="p-5 flex flex-col gap-4">
                   <div>
@@ -358,7 +356,7 @@ export default function HomePage() {
                       Paste into ChatGPT, Perplexity, Gemini, and Claude. Run each separately.
                     </p>
                     <div className="rounded-lg bg-surface-2 border border-border p-4 font-mono text-xs leading-relaxed text-foreground/80 select-all">
-                      {`"I'm looking for a [your business type] in [your city/area]. Who are the most trusted and well-reviewed options you'd recommend, and why?"`}
+                      &ldquo;I&apos;m looking for a [your business type] in [your city/area]. Who are the most trusted and well-reviewed options you&apos;d recommend, and why?&rdquo;
                     </div>
                     <p className="text-xs text-muted mt-3">
                       <strong className="text-foreground">What to look for:</strong> Does your
@@ -368,52 +366,28 @@ export default function HomePage() {
                   </div>
                   <p className="text-xs text-muted italic border-t border-border pt-3">
                     + 9 more prompts covering competitor gaps, hallucination detection, citation
-                    sourcing, and brand accuracy…
+                    sourcing, and brand accuracy&hellip;
                   </p>
                 </div>
               </div>
             </div>
-
             <div className="text-center mt-10">
               <Link href="/playbook">
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
                   Get the full bundle — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <p className="text-xs text-muted mt-3">Instant download · 30-day money-back guarantee</p>
+              <p className="text-xs text-muted mt-3">Instant download &middot; 30-day money-back guarantee</p>
             </div>
           </div>
         </section>
 
-        {/* ── HOW IT WORKS ──────────────────────────────────────────── */}
+        {/* ── HOW IT WORKS ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 tracking-tight">
-              How it works
-            </h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 tracking-tight">How it works</h2>
             <div className="flex flex-col gap-4">
-              {[
-                {
-                  step: '01',
-                  title: 'Run the free scan — see where you stand',
-                  body: 'Enter your URL above. In seconds you'll see how your site is structured for AI systems — what's working, what's broken, and where the biggest gaps are.',
-                },
-                {
-                  step: '02',
-                  title: 'Get the playbook — $27, one time',
-                  body: 'The playbook gives you the complete system to fix every gap the scan surfaces — a 27-point checklist, 10 copy-paste audit prompts, and a 30-day action plan.',
-                },
-                {
-                  step: '03',
-                  title: 'Work through the checklist',
-                  body: 'Go item by item. Each checkbox is a concrete action with clear instructions. No guessing, no jargon. Most items take under an hour.',
-                },
-                {
-                  step: '04',
-                  title: 'Re-run the scan and measure your shift',
-                  body: 'After 30 days, run the scan again and compare your score. You'll have a concrete before/after showing exactly how your AI visibility changed.',
-                },
-              ].map(({ step, title, body }) => (
+              {howItWorks.map(({ step, title, body }) => (
                 <div
                   key={step}
                   className="flex gap-5 text-left p-5 rounded-xl bg-white border border-border hover:border-accent/25 hover:shadow-card-lift transition-all duration-200"
@@ -429,7 +403,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── WHY NOW ───────────────────────────────────────────────── */}
+        {/* ── WHY NOW ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
@@ -462,18 +436,18 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── WHO IT'S FOR ──────────────────────────────────────────── */}
+        {/* ── WHO IT'S FOR ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-10 tracking-tight">
-              This is for you if…
+              This is for you if&hellip;
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
               {[
                 'You own or market a local or online business',
-                "AI assistants don't mention your business when you test them",
-                "You've read GEO articles but still don't know what to actually do",
-                "You don't want to pay $100+/month for a tracking tool",
+                'AI assistants don\'t mention your business when you test them',
+                'You\'ve read GEO articles but still don\'t know what to actually do',
+                'You don\'t want to pay $100+/month for a tracking tool',
                 'You want a clear, done-for-you action plan — not more theory',
                 'You want to act before your competitors figure this out',
               ].map((item) => (
@@ -489,7 +463,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── PRICING ───────────────────────────────────────────────── */}
+        {/* ── PRICING ── */}
         <section id="pricing" className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-md mx-auto">
             <div className="relative rounded-2xl border border-accent/40 bg-white p-8 text-center shadow-card-accent overflow-hidden">
@@ -500,7 +474,7 @@ export default function HomePage() {
               <div className="mb-1">
                 <span className="text-6xl font-black text-gradient tracking-tight">$27</span>
               </div>
-              <p className="text-sm text-muted mb-8">One-time · No subscription · Instant download</p>
+              <p className="text-sm text-muted mb-8">One-time &middot; No subscription &middot; Instant download</p>
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
                   'The Complete AI Visibility Playbook',
@@ -522,13 +496,13 @@ export default function HomePage() {
                 </Button>
               </Link>
               <p className="text-xs text-muted mt-4">
-                Secure checkout via Stripe · PDF delivered instantly
+                Secure checkout via Stripe &middot; PDF delivered instantly
               </p>
             </div>
           </div>
         </section>
 
-        {/* ── FAQ ───────────────────────────────────────────────────── */}
+        {/* ── FAQ ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12 tracking-tight">Common questions</h2>
@@ -543,10 +517,10 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── CUSTOMER REVIEWS ──────────────────────────────────────── */}
+        {/* ── CUSTOMER REVIEWS ── */}
         <HomepageReviews />
 
-        {/* ── FINAL CTA ─────────────────────────────────────────────── */}
+        {/* ── FINAL CTA ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight text-balance">
@@ -564,7 +538,7 @@ export default function HomePage() {
               </Button>
             </Link>
             <p className="text-xs text-muted mt-4">
-              One-time · Instant download · 30-day money-back guarantee
+              One-time &middot; Instant download &middot; 30-day money-back guarantee
             </p>
           </div>
         </section>
