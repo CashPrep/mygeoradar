@@ -1,7 +1,6 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase-server'
 import { NextResponse } from 'next/server'
 
-// GET /api/admin/reviews — all reviews including bad ones (requires auth)
 export async function GET() {
   try {
     const supabase = await createClient()

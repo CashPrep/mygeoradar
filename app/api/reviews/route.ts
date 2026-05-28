@@ -1,7 +1,6 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase-server'
 import { NextRequest, NextResponse } from 'next/server'
 
-// POST /api/reviews — anyone can submit
 export async function POST(req: NextRequest) {
   try {
     const { name, business_name, business_type, website, rating, review_text } = await req.json()
@@ -34,7 +33,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// GET /api/reviews — public: only approved (4-5 star) reviews
 export async function GET() {
   try {
     const supabase = await createClient()
