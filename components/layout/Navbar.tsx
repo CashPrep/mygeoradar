@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Radar, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 
 const navLinks = [
   { href: '/#scan',         label: 'Free Scan' },
@@ -47,9 +48,13 @@ export function Navbar() {
           href="/"
           className="flex items-center gap-2 font-bold text-[15px] tracking-tight hover:opacity-80 transition-opacity"
         >
-          <div className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center shadow-glow-xs">
-            <Radar className="w-4 h-4 text-white" />
-          </div>
+          <Image
+            src="/icon-512.png"
+            alt="MyGeoRadar logo"
+            width={28}
+            height={28}
+            className="rounded-lg"
+          />
           <span>
             My<span className="text-accent">Geo</span>Radar
           </span>

@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Radar, Mail } from 'lucide-react'
+import Image from 'next/image'
+import { Mail } from 'lucide-react'
 
 export function Footer() {
   const year = new Date().getFullYear()
@@ -17,9 +18,13 @@ export function Footer() {
               href="/"
               className="inline-flex items-center gap-2 font-bold text-[15px] tracking-tight mb-3 hover:opacity-80 transition-opacity"
             >
-              <div className="w-7 h-7 rounded-lg bg-accent flex items-center justify-center shadow-glow-xs">
-                <Radar className="w-4 h-4 text-white" />
-              </div>
+              <Image
+                src="/icon-512.png"
+                alt="MyGeoRadar logo"
+                width={28}
+                height={28}
+                className="rounded-lg"
+              />
               <span>
                 My<span className="text-accent">Geo</span>Radar
               </span>
