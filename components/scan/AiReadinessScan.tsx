@@ -7,6 +7,7 @@ import {
   Loader2, Radar, Lock, ExternalLink, RotateCcw,
 } from 'lucide-react'
 import { clsx } from 'clsx'
+import { EmailGate } from '@/components/scan/EmailGate'
 
 type Status = 'pass' | 'warn' | 'fail'
 interface FreeCheck {
@@ -250,59 +251,65 @@ export function AiReadinessScan() {
           </div>
 
           {/* Checks list */}
-          <div className="relative">
-            <div className="flex flex-col gap-2">
-              {result.checks.map(c => (
-                <div
-                  key={c.id}
-                  className={clsx(
-                    'rounded-lg border flex items-center gap-3 px-4 py-3',
-                    statusBg(c.status),
-                  )}
-                >
-                  {statusIcon(c.status)}
-                  <span className="flex-1 text-sm font-medium text-foreground">{c.label}</span>
-                  <span className={clsx(
-                    'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded flex-shrink-0',
-                    c.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500',
-                  )}>
-                    {c.impact}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Blur + unlock CTA — sits below the list, not overlapping it */}
-            {issueCount > 0 && (
-              <div className="mt-4 rounded-xl border border-accent/25 bg-white shadow-card-accent overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-accent to-transparent" />
-                <div className="p-5 text-center">
-                  <div className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-accent/8 border border-accent/15 mb-3">
-                    <Lock className="w-4 h-4 text-accent" />
-                  </div>
-                  <p className="text-sm font-semibold mb-1">
-                    {issueCount} issue{issueCount !== 1 ? 's' : ''} found on{' '}
-                    <span className="font-mono">{safeHostname(result.url)}</span>
-                  </p>
-                  <p className="text-xs text-muted mb-4 max-w-xs mx-auto">
-                    Get a step-by-step fix guide for each issue &mdash; exactly what to do, in what order, with validation steps.
-                  </p>
-                  <button
-                    onClick={unlockReport}
-                    disabled={paying}
-                    className="btn-primary gap-2 text-sm px-6 py-2.5"
-                  >
-                    {paying
-                      ? <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting&hellip;</>
-                      : <>Get My {issueCount} Fix Guide{issueCount !== 1 ? 's' : ''} &mdash; $9.99 <ArrowRight className="w-4 h-4" /></>}
-                  </button>
-                  <p className="text-xs text-muted/60 mt-2.5">
-                    One-time &middot; Instant access &middot; Only the fixes your site needs
-                  </p>
-                </div>
+          <div className="flex flex-col gap-2">
+            {result.checks.map(c => (
+              <div
+                key={c.id}
+                className={clsx(
+                  'rounded-lg border flex items-center gap-3 px-4 py-3',
+                  statusBg(c.status),
+                )}
+              >
+                {statusIcon(c.status)}
+                <span className="flex-1 text-sm font-medium text-foreground">{c.label}</span>
+                <span className={clsx(
+                  'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded flex-shrink-0',
+                  c.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500',
+                )}>
+                  {c.impact}
+                </span>
               </div>
-            )}
+            ))}
           </div>
+
+          {/* ── Email Gate — shown after every scan ── */}
+          <EmailGate
+            scanId={result.scanId}
+            score={result.score}
+            url={result.url}
+            failCount={failCount}
+            warnCount={warnCount}
+          />
+
+          {/* Unlock paid report CTA */}
+          {issueCount > 0 && (
+            <div className="rounded-xl border border-accent/25 bg-white shadow-card-accent overflow-hidden">
+              <div className="p-5 text-center">
+                <div className="inline-flex items-center justify-center w-9 h-9 rounded-full bg-accent/8 border border-accent/15 mb-3">
+                  <Lock className="w-4 h-4 text-accent" />
+                </div>
+                <p className="text-sm font-semibold mb-1">
+                  {issueCount} issue{issueCount !== 1 ? 's' : ''} found on{' '}
+                  <span className="font-mono">{safeHostname(result.url)}</span>
+                </p>
+                <p className="text-xs text-muted mb-4 max-w-xs mx-auto">
+                  Get a step-by-step fix guide for each issue &mdash; exactly what to do, in what order, with validation steps.
+                </p>
+                <button
+                  onClick={unlockReport}
+                  disabled={paying}
+                  className="btn-primary gap-2 text-sm px-6 py-2.5"
+                >
+                  {paying
+                    ? <><Loader2 className="w-4 h-4 animate-spin" /> Redirecting&hellip;</>
+                    : <>Get My {issueCount} Fix Guide{issueCount !== 1 ? 's' : ''} &mdash; $9.99 <ArrowRight className="w-4 h-4" /></>}
+                </button>
+                <p className="text-xs text-muted/60 mt-2.5">
+                  One-time &middot; Instant access &middot; Only the fixes your site needs
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* All passing — upsell playbook */}
           {failCount === 0 && warnCount === 0 && (
