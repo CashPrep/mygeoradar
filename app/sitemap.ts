@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 import { BLOG_POSTS } from '@/lib/blog-posts'
 
-const BASE = 'https://mygeoradar.com'
+const BASE = 'https://www.mygeoradar.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const corePages: MetadataRoute.Sitemap = [
