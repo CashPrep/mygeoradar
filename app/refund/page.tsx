@@ -5,7 +5,8 @@ import { Footer } from '@/components/layout/Footer'
 export const metadata: Metadata = {
   title: 'Refund Policy',
   description: 'MyGeoRadar refund policy — 30-day money-back guarantee on the Found by AI Playbook.',
-  robots: { index: false, follow: false },
+  robots: { index: false, follow: true },
+  alternates: { canonical: 'https://www.mygeoradar.com/refund' },
 }
 
 export default function RefundPage() {
