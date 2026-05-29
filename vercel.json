@@ -6,6 +6,7 @@
     }
   ],
   "redirects": [
+    { "source": "/:path*", "has": [{ "type": "host", "value": "mygeoradar.com" }], "destination": "https://www.mygeoradar.com/:path*", "permanent": true },
     { "source": "/scan", "destination": "/playbook", "permanent": true },
     { "source": "/scan/:path*", "destination": "/playbook", "permanent": true }
   ],
