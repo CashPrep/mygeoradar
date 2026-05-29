@@ -22,9 +22,7 @@ export const metadata: Metadata = {
     'AI search guide', 'how to show up on ChatGPT', 'found by AI playbook',
   ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.mygeoradar.com'),
-  alternates: {
-    canonical: 'https://www.mygeoradar.com',
-  },
+  // No canonical here — Next.js will generate the correct per-page canonical automatically
   openGraph: {
     type: 'website',
     locale: 'en_US',
