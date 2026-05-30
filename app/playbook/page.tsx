@@ -143,7 +143,7 @@ export default function PlaybookPage() {
         {/* ── URGENCY BANNER ─────────────────────────────────────────── */}
         <div className="bg-accent/10 border-b border-accent/20 text-center py-2.5 px-4">
           <p className="text-xs font-medium text-accent tracking-wide">
-            Launch price · <strong className="font-semibold">$27</strong> · Increases after the first 200 copies
+            Launch price · <strong className="font-semibold">$27</strong> 
           </p>
         </div>
 
@@ -399,7 +399,7 @@ export default function PlaybookPage() {
               </div>
               <p className="text-sm text-muted mb-2">One-time · No subscription · Instant download</p>
               <p className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 inline-block mb-6">
-                Launch price — limited to first 200 copies
+                Launch price — One-time payment. Yours forever.
               </p>
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
