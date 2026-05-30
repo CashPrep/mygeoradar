@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer'
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description: 'MyGeoRadar privacy policy — how we collect, use, and protect your data.',
-  robots: { index: false, follow: true },
+  robots: { index: true, follow: true },
   alternates: { canonical: 'https://www.mygeoradar.com/privacy' },
 }
 
