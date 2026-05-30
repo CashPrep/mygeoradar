@@ -550,7 +550,7 @@ export default function HomePage() {
               </div>
               <div>
                 <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">Built by</p>
-                <h3 className="text-xl font-bold text-foreground mb-2">Andrew G — AI Scholar, Elon University</h3>
+                <h3 className="text-xl font-bold text-foreground mb-2">Andrew Garber — AI Scholar, Elon University</h3>
                 <p className="text-sm text-muted leading-relaxed">
                   MyGeoRadar was built after noticing that almost every local business was invisible
                   in AI-generated answers — including businesses with strong Google rankings. Andrew
