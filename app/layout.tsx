@@ -22,11 +22,13 @@ export const metadata: Metadata = {
     'AI search guide', 'how to show up on ChatGPT', 'found by AI playbook',
   ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.mygeoradar.com'),
-  // No canonical here — Next.js will generate the correct per-page canonical automatically
+  // No canonical here — Next.js generates correct per-page canonicals via metadataBase
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://www.mygeoradar.com',
+    // NOTE: Do NOT set `url` here — it would be inherited by every page and
+    // override each page's own OG url. Let child pages set their own url,
+    // or Next.js will derive it from metadataBase + the current route.
     title: 'MyGeoRadar — Get Found by AI',
     description: 'Most businesses are invisible to AI assistants. The Found by AI Playbook shows you exactly how to fix that — step by step, one time, $27.',
     siteName: 'MyGeoRadar',
