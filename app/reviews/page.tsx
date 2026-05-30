@@ -8,6 +8,12 @@ import { Star } from 'lucide-react'
 export const metadata: Metadata = {
   title: 'Customer Reviews — MyGeoRadar',
   description: 'See what business owners and marketers say about the Found by AI Playbook from MyGeoRadar.',
+  openGraph: {
+    title: 'Customer Reviews — MyGeoRadar',
+    description: 'See what business owners and marketers say about the Found by AI Playbook from MyGeoRadar.',
+    url: 'https://mygeoradar.com/reviews',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+  },
 }
 
 export default function ReviewsPage() {
