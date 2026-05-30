@@ -7,10 +7,9 @@ import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
-  { href: '/#scan',         label: 'Free Scan' },
-  { href: '/#what-you-get', label: "What's Included" },
-  { href: '/reviews',       label: 'Reviews' },
-  { href: '/blog',          label: 'Blog' },
+  { href: '/blog',    label: 'Blog' },
+  { href: '/about',   label: 'About' },
+  { href: '/reviews', label: 'Reviews' },
 ]
 
 export function Navbar() {
@@ -68,7 +67,10 @@ export function Navbar() {
               href={href}
               className={[
                 'px-3 py-1.5 rounded-md text-sm transition-all duration-150',
-                pathname === href || (href === '/blog' && pathname.startsWith('/blog')) || (href === '/reviews' && pathname.startsWith('/reviews'))
+                pathname === href
+                  || (href === '/blog' && pathname.startsWith('/blog'))
+                  || (href === '/reviews' && pathname.startsWith('/reviews'))
+                  || (href === '/about' && pathname.startsWith('/about'))
                   ? 'text-foreground bg-surface-2 font-medium'
                   : 'text-muted hover:text-foreground hover:bg-surface-2',
               ].join(' ')}

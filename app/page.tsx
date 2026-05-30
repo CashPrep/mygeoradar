@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import { AiReadinessScan } from '@/components/scan/AiReadinessScan'
 import { HomepageReviews } from '@/components/reviews/HomepageReviews'
-import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, Clock } from 'lucide-react'
+import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, Clock, Quote } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
@@ -174,7 +175,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start pb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start pb-6">
               <div className="flex flex-col justify-center pt-4">
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-5 text-balance">
                   When someone asks AI about your industry,{' '}
@@ -194,7 +195,18 @@ export default function HomePage() {
                     </div>
                   ))}
                 </div>
-                <div className="mt-8">
+
+                {/* FIX 2 — Social proof quote ribbon beneath trust badges */}
+                <div className="mt-7 flex items-start gap-3 px-4 py-3.5 rounded-xl bg-accent/5 border border-accent/15">
+                  <Quote className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
+                  <p className="text-sm leading-relaxed">
+                    <span className="font-semibold text-foreground">Went from a 78 to 100 AI score in 30 days.</span>
+                    {' '}The checklist is the most actionable thing I've found on this topic.
+                    <span className="block text-xs text-muted mt-1">— Johnathan Lightfoot, business owner</span>
+                  </p>
+                </div>
+
+                <div className="mt-6">
                   <Link href="/#what-you-get" className="text-sm text-muted hover:text-foreground transition-colors">
                     See what the full playbook includes ↓
                   </Link>
@@ -373,8 +385,9 @@ export default function HomePage() {
             </div>
             <div className="text-center mt-10">
               <Link href="/playbook">
+                {/* FIX 1 — Outcome-focused CTA copy */}
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  Get the full bundle — $27 <ArrowRight className="w-4 h-4" />
+                  Show Up in ChatGPT — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <p className="text-xs text-muted mt-3">Instant download &middot; 30-day money-back guarantee</p>
@@ -463,6 +476,27 @@ export default function HomePage() {
           </div>
         </section>
 
+        {/* ── FIX 2 — SOCIAL PROOF ABOVE PRICING ── */}
+        <section className="py-16 px-4 md:px-8 border-t border-border">
+          <div className="max-w-2xl mx-auto">
+            <div className="rounded-2xl border border-accent/20 bg-accent/4 p-7 flex flex-col md:flex-row gap-6 items-start">
+              <Quote className="w-7 h-7 text-accent flex-shrink-0 mt-1" />
+              <div>
+                <p className="text-foreground font-medium leading-relaxed mb-3">
+                  &ldquo;I went from a 78 to a 100 AI score in 30 days. I followed the checklist exactly — most items took less than an hour each. The prompt pack alone was worth it just to see how ChatGPT was describing my business before I fixed things.&rdquo;
+                </p>
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-accent/15 flex items-center justify-center text-xs font-bold text-accent">JL</div>
+                  <div>
+                    <span className="text-sm font-semibold text-foreground block">Johnathan Lightfoot</span>
+                    <span className="text-xs text-muted">Business owner &middot; 78 → 100 AI score in 30 days</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── PRICING ── */}
         <section id="pricing" className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-md mx-auto">
@@ -491,19 +525,53 @@ export default function HomePage() {
                 ))}
               </ul>
               <Link href="/playbook">
+                {/* FIX 1 — Primary pricing CTA with outcome copy */}
                 <Button variant="primary" size="lg" className="w-full gap-2 shadow-glow-sm">
-                  Get instant access — $27 <ArrowRight className="w-4 h-4" />
+                  Fix My AI Visibility — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              <p className="text-xs text-muted mt-4">
+              {/* FIX 3 — Social volume urgency line */}
+              <p className="text-xs text-muted/70 mt-3 italic">
+                Join the business owners who checked their AI score this week.
+              </p>
+              <p className="text-xs text-muted mt-1">
                 Secure checkout via Stripe &middot; PDF delivered instantly
               </p>
             </div>
           </div>
         </section>
 
+        {/* ── FIX 4 — FOUNDER TRUST BLOCK ── */}
+        <section className="py-20 px-4 md:px-8 border-t border-border bg-surface/40">
+          <div className="max-w-2xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+              <div className="flex-shrink-0 w-20 h-20 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center text-2xl font-black text-accent select-none">
+                AG
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">Built by</p>
+                <h3 className="text-xl font-bold text-foreground mb-2">Andrew G — AI Scholar, Elon University</h3>
+                <p className="text-sm text-muted leading-relaxed">
+                  MyGeoRadar was built after noticing that almost every local business was invisible
+                  in AI-generated answers — including businesses with strong Google rankings. Andrew
+                  studied AI systems, synthesized what actually influences AI citations, and turned
+                  that research into the playbook and checklist you see here. The tools and
+                  frameworks are the same ones used to take a client from a 78 to a 100 AI score in
+                  30 days.
+                </p>
+                <Link
+                  href="/about"
+                  className="inline-flex items-center gap-1.5 text-sm text-accent hover:underline font-medium mt-3"
+                >
+                  Read the full story <ArrowRight className="w-3.5 h-3.5" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ── FAQ ── */}
-        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
+        <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12 tracking-tight">Common questions</h2>
             <div className="divide-y divide-border">
