@@ -110,7 +110,7 @@ const faqs = [
   },
   {
     q: 'How do I receive the playbook after purchase?',
-    a: 'After checkout you will be redirected to a download page and receive a confirmation email. Everything is yours to keep forever.',
+    a: 'After checkout you will be redirected to a download page. Sign in with the email you used at checkout — we send a magic link, no password needed. Your files are then available instantly.',
   },
   {
     q: 'What if I am not satisfied?',
@@ -196,7 +196,7 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                {/* FIX 2 — Social proof quote ribbon beneath trust badges */}
+                {/* Social proof quote ribbon beneath trust badges */}
                 <div className="mt-7 flex items-start gap-3 px-4 py-3.5 rounded-xl bg-accent/5 border border-accent/15">
                   <Quote className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <p className="text-sm leading-relaxed">
@@ -385,7 +385,6 @@ export default function HomePage() {
             </div>
             <div className="text-center mt-10">
               <Link href="/playbook">
-                {/* FIX 1 — Outcome-focused CTA copy */}
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
                   Show Up in ChatGPT — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
@@ -476,7 +475,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── FIX 2 — SOCIAL PROOF ABOVE PRICING ── */}
+        {/* ── SOCIAL PROOF ABOVE PRICING ── */}
         <section className="py-16 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto">
             <div className="rounded-2xl border border-accent/20 bg-accent/4 p-7 flex flex-col md:flex-row gap-6 items-start">
@@ -525,12 +524,10 @@ export default function HomePage() {
                 ))}
               </ul>
               <Link href="/playbook">
-                {/* FIX 1 — Primary pricing CTA with outcome copy */}
                 <Button variant="primary" size="lg" className="w-full gap-2 shadow-glow-sm">
                   Fix My AI Visibility — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
-              {/* FIX 3 — Social volume urgency line */}
               <p className="text-xs text-muted/70 mt-3 italic">
                 Join the business owners who checked their AI score this week.
               </p>
@@ -541,7 +538,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ── FIX 4 — FOUNDER TRUST BLOCK ── */}
+        {/* ── FOUNDER TRUST BLOCK ── */}
         <section className="py-20 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-2xl mx-auto">
             <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
