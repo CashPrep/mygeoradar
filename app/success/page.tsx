@@ -35,18 +35,25 @@ export default async function SuccessPage({
     redirect('/playbook')
   }
 
+  // Check if this user is already signed in AND their purchase is already confirmed.
+  // We do NOT block on this — the webhook may not have fired yet (race condition).
+  // If the purchase isn't in the DB yet, we still show the success state and send
+  // the user to sign in; the download will work once the webhook completes (typically
+  // within a few seconds of Stripe firing it).
   const supabase = await createSupabaseServer()
   const { data: { user } } = await supabase.auth.getUser()
 
-  let hasPurchase = false
+  let purchaseConfirmed = false
   if (user) {
     const { data } = await supabase
       .from('playbook_purchases')
       .select('id')
       .eq('email', user.email!.toLowerCase())
       .limit(1)
-    hasPurchase = !!(data && data.length > 0)
+    purchaseConfirmed = !!(data && data.length > 0)
   }
+
+  const alreadySignedInWithPurchase = !!user && purchaseConfirmed
 
   return (
     <main className="min-h-screen bg-background">
@@ -66,8 +73,8 @@ export default async function SuccessPage({
             Your <strong className="text-foreground">Found by AI Playbook</strong> is ready.
           </p>
 
-          {user && hasPurchase ? (
-            /* Already signed in — direct download */
+          {alreadySignedInWithPurchase ? (
+            /* Already signed in and purchase confirmed — direct download */
             <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left">
               <h2 className="text-lg font-semibold mb-2 flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-accent" /> You&apos;re all set
@@ -84,7 +91,13 @@ export default async function SuccessPage({
               </Link>
             </div>
           ) : (
-            /* Not signed in — magic link path, no blocking wall */
+            /* Default path: send to sign-in.
+               Works for:
+               (a) not signed in — needs magic link
+               (b) signed in but webhook hasn’t written to DB yet — by the time
+                   they check their email and click the magic link the purchase
+                   will be confirmed. If already signed in, /account will show
+                   downloads as soon as the webhook fires (usually <5 seconds). */
             <div className="rounded-2xl border border-accent/40 bg-surface p-8 text-left flex flex-col gap-5">
               <div>
                 <h2 className="text-lg font-semibold mb-1 flex items-center gap-2">
@@ -96,6 +109,9 @@ export default async function SuccessPage({
                     ? <strong className="text-foreground">{customerEmail}</strong>
                     : <>the email you used at checkout</>}{' '}
                   to access your files. We&apos;ll send a magic link — no password needed.
+                </p>
+                <p className="text-xs text-muted mb-4">
+                  A confirmation email with your download link is also on its way to you now.
                 </p>
                 <Link
                   href={`/login?next=/account&hint=${encodeURIComponent(customerEmail ?? '')}`}
