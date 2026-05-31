@@ -20,6 +20,10 @@ const ALLOWED_FILES: Record<string, { filename: string; contentType: string }> =
     filename: '30-day-action-plan.html',
     contentType: 'text/html',
   },
+  'ai-readiness-fix-guides.html': {
+    filename: 'ai-readiness-fix-guides.html',
+    contentType: 'text/html',
+  },
 }
 
 export async function GET(req: NextRequest) {
