@@ -39,9 +39,20 @@ export async function middleware(req: NextRequest) {
     )
   }
 
+  // Protect /dashboard — requires the secret key query param.
+  // DashboardInner handles the actual key validation via /api/dashboard/stats;
+  // this middleware gate blocks keyless requests before they even render.
+  if (pathname.startsWith('/dashboard')) {
+    const key = req.nextUrl.searchParams.get('key')
+    const expectedKey = process.env.DASHBOARD_SECRET_KEY
+    if (!key || !expectedKey || key !== expectedKey) {
+      return NextResponse.redirect(new URL('/', req.url))
+    }
+  }
+
   return response
 }
 
 export const config = {
-  matcher: ['/account/:path*', '/downloads/:path*'],
+  matcher: ['/account/:path*', '/downloads/:path*', '/dashboard/:path*', '/dashboard'],
 }
