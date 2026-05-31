@@ -27,10 +27,11 @@ export default async function AccountPage() {
   const hasPurchase = purchases && purchases.length > 0
 
   const files = [
-    { label: 'The Complete AI Visibility Playbook', file: 'found-by-ai-playbook.html' },
-    { label: 'The 27-Point AI Visibility Checklist',  file: 'ai-visibility-checklist.html' },
-    { label: 'Prompt Pack - 10 Copy-Paste Prompts',   file: 'prompt-pack.html' },
-    { label: '30-Day Action Plan Calendar',           file: '30-day-action-plan.html' },
+    { label: 'The Complete AI Visibility Playbook',    file: 'found-by-ai-playbook.html' },
+    { label: 'The 27-Point AI Visibility Checklist',   file: 'ai-visibility-checklist.html' },
+    { label: 'Prompt Pack - 10 Copy-Paste Prompts',    file: 'prompt-pack.html' },
+    { label: '30-Day Action Plan Calendar',            file: '30-day-action-plan.html' },
+    { label: 'AI Readiness Fix Guides',                file: 'ai-readiness-fix-guides.html' },
   ]
 
   return (
