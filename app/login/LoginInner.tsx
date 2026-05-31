@@ -6,11 +6,19 @@ import { Radar, Mail, Chrome } from 'lucide-react'
 import { createSupabaseBrowser } from '@/lib/supabase-browser'
 import { Button } from '@/components/ui/Button'
 
+/** Only allow internal paths (must start with /) to prevent open redirect. */
+function sanitizeNext(value: string | null): string {
+  if (!value) return '/account'
+  const trimmed = value.trim()
+  // Must start with a single slash but not double-slash (protocol-relative URLs)
+  return trimmed.startsWith('/') && !trimmed.startsWith('//') ? trimmed : '/account'
+}
+
 export default function LoginInner() {
   const router       = useRouter()
   const params       = useSearchParams()
   const hint         = params.get('hint') ?? ''
-  const next         = params.get('next') ?? '/account'
+  const next         = sanitizeNext(params.get('next'))
 
   const [email, setEmail]     = useState(hint)
   const [sent, setSent]       = useState(false)
