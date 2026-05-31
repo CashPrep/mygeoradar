@@ -3,7 +3,8 @@ import { createSupabaseServer } from '@/lib/supabase-server'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import Link from 'next/link'
-import { Download, ArrowRight, ShoppingBag } from 'lucide-react'
+import { ArrowRight, ShoppingBag } from 'lucide-react'
+import { DownloadButton } from '@/components/account/DownloadButton'
 
 export const metadata = {
   title: 'My Purchases | MyGeoRadar',
@@ -17,7 +18,6 @@ export default async function AccountPage() {
 
   if (!user) redirect('/login')
 
-  // Check if this user has a playbook purchase
   const { data: purchases } = await supabase
     .from('playbook_purchases')
     .select('id, purchased_at, product, stripe_session_id')
@@ -25,6 +25,13 @@ export default async function AccountPage() {
     .order('purchased_at', { ascending: false })
 
   const hasPurchase = purchases && purchases.length > 0
+
+  const files = [
+    { label: 'The Complete AI Visibility Playbook', file: 'found-by-ai-playbook.html' },
+    { label: 'The 27-Point AI Visibility Checklist',  file: 'ai-visibility-checklist.html' },
+    { label: 'Prompt Pack - 10 Copy-Paste Prompts',   file: 'prompt-pack.html' },
+    { label: '30-Day Action Plan Calendar',           file: '30-day-action-plan.html' },
+  ]
 
   return (
     <main className="min-h-screen bg-background">
@@ -39,26 +46,11 @@ export default async function AccountPage() {
               <div className="rounded-xl border border-accent/30 bg-surface p-6">
                 <div className="flex items-center gap-3 mb-5">
                   <ShoppingBag className="w-5 h-5 text-accent" />
-                  <h2 className="font-semibold">Found by AI - The AI Visibility Playbook</h2>
+                  <h2 className="font-semibold">Found by AI — The AI Visibility Playbook</h2>
                 </div>
                 <div className="flex flex-col gap-3">
-                  {[
-                    { label: 'The Complete AI Visibility Playbook', file: 'found-by-ai-playbook.html' },
-                    { label: 'The 27-Point AI Visibility Checklist', file: 'ai-visibility-checklist.html' },
-                    { label: 'Prompt Pack - 10 Copy-Paste Prompts',  file: 'prompt-pack.html' },
-                    { label: '30-Day Action Plan Calendar',          file: '30-day-action-plan.html' },
-                  ].map(({ label, file }) => (
-                    <a
-                      key={file}
-                      href={`/api/downloads?file=${file}`}
-                      className="flex items-center justify-between rounded-lg border border-border bg-background px-4 py-3 text-sm font-medium hover:bg-surface transition-colors"
-                    >
-                      <span className="flex items-center gap-2">
-                        <Download className="w-4 h-4 text-accent" />
-                        {label}
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-muted" />
-                    </a>
+                  {files.map(({ label, file }) => (
+                    <DownloadButton key={file} file={file} label={label} />
                   ))}
                 </div>
                 <p className="text-xs text-muted mt-4">
