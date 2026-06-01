@@ -76,7 +76,7 @@ export const QUESTIONS: Question[] = [
   {
     slug: 'which-ai-tools-matter-most',
     question: 'Which AI tools matter most for local business visibility?',
-    shortAnswer: 'ChatGPT, Perplexity, Google Gemini, and Claude are the four AI tools that drive the most business-related queries in 2025.',
+    shortAnswer: 'ChatGPT, Perplexity, Google Gemini, and Claude are the four AI tools that drive the most business-related queries in 2026.',
     body: [
       'ChatGPT has the largest user base and is the most commonly used AI assistant for local business recommendations. Perplexity is growing fast among research-oriented users who want sourced answers. Gemini is tightly integrated with Google Search, making it especially important for local businesses.',
       'Claude is popular with professionals and is used heavily for research and recommendations. Each AI tool weights sources differently, so a complete GEO strategy covers all four.',
@@ -113,7 +113,7 @@ export const QUESTIONS: Question[] = [
     body: [
       'Traditional SEO is about getting your web pages to rank higher on Google and Bing by optimizing for keywords, links, and technical factors. The goal is clicks to your website.',
       'GEO is about getting your business cited as a recommendation by AI assistants. The user may never visit your website — they simply receive your business as an answer and act on that recommendation directly.',
-      'Both matter in 2025. A complete digital strategy uses SEO to drive search traffic and GEO to capture the growing share of intent that is moving from traditional search to AI assistants.',
+      'Both matter in 2026. A complete digital strategy uses SEO to drive search traffic and GEO to capture the growing share of intent that is moving from traditional search to AI assistants.',
     ],
     relatedSlugs: ['what-is-geo', 'does-google-seo-help-ai-visibility'],
   },
@@ -149,6 +149,182 @@ export const QUESTIONS: Question[] = [
       'The window to get ahead is still open. Most small businesses have done nothing about AI visibility. Acting now means building an advantage that compounds over time.',
     ],
     relatedSlugs: ['what-is-geo', 'how-to-improve-ai-visibility', 'which-ai-tools-matter-most'],
+  },
+  {
+    slug: 'what-is-schema-markup',
+    question: 'What is schema markup and does it help AI visibility?',
+    shortAnswer: 'Schema markup is structured code on your website that tells search engines and AI crawlers exactly what your business is, where it is, and what it offers.',
+    body: [
+      'Schema markup uses a standardized vocabulary (Schema.org) to label your business data — name, address, phone, hours, reviews, and more — in a machine-readable format that AI models can parse accurately.',
+      'Businesses with complete LocalBusiness schema are more likely to be cited correctly by AI tools because the information is unambiguous. Without schema, AI models have to guess from unstructured text — and they often get it wrong.',
+      'Adding schema is a one-time technical fix that delivers lasting GEO benefits. MyGeoRadar checks your schema implementation and flags missing or incorrect fields in your audit report.',
+    ],
+    relatedSlugs: ['how-to-improve-ai-visibility', 'what-is-geo'],
+  },
+  {
+    slug: 'does-social-media-help-geo',
+    question: 'Does social media presence help AI visibility?',
+    shortAnswer: 'Yes — active social media profiles with consistent business information contribute to AI visibility by adding to the breadth of your online presence.',
+    body: [
+      'AI models are trained on data from across the web, and social media platforms like Facebook, Instagram, LinkedIn, and X are part of that training corpus. Businesses with active, well-maintained social profiles are more likely to be recognized by AI tools.',
+      'The key is consistency. Your business name, address, phone number, and description should be identical on every social platform and match your website exactly.',
+      'Social media engagement — posts, responses, check-ins — also creates fresh content signals that AI models associate with active, legitimate businesses.',
+    ],
+    relatedSlugs: ['how-to-improve-ai-visibility', 'do-reviews-help-ai-visibility'],
+  },
+  {
+    slug: 'what-is-nap-consistency',
+    question: 'What is NAP consistency and why does it matter for AI visibility?',
+    shortAnswer: 'NAP stands for Name, Address, and Phone Number. Consistent NAP data across all online platforms is essential for AI models to accurately identify and recommend your business.',
+    body: [
+      'When your business name, address, or phone number varies across directories, review sites, and your own website, AI models see what looks like multiple different businesses. This fragmentation dramatically reduces the likelihood of being recommended.',
+      'Common NAP inconsistencies include abbreviations ("St." vs "Street"), suite numbers appearing in some listings but not others, and old phone numbers still listed on outdated directories.',
+      'A NAP audit — checking every place your business is listed online and correcting inconsistencies — is one of the highest-ROI GEO fixes and can show results within weeks.',
+    ],
+    relatedSlugs: ['how-to-improve-ai-visibility', 'how-does-ai-find-businesses'],
+  },
+  {
+    slug: 'how-does-perplexity-rank-businesses',
+    question: 'How does Perplexity rank and recommend local businesses?',
+    shortAnswer: 'Perplexity searches the live web in real time and synthesizes sourced answers, so businesses with strong current online presence and authoritative mentions rank higher.',
+    body: [
+      'Unlike ChatGPT which relies primarily on training data, Perplexity performs live web searches and cites sources in its answers. This means your current website content, recent reviews, and up-to-date directory listings all directly influence Perplexity recommendations.',
+      'Perplexity tends to cite high-authority sources — local news coverage, industry publications, and well-ranked websites. Earning press mentions and being listed on authoritative directories is especially valuable for Perplexity visibility.',
+      'Because Perplexity is real-time, improvements to your online presence can show results faster than with ChatGPT or Claude, which require retraining cycles to fully reflect changes.',
+    ],
+    relatedSlugs: ['which-ai-tools-matter-most', 'how-does-ai-find-businesses'],
+  },
+  {
+    slug: 'can-i-advertise-on-chatgpt',
+    question: 'Can I advertise or pay to appear in ChatGPT answers?',
+    shortAnswer: 'Not directly. ChatGPT does not currently offer paid placement in its answers. Visibility is earned organically through GEO signals, not purchased.',
+    body: [
+      'As of 2026, there is no way to pay ChatGPT, Claude, or Gemini to include your business in their answers. Recommendations are generated based on training data and real-world signals, not advertising budgets.',
+      'This is actually good news for small businesses. Unlike Google Ads where larger companies can outbid you, AI visibility is an even playing field based on your actual online reputation and presence.',
+      'The only way to reliably appear in AI answers is through organic GEO work: earning reviews, building authoritative mentions, maintaining consistent listings, and creating AI-friendly content.',
+    ],
+    relatedSlugs: ['what-is-geo', 'how-to-improve-ai-visibility'],
+  },
+  {
+    slug: 'what-is-a-geo-audit',
+    question: 'What is a GEO audit and what does it include?',
+    shortAnswer: 'A GEO audit is a comprehensive scan of your business across AI platforms that identifies where you appear, where you are invisible, and exactly what to fix to improve your AI visibility.',
+    body: [
+      'A MyGeoRadar GEO audit queries ChatGPT, Perplexity, Gemini, and Claude with the exact searches your target customers use. It records whether and how your business appears in each answer.',
+      'The audit also checks technical factors: schema markup, NAP consistency, llms.txt presence, website structure, and review volume and recency across platforms.',
+      'The result is an AI Visibility Score from 0–100 plus a prioritized action plan — the GEO Playbook — that tells you exactly what to fix first for maximum impact.',
+    ],
+    relatedSlugs: ['what-is-ai-visibility-score', 'how-to-improve-ai-visibility'],
+  },
+  {
+    slug: 'how-often-should-i-scan-ai-visibility',
+    question: 'How often should I scan my AI visibility?',
+    shortAnswer: 'Scanning every 60–90 days lets you track progress, catch new gaps, and measure the impact of GEO improvements over time.',
+    body: [
+      'AI models update and retrain regularly, which means your visibility can shift even without changes on your end. Competitors making GEO improvements can displace you in AI answers over time.',
+      'A quarterly scan cadence — roughly every 90 days — gives you enough time for improvements to take effect while catching problems before they compound.',
+      'MyGeoRadar offers discounted rescans so you can track your AI Visibility Score over time and see exactly how your GEO efforts are moving the needle.',
+    ],
+    relatedSlugs: ['what-is-ai-visibility-score', 'what-is-a-geo-audit'],
+  },
+  {
+    slug: 'what-is-citation-building',
+    question: 'What is citation building and how does it help AI visibility?',
+    shortAnswer: 'Citation building is the process of getting your business listed and mentioned across authoritative online directories, review sites, and industry platforms.',
+    body: [
+      'Every time your business is mentioned with accurate NAP data on a credible website, it creates a citation. The more high-quality citations your business has, the more AI models trust its existence and legitimacy.',
+      'Priority citation sources for AI visibility include Google Business Profile, Yelp, BBB, Angi, Houzz, Healthgrades (for healthcare), Avvo (for legal), and industry-specific directories relevant to your niche.',
+      'Citation building is a foundational GEO tactic that benefits both traditional SEO and AI visibility simultaneously, making it one of the best investments of your time.',
+    ],
+    relatedSlugs: ['what-is-nap-consistency', 'how-to-improve-ai-visibility'],
+  },
+  {
+    slug: 'does-website-speed-affect-geo',
+    question: 'Does website speed and technical performance affect AI visibility?',
+    shortAnswer: 'Indirectly yes — a fast, well-structured website is easier for AI crawlers to parse and index, and it signals legitimacy that improves your overall digital authority.',
+    body: [
+      'AI models that perform live web searches (like Perplexity) are more likely to successfully crawl and cite a fast, well-structured website. Slow or broken websites get deprioritized or skipped entirely.',
+      'Core Web Vitals — Google\'s performance metrics — also influence where your website appears in the training data that models like ChatGPT and Gemini learn from. Better performance correlates with higher-quality content signals.',
+      'Technical fixes like improving page speed, fixing broken links, and adding proper meta descriptions are GEO improvements as much as they are SEO improvements.',
+    ],
+    relatedSlugs: ['how-to-improve-ai-visibility', 'what-is-geo'],
+  },
+  {
+    slug: 'what-are-ai-citations',
+    question: 'What are AI citations and how do they work?',
+    shortAnswer: 'AI citations are references in AI-generated answers that point to your business as a source or recommendation, often with your name, location, or website.',
+    body: [
+      'When an AI tool like Perplexity or ChatGPT with Browse mentions your business in an answer and links back to a source, that is an AI citation. These citations drive direct referral traffic and build brand awareness.',
+      'Even when AI answers don\'t include clickable links, the mention of your business name in an AI recommendation influences consumer behavior — users search for you directly after hearing your name from an AI.',
+      'Building the signals that earn AI citations — reviews, directory listings, press mentions, and structured website content — is the core of a GEO strategy.',
+    ],
+    relatedSlugs: ['how-does-ai-find-businesses', 'what-is-geo'],
+  },
+  {
+    slug: 'should-i-use-geo-or-google-ads',
+    question: 'Should I invest in GEO or Google Ads for my local business?',
+    shortAnswer: 'Both serve different purposes. Google Ads delivers immediate traffic. GEO builds compounding organic visibility across AI platforms that grows over time without ongoing spend.',
+    body: [
+      'Google Ads is a paid channel — when you stop spending, leads stop. GEO is an organic channel — improvements compound and persist, delivering returns long after the initial investment.',
+      'For businesses with immediate cash flow needs, Google Ads provides faster results. For businesses building long-term visibility and reducing customer acquisition cost, GEO is the more strategic investment.',
+      'The smartest approach combines both: use Google Ads to generate immediate leads while building your GEO foundation for sustainable, compounding organic growth.',
+    ],
+    relatedSlugs: ['what-is-geo', 'how-much-does-geo-cost'],
+  },
+  {
+    slug: 'how-do-i-know-if-ai-is-sending-me-traffic',
+    question: 'How do I know if AI tools are sending my business traffic or customers?',
+    shortAnswer: 'Track direct traffic spikes, monitor referrer data for AI platform domains, and watch for "how did you find us" survey responses mentioning ChatGPT or Perplexity.',
+    body: [
+      'AI-referred traffic often shows up as direct traffic in Google Analytics because users hear a business name from an AI and then type it directly into a browser. Spikes in branded search volume alongside direct traffic growth are a strong AI traffic signal.',
+      'Perplexity and some ChatGPT browsing features do pass referrer data, so check your Analytics for traffic from perplexity.ai or openai.com domains.',
+      'Adding a simple "How did you find us?" question to your intake form or booking flow is one of the most reliable ways to identify AI-referred customers, and the answers are often surprising.',
+    ],
+    relatedSlugs: ['what-is-ai-visibility-score', 'how-does-ai-find-businesses'],
+  },
+  {
+    slug: 'what-is-google-business-profile',
+    question: 'Does Google Business Profile help AI visibility?',
+    shortAnswer: 'Yes — Google Business Profile is one of the most important signals for both Google Gemini and other AI tools that incorporate Google data into their recommendations.',
+    body: [
+      'Google Business Profile (formerly Google My Business) is the single most authoritative source of local business data on the internet. Gemini pulls directly from GBP data, making a complete and accurate profile essential for AI visibility on Google\'s platforms.',
+      'Beyond Gemini, other AI models are trained on web data that includes GBP information, Google Maps listings, and Google Reviews — making GBP improvements beneficial across all AI platforms.',
+      'Ensure your GBP is 100% complete: hours, photos, services, description, Q&A, and regular posts all contribute to a stronger AI presence.',
+    ],
+    relatedSlugs: ['how-to-improve-ai-visibility', 'do-reviews-help-ai-visibility'],
+  },
+  {
+    slug: 'is-geo-the-same-as-aiseo',
+    question: 'Is GEO the same as AI SEO or LLMO?',
+    shortAnswer: 'GEO, AI SEO, and LLMO (Large Language Model Optimization) all refer to the same emerging practice of optimizing for visibility in AI-generated answers.',
+    body: [
+      'The industry hasn\'t settled on a single term yet. You may see GEO (Generative Engine Optimization), AI SEO, LLMO (Large Language Model Optimization), AEO (Answer Engine Optimization), or SGE Optimization used interchangeably.',
+      'MyGeoRadar uses GEO because it is the most descriptive: it\'s about being found by generative AI engines, just as traditional SEO is about being found by search engines.',
+      'Regardless of the label, the underlying practice is the same: building the digital signals that cause AI language models to recognize, trust, and recommend your business.',
+    ],
+    relatedSlugs: ['what-is-geo', 'how-is-geo-different-from-seo'],
+  },
+  {
+    slug: 'what-content-helps-geo',
+    question: 'What type of content best improves AI visibility?',
+    shortAnswer: 'Clear, factual, well-structured content that directly answers common customer questions performs best for AI visibility.',
+    body: [
+      'AI models are trained to answer questions. Content that is structured as direct answers — FAQ pages, service pages with clear descriptions, how-to guides — is more likely to be cited than vague, keyword-stuffed content.',
+      'Use plain language, real specifics, and structured headings. Include your business name, location, and services naturally throughout your content so AI models can unambiguously identify what you do and where you do it.',
+      'Long-form content (1,000+ words) that comprehensively covers a topic tends to earn more AI citations than thin pages, because AI models favor depth and authority.',
+    ],
+    relatedSlugs: ['how-to-improve-ai-visibility', 'what-is-geo'],
+  },
+  {
+    slug: 'does-yelp-help-ai-visibility',
+    question: 'Does Yelp help AI visibility?',
+    shortAnswer: 'Yes — Yelp is one of the most-cited sources in AI recommendations for local businesses, particularly for restaurants, home services, and healthcare.',
+    body: [
+      'Yelp data is part of the training corpus for major AI models and is frequently cited by Perplexity in real-time local business answers. A strong Yelp presence with consistent NAP data and positive reviews directly improves AI visibility.',
+      'Yelp reviews are especially influential for service categories where trust and reputation are paramount — lawyers, doctors, contractors, and restaurants all benefit significantly from Yelp authority.',
+      'Claiming your Yelp profile, completing all business information, and actively managing reviews should be part of every local business GEO strategy.',
+    ],
+    relatedSlugs: ['do-reviews-help-ai-visibility', 'what-is-citation-building'],
   },
 ]
 
