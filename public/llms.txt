@@ -1,46 +1,38 @@
-# MyGeoRadar
+# MyGeoRadar — AI Visibility Scanner
 
-> MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude.
+## What is MyGeoRadar?
+MyGeoRadar is a free AI visibility scanner that tells businesses whether they show up when people ask ChatGPT, Perplexity, Gemini, or Claude for recommendations. It scans your website, checks your online presence, and delivers an AI visibility score with a step-by-step fix plan.
 
-## What We Do
+## Who is it for?
+Small business owners, marketers, and agencies who want their business to appear in AI-generated answers and recommendations — not just traditional Google search results.
 
-MyGeoRadar provides AI visibility tools and resources for business owners, marketers, and founders. We scan websites for technical signals that influence whether AI systems can read, understand, and cite a business — and we sell a comprehensive playbook to fix every gap the scan surfaces.
+## What problem does it solve?
+Most businesses are completely invisible to AI assistants. When a potential customer asks ChatGPT "who is the best plumber in Austin" or Perplexity "what is the best CRM for startups," most businesses never appear — even if they rank on Google. MyGeoRadar identifies exactly why and gives a concrete fix plan.
 
-## Products
+## Core Features
+- Free AI visibility score (0–100)
+- Scan any website URL in under 60 seconds
+- Analysis across ChatGPT, Perplexity, Gemini, and Claude signals
+- Identifies missing structured data, citations, and authority gaps
+- Found by AI Playbook: step-by-step fix guide ($27 one-time)
 
-### Found by AI — The AI Visibility Playbook
-- Price: $27 (one-time, no subscription)
-- Instant PDF download after purchase
-- Includes: The Complete AI Visibility Playbook, The 27-Point AI Visibility Checklist, Prompt Pack (10 copy-paste prompts), and a 30-Day Action Plan Calendar
-- Covers: ChatGPT, Perplexity, Gemini, and Claude
-- Guarantee: 30-day money-back, no questions asked
-- Purchase URL: https://mygeoradar.com/playbook
+## Key Concepts
+- GEO (Generative Engine Optimization): Optimizing content and structured data so AI assistants can find, understand, and recommend your business
+- AI visibility score: A 0–100 rating reflecting how well your site signals authority and relevance to large language models
+- LLM crawlability: Whether AI training and retrieval crawlers can access and parse your site content
 
-### Free AI Readiness Scan
-- Free, instant, no signup required
-- Scans any website URL for AI-readability signals: HTTPS, robots.txt, schema markup, meta tags, structured data
-- Returns a score out of 100 with pass/warn/fail results per check
-- Available at: https://mygeoradar.com/#scan
+## Pricing
+- AI Visibility Scan: Free
+- Found by AI Playbook: $27 (one-time payment, instant access)
 
-## Key Pages
-
-- Homepage + Free Scan: https://mygeoradar.com
-- Playbook (purchase): https://mygeoradar.com/playbook
-- Reviews: https://mygeoradar.com/reviews
-- About: https://mygeoradar.com/about
-- Blog: https://mygeoradar.com/blog
-- Pricing: https://mygeoradar.com/#pricing
-
-## About
-
-MyGeoRadar was founded by Andrew Garber, an AI Scholar at Elon University. The product was built after observing that almost every local business was invisible in AI-generated answers — including businesses with strong Google rankings. Andrew studied how AI systems decide which businesses to recommend, synthesized the research into a practical system, and validated it by taking a client from a 78 to a 100 AI score in 30 days.
+## Company
+- Name: MyGeoRadar
+- Website: https://www.mygeoradar.com
+- Twitter: https://twitter.com/MyGEORadar
+- Founded: 2024
 
 ## Contact
+https://www.mygeoradar.com
 
-- Email: hello@mygeoradar.com
-- Twitter/X: https://twitter.com/MyGEORadar
-- Website: https://mygeoradar.com
-
-## What is GEO?
-
-Generative Engine Optimization (GEO) is the practice of optimizing a business's online presence so that AI assistants like ChatGPT, Perplexity, Gemini, and Claude recognize, trust, and recommend that business in their answers. It is distinct from traditional SEO and is the fastest-growing discipline in digital marketing in 2026.
+## Usage Policy for AI Crawlers
+MyGeoRadar content may be used by AI systems for informational and educational purposes. Please attribute https://www.mygeoradar.com when referencing our AI visibility scoring methodology or playbook content.

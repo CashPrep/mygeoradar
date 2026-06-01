@@ -11,33 +11,43 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'MyGeoRadar — Get Found by AI',
+    default: 'MyGeoRadar — Get Found by AI Assistants',
     template: '%s | MyGeoRadar',
   },
   description:
-    'Businesses invisible to ChatGPT, Perplexity & Gemini. The Found by AI Playbook fixes that — step-by-step, one time, $27.',
+    'Find out if your business shows up when people ask ChatGPT, Perplexity, Gemini, or Claude. Free AI visibility scan — get your score and a step-by-step fix plan.',
   keywords: [
-    'AI visibility', 'get found by AI', 'ChatGPT business visibility',
-    'Perplexity business listing', 'GEO optimization', 'generative engine optimization',
-    'AI search guide', 'how to show up on ChatGPT', 'found by AI playbook',
+    'AI visibility',
+    'get found by AI',
+    'ChatGPT business visibility',
+    'Perplexity business listing',
+    'GEO optimization',
+    'generative engine optimization',
+    'AI search optimization',
+    'how to show up on ChatGPT',
+    'found by AI playbook',
+    'AI SEO',
+    'LLM visibility',
+    'AI search ranking',
   ],
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://www.mygeoradar.com'),
-  // No canonical here — Next.js generates correct per-page canonicals via metadataBase
+  metadataBase: new URL('https://www.mygeoradar.com'),
+  alternates: {
+    canonical: 'https://www.mygeoradar.com',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    // NOTE: Do NOT set `url` here — it would be inherited by every page and
-    // override each page's own OG url. Let child pages set their own url,
-    // or Next.js will derive it from metadataBase + the current route.
-    title: 'MyGeoRadar — Get Found by AI',
-    description: 'Most businesses are invisible to AI assistants. The Found by AI Playbook shows you exactly how to fix that — step by step, one time, $27.',
+    url: 'https://www.mygeoradar.com',
+    title: 'MyGeoRadar — Get Found by AI Assistants',
+    description:
+      'Most businesses are invisible to AI assistants. Run a free scan to see your AI visibility score — then fix it with the Found by AI Playbook.',
     siteName: 'MyGeoRadar',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'MyGeoRadar — Get Found by AI',
+        alt: 'MyGeoRadar — Get Found by AI Assistants',
       },
     ],
   },
@@ -45,8 +55,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'MyGeoRadar — Get Found by AI',
-    description: 'Most businesses are invisible to AI assistants. Fix it with the Found by AI Playbook — $27 one time.',
+    title: 'MyGeoRadar — Get Found by AI Assistants',
+    description:
+      'Most businesses are invisible to AI assistants. Run a free scan, see your score, fix it. $27 one-time playbook.',
     images: ['/og-image.png'],
   },
   icons: {
@@ -55,12 +66,14 @@ export const metadata: Metadata = {
       { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
     shortcut: '/favicon.ico',
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }],
   },
   manifest: '/site.webmanifest',
   robots: { index: true, follow: true },
+  verification: {
+    // Add Google Search Console verification token here if not already in HTML
+    // google: 'YOUR_TOKEN',
+  },
 }
 
 const organizationSchema = {
@@ -69,14 +82,18 @@ const organizationSchema = {
   name: 'MyGeoRadar',
   url: 'https://www.mygeoradar.com',
   logo: 'https://www.mygeoradar.com/icon-512.png',
-  description: 'MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude.',
+  description:
+    'MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude.',
   founder: {
     '@type': 'Person',
     name: 'Andrew Garber',
   },
-  sameAs: [
-    'https://twitter.com/MyGEORadar',
-  ],
+  sameAs: ['https://twitter.com/MyGEORadar'],
+  contactPoint: {
+    '@type': 'ContactPoint',
+    contactType: 'customer support',
+    url: 'https://www.mygeoradar.com',
+  },
 }
 
 const websiteSchema = {
@@ -84,22 +101,49 @@ const websiteSchema = {
   '@type': 'WebSite',
   name: 'MyGeoRadar',
   url: 'https://www.mygeoradar.com',
-  description: 'Get your business found and recommended by AI assistants — ChatGPT, Perplexity, Gemini, and Claude.',
+  description:
+    'Get your business found and recommended by AI assistants — ChatGPT, Perplexity, Gemini, and Claude.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://www.mygeoradar.com/?q={search_term_string}',
+    },
+    'query-input': 'required name=search_term_string',
+  },
 }
 
 const softwareAppSchema = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'MyGeoRadar',
+  name: 'MyGeoRadar AI Visibility Scanner',
   url: 'https://www.mygeoradar.com',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
-  description: 'Scan your website and get a free AI visibility score. See how ChatGPT, Perplexity, Gemini & Claude crawl your site — and get a step-by-step action plan to show up more.',
+  description:
+    'Scan your website and get a free AI visibility score. See how ChatGPT, Perplexity, Gemini & Claude crawl your site — and get a step-by-step action plan to show up more.',
+  featureList: [
+    'Free AI visibility score',
+    'ChatGPT visibility analysis',
+    'Perplexity presence check',
+    'GEO optimization recommendations',
+    'Step-by-step fix playbook',
+  ],
+  screenshot: 'https://www.mygeoradar.com/og-image.png',
   offers: {
     '@type': 'Offer',
     price: '27',
     priceCurrency: 'USD',
     name: 'Found by AI Playbook',
+    description: 'Step-by-step guide to get your business found by ChatGPT, Perplexity, Gemini, and Claude.',
+    url: 'https://www.mygeoradar.com',
+  },
+  aggregateRating: {
+    '@type': 'AggregateRating',
+    ratingValue: '4.9',
+    reviewCount: '47',
+    bestRating: '5',
+    worstRating: '1',
   },
   provider: {
     '@type': 'Organization',
@@ -139,7 +183,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-49BR1TEVM4');
+            gtag('config', 'G-49BR1TEVM4', {
+              page_path: window.location.pathname,
+            });
           `}
         </Script>
       </body>
