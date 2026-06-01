@@ -33,7 +33,7 @@ const FREE_STEPS = [
   {
     number: 1,
     title: 'Claim & complete your Google Business Profile',
-    body: 'AI engines pull heavily from Google's Knowledge Graph. A fully completed GBP — with categories, description, photos, hours, and recent reviews — is the fastest trust signal you can send to AI.',
+    body: "AI engines pull heavily from Google's Knowledge Graph. A fully completed GBP — with categories, description, photos, hours, and recent reviews — is the fastest trust signal you can send to AI.",
   },
   {
     number: 2,
@@ -156,7 +156,7 @@ export default function CityPage({ params }: Props) {
             {[
               { icon: '🗺️', title: 'Google Business Profile', body: 'A fully completed GBP is the #1 trust signal. AI pulls your location, hours, and reviews directly from Google.' },
               { icon: '🏷️', title: 'Schema Markup', body: 'Structured LocalBusiness schema tells AI exactly who you are and where you serve.' },
-              { icon: '📋', title: 'Directory Citations', body: 'Consistent NAP data across 10+ directories proves your {city.name} business is real.' },
+              { icon: '📋', title: 'Directory Citations', body: `Consistent NAP data across 10+ directories proves your ${city.name} business is real.` },
               { icon: '⭐', title: 'Reviews & Ratings', body: 'More reviews = more AI trust. Recent 5-star reviews are a powerful local ranking signal.' },
               { icon: '📝', title: 'Authoritative Content', body: 'AI cites businesses it can quote from. A strong About page and FAQ section get you mentioned.' },
               { icon: '🔗', title: 'Local Press Mentions', body: `Coverage in ${city.name} media acts as third-party endorsement that AI engines trust.` },
