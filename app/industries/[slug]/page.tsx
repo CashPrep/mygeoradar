@@ -112,7 +112,7 @@ export default function IndustryPage({ params }: Props) {
             </div>
 
             <Link
-              href="/?industry=" + industry.slug
+              href={`/?industry=${industry.slug}`}
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-accent hover:bg-accent/90 text-white font-bold text-sm transition-colors w-fit shadow-lg"
             >
               {industry.ctaText} <ArrowRight className="w-4 h-4" />
@@ -255,7 +255,7 @@ export default function IndustryPage({ params }: Props) {
             <TrendingUp className="w-8 h-8 text-accent" />
             <p className="text-sm font-bold">Ready to check where your {industry.name.toLowerCase()} stands right now?</p>
             <Link
-              href="/?industry=" + industry.slug
+              href={`/?industry=${industry.slug}`}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-accent hover:bg-accent/90 text-white font-bold text-sm transition-colors"
             >
               {industry.ctaText} <ArrowRight className="w-4 h-4" />
