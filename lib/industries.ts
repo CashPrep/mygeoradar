@@ -92,4 +92,4 @@ export function getIndustryBySlug(slug: string): Industry | undefined {
   return INDUSTRIES.find(i => i.slug === slug)
 }
 
-export const INDUSTRY_TAGS = [...new Set(INDUSTRIES.map(i => i.tag))]
+export const INDUSTRY_TAGS = Array.from(new Set(INDUSTRIES.map(i => i.tag)))
