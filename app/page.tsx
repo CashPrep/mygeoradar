@@ -10,12 +10,12 @@ import { Radar, CheckCircle, ArrowRight, BookOpen, FileText, Zap, Shield, Clock,
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
-  title: 'MyGeoRadar | Free GEO Optimization Scan — Rank in ChatGPT, Perplexity & AI Search',
+  title: 'MyGeoRadar | Free AI Visibility Scanner — Get Found by ChatGPT, Perplexity & AI Search',
   description:
-    'Run a free GEO optimization scan in 30 seconds. See if ChatGPT, Perplexity & Gemini recommend your business — then fix every gap with our $27 step-by-step playbook.',
+    'Run a free AI visibility scan in 30 seconds. See if ChatGPT, Perplexity & Gemini recommend your business — then fix every gap with our $27 step-by-step GEO optimization playbook.',
   openGraph: {
-    title: 'MyGeoRadar | Free GEO Optimization Scan — Rank in ChatGPT, Perplexity & AI Search',
-    description: 'Run a free GEO scan. See if AI assistants recommend your business — then fix every gap with the $27 Found by AI Playbook.',
+    title: 'MyGeoRadar | Free AI Visibility Scanner — Get Found by ChatGPT, Perplexity & AI Search',
+    description: 'Run a free AI visibility scan. See if AI assistants recommend your business — then fix every gap with the $27 Found by AI Playbook.',
     url: 'https://mygeoradar.com',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
@@ -36,7 +36,7 @@ const jsonLd = {
         height: 630,
       },
       sameAs: ['https://twitter.com/MyGEORadar'],
-      description: 'MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude through GEO optimization.',
+      description: 'MyGeoRadar helps businesses improve AI visibility and get recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude through GEO optimization.',
     },
     {
       '@type': 'WebSite',
@@ -48,10 +48,10 @@ const jsonLd = {
     {
       '@type': 'Product',
       '@id': 'https://mygeoradar.com/#product',
-      name: 'Found by AI — The GEO Optimization Playbook',
+      name: 'Found by AI — The AI Visibility & GEO Optimization Playbook',
       url: 'https://mygeoradar.com/playbook',
       description:
-        'A complete step-by-step GEO optimization playbook to get your business found and recommended by ChatGPT, Perplexity, Gemini, and Claude.',
+        'A complete step-by-step playbook to improve your AI visibility and get your business found and recommended by ChatGPT, Perplexity, Gemini, and Claude.',
       offers: {
         '@type': 'Offer',
         price: '27.00',
@@ -67,13 +67,13 @@ const jsonLd = {
 const includes = [
   {
     icon: BookOpen,
-    title: 'The Complete GEO Optimization Playbook',
+    title: 'The Complete AI Visibility Playbook',
     description:
-      'A no-fluff, step-by-step guide covering every fix that makes AI assistants recognize, trust, and recommend your business.',
+      'A no-fluff, step-by-step guide covering every fix that makes AI assistants recognize, trust, and recommend your business. Built on GEO optimization principles.',
   },
   {
     icon: FileText,
-    title: 'The 27-Point GEO Readiness Checklist',
+    title: 'The 27-Point AI Visibility Checklist',
     description:
       '27 actionable checkboxes — run through them once and know exactly where you stand. Each item is a concrete action, not vague advice.',
   },
@@ -85,7 +85,7 @@ const includes = [
   },
   {
     icon: Shield,
-    title: '30-Day GEO Action Plan Calendar',
+    title: '30-Day AI Visibility Action Plan Calendar',
     description:
       'A day-by-day calendar for your first 30 days. Each day has one clear task so you make consistent progress without feeling overwhelmed.',
   },
@@ -97,24 +97,24 @@ const faqs = [
     a: 'Not at all. The playbook is written for business owners, marketers, and founders with no coding or deep SEO background. If you can edit your website or Google Business Profile, you can do everything in this guide.',
   },
   {
-    q: 'What AI assistants does this GEO playbook cover?',
-    a: 'ChatGPT, Perplexity, Gemini, and Claude — the four assistants that handle the vast majority of AI search traffic today. The GEO principles also apply to future assistants as they grow.',
+    q: 'What AI assistants does this playbook cover?',
+    a: 'ChatGPT, Perplexity, Gemini, and Claude — the four assistants that handle the vast majority of AI search traffic today. The AI visibility principles also apply to future assistants as they grow.',
   },
   {
     q: 'How is this different from free blog posts about GEO optimization?',
-    a: 'Free articles tell you what to do in general terms. This GEO playbook tells you exactly how, in what order, with copy-paste prompts and a 30-day calendar so you never waste time piecing it together yourself.',
+    a: 'Free articles tell you what to do in general terms. This playbook tells you exactly how, in what order, with copy-paste prompts and a 30-day calendar so you never waste time piecing it together yourself.',
   },
   {
     q: 'Is this a subscription or recurring charge?',
-    a: 'No. You pay $27 once and get the full GEO playbook, checklist, prompt pack, and 30-day plan. No recurring charges. Ever. All future updates are included at no extra cost.',
+    a: 'No. You pay $27 once and get the full AI visibility playbook, checklist, prompt pack, and 30-day plan. No recurring charges. Ever. All future updates are included at no extra cost.',
   },
   {
-    q: 'How do I receive the GEO playbook after purchase?',
+    q: 'How do I receive the playbook after purchase?',
     a: 'After checkout you will be redirected to a download page. Sign in with the email you used at checkout — we send a magic link, no password needed. Your files are then available instantly.',
   },
   {
     q: 'What if I am not satisfied?',
-    a: 'If you follow the GEO optimization steps and are not satisfied within 30 days, email us at hello@mygeoradar.com for a full refund. No questions asked, no hassle.',
+    a: 'If you follow the AI visibility steps and are not satisfied within 30 days, email us at hello@mygeoradar.com for a full refund. No questions asked, no hassle.',
   },
 ]
 
@@ -126,28 +126,28 @@ const previewChecklist = [
   { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
   { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
   { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
-  { done: false, text: 'Run the 10-prompt audit to confirm your current GEO visibility baseline' },
+  { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
 const howItWorks = [
   {
     step: '01',
-    title: 'Run your free GEO readiness scan',
-    body: 'Enter your URL above. In seconds you will see how your site is structured for AI systems — what is working, what is broken, and where the biggest GEO gaps are.',
+    title: 'Run your free AI visibility scan',
+    body: 'Enter your URL above. In seconds you will see how your site is structured for AI systems — what is working, what is broken, and where the biggest gaps are.',
   },
   {
     step: '02',
-    title: 'Get the GEO optimization playbook — $27, one time',
-    body: 'The playbook gives you the complete system to fix every gap the scan surfaces — a 27-point GEO checklist, 10 copy-paste audit prompts, and a 30-day action plan.',
+    title: 'Get the AI visibility playbook — $27, one time',
+    body: 'The playbook gives you the complete system to fix every gap the scan surfaces — a 27-point checklist, 10 copy-paste audit prompts, and a 30-day action plan.',
   },
   {
     step: '03',
-    title: 'Work through the GEO checklist item by item',
-    body: 'Go item by item. Each checkbox is a concrete action with clear instructions. No guessing, no jargon. Most GEO fixes take under an hour.',
+    title: 'Work through the checklist item by item',
+    body: 'Go item by item. Each checkbox is a concrete action with clear instructions. No guessing, no jargon. Most AI visibility fixes take under an hour.',
   },
   {
     step: '04',
-    title: 'Re-scan and measure your GEO score improvement',
+    title: 'Re-scan and measure your AI visibility score improvement',
     body: 'After 30 days, run the scan again and compare your score. You will have a concrete before/after showing exactly how your AI visibility changed.',
   },
 ]
@@ -178,7 +178,7 @@ export default function HomePage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start pb-6">
               <div className="flex flex-col justify-center pt-4">
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-3 text-balance">
-                  Free GEO Optimization Scan
+                  Free AI Visibility Scanner
                 </h1>
                 <h2 className="text-xl md:text-2xl font-medium text-muted leading-snug mb-5 text-balance">
                   When someone asks AI about your industry,{' '}
@@ -188,7 +188,7 @@ export default function HomePage() {
                   Most businesses are{' '}
                   <strong className="text-foreground font-semibold">completely invisible</strong> to
                   ChatGPT, Perplexity, Gemini, and Claude — while their competitors get recommended
-                  every day. Run the free GEO scan and find out where you stand in 30 seconds.
+                  every day. Run the free AI visibility scan and find out where you stand in 30 seconds.
                 </p>
                 <div className="flex flex-wrap gap-x-5 gap-y-2">
                   {['Free — no signup', 'Results in seconds', 'No credit card'].map((label) => (
@@ -203,22 +203,22 @@ export default function HomePage() {
                 <div className="mt-7 flex items-start gap-3 px-4 py-3.5 rounded-xl bg-accent/5 border border-accent/15">
                   <Quote className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <p className="text-sm leading-relaxed">
-                    <span className="font-semibold text-foreground">Went from a 78 to 100 GEO score in 30 days.</span>
-                    {' '}The checklist is the most actionable thing I've found on GEO optimization.
+                    <span className="font-semibold text-foreground">Went from a 78 to 100 AI visibility score in 30 days.</span>
+                    {' '}The checklist is the most actionable thing I&apos;ve found on getting found by AI search.
                     <span className="block text-xs text-muted mt-1">— Johnathan Lightfoot, business owner</span>
                   </p>
                 </div>
 
                 <div className="mt-6">
                   <Link href="/#what-you-get" className="text-sm text-muted hover:text-foreground transition-colors">
-                    See what the full GEO playbook includes ↓
+                    See what the full AI visibility playbook includes ↓
                   </Link>
                 </div>
               </div>
 
               <div id="scan" className="rounded-2xl border border-border bg-white shadow-card-accent p-6 md:p-8">
                 <div className="mb-5">
-                  <p className="font-semibold text-[15px] mb-1">Check your GEO readiness — free</p>
+                  <p className="font-semibold text-[15px] mb-1">Check your AI visibility — free</p>
                   <p className="text-sm text-muted leading-relaxed">
                     Enter your website URL. We&apos;ll analyze the technical signals that influence
                     whether AI systems can read, understand, and cite your business.
@@ -238,7 +238,7 @@ export default function HomePage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
               AI assistants are the new first impression —{' '}
-              <span className="text-muted font-medium">and most businesses fail the GEO test</span>
+              <span className="text-muted font-medium">and most businesses have zero AI visibility</span>
             </h2>
             <p className="text-muted leading-relaxed mb-4 text-pretty">
               When a potential customer asks ChatGPT &ldquo;who&apos;s the best [your type of
@@ -267,7 +267,7 @@ export default function HomePage() {
               <div className="p-6 rounded-2xl bg-surface border border-border">
                 <p className="text-4xl font-black text-gradient-accent mb-3 tracking-tight">Day 1</p>
                 <p className="text-sm text-muted leading-relaxed">
-                  GEO advantage — the businesses that establish AI visibility now will build a compounding
+                  AI visibility advantage — the businesses that establish AI search presence now will build a compounding
                   lead before their competitors even know this game exists.
                 </p>
               </div>
@@ -280,12 +280,12 @@ export default function HomePage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
-                The free GEO scan shows you the gaps.
+                The free scan shows you where your AI visibility gaps are.
                 <br />
                 <span className="text-gradient-accent">The playbook closes them.</span>
               </h2>
               <p className="text-muted max-w-xl mx-auto">
-                One purchase. Four assets. The complete GEO optimization system to go from invisible to recommended.
+                One purchase. Four assets. The complete system to go from invisible to recommended by AI.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -304,7 +304,7 @@ export default function HomePage() {
             <div className="text-center mt-10">
               <Link href="/playbook">
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  See everything included in the GEO playbook <ArrowRight className="w-4 h-4" />
+                  See everything included in the AI visibility playbook <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </div>
@@ -316,10 +316,10 @@ export default function HomePage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
-                See exactly what&apos;s inside the GEO playbook
+                See exactly what&apos;s inside the AI visibility playbook
               </h2>
               <p className="text-muted max-w-xl mx-auto">
-                A real sample from two of the four assets — the GEO checklist and the prompt pack.
+                A real sample from two of the four assets — the AI visibility checklist and the prompt pack.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -327,7 +327,7 @@ export default function HomePage() {
               <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-card-lift">
                 <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <FileText className="w-4 h-4 text-accent" />
-                  <span className="font-semibold text-sm">27-Point GEO Readiness Checklist</span>
+                  <span className="font-semibold text-sm">27-Point AI Visibility Checklist</span>
                   <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1–8 of 27</span>
                 </div>
                 <div className="p-5 flex flex-col gap-3">
@@ -350,7 +350,7 @@ export default function HomePage() {
                     </div>
                   ))}
                   <p className="text-xs text-muted italic border-t border-border pt-3 mt-1">
-                    + 19 more GEO optimization items inside the full checklist&hellip;
+                    + 19 more AI visibility items inside the full checklist&hellip;
                   </p>
                 </div>
               </div>
@@ -359,13 +359,13 @@ export default function HomePage() {
               <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-card-lift">
                 <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <Zap className="w-4 h-4 text-accent" />
-                  <span className="font-semibold text-sm">GEO Audit Prompt Pack — Sample</span>
+                  <span className="font-semibold text-sm">AI Visibility Audit Prompt Pack — Sample</span>
                   <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">1 of 10</span>
                 </div>
                 <div className="p-5 flex flex-col gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">
-                      Prompt #1 — GEO Awareness Audit
+                      Prompt #1 — AI Visibility Audit
                     </p>
                     <p className="text-xs text-muted mb-3">
                       Paste into ChatGPT, Perplexity, Gemini, and Claude. Run each separately.
@@ -375,12 +375,12 @@ export default function HomePage() {
                     </div>
                     <p className="text-xs text-muted mt-3">
                       <strong className="text-foreground">What to look for:</strong> Does your
-                      business appear? How is it described? The GEO playbook walks you through exactly
-                      what each answer means and what to fix.
+                      business appear? How is it described? The playbook walks you through exactly
+                      what each answer means and what to fix to improve your AI visibility.
                     </p>
                   </div>
                   <p className="text-xs text-muted italic border-t border-border pt-3">
-                    + 9 more GEO prompts covering competitor gaps, hallucination detection, citation
+                    + 9 more AI visibility prompts covering competitor gaps, hallucination detection, citation
                     sourcing, and brand accuracy&hellip;
                   </p>
                 </div>
@@ -389,7 +389,7 @@ export default function HomePage() {
             <div className="text-center mt-10">
               <Link href="/playbook">
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  Start GEO Optimization — $27 <ArrowRight className="w-4 h-4" />
+                  Improve My AI Visibility — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <p className="text-xs text-muted mt-3">Instant download &middot; 30-day money-back guarantee</p>
@@ -400,7 +400,7 @@ export default function HomePage() {
         {/* ── HOW IT WORKS ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 tracking-tight">How GEO optimization works</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 tracking-tight">How AI visibility optimization works</h2>
             <div className="flex flex-col gap-4">
               {howItWorks.map(({ step, title, body }) => (
                 <div
@@ -422,17 +422,17 @@ export default function HomePage() {
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
-              Your competitors are figuring out GEO right now
+              Your competitors are building AI visibility right now
             </h2>
             <p className="text-muted leading-relaxed mb-4 text-pretty">
-              GEO — Generative Engine Optimization — is the fastest-growing discipline in digital
-              marketing in 2026. Based on publicly available agency pricing, specialist firms charge
-              $2,000–$5,000/month for this exact GEO work. Early movers are quietly building AI
-              visibility before the rest of the market wakes up.
+              AI search visibility — sometimes called GEO (Generative Engine Optimization) — is the
+              fastest-growing discipline in digital marketing in 2026. Based on publicly available agency
+              pricing, specialist firms charge $2,000–$5,000/month for this exact work. Early movers are
+              quietly building AI visibility before the rest of the market wakes up.
             </p>
             <p className="text-muted leading-relaxed mb-3 text-pretty">
               AI systems weight well-cited, established sources. Once your competitors build that
-              GEO authority,{' '}
+              AI visibility,{' '}
               <strong className="text-foreground">
                 displacing them gets exponentially more expensive.
               </strong>
@@ -444,7 +444,7 @@ export default function HomePage() {
             <div className="inline-flex items-center gap-3 px-5 py-4 rounded-xl bg-accent/5 border border-accent/15 text-left max-w-sm mx-auto">
               <Clock className="w-5 h-5 text-accent flex-shrink-0" />
               <p className="text-sm">
-                <strong>The GEO playbook is $27.</strong> One agency consultation costs $300+. You can
+                <strong>The AI visibility playbook is $27.</strong> One agency consultation costs $300+. You can
                 start fixing this today.
               </p>
             </div>
@@ -455,16 +455,16 @@ export default function HomePage() {
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-10 tracking-tight">
-              This GEO optimization guide is for you if&hellip;
+              This AI visibility guide is for you if&hellip;
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
               {[
                 'You own or market a local or online business',
                 'AI assistants don\'t mention your business when you test them',
-                'You\'ve read GEO articles but still don\'t know what to actually do',
+                'You\'ve read about AI visibility but still don\'t know what to actually do',
                 'You don\'t want to pay $100+/month for a tracking tool',
-                'You want a clear, done-for-you GEO action plan — not more theory',
-                'You want to act before your competitors figure out GEO',
+                'You want a clear, done-for-you action plan — not more theory',
+                'You want to act before your competitors figure out AI search',
               ].map((item) => (
                 <div
                   key={item}
@@ -485,13 +485,13 @@ export default function HomePage() {
               <Quote className="w-7 h-7 text-accent flex-shrink-0 mt-1" />
               <div>
                 <p className="text-foreground font-medium leading-relaxed mb-3">
-                  &ldquo;I went from a 78 to a 100 GEO score in 30 days. I followed the checklist exactly — most GEO items took less than an hour each. The prompt pack alone was worth it just to see how ChatGPT was describing my business before I fixed things.&rdquo;
+                  &ldquo;I went from a 78 to a 100 AI visibility score in 30 days. I followed the checklist exactly — most items took less than an hour each. The prompt pack alone was worth it just to see how ChatGPT was describing my business before I fixed things.&rdquo;
                 </p>
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-full bg-accent/15 flex items-center justify-center text-xs font-bold text-accent">JL</div>
                   <div>
                     <span className="text-sm font-semibold text-foreground block">Johnathan Lightfoot</span>
-                    <span className="text-xs text-muted">Business owner &middot; 78 → 100 GEO score in 30 days</span>
+                    <span className="text-xs text-muted">Business owner &middot; 78 → 100 AI visibility score in 30 days</span>
                   </div>
                 </div>
               </div>
@@ -505,7 +505,7 @@ export default function HomePage() {
             <div className="relative rounded-2xl border border-accent/40 bg-white p-8 text-center shadow-card-accent overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
               <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent mb-5 mt-1">
-                Found by AI — Complete GEO Bundle
+                Found by AI — Complete AI Visibility Bundle
               </p>
               <div className="mb-1">
                 <span className="text-6xl font-black text-gradient tracking-tight">$27</span>
@@ -513,10 +513,10 @@ export default function HomePage() {
               <p className="text-sm text-muted mb-8">One-time &middot; No subscription &middot; Instant download</p>
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
-                  'The Complete GEO Optimization Playbook',
-                  'The 27-Point GEO Readiness Checklist',
-                  'Prompt Pack — 10 copy-paste GEO audit prompts',
-                  '30-Day GEO Action Plan calendar',
+                  'The Complete AI Visibility Playbook',
+                  'The 27-Point AI Visibility Checklist',
+                  'Prompt Pack — 10 copy-paste AI audit prompts',
+                  '30-Day AI Visibility Action Plan calendar',
                   '30-day money-back guarantee',
                   'All future updates included free',
                 ].map((item) => (
@@ -528,11 +528,11 @@ export default function HomePage() {
               </ul>
               <Link href="/playbook">
                 <Button variant="primary" size="lg" className="w-full gap-2 shadow-glow-sm">
-                  Start GEO Optimization — $27 <ArrowRight className="w-4 h-4" />
+                  Improve My AI Visibility — $27 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <p className="text-xs text-muted/70 mt-3 italic">
-                Join the business owners who ran their GEO scan this week.
+                Join the business owners who ran their AI visibility scan this week.
               </p>
               <p className="text-xs text-muted mt-1">
                 Secure checkout via Stripe &middot; PDF delivered instantly
@@ -552,11 +552,11 @@ export default function HomePage() {
                 <p className="text-xs font-semibold uppercase tracking-widest text-accent mb-2">Built by</p>
                 <h3 className="text-xl font-bold text-foreground mb-2">Andrew Garber — AI Scholar, Elon University</h3>
                 <p className="text-sm text-muted leading-relaxed">
-                  MyGeoRadar was built after noticing that almost every local business was invisible
-                  in AI-generated answers — including businesses with strong Google rankings. Andrew
+                  MyGeoRadar was built after noticing that almost every local business had zero AI
+                  visibility — including businesses with strong Google rankings. Andrew
                   studied AI systems, synthesized what actually influences AI citations, and turned
-                  that research into the GEO playbook and checklist you see here. The tools and
-                  frameworks are the same ones used to take a client from a 78 to a 100 GEO score in
+                  that research into the AI visibility playbook and checklist you see here. The tools and
+                  frameworks are the same ones used to take a client from a 78 to a 100 AI visibility score in
                   30 days.
                 </p>
                 <Link
@@ -573,7 +573,7 @@ export default function HomePage() {
         {/* ── FAQ ── */}
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12 tracking-tight">Common GEO optimization questions</h2>
+            <h2 className="text-3xl font-bold text-center mb-12 tracking-tight">Common AI visibility questions</h2>
             <div className="divide-y divide-border">
               {faqs.map(({ q, a }) => (
                 <div key={q} className="py-6">
@@ -592,17 +592,17 @@ export default function HomePage() {
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight text-balance">
-              Stop being invisible to AI. Start your GEO optimization today.
+              Stop being invisible to AI. Improve your AI visibility today.
             </h2>
             <p className="text-muted mb-8 text-pretty">
-              Every day you wait, the competitors who act first on GEO get recommended instead of you. The
+              Every day you wait, the competitors who act first get recommended instead of you. The
               playbook is{' '}
               <strong className="text-foreground">$27 — one time</strong>. Everything you need,
               downloadable in the next two minutes.
             </p>
             <Link href="/playbook">
               <Button variant="primary" size="xl" className="gap-2 shadow-glow-sm">
-                Get the GEO Optimization Playbook — $27 <ArrowRight className="w-5 h-5" />
+                Get the AI Visibility Playbook — $27 <ArrowRight className="w-5 h-5" />
               </Button>
             </Link>
             <p className="text-xs text-muted mt-4">
