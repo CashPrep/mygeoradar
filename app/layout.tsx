@@ -11,18 +11,20 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'MyGeoRadar — Get Found by AI Assistants',
+    default: 'MyGeoRadar | Free GEO Optimization Scan — Rank in ChatGPT, Perplexity & AI Search',
     template: '%s | MyGeoRadar',
   },
   description:
-    'Find out if your business shows up when people ask ChatGPT, Perplexity, Gemini, or Claude. Free AI visibility scan — get your score and a step-by-step fix plan.',
+    'Run a free AI visibility scan in 30 seconds. See if ChatGPT, Perplexity & Gemini recommend your business — then fix every gap with our $27 GEO optimization playbook.',
   keywords: [
-    'AI visibility',
+    'GEO optimization',
+    'generative engine optimization',
+    'AI visibility scan',
+    'rank in ChatGPT',
+    'rank in Perplexity',
     'get found by AI',
     'ChatGPT business visibility',
     'Perplexity business listing',
-    'GEO optimization',
-    'generative engine optimization',
     'AI search optimization',
     'how to show up on ChatGPT',
     'found by AI playbook',
@@ -38,16 +40,16 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://www.mygeoradar.com',
-    title: 'MyGeoRadar — Get Found by AI Assistants',
+    title: 'MyGeoRadar | Free GEO Optimization Scan — Rank in ChatGPT, Perplexity & AI Search',
     description:
-      'Most businesses are invisible to AI assistants. Run a free scan to see your AI visibility score — then fix it with the Found by AI Playbook.',
+      'Most businesses are invisible to AI assistants. Run a free GEO scan to see your AI visibility score — then fix it with the Found by AI Playbook.',
     siteName: 'MyGeoRadar',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'MyGeoRadar — Get Found by AI Assistants',
+        alt: 'MyGeoRadar — Free GEO Optimization Scan',
       },
     ],
   },
@@ -55,9 +57,9 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'MyGeoRadar — Get Found by AI Assistants',
+    title: 'MyGeoRadar | Free GEO Optimization Scan — Rank in ChatGPT & AI Search',
     description:
-      'Most businesses are invisible to AI assistants. Run a free scan, see your score, fix it. $27 one-time playbook.',
+      'Most businesses are invisible to AI assistants. Run a free GEO scan, see your score, fix it. $27 one-time playbook.',
     images: ['/og-image.png'],
   },
   icons: {
@@ -83,7 +85,7 @@ const organizationSchema = {
   url: 'https://www.mygeoradar.com',
   logo: 'https://www.mygeoradar.com/icon-512.png',
   description:
-    'MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude.',
+    'MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude through GEO optimization.',
   founder: {
     '@type': 'Person',
     name: 'Andrew Garber',
@@ -102,7 +104,7 @@ const websiteSchema = {
   name: 'MyGeoRadar',
   url: 'https://www.mygeoradar.com',
   description:
-    'Get your business found and recommended by AI assistants — ChatGPT, Perplexity, Gemini, and Claude.',
+    'Free GEO optimization scan — see if ChatGPT, Perplexity, Gemini, and Claude recommend your business, then fix every gap.',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
@@ -121,13 +123,13 @@ const softwareAppSchema = {
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Web',
   description:
-    'Scan your website and get a free AI visibility score. See how ChatGPT, Perplexity, Gemini & Claude crawl your site — and get a step-by-step action plan to show up more.',
+    'Scan your website and get a free GEO optimization score. See how ChatGPT, Perplexity, Gemini & Claude crawl your site — and get a step-by-step action plan to rank in AI search.',
   featureList: [
     'Free AI visibility score',
-    'ChatGPT visibility analysis',
+    'GEO optimization analysis',
+    'ChatGPT visibility check',
     'Perplexity presence check',
-    'GEO optimization recommendations',
-    'Step-by-step fix playbook',
+    'Step-by-step GEO fix playbook',
   ],
   screenshot: 'https://www.mygeoradar.com/og-image.png',
   offers: {
@@ -135,7 +137,7 @@ const softwareAppSchema = {
     price: '27',
     priceCurrency: 'USD',
     name: 'Found by AI Playbook',
-    description: 'Step-by-step guide to get your business found by ChatGPT, Perplexity, Gemini, and Claude.',
+    description: 'Step-by-step GEO optimization guide to get your business found by ChatGPT, Perplexity, Gemini, and Claude.',
     url: 'https://www.mygeoradar.com',
   },
   aggregateRating: {
@@ -150,6 +152,53 @@ const softwareAppSchema = {
     name: 'MyGeoRadar',
     url: 'https://www.mygeoradar.com',
   },
+}
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is GEO optimization?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'GEO (Generative Engine Optimization) is the practice of optimizing your website and online presence so that AI assistants like ChatGPT, Perplexity, Gemini, and Claude recommend your business when users ask relevant questions. Unlike traditional SEO which targets Google\'s algorithm, GEO targets the large language models that power AI search.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I check if my business shows up in ChatGPT?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'You can run a free AI visibility scan at MyGeoRadar.com. Enter your website URL and we\'ll test how ChatGPT, Perplexity, Gemini, and Claude respond to questions about your industry — showing you exactly whether your business appears and how prominently.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Why is my business invisible to AI assistants?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'AI assistants pull information from sources they trust — authoritative websites, structured data, brand mentions, and clear expertise signals. If your site lacks structured data (schema markup), has thin content, or isn\'t cited by other trusted sources, AI models simply won\'t know to recommend you. GEO optimization fixes these gaps.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the Found by AI Playbook?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The Found by AI Playbook is a $27 step-by-step guide that walks you through every fix needed to get your business recommended by AI assistants. It covers schema markup, content strategy, brand authority building, and the exact technical changes that make AI models recognize and recommend your business.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How long does it take to rank in AI search results?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Most businesses start seeing improvement in AI visibility within 2–6 weeks of implementing GEO optimization fixes. Results depend on your current authority level, content quality, and how competitive your industry is. The MyGeoRadar scan gives you a prioritized action plan so you focus on the highest-impact changes first.',
+      },
+    },
+  ],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -170,6 +219,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           id="schema-software"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareAppSchema) }}
+        />
+        <Script
+          id="schema-faq"
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
         />
       </head>
       <body className="bg-background text-foreground font-sans antialiased min-h-screen">
