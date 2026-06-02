@@ -526,6 +526,20 @@ Sponsoring a local event or community organization often gets you mentioned on t
 ### The minimum press goal
 3 editorial mentions per year from sources you don't control. That's one every four months. It's achievable for any business that puts in modest effort.
 
+> 📬 **Before you hit send — the press pitch checklist.**
+>
+> Most pitch emails get deleted in under five seconds. Run yours through this checklist before sending:
+>
+> - [ ] **Subject line names a story, not a business** — "Local roofer hits 500 jobs" beats "[Business Name] media inquiry"
+> - [ ] **First sentence says who you are and why it's newsworthy** — not a company bio
+> - [ ] **There's a real angle for their audience** — ask: why would *their readers* care?
+> - [ ] **You've named the reporter correctly** — a misspelled name or wrong outlet name is an instant delete
+> - [ ] **It's under 150 words** — journalists are busy; if you can't hook them in 150 words, a longer email won't help
+> - [ ] **You've offered something easy to say yes to** — a 15-minute call, a photo, a data point, a quote
+> - [ ] **You have at least one real news hook** — a milestone, a hire, a study, a trend tie-in, a community angle
+>
+> If your pitch fails 3 or more of these, rewrite it before sending. A bad pitch doesn't just get ignored — it can get you marked as spam by that outlet.
+
 ---
 
 ## Part 7: Wikidata — AI's Most Trusted Directory
