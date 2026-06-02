@@ -399,6 +399,17 @@ Use the same business description across all directories — but it must be genu
 
 Fill in every field available on every directory. The more complete your profile, the more data points AI has to pull from.
 
+> 🕒 **How long until directories show up in AI results?**
+>
+> Directory listings don't go live in AI instantly — they have to be crawled, indexed, and weighted first. Here's what to expect:
+>
+> - **Google Business Profile:** Picked up by Gemini within days of verification; appears in ChatGPT and Perplexity results within 2–4 weeks of full completion.
+> - **Bing Places:** Reflected in Microsoft Copilot results within 1–2 weeks once verified.
+> - **Yelp, BBB, Facebook:** Typically crawled by AI within 3–6 weeks of your listing going live. Yelp is fastest due to its high crawl priority.
+> - **Smaller directories (Manta, Hotfrog, Superpages):** These take 4–8 weeks to register as signals. Their value is cumulative — each one adds a small trust increment.
+>
+> **The practical rule:** Submit all 15 directories in one sitting, then don't check for results for 30 days. Checking too early and seeing nothing is the #1 reason people abandon this process before it works.
+
 ---
 
 ## Part 5: Content That AI Quotes
