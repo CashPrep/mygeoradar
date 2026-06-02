@@ -27,6 +27,19 @@ This playbook is your complete system for making sure you're in the answer.
 
 ---
 
+> ⏱ **How long will this take to work?**
+>
+> Set the right expectations before you start:
+>
+> - **Days 1–14:** Implement the foundations (GBP, schema, directories, website). This is the work phase — nothing visible yet.
+> - **Days 15–30:** AI crawlers begin picking up your changes. You may start appearing in direct name searches on Perplexity first, as it uses live search.
+> - **Month 2–3:** Most businesses see their first mentions across ChatGPT and Gemini. Category recommendations ("best plumber in Austin") start appearing.
+> - **Month 3–6:** Full visibility across all four assistants for businesses that complete all sections.
+>
+> **This is normal. AI models update on crawl cycles, not instantly.** If you implement everything in Week 1 and check ChatGPT in Week 2, you will likely not see yourself yet — that does not mean it isn't working. Stay the course.
+
+---
+
 ## Part 1: How AI Assistants Actually Decide What to Recommend
 
 ### The short version
