@@ -574,6 +574,24 @@ If you're a brand new business with no press mentions, hold off until you have s
 
 Once your entry exists and has at least 3–4 statements with references, it becomes a data point AI models actively use.
 
+> 🚩 **If your Wikidata entry gets flagged or deleted — here's what to do.**
+>
+> Wikidata has volunteer editors who patrol new entries and flag ones that appear to lack "notability" (their term for having sufficient third-party documentation). This happens to small business entries regularly. Don't panic — it's fixable.
+>
+> **Why entries get flagged:**
+> - No references attached to any statements (the most common reason)
+> - The entry looks promotional rather than encyclopedic
+> - The business name is too generic and could be confused with others
+>
+> **How to strengthen a flagged entry — in order:**
+> 1. **Add references to every statement.** Click the "+ add reference" link under each property and paste in a URL — your website, a news article, your GBP listing, your BBB page. Unreferenced statements are the #1 deletion trigger.
+> 2. **Link to an external identifier.** If your business has a DUNS number, a CAGE code, or a listing on a government-registered database, add it as an external identifier property. This instantly signals legitimacy.
+> 3. **Add a Wikipedia sitelink if one exists.** Even a Wikipedia article about your city that mentions your business counts as a sitelink signal.
+> 4. **Write neutrally.** Remove any language that sounds like marketing ("leading provider," "best in class," "award-winning" without a citation). Stick to factual statements with references.
+> 5. **Wait 7 days before re-submitting** a deleted entry — resubmitting immediately after deletion often triggers a faster second deletion.
+>
+> If your entry keeps getting deleted, it's a sign you need more third-party press first. Do Part 6 before retrying Part 7.
+
 ---
 
 ## Part 8: Social Proof Amplification
