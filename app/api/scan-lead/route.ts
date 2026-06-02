@@ -20,7 +20,7 @@ function getSupabase() {
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json()
+    const body          = await req.json()
     const email: string    = (body.email ?? '').trim().toLowerCase()
     const scanId: string   = body.scanId ?? ''
     const score: number    = body.score ?? 0
@@ -37,27 +37,31 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = getSupabase()
+    const now      = new Date().toISOString()
 
-    // Upsert lead — if same email+scan already exists, update it
+    // Upsert lead — corrected column names to match actual DB schema
     const { data: lead, error: leadErr } = await supabase
       .from('scan_leads')
       .upsert(
         {
           email,
-          scan_id:       scanId || null,
+          scan_report_id:      scanId || null,  // was: scan_id (wrong)
+          domain:              url,              // was: url (wrong column name)
           score,
-          url,
-          email_1_sent_at: new Date().toISOString(),
+          url,                                  // new column added in migration
+          email_sequence_step: 1,
+          email_1_sent_at:     now,
+          last_email_sent_at:  now,
+          subscribed:          true,
         },
-        { onConflict: 'email,scan_id', ignoreDuplicates: false }
+        { onConflict: 'email,scan_report_id' }  // was: email,scan_id (wrong)
       )
       .select('id')
       .single()
 
-    if (leadErr || !lead) {
-      // If it's a unique violation, the lead already exists — still send email
+    if (leadErr && !lead) {
+      // Unique violation or other error — try to fetch existing lead
       console.error('Lead upsert error:', leadErr)
-      // Try to fetch existing lead
       const { data: existing } = await supabase
         .from('scan_leads')
         .select('id')
@@ -72,12 +76,12 @@ export async function POST(req: NextRequest) {
 
     const leadId = lead?.id
 
-    // Create unsubscribe token
+    // Create unsubscribe token — corrected column name
     let unsubToken = ''
     if (leadId) {
       const { data: tokenRow } = await supabase
         .from('unsubscribe_tokens')
-        .insert({ lead_id: leadId })
+        .insert({ scan_lead_id: leadId })  // was: lead_id (wrong column name)
         .select('token')
         .single()
       unsubToken = tokenRow?.token ?? ''
