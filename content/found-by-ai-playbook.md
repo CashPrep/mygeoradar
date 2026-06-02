@@ -353,6 +353,16 @@ Write your answers as complete, standalone sentences that would sound natural if
 
 **Custom site:** Paste the JSON-LD in a `<script type="application/ld+json">` tag in your `<head>` section.
 
+> ⚠️ **Before you save — do this check first.**
+>
+> The #1 reason schema fails silently is unfilled placeholders. Before saving your schema to your site:
+>
+> 1. Press **Ctrl+F** (or Cmd+F on Mac) and search for `[`
+> 2. Every single result must be replaced with your real information
+> 3. A single leftover bracket like `[Your Exact Business Name]` will cause a validation error that breaks the entire schema block — with no visible error on your website
+>
+> After saving, paste your page URL into **[validator.schema.org](https://validator.schema.org)** and confirm it shows zero errors before moving on.
+
 **Validate your schema:** After adding, use [validator.schema.org](https://validator.schema.org) to confirm there are no errors.
 
 ---
