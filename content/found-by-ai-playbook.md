@@ -90,6 +90,16 @@ Before any advanced tactics work, these five foundations must be airtight. Don't
 
 Your Google Business Profile is the single most leveraged asset you have for AI visibility. Google's Knowledge Graph feeds ChatGPT (via Bing/web), Gemini directly, and Perplexity's search results. A complete GBP is the baseline for all other AI visibility work.
 
+> 🟡 **Online-only, SaaS, or service-area business? Read this first.**
+>
+> If you don't have a physical storefront — you're a SaaS product, a fully remote service, or you work from home and serve clients across a region — GBP still matters, but the setup is slightly different:
+>
+> - **Do not enter a street address** if you don't want it publicly displayed. Instead, set a **Service Area** (the cities or regions you serve) during setup. Google allows this for service-area businesses.
+> - **Your Foundation 1 priority shifts:** Since you won't have a Maps pin location, double down on your **website content (Foundation 3)**, **Organization schema (Part 3)**, and **LinkedIn Company Page** as your primary trust signals.
+> - **For SaaS/software products specifically:** Skip GBP if you have no geographic component at all. Instead, prioritize G2, Capterra, Product Hunt, and Trustpilot listings — these are the directories AI uses most for software recommendations.
+>
+> Resume the steps below, skipping any that don't apply to your business type.
+
 **Do this — in this exact order:**
 
 1. Go to [business.google.com](https://business.google.com) and claim your listing if you haven't.
