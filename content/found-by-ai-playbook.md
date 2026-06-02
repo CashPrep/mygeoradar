@@ -452,6 +452,40 @@ For AI visibility purposes, you need at minimum:
 
 You don't need to write 2,000-word essays. A well-structured 600-word piece that directly answers one specific question and includes proper schema is worth more for AI visibility than a 3,000-word rambling post.
 
+> 💡 **Not sure what to write about? Start here.**
+>
+> The best content answers the exact question a customer types into an AI assistant. Here are proven starting points by business type — pick the ones that fit and write one per month:
+>
+> **Home services (plumber, electrician, HVAC, roofer, landscaper)**
+> - "How much does [service] cost in [city]?"
+> - "How do I know if I need [service] or just a repair?"
+> - "What should I look for when hiring a [trade] in [city]?"
+> - "[Business Name]'s process: what happens from first call to job complete"
+>
+> **Professional services (lawyer, accountant, financial advisor, consultant)**
+> - "What does a [your role] actually do for [client type]?"
+> - "[Your specialty] vs. [alternative approach]: which is right for your situation?"
+> - "How to choose a [profession] in [city]: what to ask before you hire"
+> - "[Business Name]'s approach to [core service]: what makes us different"
+>
+> **Health and wellness (dentist, chiropractor, therapist, gym, med spa)**
+> - "What to expect at your first appointment at [Business Name]"
+> - "[Treatment or service]: who is it for and what does it involve?"
+> - "How [Business Name] treats [common condition] — our approach explained"
+> - "Insurance, pricing, and payment options at [Business Name]"
+>
+> **Restaurants, retail, and hospitality**
+> - "What makes [Business Name] different from other [type] in [city]?"
+> - "Our menu / products explained: what to order on your first visit"
+> - "[Business Name]'s story: where we started and why we do what we do"
+> - "Private events and group bookings at [Business Name]"
+>
+> **SaaS and online businesses**
+> - "[Product Name] vs. [Competitor]: an honest comparison"
+> - "How [Product Name] works: a plain-English walkthrough"
+> - "Who [Product Name] is built for — and who it's not"
+> - "[Product Name] integrations, pricing tiers, and support options explained"
+
 ---
 
 ## Part 6: Getting Press and Third-Party Mentions
