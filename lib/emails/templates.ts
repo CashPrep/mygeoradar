@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // MyGeoRadar — Email nurture sequence templates
-// All 5 emails sent via Resend → from: mygeoradar@gmail.com
+// All 5 emails sent via Resend → from: hello@mygeoradar.com
 // ─────────────────────────────────────────────────────────────────────────────
 
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://www.mygeoradar.com'
@@ -11,7 +11,7 @@ function footer(unsubUrl: string) {
       <tr>
         <td align="center" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;color:#a1a1aa;line-height:1.8">
           MyGeoRadar &middot; Canton, MA 02021 &middot;
-          <a href="mailto:mygeoradar@gmail.com" style="color:#a1a1aa">mygeoradar@gmail.com</a><br/>
+          <a href="mailto:hello@mygeoradar.com" style="color:#a1a1aa">hello@mygeoradar.com</a><br/>
           You received this because you ran a free AI readiness scan on our site.<br/>
           <a href="${unsubUrl}" style="color:#a1a1aa;text-decoration:underline">Unsubscribe</a>
         </td>
@@ -52,7 +52,7 @@ function p(text: string) {
 function cta(text: string, href: string) {
   return `
     <table cellpadding="0" cellspacing="0" style="margin:24px 0">
-      <tr><td style="background:#6d28d9;border-radius:8px">
+      <tr><td style="background:#01696f;border-radius:8px">
         <a href="${href}" style="display:inline-block;padding:14px 28px;font-size:15px;font-weight:700;color:#ffffff;text-decoration:none">${text}</a>
       </td></tr>
     </table>
@@ -111,7 +111,7 @@ export function email2_problemAgitation(opts: {
     ${h1('Someone is asking AI about your industry right now.')}
     ${p('Open a new tab and type this into ChatGPT or Perplexity:')}
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0">
-      <tr><td style="background:#f1f5f9;border-left:3px solid #6d28d9;border-radius:0 6px 6px 0;padding:14px 18px;font-family:monospace;font-size:13px;color:#1e293b">
+      <tr><td style="background:#f1f5f9;border-left:3px solid #01696f;border-radius:0 6px 6px 0;padding:14px 18px;font-family:monospace;font-size:13px;color:#1e293b">
         &ldquo;Who are the most trusted [your type of business] in [your city]?&rdquo;
       </td></tr>
     </table>
@@ -139,13 +139,13 @@ export function email3_solution(opts: {
       <tr><td style="padding:0">
         <table width="100%" cellpadding="0" cellspacing="0">
           <tr><td style="padding:12px 0;border-bottom:1px solid #f1f5f9">
-            <p style="margin:0"><strong style="color:#6d28d9">1. Structured authority signals.</strong> Schema markup, clear entity definition, and consistent NAP data across the web. AI uses these to verify you're a real, legitimate business.</p>
+            <p style="margin:0"><strong style="color:#01696f">1. Structured authority signals.</strong> Schema markup, clear entity definition, and consistent NAP data across the web. AI uses these to verify you\'re a real, legitimate business.</p>
           </td></tr>
           <tr><td style="padding:12px 0;border-bottom:1px solid #f1f5f9">
-            <p style="margin:0"><strong style="color:#6d28d9">2. Citation presence.</strong> Being mentioned on directories, publications, and platforms that AI systems are trained on. This is the single biggest driver of AI recommendations.</p>
+            <p style="margin:0"><strong style="color:#01696f">2. Citation presence.</strong> Being mentioned on directories, publications, and platforms that AI systems are trained on. This is the single biggest driver of AI recommendations.</p>
           </td></tr>
           <tr><td style="padding:12px 0">
-            <p style="margin:0"><strong style="color:#6d28d9">3. Content that AI can quote.</strong> Specific, authoritative pages that answer the exact questions AI users are asking about your category.</p>
+            <p style="margin:0"><strong style="color:#01696f">3. Content that AI can quote.</strong> Specific, authoritative pages that answer the exact questions AI users are asking about your category.</p>
           </td></tr>
         </table>
       </td></tr>
@@ -168,7 +168,7 @@ export function email4_socialProof(opts: { unsubUrl: string }) {
     ${h1('What happens when you actually fix this.')}
     ${p('Here\'s the pattern we see over and over:')}
     <table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0">
-      <tr><td style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:10px;padding:20px 24px">
+      <tr><td style="background:#f0fafa;border:1px solid #b2d8d8;border-radius:10px;padding:20px 24px">
         <p style="margin:0 0 10px;font-size:24px">&ldquo;</p>
         <p style="margin:0 0 12px;font-size:15px;color:#1e293b;line-height:1.7">I ran the scan, got a 34/100, and honestly didn't expect much. Worked through the playbook over 3 weekends. Checked ChatGPT again last week — my business showed up in 3 out of 5 prompts I tested. Before it was zero.</p>
         <p style="margin:0;font-size:13px;color:#71717a">— Marketing consultant, Boston MA</p>
