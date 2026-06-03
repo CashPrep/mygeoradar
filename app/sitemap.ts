@@ -1,68 +1,45 @@
-import { MetadataRoute } from 'next'
-import { BLOG_POSTS } from '@/lib/blog-posts'
-import { INDUSTRIES } from '@/lib/industries'
-import { CITIES } from '@/lib/cities'
-import { QUESTIONS } from '@/lib/questions'
-import { COMPARISONS } from '@/lib/comparisons'
+import type { MetadataRoute } from 'next'
+import { getAllPairs, INDUSTRIES, CITIES } from '@/lib/programmatic-data'
 
-const BASE = 'https://www.mygeoradar.com'
+const BASE = 'https://mygeoradar.com'
+const NOW = new Date().toISOString()
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const corePages: MetadataRoute.Sitemap = [
-    { url: `${BASE}/`,             lastModified: new Date(), changeFrequency: 'weekly',  priority: 1.0 },
-    { url: `${BASE}/playbook`,     lastModified: new Date(), changeFrequency: 'monthly', priority: 0.9 },
-    { url: `${BASE}/invisible`,    lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${BASE}/about`,        lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${BASE}/blog`,         lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/industries`,   lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.85 },
-    { url: `${BASE}/cities`,       lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.85 },
-    { url: `${BASE}/questions`,    lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/comparisons`,  lastModified: new Date(), changeFrequency: 'weekly',  priority: 0.8 },
-    { url: `${BASE}/privacy`,      lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.3 },
-    { url: `${BASE}/terms`,        lastModified: new Date(), changeFrequency: 'yearly',  priority: 0.3 },
+  // Core static pages
+  const staticPages: MetadataRoute.Sitemap = [
+    { url: BASE, lastModified: NOW, changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${BASE}/pricing`, lastModified: NOW, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE}/playbook`, lastModified: NOW, changeFrequency: 'monthly', priority: 0.9 },
+    { url: `${BASE}/about`, lastModified: NOW, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${BASE}/blog`, lastModified: NOW, changeFrequency: 'weekly', priority: 0.7 },
+    { url: `${BASE}/privacy`, lastModified: NOW, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE}/terms`, lastModified: NOW, changeFrequency: 'yearly', priority: 0.3 },
+    { url: `${BASE}/refund`, lastModified: NOW, changeFrequency: 'yearly', priority: 0.3 },
   ]
 
-  const blogPages: MetadataRoute.Sitemap = BLOG_POSTS.map(({ slug, lastMod }) => ({
-    url:             `${BASE}/blog/${slug}`,
-    lastModified:    new Date(lastMod),
-    changeFrequency: 'monthly',
-    priority:        0.7,
+  // Industry hub pages — /dentists, /plumbers, etc.
+  const industryHubs: MetadataRoute.Sitemap = INDUSTRIES.map((i) => ({
+    url: `${BASE}/${i.slug}`,
+    lastModified: NOW,
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
   }))
 
-  const industryPages: MetadataRoute.Sitemap = INDUSTRIES.map(({ slug }) => ({
-    url:             `${BASE}/industries/${slug}`,
-    lastModified:    new Date(),
-    changeFrequency: 'monthly',
-    priority:        0.75,
+  // City hub pages — /chicago, /miami, etc.
+  const cityHubs: MetadataRoute.Sitemap = CITIES.map((c) => ({
+    url: `${BASE}/${c.slug}`,
+    lastModified: NOW,
+    changeFrequency: 'monthly' as const,
+    priority: 0.7,
   }))
 
-  const cityPages: MetadataRoute.Sitemap = CITIES.map(({ slug }) => ({
-    url:             `${BASE}/cities/${slug}`,
-    lastModified:    new Date(),
-    changeFrequency: 'monthly',
-    priority:        0.75,
+  // Programmatic pages — /dentists/chicago, /plumbers/miami, etc.
+  const programmatic: MetadataRoute.Sitemap = getAllPairs().map(({ industry, city }) => ({
+    url: `${BASE}/${industry}/${city}`,
+    lastModified: NOW,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
   }))
 
-  const questionPages: MetadataRoute.Sitemap = QUESTIONS.map(({ slug }) => ({
-    url:             `${BASE}/questions/${slug}`,
-    lastModified:    new Date(),
-    changeFrequency: 'monthly',
-    priority:        0.7,
-  }))
-
-  const comparisonPages: MetadataRoute.Sitemap = COMPARISONS.map(({ slug }) => ({
-    url:             `${BASE}/comparisons/${slug}`,
-    lastModified:    new Date(),
-    changeFrequency: 'monthly',
-    priority:        0.75,
-  }))
-
-  return [
-    ...corePages,
-    ...blogPages,
-    ...industryPages,
-    ...cityPages,
-    ...questionPages,
-    ...comparisonPages,
-  ]
+  return [...staticPages, ...industryHubs, ...cityHubs, ...programmatic]
 }
