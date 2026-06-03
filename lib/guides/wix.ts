@@ -1,119 +1,206 @@
-export const wixGuide = {
-  platform: "Wix",
-  slug: "wix",
-  tagline: "Easy drag-and-drop builder with growing SEO capabilities — but GEO ceiling is real.",
-  geoScore: 48,
-  color: "#faad03",
+import type { PlatformGuide } from './types';
 
-  canDo: [
+export const wixGuide: PlatformGuide = {
+  platform: 'Wix',
+  slug: 'wix',
+  tagline: 'More GEO control than most people realize — but with hard infrastructure ceilings.',
+  description:
+    'Wix has significantly improved its SEO and structured data capabilities in recent years. Most GEO-relevant changes — meta tags, JSON-LD schema, Open Graph, and robots.txt — are now accessible without writing code, through the Wix SEO settings panel. The platform ceiling appears when you need programmatic control, custom rendering logic, or deep technical customization. This guide shows you exactly what\'s possible and where you\'ll hit a wall.',
+  geoScore: 5,
+  sections: [
     {
-      title: "Add JSON-LD Schema",
-      difficulty: "medium",
-      steps: [
-        "In your Wix Editor, go to Settings (the gear icon in the left panel).",
-        "Click 'SEO' in the left sidebar, then select 'SEO Tools'.",
-        "Click 'Structured Data Markup' — this opens the JSON-LD editor.",
-        "Select the page type you want to add schema to (Home, About, Product, etc.).",
-        "Paste your JSON-LD code in the text box. Wix supports dynamic variables like {page.title} and {page.url}.",
-        "Click 'Apply' and publish your site.",
-        "Validate with Google's Rich Results Test."
+      id: 'meta-title-description',
+      title: 'Meta Title & Description',
+      tier: 'green',
+      items: [
+        {
+          label: 'Where to find it',
+          detail: 'In the Wix Editor, click on any page → Page Settings (gear icon at top) → SEO tab. Or use the Wix SEO Dashboard (Marketing & SEO → SEO Tools → SEO Dashboard).',
+        },
+        {
+          label: 'Bulk editing',
+          detail: 'Marketing & SEO → SEO Tools → SEO Dashboard → scroll down to "Get found on Google" → manage pages. You can edit meta for all pages from one view.',
+        },
+        {
+          label: 'Dynamic pages',
+          detail: 'For Wix Stores, Blog, or dynamic content: go to the dynamic page settings and use SEO patterns (e.g., {title} - {siteName}) to auto-populate meta tags across all items.',
+        },
+        {
+          label: 'GEO tip',
+          detail: 'Write meta descriptions as direct answers. "We are a Canton MA plumber open 24/7" performs better in AI answers than "Welcome to our plumbing services."',
+        },
       ],
-      tip: "Wix's Structured Data tool is surprisingly capable — you can add LocalBusiness, FAQPage, Organization, and Product schema without any code."
     },
     {
-      title: "Edit Meta Title & Description",
-      difficulty: "easy",
-      steps: [
-        "In the Wix Editor, click on the page you want to edit in the Pages panel.",
-        "Click the three-dot menu next to the page name → SEO Basics.",
-        "Edit the Title Tag and Meta Description fields.",
-        "For dynamic pages (blog, store): go to Pages → [Dynamic Page] → SEO → and use the SEO Patterns feature to set meta templates.",
-        "Click Save and Publish."
+      id: 'json-ld-schema',
+      title: 'JSON-LD / Structured Data',
+      tier: 'yellow',
+      items: [
+        {
+          label: 'Built-in Structured Data Markup tool',
+          detail: 'Marketing & SEO → SEO Tools → Structured Data Markup. This is Wix\'s native JSON-LD editor. You can select page type and add schema without writing code.',
+        },
+        {
+          label: 'How to add custom JSON-LD',
+          detail: 'In the Structured Data Markup tool, click "Add Schema" → choose type (e.g., FAQPage, LocalBusiness) → fill in the fields or paste raw JSON. Save and publish.',
+        },
+        {
+          label: 'Dynamic variables',
+          detail: 'Wix lets you use variables like {title}, {price}, {description} inside schema fields to auto-populate data from your content — no manual updates needed when products change.',
+        },
+        {
+          label: 'Wix Stores schema',
+          detail: 'Product schema is added automatically for Wix Stores items. Verify it\'s rendering correctly with Google\'s Rich Results Test.',
+        },
+        {
+          label: 'Blog Article schema',
+          detail: 'Wix Blog auto-generates Article schema. To add Author entity markup (important for E-E-A-T signals), you need to use the Structured Data Markup tool manually per post or use a pattern.',
+        },
       ],
-      tip: "Use Wix's SEO Patterns for blog and store pages — it lets you create templates like '{post.title} | Your Brand' so you're not manually editing hundreds of posts."
-    },
+      codeSnippet: `// Example: Adding FAQPage schema via Wix Structured Data Markup tool
+// Paste this JSON in the "Custom" schema field:
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      title: "robots.txt",
-      difficulty: "hard",
-      steps: [
-        "Wix does NOT let you edit robots.txt directly through the standard editor.",
-        "To access it: go to your Wix Dashboard → Marketing & SEO → SEO Tools → robots.txt editor.",
-        "This feature is available on most paid plans and lets you add custom Allow/Disallow rules.",
-        "Add AI crawler permissions: User-agent: GPTBot\nAllow: / and User-agent: ClaudeBot\nAllow: /",
-        "Wix automatically includes a sitemap reference at the bottom of your robots.txt."
-      ],
-      tip: "If you don't see a robots.txt editor, you may be on an older Wix plan. Upgrade or contact Wix support."
-    },
-    {
-      title: "Open Graph Tags",
-      difficulty: "easy",
-      steps: [
-        "Wix includes basic Open Graph tags automatically for all pages.",
-        "To customize: Editor → Page settings → SEO → Social Share.",
-        "Upload a custom social image (1200×630px recommended) and edit the OG title and description.",
-        "For blog posts: Blog dashboard → Post → SEO & Social settings → Social tab.",
-        "For products: Wix Stores → Product → Edit → SEO tab → Social Share settings."
-      ],
-      tip: "Wix doesn't expose og:type or og:locale in the UI — these are set automatically. For advanced OG control you'll need Wix Velo (see below)."
-    },
-    {
-      title: "Edit H1 & Content Headings",
-      difficulty: "easy",
-      steps: [
-        "In the Wix Editor, click on any text element on your page.",
-        "Highlight text and use the text formatting toolbar — select Heading 1, Heading 2, etc.",
-        "Important: Only ONE element per page should be set to H1 — this is usually your page's main title.",
-        "For blog posts: the post title is automatically H1. Use the editor to set subheadings as H2/H3.",
-        "Use the Wix Accessibility Wizard (Settings → Accessibility) to check heading hierarchy."
-      ],
-      tip: "Wix's drag-and-drop makes it easy to accidentally have multiple H1 tags or skip heading levels. Run an audit with the Accessibility Wizard before publishing."
+      "@type": "Question",
+      "name": "Do you offer same-day service?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, we offer same-day service for appointments booked before 2pm."
+      }
     }
+  ]
+}`,
+      codeLanguage: 'json',
+    },
+    {
+      id: 'open-graph',
+      title: 'Open Graph Tags',
+      tier: 'green',
+      items: [
+        {
+          label: 'Default behavior',
+          detail: 'Wix auto-generates og:title, og:description, og:image, og:type, and og:url for all pages based on your SEO settings and featured images.',
+        },
+        {
+          label: 'Customizing per page',
+          detail: 'Page Settings → SEO tab → Social Share section. You can set a custom OG title, description, and image per page.',
+        },
+        {
+          label: 'Site-wide OG image',
+          detail: 'Marketing & SEO → SEO Tools → Social Share Settings. Set the default fallback image used when no page-specific image is defined.',
+        },
+      ],
+    },
+    {
+      id: 'robots-txt',
+      title: 'robots.txt',
+      tier: 'yellow',
+      items: [
+        {
+          label: 'Where to find it',
+          detail: 'Marketing & SEO → SEO Tools → Robots.txt Editor. This is a full text editor for your robots.txt — available on all Wix plans.',
+        },
+        {
+          label: 'How to edit',
+          detail: 'Click "Edit Robots.txt" and modify directly. Changes take effect after publishing. Wix will warn you if you\'re about to block major crawlers.',
+        },
+        {
+          label: 'GEO-critical rule',
+          detail: 'Make sure GPTBot, ClaudeBot, PerplexityBot, GoogleOther, and anthropic-ai are NOT in your Disallow list. If you\'ve ever used a security plugin or template, check these entries.',
+        },
+        {
+          label: 'Recommended addition',
+          detail: 'Add a Sitemap line: Sitemap: https://yourdomain.com/sitemap.xml — Wix auto-generates your sitemap at this URL.',
+        },
+      ],
+    },
+    {
+      id: 'h1-content',
+      title: 'H1 & Content Headings',
+      tier: 'green',
+      items: [
+        {
+          label: 'Setting H1',
+          detail: 'In the Wix Editor, click any text element → Text Settings (top toolbar) → change the style dropdown to "Heading 1". Only one H1 per page.',
+        },
+        {
+          label: 'GEO best practice',
+          detail: 'Your H1 should match or closely mirror your meta title. AI models weight the H1 heavily when determining what a page is about.',
+        },
+        {
+          label: 'Subheadings (H2/H3)',
+          detail: 'Use the same Text Settings dropdown for H2 and H3. Structure content as questions (H2) with direct answers (paragraph below) — this is the format AI models love to cite.',
+        },
+        {
+          label: 'Wix Blog headings',
+          detail: 'In the Blog post editor, use the Format toolbar (the H1/H2/H3 buttons) to set heading hierarchy. The post title auto-renders as H1.',
+        },
+      ],
+    },
   ],
-
   cannotDo: [
-    "Edit raw HTML output — Wix generates HTML automatically and you can't override its structure.",
-    "Control server-side rendering, caching, or CDN behavior.",
-    "Implement custom HTTP headers or edge middleware.",
-    "Achieve reliable sub-2s Core Web Vitals — Wix's JavaScript payload is heavy and largely outside your control.",
-    "Add canonical tags to external URLs (Wix only allows self-referential canonicals).",
-    "Export your site to another platform without rebuilding content manually.",
-    "Use custom server-side logic for AI crawler detection or conditional rendering."
+    'Access or modify server infrastructure, CDN configuration, or HTTP headers.',
+    'Implement custom middleware for dynamic rendering or bot-specific responses.',
+    'Use custom JavaScript frameworks (React, Next.js, Vue) — Wix uses its own Velo framework only.',
+    'Control Core Web Vitals at the infrastructure level — Wix\'s rendering engine is fully managed.',
+    'Create URL structures outside of Wix\'s slug patterns (e.g., no /category/subcategory/product nesting).',
+    'Inject server-side code or edge functions for real-time personalization or AI-specific rendering.',
+    'Export and migrate content easily — Wix lock-in is real and migration requires manual effort or third-party tools.',
   ],
-
   recommendedApps: [
     {
-      name: "Wix SEO Wiz",
-      purpose: "Built-in guided SEO checklist. Good starting point for GEO basics.",
+      name: 'Wix SEO Wiz',
+      url: 'https://support.wix.com/en/article/wix-seo-wiz-getting-started',
+      description: 'Built-in guided SEO setup tool. Walks you through meta, sitemap, and structured data steps for your specific business type.',
       free: true,
-      url: "https://support.wix.com/en/article/wix-seo-wiz"
     },
     {
-      name: "Semrush (Wix Integration)",
-      purpose: "Keyword research + on-page SEO suggestions directly inside Wix dashboard.",
+      name: 'SE Ranking',
+      url: 'https://seranking.com',
+      description: 'External tool for tracking GEO keyword visibility across AI platforms. Use alongside Wix to measure what\'s working.',
       free: false,
-      url: "https://www.wix.com/app-market/semrush"
     },
     {
-      name: "Site Booster",
-      purpose: "Business listing distribution and local SEO signals — good for GEO local visibility.",
+      name: 'Semrush Site Audit',
+      url: 'https://semrush.com',
+      description: 'Connect your Wix domain for a full technical SEO audit including schema validation and crawlability checks.',
       free: false,
-      url: "https://www.wix.com/app-market/site-booster"
-    }
+    },
+    {
+      name: 'Cloudflare (via CNAME)',
+      url: 'https://www.cloudflare.com',
+      description: 'If on a Wix Business plan, you can point to Cloudflare for added performance and security — partially mitigates infrastructure limitations.',
+      free: true,
+    },
   ],
-
-  migrationFramework: {
-    stayIf: [
-      "You're a small local business and local GEO (LocalBusiness schema, Google Maps, NAP consistency) is your primary need — fully doable on Wix.",
-      "You're non-technical and need a manageable UI — Wix Velo can handle moderate customizations without a full developer.",
-      "Your site has fewer than 50 pages and you're not relying on programmatic SEO at scale.",
-      "Your budget doesn't allow for a rebuild — Wix's free structured data tool is genuinely useful."
-    ],
-    migrateIf: [
-      "Core Web Vitals are failing and affecting your GEO visibility — Wix has limited CWV optimization headroom.",
-      "You need programmatic page generation (e.g., 1000s of location pages, product pages).",
-      "You're a SaaS or tech company where your site's authority and technical precision matter to AI engines.",
-      "You need to run A/B tests, custom redirects, or middleware that Wix doesn't support."
-    ],
-    recommendedAlternative: "WordPress with a lightweight theme (Kadence, GeneratePress) + Rank Math SEO plugin gives you Wix-level ease with far more GEO control."
-  }
+  migrationFramework: [
+    {
+      situation: 'Local service business with simple info pages',
+      verdict: 'Stay',
+      reason: 'Wix\'s structured data tool + clean content structure covers the GEO needs of most local businesses.',
+    },
+    {
+      situation: 'E-commerce store growing past 500 products',
+      verdict: 'Consider migrating',
+      reason: 'Shopify or WooCommerce provide better schema coverage, bulk editing, and app ecosystems at scale.',
+    },
+    {
+      situation: 'Content-heavy site needing advanced blog structure',
+      verdict: 'Consider migrating',
+      reason: 'WordPress gives far more content architecture control — categories, tags, custom post types, and schema all at a deeper level.',
+    },
+    {
+      situation: 'Technical founder who wants full code control',
+      verdict: 'Migrate',
+      reason: 'Wix Velo is limited vs. Next.js/Webflow. If you\'re comfortable with code, the ceiling is too low for serious GEO work.',
+    },
+    {
+      situation: 'Non-technical owner with limited budget',
+      verdict: 'Stay',
+      reason: 'Wix\'s native SEO tools are genuinely good enough for most small businesses. The migration cost outweighs the gains.',
+    },
+  ],
 };

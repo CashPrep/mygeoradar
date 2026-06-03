@@ -1,123 +1,202 @@
-export const shopifyGuide = {
-  platform: "Shopify",
-  slug: "shopify",
-  tagline: "The world's most popular e-commerce platform — powerful for selling, limited for GEO.",
-  geoScore: 62,
-  color: "#96bf48",
+import type { PlatformGuide } from './types';
 
-  canDo: [
+export const shopifyGuide: PlatformGuide = {
+  platform: 'Shopify',
+  slug: 'shopify',
+  tagline: 'Solid native SEO controls but limited schema flexibility without apps.',
+  description:
+    'Shopify gives merchants a strong foundation for technical SEO and GEO — meta tags, sitemaps, and canonical URLs are handled automatically. The real gap is structured data: Shopify only injects basic Product and BreadcrumbList schema by default, and getting custom JSON-LD onto every page type requires either theme code edits or a dedicated app. This guide walks you through every GEO action, whether you can do it yourself or need help.',
+  geoScore: 6,
+  sections: [
     {
-      title: "Add JSON-LD Schema",
-      difficulty: "medium",
-      steps: [
-        "From your Shopify Admin, go to Online Store → Themes.",
-        "Click the three-dot menu next to your active theme → Edit code.",
-        "Open theme.liquid (under Layout).",
-        "Paste your JSON-LD <script> block just before the closing </head> tag.",
-        "For product-specific schema, open product.liquid or product-template.liquid.",
-        "Use Liquid variables like {{ product.title }} and {{ product.description }} inside your JSON-LD to make it dynamic.",
-        "Save and verify with Google's Rich Results Test."
+      id: 'meta-title-description',
+      title: 'Meta Title & Description',
+      tier: 'green',
+      items: [
+        {
+          label: 'Where to find it',
+          detail: 'Online Store → Pages / Products / Collections → scroll to the bottom of any edit screen → "Search engine listing preview" → click "Edit website SEO".',
+        },
+        {
+          label: 'Title length',
+          detail: 'Keep under 60 characters. Shopify shows a live preview as you type.',
+        },
+        {
+          label: 'Description length',
+          detail: 'Keep under 155 characters. AI models read this field — treat it like a one-sentence answer to what the page is about.',
+        },
+        {
+          label: 'Homepage meta',
+          detail: 'Online Store → Preferences → "Title and meta description" at the top of the page.',
+        },
       ],
-      tip: "Shopify's Online Store 2.0 themes support app blocks — some schema apps inject JSON-LD without touching code at all."
     },
     {
-      title: "Edit Meta Title & Description",
-      difficulty: "easy",
-      steps: [
-        "Go to Online Store → Pages (or Products / Collections depending on what you're editing).",
-        "Scroll to the bottom of any page editor — you'll see an SEO section.",
-        "Click 'Edit website SEO'.",
-        "Update Page title (70 chars max) and Meta description (160 chars max).",
-        "Hit Save. Changes go live immediately."
+      id: 'json-ld-schema',
+      title: 'JSON-LD / Structured Data',
+      tier: 'yellow',
+      items: [
+        {
+          label: 'What Shopify adds by default',
+          detail: 'Product schema and BreadcrumbList are injected automatically on product pages. No FAQ, LocalBusiness, Article, or HowTo schema is added.',
+        },
+        {
+          label: 'DIY method (requires theme code access)',
+          detail: 'Online Store → Themes → Actions → Edit code → open theme.liquid (or the relevant section file) → paste your JSON-LD block inside a <script type="application/ld+json"> tag just before </head>.',
+        },
+        {
+          label: 'No-code method',
+          detail: 'Use the Schema Plus for SEO app (see Recommended Apps). It generates and injects JSON-LD per page type without touching code.',
+        },
+        {
+          label: 'FAQ schema tip',
+          detail: 'Any product page with a FAQ section should have FAQPage schema added — this is one of the highest-impact GEO actions. AI models frequently pull FAQ content into answers.',
+        },
       ],
-      tip: "Shopify auto-generates meta titles from product/page names — always override them manually for GEO-optimized copy."
-    },
+      codeSnippet: `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
     {
-      title: "robots.txt",
-      difficulty: "medium",
-      steps: [
-        "Shopify auto-generates a robots.txt file at yourdomain.com/robots.txt.",
-        "Since Shopify 2021, you can customize it via a robots.txt.liquid file.",
-        "In Theme Editor → Edit code, create a new template: Templates → Add a new template → robots.txt.",
-        "This gives you control over which paths to allow/disallow and lets you add crawl rules for AI bots like GPTBot or ClaudeBot.",
-        "Add: User-agent: GPTBot\nAllow: / to ensure AI crawlers can index your content."
-      ],
-      tip: "Without a custom robots.txt.liquid, Shopify blocks several paths like /checkout and /cart — that's fine. Focus on ensuring your main pages are crawlable."
-    },
-    {
-      title: "Open Graph Tags",
-      difficulty: "easy",
-      steps: [
-        "Shopify includes basic Open Graph tags natively in most themes via theme.liquid.",
-        "To verify, view source on any page and search for og:title.",
-        "For custom OG images per page: go to the page/product editor → SEO section → you may see an 'Image' field depending on your theme.",
-        "For advanced control, edit theme.liquid to add custom og:description and og:image meta tags using Liquid variables."
-      ],
-      tip: "The free 'OG Tags' or 'SEO Manager' apps give you a UI to set Open Graph data without touching code."
-    },
-    {
-      title: "Edit H1 & Content Headings",
-      difficulty: "easy",
-      steps: [
-        "Product H1: The product title IS the H1 on most Shopify themes. Edit it in Products → [Product Name] → Title field.",
-        "Page H1: Online Store → Pages → Title field renders as H1.",
-        "Body content: Use the rich text editor to add H2, H3 headings inside description or page content.",
-        "For blog posts: Blog Posts → [Post] — title is H1, use formatting in the body editor for subheadings."
-      ],
-      tip: "Never use H2/H3 in descriptions just for styling — AI engines read heading hierarchy to understand page structure."
+      "@type": "Question",
+      "name": "What makes your product different?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your honest, specific answer goes here."
+      }
     }
+  ]
+}
+</script>`,
+      codeLanguage: 'html',
+    },
+    {
+      id: 'open-graph',
+      title: 'Open Graph Tags',
+      tier: 'green',
+      items: [
+        {
+          label: 'Built-in support',
+          detail: 'Shopify themes automatically output og:title, og:description, og:image, og:url, and og:type on all pages — no setup needed.',
+        },
+        {
+          label: 'Customizing OG image',
+          detail: 'Online Store → Preferences → Social sharing image. This sets the fallback OG image site-wide. Individual product/collection images override it automatically.',
+        },
+        {
+          label: 'Verify tags',
+          detail: 'Use Facebook Sharing Debugger or opengraph.xyz to confirm tags are rendering correctly after any theme changes.',
+        },
+      ],
+    },
+    {
+      id: 'robots-txt',
+      title: 'robots.txt',
+      tier: 'yellow',
+      items: [
+        {
+          label: 'Default behavior',
+          detail: 'Shopify generates a robots.txt automatically. For most stores the default is fine.',
+        },
+        {
+          label: 'How to customize (Shopify 2.0+ themes only)',
+          detail: 'Online Store → Themes → Actions → Edit code → look for robots.txt.liquid. If it doesn\'t exist, create it at the Templates level. This file uses Liquid to output your custom rules.',
+        },
+        {
+          label: 'GEO-relevant rule',
+          detail: 'Do NOT block GPTBot, ClaudeBot, PerplexityBot, or GoogleOther. These are the AI crawler agents that build the training and retrieval indexes. Blocking them means you won\'t appear in AI answers.',
+        },
+        {
+          label: 'AI crawler user agents to allow',
+          detail: 'GPTBot (OpenAI), ClaudeBot (Anthropic), PerplexityBot, GoogleOther (Gemini), anthropic-ai.',
+        },
+      ],
+    },
+    {
+      id: 'h1-content',
+      title: 'H1 & Content Headings',
+      tier: 'green',
+      items: [
+        {
+          label: 'Product page H1',
+          detail: 'The product title IS the H1 on product pages. Edit it in Products → [product name] → Title field.',
+        },
+        {
+          label: 'Page & blog H1',
+          detail: 'Online Store → Pages or Blog Posts → the page title field renders as H1. Keep it specific and entity-rich.',
+        },
+        {
+          label: 'Body content headings',
+          detail: 'In the rich text editor, highlight text and use the Format dropdown to apply H2/H3. Structure your content so H2s answer specific questions — AI models look for clear Q&A patterns.',
+        },
+        {
+          label: 'GEO tip',
+          detail: 'Use H2s that mirror the exact questions your customers ask. "How long does shipping take?" as an H2 with a direct answer below it dramatically increases your chances of appearing in AI responses.',
+        },
+      ],
+    },
   ],
-
   cannotDo: [
-    "Control server-side rendering or caching headers — Shopify manages all infrastructure.",
-    "Restructure semantic HTML layout of your theme without editing Liquid theme files (requires developer).",
-    "Implement dynamic rendering for AI crawlers specifically (e.g., serving a text-heavy version to GPTBot).",
-    "Achieve sub-2s LCP reliably — Shopify's CDN is good but Core Web Vitals are heavily theme-dependent.",
-    "Add custom HTTP headers (like Link: rel=canonical directives) at the server level.",
-    "Bulk-generate schema across thousands of products programmatically without an app or custom script.",
-    "Modify the checkout pages — these are locked by Shopify (Shopify Plus only allows limited customization)."
+    'Control server-side rendering or streaming behavior — Shopify\'s CDN and rendering pipeline is fully managed.',
+    'Implement dynamic rendering for AI crawlers specifically (no middleware or edge function access).',
+    'Bulk-generate schema programmatically across thousands of products without an app.',
+    'Add custom HTTP response headers (e.g., Link: <url>; rel=canonical via header instead of tag).',
+    'Modify Core Web Vitals at the infrastructure level — theme code can help, but JS framework and CDN are Shopify-controlled.',
+    'Create custom URL structures beyond Shopify\'s fixed /products/, /collections/, /pages/ patterns without third-party redirects.',
+    'Implement server-side hreflang injection for complex international setups.',
   ],
-
   recommendedApps: [
     {
-      name: "Schema Plus for SEO",
-      purpose: "Auto-generates rich JSON-LD schema for all products, collections, and pages.",
+      name: 'Schema Plus for SEO',
+      url: 'https://apps.shopify.com/schema-plus',
+      description: 'Automatically generates and injects 20+ schema types including FAQ, HowTo, Article, and LocalBusiness. No code required.',
       free: false,
-      url: "https://apps.shopify.com/schema-plus"
     },
     {
-      name: "SEO Manager",
-      purpose: "Bulk meta title/description editing, Open Graph controls, sitemap management.",
+      name: 'Plug in SEO',
+      url: 'https://apps.shopify.com/plug-in-seo',
+      description: 'Comprehensive SEO audit tool with structured data, meta tag management, and broken link detection.',
+      free: true,
+    },
+    {
+      name: 'TinyIMG',
+      url: 'https://apps.shopify.com/tiny-img',
+      description: 'Image compression + alt text optimization. Fast images = better GEO signals.',
+      free: true,
+    },
+    {
+      name: 'JSON-LD for SEO',
+      url: 'https://apps.shopify.com/json-ld-for-seo',
+      description: 'Specialized structured data app used by 30k+ stores. Handles all major schema types.',
       free: false,
-      url: "https://apps.shopify.com/seo-manager"
     },
-    {
-      name: "Plug In SEO",
-      purpose: "Free tier available. Scans for missing meta, broken links, schema issues.",
-      free: true,
-      url: "https://apps.shopify.com/plug-in-seo"
-    },
-    {
-      name: "TinyIMG",
-      purpose: "Image compression + alt text automation for better Core Web Vitals and GEO signals.",
-      free: true,
-      url: "https://apps.shopify.com/tiny-img"
-    }
   ],
-
-  migrationFramework: {
-    stayIf: [
-      "You're an e-commerce store and selling is your primary goal — Shopify's commerce features are unmatched.",
-      "You have under 500 products and your GEO needs are schema + meta optimization (fully doable on Shopify).",
-      "You don't have developer resources — Shopify apps cover 80% of GEO gaps without code.",
-      "Your tech team is non-technical — Shopify's UI is the most beginner-friendly of all platforms."
-    ],
-    migrateIf: [
-      "You need granular control over page rendering, custom server middleware, or edge functions for AI personalization.",
-      "Your site is content-heavy (blog, knowledge base, resource hub) and e-commerce is secondary.",
-      "You need programmatic schema generation for a large catalog (1000+ products) and apps are too expensive.",
-      "You're hitting Core Web Vitals walls that theme optimization can't solve."
-    ],
-    recommendedAlternative: "Next.js + Shopify Storefront API (headless) — keeps Shopify as the commerce backend while giving you full frontend control."
-  }
+  migrationFramework: [
+    {
+      situation: 'Simple product catalog, no complex content needs',
+      verdict: 'Stay',
+      reason: 'Shopify + Schema Plus app covers 90% of GEO needs for a standard e-commerce store.',
+    },
+    {
+      situation: 'Primarily a content/blog-driven business using Shopify',
+      verdict: 'Consider migrating',
+      reason: 'Shopify\'s blog is limited. WordPress gives far more content structure control for GEO.',
+    },
+    {
+      situation: 'Local service business using Shopify for booking',
+      verdict: 'Consider migrating',
+      reason: 'LocalBusiness + ServiceArea schema is complex on Shopify. Webflow or WordPress handles it better natively.',
+    },
+    {
+      situation: 'Large catalog (1,000+ SKUs) needing bulk schema',
+      verdict: 'Consider migrating',
+      reason: 'Headless commerce (Shopify API + Next.js) gives full code control while keeping Shopify as backend.',
+    },
+    {
+      situation: 'Revenue depends on AI-driven discovery for branded queries',
+      verdict: 'Stay',
+      reason: 'Shopify\'s domain authority and Product schema coverage is strong for branded product queries.',
+    },
+  ],
 };
