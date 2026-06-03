@@ -6,10 +6,11 @@ import { Input } from '@/components/ui/Input'
 import { Badge } from '@/components/ui/Badge'
 import {
   X, Plus, Lock, Zap, Clock, CheckCircle2, AlertCircle,
-  Loader2, Globe, Sparkles, MapPin,
+  Loader2, Globe, Sparkles, MapPin, Monitor,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { SCAN_PRICE_USD } from '@/lib/constants'
+import { PLATFORM_LIST, type PlatformId } from '@/lib/platforms'
 
 const MAX_TOPICS = 50
 type CrawlStatus = 'idle' | 'crawling' | 'success' | 'failed'
@@ -36,9 +37,8 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
   const [topicInput,   setTopicInput]   = useState('')
   const [industry,     setIndustry]     = useState('')
   const [location,     setLocation]     = useState('')
+  const [platform,     setPlatform]     = useState<PlatformId | ''>('')
   const [geoLoading,   setGeoLoading]   = useState(false)
-  // Track whether geolocation has already resolved (success or denied)
-  // so crawl results never clobber a real geo-detected city.
   const geoResolved = useRef(false)
   const [crawlStatus,  setCrawlStatus]  = useState<CrawlStatus>('idle')
   const [crawlMessage, setCrawlMessage] = useState('')
@@ -64,7 +64,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         }
       },
       () => {
-        // Permission denied or unavailable — mark resolved so crawl can fill
         geoResolved.current = true
         setGeoLoading(false)
       },
@@ -107,9 +106,6 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       let filled = 0
       if (data.businessName && !businessName) { setBusinessName(data.businessName); filled++ }
       if (data.industry)                       { setIndustry(data.industry); filled++ }
-      // Only use crawl-returned location if geolocation has resolved and left
-      // the field empty (permission denied / unavailable). Never overwrite a
-      // real geo-detected city with whatever GPT guessed from the website.
       if (data.location && geoResolved.current) {
         setLocation(prev => prev === '' ? data.location : prev)
         filled++
@@ -160,6 +156,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
   }
 
   function removeTopic(t: string) {
+    setTopics(prev => prev.filter(x => x !== x === t ? false : true))
     setTopics(prev => prev.filter(x => x !== t))
   }
 
@@ -174,7 +171,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       const res  = await fetch('/api/scan/create', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ businessName, website, topics, location, industry }),
+        body:    JSON.stringify({ businessName, website, topics, location, industry, platform: platform || null }),
       })
       const data = await res.json()
       if (data.url) {
@@ -191,10 +188,12 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
 
   const canSubmit = businessName.trim() && website.trim() && topics.length > 0
 
+  const selectedPlatform = platform ? PLATFORM_LIST.find(p => p.id === platform) : null
+
   return (
     <div className="card p-6 flex flex-col gap-5">
 
-      {/* \u2500\u2500 URL field \u2500\u2500 */}
+      {/* ── URL field ── */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-foreground-dim flex items-center gap-1.5">
           <Globe className="w-3.5 h-3.5" /> Website *
@@ -236,7 +235,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         )}
       </div>
 
-      {/* \u2500\u2500 Business name \u2500\u2500 */}
+      {/* ── Business name ── */}
       <div className="flex flex-col gap-1.5">
         <label className="text-sm font-medium text-foreground-dim">Business name *</label>
         <input
@@ -248,7 +247,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         />
       </div>
 
-      {/* \u2500\u2500 Industry + Location row \u2500\u2500 */}
+      {/* ── Industry + Location row ── */}
       <div className="grid grid-cols-2 gap-3">
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-foreground-dim">Industry</label>
@@ -276,7 +275,45 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         </div>
       </div>
 
-      {/* \u2500\u2500 Topics \u2500\u2500 */}
+      {/* ── Platform selector (optional) ── */}
+      <div className="flex flex-col gap-2">
+        <label className="text-sm font-medium text-foreground-dim flex items-center gap-1.5">
+          <Monitor className="w-3.5 h-3.5" />
+          Website builder
+          <span className="text-xs text-muted font-normal">(optional)</span>
+        </label>
+        <div className="flex flex-wrap gap-2">
+          {PLATFORM_LIST.filter(p => p.id !== 'other').map(p => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setPlatform(prev => prev === p.id ? '' : p.id as PlatformId)}
+              className={clsx(
+                'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all',
+                platform === p.id
+                  ? 'bg-accent/10 border-accent/40 text-accent'
+                  : 'bg-surface-2 border-border text-muted hover:border-accent/30 hover:text-foreground'
+              )}
+            >
+              <span>{p.emoji}</span>
+              <span>{p.label}</span>
+            </button>
+          ))}
+        </div>
+        {selectedPlatform && (
+          <p className="text-xs text-accent/80 flex items-center gap-1.5 mt-0.5">
+            <CheckCircle2 className="w-3 h-3" />
+            Results will show what you can fix on <strong>{selectedPlatform.label}</strong>. Click again to deselect.
+          </p>
+        )}
+        {!selectedPlatform && (
+          <p className="text-xs text-muted">
+            Select your platform to filter results to changes you can actually make. Skip if you have a custom-coded site.
+          </p>
+        )}
+      </div>
+
+      {/* ── Topics ── */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <label className="text-sm font-medium text-foreground-dim">Topics to scan</label>
@@ -332,57 +369,29 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
         )}
       </div>
 
-      {/* \u2500\u2500 Engines + timing \u2500\u2500 */}
-      <div className="flex items-center justify-between px-4 py-3 bg-surface-2 border border-border rounded-xl">
-        <div className="flex items-center gap-2">
-          <Clock className="w-4 h-4 text-accent shrink-0" />
-          <span className="text-xs text-foreground-dim">45\u201390 second scan</span>
-        </div>
-        <div className="flex gap-1.5">
-          {['ChatGPT', 'Perplexity', 'Gemini', 'Claude'].map(e => (
-            <Badge key={e} variant="neutral" className="text-xs">{e}</Badge>
-          ))}
-        </div>
-      </div>
-
-      {/* \u2500\u2500 Payment summary \u2500\u2500 */}
-      <div className="bg-accent/5 border border-accent/20 rounded-xl p-4 flex flex-col gap-3">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-semibold">One-time payment</p>
-          <span className="text-lg font-bold text-accent">${SCAN_PRICE_USD.toFixed(2)}</span>
-        </div>
-        <div className="flex flex-col gap-1.5 pt-2 border-t border-accent/10">
-          <div className="flex items-center gap-2 text-xs text-foreground-dim">
-            <Lock className="w-3.5 h-3.5 text-success shrink-0" />
-            256-bit SSL \u2014 secured by Stripe
-          </div>
-          <div className="flex items-center gap-2 text-xs text-foreground-dim">
-            <Zap className="w-3.5 h-3.5 text-warning shrink-0" />
-            Instant results when scan finishes
-          </div>
-        </div>
-      </div>
-
-      {error && <p className="text-sm text-danger">{error}</p>}
-
-      <Button
-        variant="primary"
-        loading={loading || crawlStatus === 'crawling'}
-        onClick={handleSubmit}
-        disabled={!canSubmit || loading}
-        className="w-full"
-      >
-        {loading ? 'Redirecting to checkout\u2026' :
-         crawlStatus === 'crawling' ? 'Scanning your site\u2026' :
-         `Pay $${SCAN_PRICE_USD.toFixed(2)} \u00b7 Run Full Scan`}
-      </Button>
-
-      {!canSubmit && crawlStatus !== 'crawling' && (
-        <p className="text-xs text-muted text-center -mt-2">
-          {!website ? 'Enter your URL to get started' :
-           topics.length === 0 ? 'Waiting for topics\u2026 or add one manually above' : ''}
+      {/* ── Submit ── */}
+      {error && (
+        <p className="text-xs text-danger flex items-center gap-1.5">
+          <AlertCircle className="w-3.5 h-3.5" /> {error}
         </p>
       )}
+
+      <button
+        type="button"
+        onClick={handleSubmit}
+        disabled={!canSubmit || loading}
+        className="btn-primary w-full py-3 rounded-xl font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        {loading
+          ? <span className="flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Running scan\u2026</span>
+          : <span className="flex items-center justify-center gap-2"><Zap className="w-4 h-4" /> Run free scan</span>
+        }
+      </button>
+
+      <p className="text-xs text-muted text-center">
+        Free \u00b7 No account required \u00b7 Results in ~10 seconds
+      </p>
+
     </div>
   )
 }
