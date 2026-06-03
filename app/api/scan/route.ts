@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { getCheckFeasibility, getPlatformNote } from '@/lib/platforms'
 
 export const runtime = 'nodejs'
 export const maxDuration = 15
@@ -31,8 +32,10 @@ function getSupabase() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const rawUrl: string = body.url ?? ''
+    const rawUrl: string       = body.url ?? ''
     const businessName: string = (body.businessName ?? '').trim()
+    // platform is optional — null / undefined means no builder selected
+    const platform: string | null = body.platform ?? null
 
     if (!rawUrl) return NextResponse.json({ error: 'URL is required' }, { status: 400 })
 
@@ -42,13 +45,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Invalid URL' }, { status: 400 })
     }
 
-    const origin = parsedUrl.origin
+    const origin  = parsedUrl.origin
     const isHttps = parsedUrl.protocol === 'https:'
 
     // ── Fetch page HTML ────────────────────────────────────────────
     let html = ''
     let reachable = false
-    let finalUrl = url
+    let finalUrl  = url
     try {
       const res = await fetch(url, {
         headers: HEADERS,
@@ -56,8 +59,8 @@ export async function POST(req: NextRequest) {
         signal: AbortSignal.timeout(8000),
       })
       reachable = res.ok
-      finalUrl = res.url
-      html = reachable ? await res.text() : ''
+      finalUrl  = res.url
+      html      = reachable ? await res.text() : ''
     } catch {
       reachable = false
     }
@@ -75,10 +78,10 @@ export async function POST(req: NextRequest) {
     // ── Parse signals ────────────────────────────────────────────
     const lcHtml = html.toLowerCase()
 
-    const robotsBlocksAll      = /user-agent:\s*\*[\s\S]*?disallow:\s*\//i.test(robotsTxt)
-    const robotsBlocksGptBot   = /user-agent:\s*gptbot[\s\S]*?disallow:\s*\//i.test(robotsTxt)
+    const robotsBlocksAll       = /user-agent:\s*\*[\s\S]*?disallow:\s*\//i.test(robotsTxt)
+    const robotsBlocksGptBot    = /user-agent:\s*gptbot[\s\S]*?disallow:\s*\//i.test(robotsTxt)
     const robotsBlocksClaudeBot = /user-agent:\s*claudebot[\s\S]*?disallow:\s*\//i.test(robotsTxt)
-    const robotsBlocksAny      = robotsBlocksAll || robotsBlocksGptBot || robotsBlocksClaudeBot
+    const robotsBlocksAny       = robotsBlocksAll || robotsBlocksGptBot || robotsBlocksClaudeBot
 
     const hasSchemaOrg          = lcHtml.includes('schema.org')
     const hasOrganizationSchema = lcHtml.includes('"organization"') || lcHtml.includes("'organization'")
@@ -103,19 +106,19 @@ export async function POST(req: NextRequest) {
     // ── Build full checks (saved to DB) ───────────────────────────
     type Status = 'pass' | 'warn' | 'fail'
     interface Check {
-      id: string
-      label: string
+      id:     string
+      label:  string
       status: Status
       impact: 'High' | 'Medium'
       detail: string
-      fix: string
+      fix:    string
     }
 
     const checks: Check[] = []
 
     checks.push({
-      id: 'https',
-      label: 'Secure connection (HTTPS)',
+      id:     'https',
+      label:  'Secure connection (HTTPS)',
       status: isHttps ? 'pass' : 'fail',
       impact: 'High',
       detail: isHttps
@@ -125,8 +128,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id: 'reachable',
-      label: 'Site is publicly accessible',
+      id:     'reachable',
+      label:  'Site is publicly accessible',
       status: reachable ? 'pass' : 'fail',
       impact: 'High',
       detail: reachable
@@ -136,8 +139,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id: 'robots',
-      label: 'AI crawlers not blocked (robots.txt)',
+      id:     'robots',
+      label:  'AI crawlers not blocked (robots.txt)',
       status: robotsBlocksAny ? 'fail' : robotsTxt ? 'pass' : 'warn',
       impact: 'High',
       detail: robotsBlocksAny
@@ -149,8 +152,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id: 'meta-title',
-      label: 'Page title (meta title)',
+      id:     'meta-title',
+      label:  'Page title (meta title)',
       status: metaTitle && metaTitle.length >= 20 && metaTitle.length <= 70 ? 'pass'
             : metaTitle ? 'warn' : 'fail',
       impact: 'High',
@@ -161,8 +164,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id: 'meta-desc',
-      label: 'Meta description',
+      id:     'meta-desc',
+      label:  'Meta description',
       status: metaDesc && metaDesc.length >= 80 && metaDesc.length <= 165 ? 'pass'
             : metaDesc ? 'warn' : 'fail',
       impact: 'High',
@@ -174,8 +177,8 @@ export async function POST(req: NextRequest) {
 
     const ogScore = [ogTitle, ogDesc, ogImage].filter(Boolean).length
     checks.push({
-      id: 'og-tags',
-      label: 'Open Graph tags (og:title, og:description, og:image)',
+      id:     'og-tags',
+      label:  'Open Graph tags (og:title, og:description, og:image)',
       status: ogScore === 3 ? 'pass' : ogScore >= 1 ? 'warn' : 'fail',
       impact: 'Medium',
       detail: ogScore === 3
@@ -187,8 +190,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id: 'schema',
-      label: 'Structured data (Schema.org)',
+      id:     'schema',
+      label:  'Structured data (Schema.org)',
       status: schemaCount >= 2 ? 'pass' : hasSchemaOrg ? 'warn' : 'fail',
       impact: 'High',
       detail: schemaCount >= 2
@@ -200,8 +203,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id: 'h1',
-      label: 'Clear H1 heading on page',
+      id:     'h1',
+      label:  'Clear H1 heading on page',
       status: hasH1 ? 'pass' : 'fail',
       impact: 'Medium',
       detail: hasH1
@@ -212,8 +215,8 @@ export async function POST(req: NextRequest) {
 
     if (businessName) {
       checks.push({
-        id: 'business-name',
-        label: 'Business name appears on page',
+        id:     'business-name',
+        label:  'Business name appears on page',
         status: nameOnPage ? 'pass' : 'fail',
         impact: 'High',
         detail: nameOnPage
@@ -224,8 +227,8 @@ export async function POST(req: NextRequest) {
     }
 
     checks.push({
-      id: 'viewport',
-      label: 'Mobile-friendly viewport tag',
+      id:     'viewport',
+      label:  'Mobile-friendly viewport tag',
       status: hasViewport ? 'pass' : 'warn',
       impact: 'Medium',
       detail: hasViewport
@@ -235,8 +238,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id: 'canonical',
-      label: 'Canonical URL defined',
+      id:     'canonical',
+      label:  'Canonical URL defined',
       status: hasCanonical ? 'pass' : 'warn',
       impact: 'Medium',
       detail: hasCanonical
@@ -245,32 +248,36 @@ export async function POST(req: NextRequest) {
       fix: 'Add <link rel="canonical" href="https://yourdomain.com/"> to your page <head>.',
     })
 
-    // ── Score ─────────────────────────────────────────────────
+    // ── Score ─────────────────────────────────────────────────────
     const weights: Record<string, number> = {
       https: 10, reachable: 15, robots: 12, 'meta-title': 12, 'meta-desc': 10,
       'og-tags': 8, schema: 13, h1: 8, 'business-name': 8, viewport: 2, canonical: 2,
     }
-    let score = 0
+    let score    = 0
     let maxScore = 0
     for (const c of checks) {
       const w = weights[c.id] ?? 5
       maxScore += w
-      if (c.status === 'pass') score += w
+      if (c.status === 'pass')      score += w
       else if (c.status === 'warn') score += w * 0.4
     }
     const finalScore = Math.round((score / maxScore) * 100)
 
     // ── Save full result to Supabase ──────────────────────────────
+    // NOTE: ensure the `scans` table has a nullable `platform text` column.
+    // Migration (run once in Supabase SQL editor):
+    //   ALTER TABLE scans ADD COLUMN IF NOT EXISTS platform text;
     let scanId: string | null = null
     try {
       const supabase = getSupabase()
       const { data, error } = await supabase
         .from('scans')
         .insert({
-          url: finalUrl,
+          url:           finalUrl,
           business_name: businessName || null,
-          score: finalScore,
-          checks, // full data including detail + fix
+          score:         finalScore,
+          checks,           // full data including detail + fix
+          platform:      platform || null,  // NEW — nullable platform id
         })
         .select('id')
         .single()
@@ -280,16 +287,36 @@ export async function POST(req: NextRequest) {
       console.error('Supabase write error:', e)
     }
 
-    // ── Return STRIPPED free response ─────────────────────────────
-    // detail + fix are intentionally excluded — unlocked only after payment
-    const freeChecks = checks.map(({ id, label, status, impact }) => ({ id, label, status, impact }))
+    // ── Annotate free checks with platform feasibility ────────────
+    // feasibility + platformNote are additive — they never change the check
+    // status or hide any result. If no platform was selected both fields are
+    // omitted so the response is byte-for-byte identical to the old format.
+    const freeChecks = checks.map(({ id, label, status, impact }) => {
+      if (!platform) return { id, label, status, impact }
+
+      const feasibility   = getCheckFeasibility(id, platform)
+      const platformNote  = getPlatformNote(id, platform)
+
+      return {
+        id,
+        label,
+        status,
+        impact,
+        // Only include platform fields when a platform is selected
+        ...(feasibility !== 'full' && { feasibility }),
+        ...(platformNote            && { platformNote }),
+      }
+    })
 
     return NextResponse.json({
       scanId,
-      score: finalScore,
-      url: finalUrl,
-      checks: freeChecks,
-      scannedAt: new Date().toISOString(),
+      score:      finalScore,
+      url:        finalUrl,
+      checks:     freeChecks,
+      scannedAt:  new Date().toISOString(),
+      // Echo the platform back so the results UI can use it without
+      // re-reading it from state or local storage.
+      ...(platform && { platform }),
     })
   } catch (err) {
     console.error('Scan error:', err)
