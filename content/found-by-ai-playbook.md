@@ -678,6 +678,33 @@ Once a month, run these exact tests in all four assistants. Copy the responses i
 **Test 5 — Credential query:**
 "Which [your business type] in [your city] have been around the longest?"
 
+> 📊 **How to log results and know if you're actually improving.**
+>
+> Running the tests is only half the work. The other half is recording what you find so you can see the trend over time. Here's a simple logging system that takes less than 10 minutes per month:
+>
+> **Create a tracking doc** (a Google Sheet or even a plain text file works fine). For each monthly test session, record:
+>
+> | Date | Assistant | Test # | Result |
+> |------|-----------|--------|--------|
+> | June 1 | ChatGPT | Test 1 | Not mentioned |
+> | June 1 | Perplexity | Test 1 | Mentioned with address and rating |
+> | June 1 | Gemini | Test 2 | Listed 4th of 5 businesses |
+>
+> **What to write in the Result column:**
+> - "Not mentioned" — your business didn't appear at all
+> - "Mentioned, uncertain" — AI knew your name but hedged ("I believe...", "you may want to verify...")
+> - "Mentioned, confident" — AI stated facts about your business without hedging
+> - "Recommended" — AI proactively named you in a category or comparison query
+> - "Top mention" — AI named you first or as a primary recommendation
+>
+> **How to interpret what you're seeing:**
+>
+> - **Perplexity moves first** — it uses live search, so it picks up your changes fastest. If Perplexity isn't mentioning you after 30 days, check your website content and recent reviews first.
+> - **Gemini responds to GBP changes** — if Gemini improves but ChatGPT doesn't, your Google presence is strong but your third-party press footprint is thin.
+> - **ChatGPT and Claude lag by design** — they rely more on training data and high-authority sources. Progress here often lags 60–90 days behind your actual work. Don't panic.
+> - **"Mentioned, uncertain" is progress** — it means AI knows about you but doesn't yet trust its own data. More consistent citations across more sources will push you from uncertain to confident.
+> - **Dropping from "Recommended" back to "Mentioned"** usually means a competitor has recently improved their own signals, not that you've done anything wrong. Accelerate, don't retreat.
+
 ### What good looks like
 
 - **Month 1 (baseline):** Likely not mentioned or mentioned with limited/uncertain information
