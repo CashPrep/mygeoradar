@@ -727,6 +727,24 @@ If after 60 days of implementing this playbook you're still not being mentioned:
 
 Once the foundations are solid, these advanced tactics can push you from "sometimes mentioned" to "consistently recommended."
 
+> 🎯 **Which tactic to do first — and why the order matters.**
+>
+> These five tactics are not equal in effort or impact, and they're not all available to you at the same time. Here's the sequencing logic:
+>
+> **Do these in order. Don't start #3 until #1 is done.**
+>
+> 1. **Email signature** — Do this today. It takes 5 minutes, requires nothing else to be in place, and starts compounding immediately. Every email you send is a potential review prompt.
+>
+> 2. **Content hub** — Do this in your first month of active publishing. Prerequisite: you've already written at least 2–3 pieces of content (from Part 5). Linking those pieces together is what creates topical authority — isolated posts don't compound the same way.
+>
+> 3. **Press page** — Do this once you have at least 3 external mentions to list (from Part 6). A press page with one item looks thin and won't help. With 3+ entries and proper schema, it becomes a genuine credibility signal.
+>
+> 4. **"Best of City" / Guide resource** — Do this in month 2 or 3, after your foundational content is live and indexed. This type of post earns links — but only if your site already has enough content that other sites feel comfortable linking to you. Publishing it too early means it earns nothing.
+>
+> 5. **Complementary business partnerships** — Do this last. It requires relationship-building and only pays off once you already have a credible web presence. Asking a peer business to mention you before you have a solid site, reviews, and schema is a weak ask. Get your house in order first, then approach partners from a position of mutual value.
+>
+> **If you only have time for one:** Do the email signature today and the content hub this month. Those two compound faster than anything else here.
+
 ### Create your own press page
 
 A `/press` or `/in-the-news` page on your website that aggregates every mention, award, and citation your business has received. With proper schema, AI treats this page as a curated credibility summary.
