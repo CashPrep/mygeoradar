@@ -17,15 +17,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/refund`, lastModified: NOW, changeFrequency: 'yearly', priority: 0.3 },
   ]
 
-  // Industry hub pages
+  // Industry hub pages — use canonical /industries/[slug] path (not the root redirect)
   const industryHubs: MetadataRoute.Sitemap = INDUSTRIES.map((i) => ({
-    url: `${BASE}/${i.slug}`,
+    url: `${BASE}/industries/${i.slug}`,
     lastModified: NOW,
     changeFrequency: 'monthly' as const,
     priority: 0.8,
   }))
 
-  // City hub pages — now at /locations/[city]
+  // City hub pages
   const cityHubs: MetadataRoute.Sitemap = CITIES.map((c) => ({
     url: `${BASE}/locations/${c.slug}`,
     lastModified: NOW,
@@ -33,7 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }))
 
-  // Programmatic pages
+  // Programmatic pages — 34 industries × 100 cities = 3,400 pages
   const programmatic: MetadataRoute.Sitemap = getAllPairs().map(({ industry, city }) => ({
     url: `${BASE}/${industry}/${city}`,
     lastModified: NOW,
