@@ -41,7 +41,7 @@ const industryHubLinks = INDUSTRIES.map(
 ).join('\n')
 
 const cityHubLinks = CITIES.map(
-  (c) => `- ${c.label}: ${BASE}/${c.slug}`
+  (c) => `- ${c.label}: ${BASE}/locations/${c.slug}`
 ).join('\n')
 
 // Representative sample of industry×city pages (not all 160)
