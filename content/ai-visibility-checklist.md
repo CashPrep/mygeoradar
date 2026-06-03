@@ -20,7 +20,7 @@
 
 ## SECTION B: Reviews & Reputation (3 points)
 
-- [ ] **B1.** At least 25 Google reviews with an average of 4.5+ stars
+- [ ] **B1.** Review momentum is active — you have a system in place to ask every customer, and your count is growing. *(Target: 25+ Google reviews at 4.5+ stars. If you're not there yet, check this box when your ask system is running and reviews are coming in — not when you hit the number.)*
 - [ ] **B2.** Every review (positive and negative) has been responded to within 48 hours
 - [ ] **B3.** Active review presence on at least one additional platform (Yelp, Facebook, or industry-specific)
 
