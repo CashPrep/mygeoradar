@@ -5,7 +5,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
 import {
   CheckCircle, AlertTriangle, XCircle, ArrowRight,
-  Clock, Lock, Download,
+  Clock, Lock, Download, Wrench,
 } from 'lucide-react'
 import { FIX_GUIDES, type FixGuide } from '@/lib/fixGuides'
 
@@ -30,6 +30,24 @@ interface ScanRow {
   business_name: string | null
   checks: Check[]
   created_at: string
+  platform: string | null
+}
+
+// Human-readable platform names for display
+const PLATFORM_LABELS: Record<string, string> = {
+  shopify:    'Shopify',
+  wix:        'Wix',
+  wordpress:  'WordPress',
+  squarespace:'Squarespace',
+  webflow:    'Webflow',
+  weebly:     'Weebly',
+  godaddy:    'GoDaddy Website Builder',
+  other:      'Your Platform',
+}
+
+function platformLabel(platform: string | null): string {
+  if (!platform) return ''
+  return PLATFORM_LABELS[platform] ?? platform
 }
 
 function safeHostname(url: string): string {
@@ -54,7 +72,7 @@ async function getReport(token: string): Promise<ScanRow | null> {
 
   const { data: scan } = await supabase
     .from('scans')
-    .select('url, score, business_name, checks, created_at')
+    .select('url, score, business_name, checks, created_at, platform')
     .eq('id', purchase.scan_id)
     .single()
 
@@ -100,11 +118,29 @@ function StatusIcon({ status }: { status: Status }) {
   return                        <XCircle        className="w-5 h-5 text-red-500    flex-shrink-0" />
 }
 
-function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined }) {
+function CheckCard({
+  check,
+  guide,
+  platform,
+}: {
+  check: Check
+  guide: FixGuide | undefined
+  platform: string | null
+}) {
   const rowBg =
     check.status === 'pass' ? 'border-emerald-200 bg-emerald-50/40' :
     check.status === 'warn' ? 'border-amber-200   bg-amber-50/40'   :
                               'border-red-200     bg-red-50/40'
+
+  // Use platform-specific steps when available, otherwise fall back to generic steps
+  const platformSpecificSteps =
+    platform && guide?.platformSteps?.[platform]
+      ? guide.platformSteps[platform]
+      : null
+
+  const stepsToShow = platformSpecificSteps ?? guide?.steps
+  const hasPlatformSteps = !!platformSpecificSteps
+  const pLabel = platformLabel(platform)
 
   return (
     <div className={`rounded-2xl border overflow-hidden ${rowBg}`}>
@@ -128,9 +164,24 @@ function CheckCard({ check, guide }: { check: Check; guide: FixGuide | undefined
             <p className="text-sm text-foreground/80 leading-relaxed">{guide.why}</p>
           </div>
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-accent mb-3">How to Fix It — Step by Step</p>
+            <div className="flex items-center gap-2 mb-3">
+              <p className="text-xs font-bold uppercase tracking-wider text-accent">
+                How to Fix It — Step by Step
+              </p>
+              {hasPlatformSteps && pLabel && (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20 text-accent text-[10px] font-bold">
+                  <Wrench className="w-2.5 h-2.5" />
+                  {pLabel} steps
+                </span>
+              )}
+            </div>
+            {hasPlatformSteps && (
+              <p className="text-xs text-muted mb-3 italic">
+                These steps are specific to {pLabel}. They replace the generic instructions with exact navigation paths for your platform.
+              </p>
+            )}
             <ol className="flex flex-col gap-3">
-              {guide.steps.map((step, i) => (
+              {stepsToShow?.map((step, i) => (
                 <li key={i} className="flex gap-3">
                   <span className="flex-shrink-0 w-6 h-6 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-bold flex items-center justify-center mt-0.5">
                     {i + 1}
@@ -181,6 +232,8 @@ export default async function ReportPage({
   const passChecks = scan.checks.filter(c => c.status === 'pass')
   const issueCount = failChecks.length + warnChecks.length
   const hostname   = safeHostname(scan.url)
+  const platform   = scan.platform ?? null
+  const pLabel     = platformLabel(platform)
 
   return (
     <main className="min-h-screen bg-background">
@@ -195,6 +248,13 @@ export default async function ReportPage({
           </div>
           <h1 className="text-3xl md:text-4xl font-bold mb-3">Your AI Readiness Report</h1>
           <p className="text-muted font-mono text-sm break-all mb-6">{scan.url}</p>
+
+          {pLabel && (
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface border border-border text-muted text-xs font-medium mb-4">
+              <Wrench className="w-3 h-3" />
+              Fix guides tailored for <strong className="text-foreground">{pLabel}</strong>
+            </div>
+          )}
 
           <div className={`inline-flex flex-col sm:flex-row items-center gap-6 px-8 py-6 rounded-2xl border ${bg} shadow-card-hover`}>
             <ScoreRing score={scan.score} />
@@ -226,7 +286,8 @@ export default async function ReportPage({
         <div className="mb-10 p-5 rounded-xl bg-surface border border-border">
           <p className="text-xs font-bold uppercase tracking-wider text-accent mb-2">How to Use This Report</p>
           <p className="text-sm text-muted leading-relaxed">
-            This report contains {issueCount > 0 ? `${issueCount} fix guide${issueCount !== 1 ? 's' : ''} — one for each issue found on ${hostname}` : 'a full breakdown of your site'}. Start with <strong className="text-foreground">Critical Issues</strong> first. Each card has a full explanation of why the issue matters, a numbered step-by-step guide to fix it, and a validation step to confirm it worked. When you&apos;re done, re-run the free scan to watch your score improve.
+            This report contains {issueCount > 0 ? `${issueCount} fix guide${issueCount !== 1 ? 's' : ''} — one for each issue found on ${hostname}` : 'a full breakdown of your site'}.
+            {pLabel && ` Each guide shows exact steps for ${pLabel}.`} Start with <strong className="text-foreground">Critical Issues</strong> first. Each card has a full explanation of why the issue matters, a numbered step-by-step guide to fix it, and a validation step to confirm it worked. When you&apos;re done, re-run the free scan to watch your score improve.
           </p>
         </div>
 
@@ -238,7 +299,7 @@ export default async function ReportPage({
             </h2>
             <div className="flex flex-col gap-4">
               {failChecks.map(c => (
-                <CheckCard key={c.id} check={c} guide={FIX_GUIDES[c.id]} />
+                <CheckCard key={c.id} check={c} guide={FIX_GUIDES[c.id]} platform={platform} />
               ))}
             </div>
           </section>
@@ -264,7 +325,7 @@ export default async function ReportPage({
             </h2>
             <div className="flex flex-col gap-4">
               {warnChecks.map(c => (
-                <CheckCard key={c.id} check={c} guide={FIX_GUIDES[c.id]} />
+                <CheckCard key={c.id} check={c} guide={FIX_GUIDES[c.id]} platform={platform} />
               ))}
             </div>
           </section>
@@ -278,33 +339,10 @@ export default async function ReportPage({
             </h2>
             <div className="flex flex-col gap-3">
               {passChecks.map(c => (
-                <CheckCard key={c.id} check={c} guide={undefined} />
+                <CheckCard key={c.id} check={c} guide={undefined} platform={platform} />
               ))}
             </div>
           </section>
         )}
 
-        <div className="p-7 rounded-2xl border border-accent/30 bg-white shadow-card-accent text-center relative overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
-          <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-3">Next step</p>
-          <h3 className="text-xl font-bold mb-2">Technical fixes are just the beginning</h3>
-          <p className="text-sm text-muted leading-relaxed mb-5 max-w-lg mx-auto">
-            This report covers the technical signals AI uses to <em>read</em> your site. The Found by AI Playbook covers the full picture — citation building, content authority, review signals, and the 30-day plan that gets AI assistants to actually <em>recommend</em> your business.
-          </p>
-          <Link href="/playbook" className="btn-primary inline-flex text-sm px-6 py-3 rounded-xl shadow-glow-sm gap-2">
-            Get the Found by AI Playbook — $27 <ArrowRight className="w-4 h-4" />
-          </Link>
-          <p className="text-xs text-muted mt-3">One-time &middot; Instant download &middot; 30-day money-back guarantee</p>
-        </div>
-
-        <p className="text-xs text-muted/50 text-center mt-8">
-          Bookmark this page — your report lives here permanently.
-          Questions? <a href="mailto:hello@mygeoradar.com" className="underline hover:text-accent transition-colors">hello@mygeoradar.com</a>
-        </p>
-
-      </div>
-
-      <Footer />
-    </main>
-  )
-}
+        <div className="p-7 ro
