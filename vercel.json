@@ -8,7 +8,15 @@
   "redirects": [
     { "source": "/:path*", "has": [{ "type": "host", "value": "mygeoradar.com" }], "destination": "https://www.mygeoradar.com/:path*", "permanent": true },
     { "source": "/scan", "destination": "/playbook", "permanent": true },
-    { "source": "/scan/:path*", "destination": "/playbook", "permanent": true }
+    { "source": "/scan/:path*", "destination": "/playbook", "permanent": true },
+    { "source": "/dentists", "destination": "/industries/dentists", "permanent": true },
+    { "source": "/plumbers", "destination": "/industries/plumbers", "permanent": true },
+    { "source": "/lawyers", "destination": "/industries/lawyers", "permanent": true },
+    { "source": "/restaurants", "destination": "/industries/restaurants", "permanent": true },
+    { "source": "/med-spas", "destination": "/industries/med-spas", "permanent": true },
+    { "source": "/chiropractors", "destination": "/industries/chiropractors", "permanent": true },
+    { "source": "/contractors", "destination": "/industries/contractors", "permanent": true },
+    { "source": "/real-estate-agents", "destination": "/industries/real-estate-agents", "permanent": true }
   ],
   "headers": [
     {

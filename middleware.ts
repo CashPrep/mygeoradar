@@ -32,20 +32,20 @@ export async function middleware(req: NextRequest) {
   }
 
   // Protect /downloads/* — must be logged in
-  // Purchase verification happens in the API route for a clean 403 response
   if (pathname.startsWith('/downloads/') && !user) {
     return NextResponse.redirect(
       new URL(`/login?next=${encodeURIComponent(pathname)}`, req.url)
     )
   }
 
-  // Protect /dashboard — requires the secret key query param.
-  // DashboardInner handles the actual key validation via /api/dashboard/stats;
-  // this middleware gate blocks keyless requests before they even render.
+  // Protect /dashboard — requires a logged-in user with role === 'admin'
+  // Set this on the user in Supabase: Auth > Users > Edit > user_metadata { "role": "admin" }
   if (pathname.startsWith('/dashboard')) {
-    const key = req.nextUrl.searchParams.get('key')
-    const expectedKey = process.env.DASHBOARD_SECRET_KEY
-    if (!key || !expectedKey || key !== expectedKey) {
+    if (!user) {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+    const role = (user.user_metadata as Record<string, unknown>)?.role
+    if (role !== 'admin') {
       return NextResponse.redirect(new URL('/', req.url))
     }
   }
