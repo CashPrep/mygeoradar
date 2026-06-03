@@ -14,6 +14,7 @@ import {
   FileText,
   Zap,
   AlertCircle,
+  BookOpen,
 } from 'lucide-react'
 
 type Props = {
@@ -119,6 +120,27 @@ export default function ProgrammaticPage({ params }: Props) {
                 <p className="font-semibold text-sm text-amber-900 mb-1">The #1 problem for {industry!.plural.toLowerCase()} in {city!.label}</p>
                 <p className="text-sm text-amber-800 leading-relaxed">{industry!.topProblem}</p>
               </div>
+            </div>
+
+            {/* ── INLINE FIX GUIDE UPSELL CARD (Issue #9) ── */}
+            <div className="mt-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 rounded-xl border border-accent/30 bg-accent/5">
+              <div className="w-10 h-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center flex-shrink-0">
+                <BookOpen className="w-5 h-5 text-accent" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm text-foreground">
+                  {industry!.plural} Fix Guide — step-by-step solution
+                </p>
+                <p className="text-xs text-muted mt-0.5 leading-relaxed">
+                  Exact fixes for the problem above: schema code, GBP checklist, citation cleanup, and a 30-day action plan built for {industry!.plural.toLowerCase()} in {city!.metro}.
+                </p>
+              </div>
+              <Link
+                href="/playbook"
+                className="shrink-0 inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent text-white text-sm font-semibold hover:bg-accent/90 transition-colors whitespace-nowrap"
+              >
+                Get it — $27 <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
         </section>

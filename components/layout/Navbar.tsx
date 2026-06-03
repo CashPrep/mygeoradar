@@ -7,10 +7,11 @@ import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
-  { href: '/pricing',  label: 'Pricing' },
-  { href: '/playbook', label: 'Playbook' },
-  { href: '/blog',     label: 'Blog' },
-  { href: '/about',    label: 'About' },
+  { href: '/pricing',   label: 'Pricing' },
+  { href: '/playbook',  label: 'Playbook' },
+  { href: '/invisible', label: 'Why Invisible?' },
+  { href: '/blog',      label: 'Blog' },
+  { href: '/about',     label: 'About' },
 ]
 
 export function Navbar() {

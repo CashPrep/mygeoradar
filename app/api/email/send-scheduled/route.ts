@@ -3,11 +3,17 @@
 // Called daily at 10:00 UTC by Vercel Cron (configured in vercel.json)
 // Finds all leads who are due for emails 2–5 and sends them.
 //
-// Schedule:
-//   Email 2 → 1 day  after email_1_sent_at
-//   Email 3 → 2 days after email_1_sent_at
-//   Email 4 → 4 days after email_1_sent_at
-//   Email 5 → 7 days after email_1_sent_at
+// Schedule (Issue #11 — front-load the upsell into the first 48h):
+//   Email 2 → 2 hours after email_1_sent_at  ← was 24h; now fires same day
+//   Email 3 → 1 day   after email_1_sent_at
+//   Email 4 → 3 days  after email_1_sent_at
+//   Email 5 → 6 days  after email_1_sent_at
+//
+// Rationale: SaaS purchase intent peaks within 2–48h of first touch.
+// Email 2 (problem agitation + playbook CTA) must land while the scan
+// result is still top of mind. The cron still runs daily; the 2h window
+// means Email 2 will fire on the *next* cron run after sign-up for most
+// users (worst case: 14h delay if they scan just after 10:00 UTC).
 // ─────────────────────────────────────────────────────────────────────────────
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
@@ -30,11 +36,16 @@ function getSupabase() {
   )
 }
 
-function daysAgo(days: number) {
-  const d = new Date()
-  d.setDate(d.getDate() - days)
-  return d.toISOString()
-}
+// Timing constants — all in milliseconds
+const HOUR_MS = 60 * 60 * 1000
+const DAY_MS  = 24 * HOUR_MS
+
+const EMAIL_DELAYS = {
+  2: 2  * HOUR_MS,  // 2 hours  — problem agitation + playbook CTA
+  3: 1  * DAY_MS,   // 1 day    — solution overview
+  4: 3  * DAY_MS,   // 3 days   — social proof
+  5: 6  * DAY_MS,   // 6 days   — last chance
+} as const
 
 // Validate cron secret so only Vercel (or you) can trigger this
 function isAuthorized(req: NextRequest) {
@@ -76,7 +87,6 @@ export async function GET(req: NextRequest) {
 
     const email1At = new Date(lead.email_1_sent_at).getTime()
     const now      = Date.now()
-    const dayMs    = 24 * 60 * 60 * 1000
 
     // Fetch unsubscribe token for this lead
     const { data: tokenRow } = await supabase
@@ -92,13 +102,18 @@ export async function GET(req: NextRequest) {
       ? `${appUrl}/unsubscribe?token=${tokenRow.token}`
       : `${appUrl}/unsubscribe`
 
-    // Determine which email to send next
+    // Determine which email to send next (sequential — only one per run)
     let emailNum: 2 | 3 | 4 | 5 | null = null
 
-    if (!lead.email_2_sent_at && now >= email1At + 1 * dayMs) emailNum = 2
-    else if (!lead.email_3_sent_at && lead.email_2_sent_at && now >= email1At + 2 * dayMs) emailNum = 3
-    else if (!lead.email_4_sent_at && lead.email_3_sent_at && now >= email1At + 4 * dayMs) emailNum = 4
-    else if (!lead.email_5_sent_at && lead.email_4_sent_at && now >= email1At + 7 * dayMs) emailNum = 5
+    if (!lead.email_2_sent_at && now >= email1At + EMAIL_DELAYS[2]) {
+      emailNum = 2
+    } else if (!lead.email_3_sent_at && lead.email_2_sent_at && now >= email1At + EMAIL_DELAYS[3]) {
+      emailNum = 3
+    } else if (!lead.email_4_sent_at && lead.email_3_sent_at && now >= email1At + EMAIL_DELAYS[4]) {
+      emailNum = 4
+    } else if (!lead.email_5_sent_at && lead.email_4_sent_at && now >= email1At + EMAIL_DELAYS[5]) {
+      emailNum = 5
+    }
 
     if (!emailNum) { skipped++; continue }
 
