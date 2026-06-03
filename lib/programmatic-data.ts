@@ -35,7 +35,7 @@ export const INDUSTRIES: Industry[] = [
     label: 'Plumber',
     plural: 'Plumbers',
     emoji: '🔧',
-    painPhrase: 'emergency plumber searches happen in seconds — you either show up or you don't',
+    painPhrase: "emergency plumber searches happen in seconds — you either show up or you don't",
     topProblem: 'missing or inconsistent NAP data across directories',
     aiExample: 'Perplexity and Google AI Overviews pull from citation data — outdated listings mean invisible rankings',
   },
