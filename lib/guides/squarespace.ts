@@ -1,114 +1,215 @@
-export const squarespaceGuide = {
-  platform: "Squarespace",
-  slug: "squarespace",
-  tagline: "Beautiful design-first platform with decent SEO basics — but GEO depth is limited.",
-  geoScore: 51,
-  color: "#1c1c1c",
+import type { PlatformGuide } from './types';
 
-  canDo: [
+export const squarespaceGuide: PlatformGuide = {
+  platform: 'Squarespace',
+  slug: 'squarespace',
+  tagline: 'Clean aesthetics, limited GEO depth — you can do the basics but hit walls fast.',
+  description:
+    'Squarespace produces beautiful websites and handles fundamental SEO competently, but it was designed as a design-first platform, not a GEO optimization platform. Meta tags, OG, and basic schema are accessible. But structured data is largely auto-generated and not customizable per page without injecting raw code in the header — which requires a Business plan or higher. If you\'re on a Personal plan, your GEO options are severely limited.',
+  geoScore: 4,
+  sections: [
     {
-      title: "Add JSON-LD Schema",
-      difficulty: "medium",
-      steps: [
-        "Go to your Squarespace Pages panel and open the page you want to add schema to.",
-        "Click the gear icon next to the page name → Advanced tab.",
-        "In the 'Page Header Code Injection' field, paste your JSON-LD <script> block.",
-        "This injects code only on that specific page — ideal for page-specific schema.",
-        "For site-wide schema (e.g., Organization schema), go to Settings → Advanced → Code Injection → Header.",
-        "Paste your JSON-LD in the Header field — this runs on every page.",
-        "Validate with Google's Rich Results Test after publishing."
+      id: 'meta-title-description',
+      title: 'Meta Title & Description',
+      tier: 'green',
+      items: [
+        {
+          label: 'Per-page meta title',
+          detail: 'Pages panel → hover over a page → gear icon → SEO tab → "SEO Title" and "SEO Description" fields.',
+        },
+        {
+          label: 'Homepage meta',
+          detail: 'Marketing → SEO → Site Title & SEO Description. This sets the site-wide fallback and the homepage meta.',
+        },
+        {
+          label: 'Blog posts',
+          detail: 'Edit any blog post → Options tab (top right) → SEO section. Each post gets its own meta title and description.',
+        },
+        {
+          label: 'Products (Commerce)',
+          detail: 'Products section → edit product → SEO tab. Same fields as pages.',
+        },
+        {
+          label: 'GEO tip',
+          detail: 'Squarespace uses the page title as a meta title fallback. Always set explicit SEO titles — the page title is usually too short and brand-only.',
+        },
       ],
-      tip: "Squarespace 7.1 does NOT support the old Style Editor injection method — use the Advanced tab per-page or the global Code Injection in Settings."
     },
     {
-      title: "Edit Meta Title & Description",
-      difficulty: "easy",
-      steps: [
-        "In the Pages panel, click the gear icon next to any page.",
-        "Go to the SEO tab.",
-        "Edit the SEO Title (shown in search results) and Description fields.",
-        "For blog posts: open the post → gear icon → SEO tab.",
-        "For products: Squarespace Commerce → [Product] → SEO tab.",
-        "Squarespace also has a site-wide SEO title format under Settings → SEO → Title Format."
+      id: 'json-ld-schema',
+      title: 'JSON-LD / Structured Data',
+      tier: 'yellow',
+      items: [
+        {
+          label: 'What Squarespace adds automatically',
+          detail: 'Product schema on Commerce pages, Article schema on blog posts, and basic Organization/WebSite schema sitewide. No FAQPage, LocalBusiness, or HowTo schema is injected.',
+        },
+        {
+          label: 'How to add custom schema (Business plan required)',
+          detail: 'Website → Pages → select a page → gear icon → Advanced tab → "Page Header Code Injection" field. Paste your <script type="application/ld+json"> block here.',
+        },
+        {
+          label: 'Sitewide schema injection',
+          detail: 'Settings → Advanced → Code Injection → Header section. Add JSON-LD here to appear on every page — useful for Organization, LocalBusiness, or WebSite schema.',
+        },
+        {
+          label: 'Plan requirement',
+          detail: 'Code Injection is only available on Business, Commerce Basic, and Commerce Advanced plans. Personal plan users cannot inject custom schema — this is a hard ceiling.',
+        },
+        {
+          label: 'No bulk automation',
+          detail: 'Every page\'s schema must be added manually. There is no way to programmatically inject schema across hundreds of pages.',
+        },
       ],
-      tip: "Use the Title Format setting to create a consistent brand suffix: 'Page Title | Your Business Name' — this is great for AI engines to identify your brand."
+      codeSnippet: `<!-- Paste in: Page Settings > Advanced > Page Header Code Injection -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Your Business Name",
+  "description": "One sentence describing what you do and who you serve.",
+  "url": "https://yourdomain.com",
+  "telephone": "+1-555-000-0000",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "123 Main St",
+    "addressLocality": "Your City",
+    "addressRegion": "MA",
+    "postalCode": "02021",
+    "addressCountry": "US"
+  },
+  "openingHours": "Mo-Fr 09:00-17:00"
+}
+</script>`,
+      codeLanguage: 'html',
     },
     {
-      title: "robots.txt",
-      difficulty: "hard",
-      steps: [
-        "Squarespace auto-generates a robots.txt at yourdomain.com/robots.txt.",
-        "You CANNOT edit it directly — there is no robots.txt editor in Squarespace's UI.",
-        "The only workaround is to use the URL Mapping feature (Settings → Advanced → URL Mappings) to redirect /robots.txt to a custom hosted file — but this breaks the auto-generated one.",
-        "Practical approach: Verify your site isn't accidentally blocked by checking the auto-generated robots.txt and ensuring your key pages are crawlable.",
-        "For AI crawlers: Squarespace's default robots.txt doesn't block GPTBot or ClaudeBot — you're likely already crawlable."
+      id: 'open-graph',
+      title: 'Open Graph Tags',
+      tier: 'green',
+      items: [
+        {
+          label: 'Default behavior',
+          detail: 'Squarespace auto-generates og:title, og:description, and og:image based on your page SEO settings and featured images.',
+        },
+        {
+          label: 'Custom social image per page',
+          detail: 'Pages → gear icon → SEO tab → scroll to "Social Image" and upload a custom image. 1200x628px recommended.',
+        },
+        {
+          label: 'Blog post social images',
+          detail: 'Post editor → Options tab → Thumbnail Image. This image is used for both the blog index and OG tags.',
+        },
       ],
-      tip: "This is one of Squarespace's biggest GEO limitations. If robots.txt control is critical to your strategy, this is a strong migration argument."
     },
     {
-      title: "Open Graph Tags",
-      difficulty: "easy",
-      steps: [
-        "Squarespace automatically generates Open Graph tags from your page title, description, and thumbnail.",
-        "To customize per page: Pages → gear icon → Social Image — upload a 1200×630px image.",
-        "The social sharing title and description pull from your SEO Title and Description fields.",
-        "For site-wide OG: Settings → SEO → Social Sharing → set a default social image.",
-        "Verify OG tags with the Facebook Sharing Debugger or LinkedIn Post Inspector."
+      id: 'robots-txt',
+      title: 'robots.txt',
+      tier: 'red',
+      items: [
+        {
+          label: 'Native editing',
+          detail: 'Squarespace does NOT provide a robots.txt editor in the UI. The file is auto-generated and you cannot edit it directly.',
+        },
+        {
+          label: 'Current default',
+          detail: 'Squarespace\'s default robots.txt allows all crawlers on all pages except /config/, /cart/, /checkout/, and a few admin paths. This is acceptable for most sites.',
+        },
+        {
+          label: 'GEO check',
+          detail: 'Visit yourdomain.com/robots.txt and verify that GPTBot, ClaudeBot, PerplexityBot, and GoogleOther are not being blocked. By default they are not.',
+        },
+        {
+          label: 'Custom rules workaround',
+          detail: 'There is no supported workaround for editing robots.txt on Squarespace without migrating to a headless setup.',
+        },
       ],
-      tip: "Squarespace's OG implementation is solid for basic needs. You can't add custom og:type values beyond what Squarespace sets, but for most GEO use cases this is fine."
     },
     {
-      title: "Edit H1 & Content Headings",
-      difficulty: "easy",
-      steps: [
-        "In the Squarespace editor, click on any text block.",
-        "Highlight text and use the toolbar to apply Heading 1, Heading 2, Heading 3, etc.",
-        "Your page's main title (at the top of the page layout) typically renders as H1 automatically.",
-        "Avoid adding a second H1 in your content blocks — use H2 for section headers instead.",
-        "For blog posts: the post title is H1. Use heading formats in the body for structure."
+      id: 'h1-content',
+      title: 'H1 & Content Headings',
+      tier: 'green',
+      items: [
+        {
+          label: 'Setting H1',
+          detail: 'In the Squarespace editor, click any text block → text toolbar → Heading 1. Only use H1 once per page, for the main page title.',
+        },
+        {
+          label: 'Page title behavior',
+          detail: 'If you use a Page Title block from Squarespace\'s block library, it auto-renders as H1. Don\'t add a second H1 manually.',
+        },
+        {
+          label: 'Blog post headings',
+          detail: 'The blog post title is the H1. In the body, use Heading 2 and Heading 3 to structure content. AI models look for Q&A patterns in subheadings.',
+        },
+        {
+          label: 'GEO tip',
+          detail: 'Structure your service or product pages with H2s that answer real questions. "How does X work?" → short paragraph answer. This exact format is what AI models excerpt.',
+        },
       ],
-      tip: "Squarespace 7.1 renders page headers as H1 in most templates. Confirm by viewing page source or using a browser SEO extension like Detailed."
-    }
+    },
   ],
-
   cannotDo: [
-    "Edit robots.txt — Squarespace generates it automatically and provides no native editor.",
-    "Add custom HTTP headers, server-side redirects beyond basic URL mappings, or edge functions.",
-    "Control Core Web Vitals at a technical level — Squarespace's JavaScript bundle is large.",
-    "Generate pages programmatically — no templating engine access for bulk page creation.",
-    "Use server-side rendering customization or dynamic rendering for AI crawlers.",
-    "Access or modify the underlying HTML structure of your templates.",
-    "Implement hreflang tags for multilingual SEO natively (requires code injection workarounds)."
+    'Edit robots.txt — it is auto-generated and locked on all Squarespace plans.',
+    'Add custom schema on Personal plan — Code Injection requires Business plan or higher.',
+    'Programmatically generate schema across multiple pages — every page is manual.',
+    'Use custom server-side code, edge functions, or middleware.',
+    'Access the server or CDN configuration.',
+    'Install third-party SEO plugins (unlike WordPress — Squarespace has no plugin marketplace).',
+    'Create complex URL hierarchies — Squarespace URLs are flat or one level deep only.',
+    'Implement hreflang tags for multilingual SEO without manual code injection per page.',
   ],
-
   recommendedApps: [
     {
-      name: "SEOSpace",
-      purpose: "Squarespace-specific SEO tool. Audits pages, checks headings, meta, and schema gaps.",
-      free: false,
-      url: "https://seospace.co"
+      name: 'Squarespace SEO Checklist (built-in)',
+      url: 'https://support.squarespace.com/hc/en-us/articles/205814308',
+      description: "Squarespace's own guided SEO checklist. Start here before any third-party tools.",
+      free: true,
     },
     {
-      name: "Google Search Console",
-      purpose: "Connect via Settings → Connected Accounts. Essential for monitoring GEO crawl coverage.",
+      name: 'Google Search Console',
+      url: 'https://search.google.com/search-console',
+      description: 'Connect via Marketing > SEO > Connect to Google. Essential for monitoring how Googlebot (and Google AI) sees your site.',
       free: true,
-      url: "https://search.google.com/search-console"
-    }
+    },
+    {
+      name: 'Semrush',
+      url: 'https://semrush.com',
+      description: 'External audit tool. Use for keyword tracking, schema validation, and GEO visibility monitoring outside the Squarespace dashboard.',
+      free: false,
+    },
+    {
+      name: 'Schema Markup Generator (Merkle)',
+      url: 'https://technicalseo.com/tools/schema-markup-generator/',
+      description: 'Free tool to generate correctly formatted JSON-LD for manual injection via Squarespace Code Injection.',
+      free: true,
+    },
   ],
-
-  migrationFramework: {
-    stayIf: [
-      "Your brand relies heavily on visual presentation (portfolio, photography, restaurant) and GEO optimization is secondary.",
-      "You have a small site (under 30 pages) with basic local business GEO needs.",
-      "Design consistency and ease of use matter more than technical SEO depth.",
-      "You're using Squarespace for a side project, landing page, or personal brand."
-    ],
-    migrateIf: [
-      "You need robots.txt control for AI crawler management — Squarespace simply doesn't offer this.",
-      "You're building a content-heavy site (50+ pages) where programmatic SEO matters.",
-      "Core Web Vitals failures are costing you visibility — Squarespace has limited optimization headroom.",
-      "You need schema automation beyond what manual code injection can reasonably manage."
-    ],
-    recommendedAlternative: "WordPress with Kadence theme + Rank Math SEO offers comparable design quality with vastly superior GEO control."
-  }
+  migrationFramework: [
+    {
+      situation: 'Portfolio, photographer, or visual-first business',
+      verdict: 'Stay',
+      reason: "Squarespace's design quality is genuinely best-in-class. GEO gains from migrating rarely outweigh the cost for visual-first sites.",
+    },
+    {
+      situation: 'Local service business needing LocalBusiness schema',
+      verdict: 'Consider migrating',
+      reason: 'You can add LocalBusiness schema via code injection on Business plan, but WordPress + Yoast handles it far more cleanly.',
+    },
+    {
+      situation: 'Blogger or content creator on Personal plan',
+      verdict: 'Migrate',
+      reason: 'No schema injection on Personal plan is a significant GEO handicap. WordPress is free and gives full control.',
+    },
+    {
+      situation: 'E-commerce store needing product SEO at scale',
+      verdict: 'Migrate',
+      reason: 'Shopify or WooCommerce have far better product schema, app ecosystems, and bulk SEO tools.',
+    },
+    {
+      situation: 'Small business, happy with the site, low GEO ambitions',
+      verdict: 'Stay',
+      reason: 'Content quality and meta tag optimization alone can achieve strong GEO results — you don\'t always need advanced schema.',
+    },
+  ],
 };
