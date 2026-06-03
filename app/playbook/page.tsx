@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Script from 'next/script'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
-import { CheckoutButton } from '@/components/playbook/CheckoutButton'
+import { PlaybookShell } from '@/components/playbook/PlaybookShell'
 import {
   CheckCircle, BookOpen, FileText, Zap, Shield,
   Star, Eye, Clock, AlertTriangle,
@@ -38,9 +38,10 @@ const productSchema = {
   },
 }
 
-const deliverables = [
+export const deliverables = [
   {
     icon: BookOpen,
+    id: 'playbook',
     title: 'The Complete AI Visibility Playbook (PDF)',
     tagline: 'The step-by-step blueprint — nothing left out.',
     bullets: [
@@ -54,6 +55,7 @@ const deliverables = [
   },
   {
     icon: FileText,
+    id: 'checklist',
     title: 'The 27-Point AI Visibility Checklist',
     tagline: 'Run it once. Know exactly where you stand.',
     bullets: [
@@ -66,6 +68,7 @@ const deliverables = [
   },
   {
     icon: Zap,
+    id: 'prompts',
     title: 'Prompt Pack — 10 Copy-Paste Prompts',
     tagline: 'Know your AI visibility score in 10 minutes.',
     bullets: [
@@ -78,6 +81,7 @@ const deliverables = [
   },
   {
     icon: Shield,
+    id: 'plan',
     title: '30-Day Action Plan Calendar',
     tagline: 'One task per day. No overwhelm.',
     bullets: [
@@ -91,18 +95,18 @@ const deliverables = [
   },
 ]
 
-const previewChecklist = [
+export const previewChecklist = [
   { done: true,  text: 'Claim and fully complete your Google Business Profile' },
   { done: true,  text: 'Add a clear, keyword-rich business description everywhere' },
   { done: true,  text: 'Ensure NAP (Name, Address, Phone) is identical across all directories' },
   { done: false, text: 'Publish at least 3 authoritative articles that cite your expertise' },
   { done: false, text: 'Add structured data (schema) for Organization, LocalBusiness, or Product' },
   { done: false, text: 'Build citations on the top 15 AI-trusted directories (list inside)' },
-  { done: false, text: 'Create a dedicated "About" page written to be pulled by AI overviews' },
+  { done: false, text: 'Create a dedicated \u201cAbout\u201d page written to be pulled by AI overviews' },
   { done: false, text: 'Run the 10-prompt audit to confirm your current AI visibility baseline' },
 ]
 
-const faqs = [
+export const faqs = [
   {
     q: 'Do I need to be technical or know SEO to use this?',
     a: 'Not at all. The playbook is written for business owners, marketers, and founders with no coding or deep SEO background. If you can edit your website or Google Business Profile, you can do everything in this guide.',
@@ -143,7 +147,7 @@ export default function PlaybookPage() {
         {/* ── URGENCY BANNER ─────────────────────────────────────────── */}
         <div className="bg-accent/10 border-b border-accent/20 text-center py-2.5 px-4">
           <p className="text-xs font-medium text-accent tracking-wide">
-            Launch price · <strong className="font-semibold">$27</strong> 
+            Launch price · <strong className="font-semibold">$27</strong>
           </p>
         </div>
 
@@ -180,7 +184,15 @@ export default function PlaybookPage() {
               business, market, and implementation effort. No specific outcome is guaranteed.
             </p>
 
-            <CheckoutButton />
+            {/*
+              PlaybookShell is a Client Component that owns:
+               - platform state
+               - PlatformSelector
+               - CheckoutButton (receives platform prop)
+               - Dynamic deliverable bonus line
+            */}
+            <PlaybookShell />
+
             <p className="text-xs text-muted mt-4">
               One-time payment · Instant PDF download · 30-day money-back guarantee
             </p>
@@ -259,7 +271,6 @@ export default function PlaybookPage() {
                           <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
                             <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
-
                         )}
                       </div>
                       <span className={`text-sm leading-snug ${
@@ -299,7 +310,7 @@ export default function PlaybookPage() {
             </div>
 
             <div className="text-center mt-10">
-              <CheckoutButton label="Get the full bundle — $27" />
+              <PlaybookShell label="Get the full bundle — $27" />
               <p className="text-xs text-muted mt-3">Instant download · 30-day money-back guarantee</p>
             </div>
           </div>
@@ -315,8 +326,8 @@ export default function PlaybookPage() {
             <div className="flex flex-col gap-4">
               {[
                 { step: '01', heading: 'Run the prompt pack — see the truth in 10 minutes', body: 'Paste the 10 included prompts into ChatGPT, Perplexity, Gemini, and Claude. You will know exactly whether your business appears, how it\u2019s described, and where the gaps are.' },
-                { step: '02', heading: 'Work through the 27-point checklist', body: 'The checklist tells you precisely what to fix, in what order, starting with the highest-impact items. Each checkbox is a concrete action — no guessing, no wasted effort.' },
-                { step: '03', heading: 'Follow the 30-day plan — one task per day', body: 'A structured day-by-day calendar for your first 30 days. Each task takes 30–90 minutes and is designed to fit around running a business, not replace it.' },
+                { step: '02', heading: 'Work through the 27-point checklist', body: 'The checklist tells you precisely what to fix, in what order, starting with the highest-impact items. Each checkbox is a concrete action \u2014 no guessing, no wasted effort.' },
+                { step: '03', heading: 'Follow the 30-day plan \u2014 one task per day', body: 'A structured day-by-day calendar for your first 30 days. Each task takes 30\u201390 minutes and is designed to fit around running a business, not replace it.' },
                 { step: '04', heading: 'Re-run the prompts and measure your shift', body: 'After 30 days, run the same audit prompts again. You will have a concrete before/after comparison showing exactly how your AI visibility changed.' },
               ].map(({ step, heading, body }) => (
                 <div key={step} className="flex gap-5 text-left p-5 rounded-xl bg-white border border-border hover:border-accent/25 hover:shadow-card-lift transition-all duration-200">
@@ -352,7 +363,7 @@ export default function PlaybookPage() {
               {[
                 { icon: Clock,  heading: 'The early-mover window',  body: "GEO is where SEO was in 2005. Your competitors almost certainly haven't started." },
                 { icon: Eye,    heading: 'Compounding returns',       body: 'AI recommendations reinforce themselves. Being cited builds more citations. Acting early creates a lead that grows.' },
-                { icon: Shield, heading: '$27 vs. $2,000+/month',    body: 'Based on publicly available agency pricing as of 2026, specialist firms charge $2,000–5,000/month for this work. This is a flat $27.' },
+                { icon: Shield, heading: '$27 vs. $2,000+/month',    body: 'Based on publicly available agency pricing as of 2026, specialist firms charge $2,000\u20135,000/month for this work. This is a flat $27.' },
               ].map(({ icon: Icon, heading, body }) => (
                 <div key={heading} className="p-5 rounded-xl bg-white border border-border text-left hover:border-accent/25 hover:shadow-card-lift transition-all">
                   <div className="w-8 h-8 rounded-lg bg-accent/8 flex items-center justify-center mb-3">
@@ -372,64 +383,30 @@ export default function PlaybookPage() {
             <h2 className="text-2xl md:text-3xl font-bold mb-10 tracking-tight">This is for you if…</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-left">
               {[
-                'You own or market a local or online business',
-                "AI assistants don't mention your business when you test them",
-                "You've read GEO articles but still don't know what to actually do",
-                "You don't want to pay $100+/month for a tracking tool",
-                'You want a clear, done-for-you action plan — not more theory',
-                'You want to establish AI visibility before your competitors do',
-              ].map((item) => (
-                <div key={item} className="flex items-start gap-3 px-4 py-3.5 rounded-lg bg-white border border-border hover:border-accent/25 transition-colors">
+                'You own or run a local business, service business, or online brand',
+                'You\u2019ve Googled yourself and your AI results are wrong, thin, or missing',
+                'You\u2019ve heard about GEO or AI SEO but have no idea where to start',
+                'You\u2019re spending money on SEO but not showing up in AI answers',
+                'You want to act before your competitors figure this out',
+                'You\u2019re not a developer and need plain-language instructions',
+              ].map((text) => (
+                <div key={text} className="flex items-start gap-3 p-4 rounded-xl bg-white border border-border">
                   <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                  <span className="text-sm">{item}</span>
+                  <p className="text-sm text-foreground">{text}</p>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ── PRICING ───────────────────────────────────────────────── */}
+        {/* ── FAQ ───────────────────────────────────────────────────── */}
         <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
-          <div className="max-w-md mx-auto">
-            <div className="relative rounded-2xl border border-accent/40 bg-white p-8 text-center shadow-card-accent overflow-hidden">
-              <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
-              <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent mb-5 mt-1">Found by AI — Complete Bundle</p>
-              <div className="mb-1">
-                <span className="text-6xl font-black text-gradient tracking-tight">$27</span>
-              </div>
-              <p className="text-sm text-muted mb-2">One-time · No subscription · Instant download</p>
-              <p className="text-xs font-semibold text-amber-600 bg-amber-50 border border-amber-200 rounded-full px-3 py-1 inline-block mb-6">
-                Launch price — One-time payment. Yours forever.
-              </p>
-              <ul className="flex flex-col gap-3 text-left mb-8">
-                {[
-                  'The Complete AI Visibility Playbook (PDF)',
-                  'The 27-Point AI Visibility Checklist',
-                  'Prompt Pack — 10 copy-paste prompts',
-                  '30-Day Action Plan calendar',
-                  '30-day money-back guarantee',
-                  'All future updates included free',
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm">
-                    <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <CheckoutButton className="btn-primary w-full text-base px-6 py-3.5 rounded-xl shadow-glow-sm" />
-              <p className="text-xs text-muted mt-4">Secure checkout via Stripe · PDF delivered instantly</p>
-            </div>
-          </div>
-        </section>
-
-        {/* ── FAQ ──────────────────────────────────────────────────── */}
-        <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12 tracking-tight">Questions answered</h2>
-            <div className="divide-y divide-border">
+            <h2 className="text-2xl md:text-3xl font-bold mb-10 text-center tracking-tight">Frequently asked questions</h2>
+            <div className="flex flex-col gap-4">
               {faqs.map(({ q, a }) => (
-                <div key={q} className="py-6">
-                  <h3 className="font-semibold text-[15px] mb-2">{q}</h3>
+                <div key={q} className="p-5 rounded-xl bg-white border border-border">
+                  <p className="font-semibold text-[15px] mb-2">{q}</p>
                   <p className="text-sm text-muted leading-relaxed">{a}</p>
                 </div>
               ))}
@@ -437,19 +414,20 @@ export default function PlaybookPage() {
           </div>
         </section>
 
-        {/* ── FINAL CTA ────────────────────────────────────────────── */}
-        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight text-balance">
-              The window is open. Act before your market closes it.
+        {/* ── BOTTOM CTA ────────────────────────────────────────────── */}
+        <section className="py-24 px-4 md:px-8 border-t border-border">
+          <div className="max-w-xl mx-auto text-center">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 tracking-tight text-balance">
+              One-time. $27. Instant access.
             </h2>
-            <p className="text-muted mb-8 text-pretty">
-              GEO is still early enough that a $27 playbook can put you ahead of 95% of your
-              competitors. One-time. Instant download. Everything you need to get found by AI before
-              the businesses around you figure out this game exists.
+            <p className="text-muted mb-8 leading-relaxed text-pretty">
+              The complete system — playbook, checklist, prompts, and 30-day plan. Everything you
+              need to stop being invisible to AI assistants.
             </p>
-            <CheckoutButton label="Get the Found by AI Playbook — $27" />
-            <p className="text-xs text-muted mt-4">30-day money-back guarantee · Instant download · No subscription</p>
+            <PlaybookShell label="Get instant access — $27" />
+            <p className="text-xs text-muted mt-4">
+              30-day money-back guarantee · No recurring fees · Updates included
+            </p>
           </div>
         </section>
 
