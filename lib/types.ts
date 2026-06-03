@@ -1,3 +1,5 @@
+import type { PlatformId } from './platforms'
+
 export type AiEngine = 'chatgpt' | 'perplexity' | 'gemini' | 'claude'
 
 export type VisibilityLevel = 'excellent' | 'good' | 'weak' | 'poor'
@@ -31,6 +33,8 @@ export interface ActionItem {
   title:       string
   description: string
   effort:      'easy' | 'medium' | 'hard'
+  /** The scan check ID this action maps to (used for platform feasibility lookup) */
+  checkId?:    string
 }
 
 // --- Schema Checker ---
@@ -89,6 +93,7 @@ export interface ScanReport {
   topics:        string[]
   location?:     string
   industry?:     string
+  platform?:     PlatformId | null
   competitorUrl?: string | null
   engines:       EngineResult[]
   overallScore:  number
@@ -108,5 +113,6 @@ export interface ScanInput {
   topics:        string[]
   location?:     string
   industry?:     string
+  platform?:     PlatformId | null
   competitorUrl?: string | null
 }
