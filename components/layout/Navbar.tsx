@@ -35,11 +35,6 @@ export function Navbar() {
 
   return (
     <>
-      {/* Trust bar */}
-      <div className="w-full bg-accent/10 border-b border-accent/20 text-center py-1.5 text-xs text-accent font-medium tracking-wide">
-        Trusted by 500+ businesses — ChatGPT · Perplexity · Gemini · Claude
-      </div>
-
       <header
         className={[
           'sticky top-0 left-0 right-0 z-50 transition-all duration-200',
