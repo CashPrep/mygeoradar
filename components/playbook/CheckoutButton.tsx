@@ -2,13 +2,15 @@
 
 import { useState } from 'react'
 import { ArrowRight, Loader2 } from 'lucide-react'
+import type { PlatformId } from '@/lib/platforms'
 
 interface Props {
-  label?: string
+  label?:     string
   className?: string
+  platform?:  PlatformId | null
 }
 
-export function CheckoutButton({ label = 'Get instant access — $27', className }: Props) {
+export function CheckoutButton({ label = 'Get instant access — $27', className, platform }: Props) {
   const [loading, setLoading] = useState(false)
   const [gone,    setGone]    = useState(false)
   const [error,   setError]   = useState('')
@@ -17,7 +19,12 @@ export function CheckoutButton({ label = 'Get instant access — $27', className
     setLoading(true)
     setError('')
     try {
-      const res = await fetch('/api/checkout', { method: 'POST' })
+      const body = platform ? JSON.stringify({ platform }) : undefined
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: body ? { 'Content-Type': 'application/json' } : undefined,
+        body,
+      })
       if (!res.ok) throw new Error('non-2xx')
       const redirectUrl = res.redirected ? res.url : (await res.json()).url
       if (!redirectUrl) throw new Error('no url')
