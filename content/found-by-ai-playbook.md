@@ -626,6 +626,33 @@ Reviews are cited by AI assistants more than almost any other signal. When someo
 *Thank you,*
 *[Your name]*
 
+> ⏰ **When and how to ask — scripts for every channel.**
+>
+> Timing is everything. The best moment to ask is when the customer is still in the glow of a great experience — not three weeks later when they've forgotten the details. Here's what works channel by channel:
+>
+> **In-person (highest conversion rate)**
+> Ask at the moment of completion — when you hand over the keys, finish the job, wrap up the appointment, or close out the register.
+>
+> *"Hey, really glad everything turned out well. Would you mind leaving us a quick Google review? It makes a huge difference for us. I can text you the link right now if you want."*
+>
+> Then pull out your phone, open your GBP short link, and text it to them on the spot. Don't wait — the in-the-moment ask has 3–5× higher follow-through than any follow-up message.
+>
+> **SMS / text (best for service businesses)**
+> Send within 1–2 hours of job completion while the experience is fresh.
+>
+> *"Hi [Name], this is [Your Name] from [Business Name] — just wanted to make sure everything was great today. If you have a minute, a Google review would mean a lot to us: [link]. Thanks!"*
+>
+> Keep it under 160 characters if possible. One message only — do not follow up with a second text if they don't respond.
+>
+> **Email (best for professional services and B2B)**
+> Send within 24 hours. The email template above works — but add one specific detail about their project or service to make it feel personal, not automated.
+>
+> **What not to do:**
+> - Don't ask for "5 stars" — it violates Google's and Yelp's policies and can get reviews removed
+> - Don't send review requests to unhappy customers — screen first by asking "How did everything go?"
+> - Don't use bulk review request services that send the same link to hundreds of people at once — sudden review spikes trigger platform filters
+> - Don't ask on the same day for multiple platforms — one ask, one platform, then wait at least a week before asking for a second
+
 ---
 
 ## Part 9: Testing Your AI Visibility
