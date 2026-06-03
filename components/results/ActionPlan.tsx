@@ -1,8 +1,10 @@
 'use client'
 
 import type { ActionItem } from '@/lib/types'
+import { getCheckFeasibility, getPlatformNote } from '@/lib/platforms'
+import type { PlatformId } from '@/lib/platforms'
 import { clsx } from 'clsx'
-import { Zap } from 'lucide-react'
+import { CheckCircle2, AlertCircle, Wrench, Zap } from 'lucide-react'
 
 const EFFORT_LABELS: Record<string, string> = {
   easy:   'Easy',
@@ -30,12 +32,55 @@ const CATEGORY_LABELS: Record<string, string> = {
   technical: 'Technical',
 }
 
+function FeasibilityBadge({
+  checkId,
+  platformId,
+}: {
+  checkId?: string
+  platformId?: PlatformId | null
+}) {
+  if (!checkId || !platformId) return null
+  const feasibility = getCheckFeasibility(checkId, platformId)
+  const note = getPlatformNote(checkId, platformId)
+
+  if (feasibility === 'full') {
+    return (
+      <span className="flex items-center gap-1 text-xs text-success" title="You can do this yourself">
+        <CheckCircle2 className="w-3 h-3" />
+        DIY
+      </span>
+    )
+  }
+  if (feasibility === 'partial') {
+    return (
+      <span
+        className="flex items-center gap-1 text-xs text-warning cursor-help"
+        title={note ?? 'Needs an app or plugin'}
+      >
+        <AlertCircle className="w-3 h-3" />
+        Needs app
+      </span>
+    )
+  }
+  // requires-dev
+  return (
+    <span
+      className="flex items-center gap-1 text-xs text-danger cursor-help"
+      title={note ?? 'Requires a developer'}
+    >
+      <Wrench className="w-3 h-3" />
+      Needs dev
+    </span>
+  )
+}
+
 interface ActionPlanProps {
   actions:    ActionItem[]
   quickWins:  string[]
+  platformId?: PlatformId | null
 }
 
-export function ActionPlan({ actions, quickWins }: ActionPlanProps) {
+export function ActionPlan({ actions, quickWins, platformId }: ActionPlanProps) {
   return (
     <div className="flex flex-col gap-6">
 
@@ -74,6 +119,7 @@ export function ActionPlan({ actions, quickWins }: ActionPlanProps) {
                 <span className={clsx('text-xs px-2 py-0.5 rounded-full border font-medium ml-auto', EFFORT_COLORS[action.effort])}>
                   {EFFORT_LABELS[action.effort]}
                 </span>
+                <FeasibilityBadge checkId={action.checkId} platformId={platformId} />
               </div>
               <p className="text-sm font-semibold text-foreground">{action.title}</p>
               <p className="text-sm text-foreground-dim leading-relaxed">{action.description}</p>
