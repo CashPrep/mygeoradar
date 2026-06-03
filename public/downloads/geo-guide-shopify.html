@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shopify GEO Fix Guide | MyGeoRadar</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; color: #1a1a1a; line-height: 1.7; }
+  h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; color: #0f172a; }
+  h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.5rem; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; color: #1e293b; }
+  p { margin: 0.6rem 0 1rem; }
+  ul, ol { padding-left: 1.5rem; margin: 0.5rem 0 1rem; }
+  li { margin-bottom: 0.4rem; }
+  table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.92rem; }
+  th { background: #0f172a; color: #fff; padding: 10px 14px; text-align: left; }
+  td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.88em; font-family: 'Courier New', monospace; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 1rem 0; }
+  pre code { background: none; padding: 0; color: inherit; font-size: 0.85rem; }
+  blockquote { border-left: 4px solid #6366f1; background: #f0f0ff; padding: 12px 16px; margin: 1rem 0; border-radius: 0 6px 6px 0; font-style: italic; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 2rem 0; }
+  a { color: #6366f1; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 8px; margin: 6px 0; cursor: pointer; }
+  .checklist-item input { margin-top: 4px; width: 16px; height: 16px; cursor: pointer; accent-color: #6366f1; }
+  .header-bar { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; padding: 28px 32px; border-radius: 12px; margin-bottom: 2rem; }
+  .header-bar p { color: rgba(255,255,255,0.85); margin: 4px 0 0; font-size: 0.95rem; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b; text-align: center; }
+</style>
+</head>
+<body>
+<div class="header-bar">
+  <h1 style="color:white;border:none;font-size:1.6rem;margin:0">Shopify GEO Fix Guide</h1>
+  <p>MyGeoRadar Platform-Specific Playbook &mdash; mygeoradar.com</p>
+</div>
+
+<h2>What Is GEO and Why It Matters for Your Shopify Store</h2>
+<p>Generative Engine Optimization (GEO) is the practice of making your website content readable, trustworthy, and citable by AI tools like ChatGPT, Google AI Overviews, Perplexity, and Bing Copilot. These tools now answer millions of shopping and product questions every day — and if your Shopify store isn't optimized for them, you are invisible to that traffic.</p>
+<p>Unlike traditional SEO (which targets search ranking positions), GEO is about being the <em>source</em> that AI cites when someone asks "What's the best [product you sell]?" or "Where can I buy [thing you offer]?"</p>
+<p>This guide gives you every fix available on Shopify, step by step.</p>
+<hr>
+
+<h2>Before You Start: Shopify's Limitations You Must Know</h2>
+<p>Shopify is a hosted platform. It locks certain technical areas. Here's what you can and cannot control:</p>
+<table>
+<tr><th>Area</th><th>Can You Edit?</th><th>Notes</th></tr>
+<tr><td>Page titles &amp; meta descriptions</td><td>Yes</td><td>Via Online Store &gt; Preferences or each page</td></tr>
+<tr><td>Product descriptions</td><td>Yes</td><td>Full HTML editor available</td></tr>
+<tr><td>Blog posts</td><td>Yes</td><td>Fully editable</td></tr>
+<tr><td>Schema/structured data</td><td>Yes (with workarounds)</td><td>Requires theme code edit or app</td></tr>
+<tr><td>robots.txt</td><td>Shopify Plus only</td><td>Standard plans cannot edit robots.txt</td></tr>
+<tr><td>sitemap.xml</td><td>Auto-generated</td><td>Cannot customize — Shopify controls it</td></tr>
+<tr><td>Page speed (server-side)</td><td>No</td><td>Shopify controls hosting infrastructure</td></tr>
+<tr><td>Custom HTTP headers</td><td>No</td><td>Not available on any plan</td></tr>
+</table>
+<hr>
+
+<h2>Step 1 — Fix Your Homepage Title and Meta Description</h2>
+<p>Your homepage title and meta description are the single most important GEO signals. AI tools read them to understand what your store is about.</p>
+<h3>How to do it:</h3>
+<ol>
+<li>In your Shopify Admin, go to <strong>Online Store → Preferences</strong></li>
+<li>Find the <strong>Title and meta description</strong> section</li>
+<li>Write a title using this formula: <code>[What You Sell] | [Your Store Name] — [City or Niche]</code></li>
+<li>Example: <code>Handmade Leather Wallets | Thornfield Supply — Austin, TX</code></li>
+<li>Write a meta description (150–160 characters) that answers: What do you sell? Who is it for? What makes you different?</li>
+<li>Click <strong>Save</strong></li>
+</ol>
+<blockquote>Why this matters for GEO: AI tools use your title and meta description as the first signal to categorize your store. A vague title like "Welcome to Our Store" makes you invisible. A specific one makes you citable.</blockquote>
+<hr>
+
+<h2>Step 2 — Rewrite Every Product Description for AI Readability</h2>
+<p>AI tools scan product descriptions looking for factual, structured answers. Most Shopify stores write descriptions that are either too short or written like ad copy. Neither gets cited.</p>
+<h3>The formula for a GEO-optimized product description:</h3>
+<ul>
+<li>Paragraph 1 — What it is (2–3 sentences, factual)</li>
+<li>Paragraph 2 — Who it's for / use cases (2–3 sentences)</li>
+<li>Bullet list — Specifications and key features</li>
+<li>Paragraph 3 — Materials, sourcing, or process (builds trust)</li>
+<li>Closing line — Care instructions or shipping note</li>
+</ul>
+<h3>How to update product descriptions in Shopify:</h3>
+<ol>
+<li>Go to <strong>Products → All Products</strong></li>
+<li>Click on any product</li>
+<li>In the <strong>Description</strong> field, rewrite using the formula above</li>
+<li>Use the formatting toolbar to add bold text for spec labels</li>
+<li>Save</li>
+</ol>
+<p>Repeat for your top 10 products first, then work through the rest.</p>
+<hr>
+
+<h2>Step 3 — Add Structured Data (Schema Markup) to Your Store</h2>
+<p>Schema markup is code that tells AI tools and search engines exactly what type of content is on your page.</p>
+<h3>Option A: Use a Free App (Easiest)</h3>
+<ol>
+<li>Go to the Shopify App Store</li>
+<li>Search for <strong>"JSON-LD for SEO"</strong> (by Little Stream Software — free tier available)</li>
+<li>Install the app — it automatically adds complete Product, Organization, BreadcrumbList, and WebSite schema</li>
+<li>No code editing required</li>
+</ol>
+<h3>Option B: Edit Your Theme Code (Intermediate)</h3>
+<ol>
+<li>Go to <strong>Online Store → Themes → Actions → Edit Code</strong></li>
+<li>Find <strong>Sections → product-template.liquid</strong> (or <strong>main-product.liquid</strong>)</li>
+<li>Scroll to the bottom and add schema before the closing tag</li>
+<li>Click <strong>Save</strong></li>
+</ol>
+<h3>Verify Your Schema</h3>
+<ol>
+<li>Go to <a href="https://search.google.com/test/rich-results" target="_blank">Google's Rich Results Test</a></li>
+<li>Enter your product page URL</li>
+<li>Confirm it shows "Product" as a detected item with no errors</li>
+</ol>
+<hr>
+
+<h2>Step 4 — Set Up and Optimize Your Shopify Blog</h2>
+<p>AI tools heavily weight blog content when forming answers. A store with well-structured, question-answering blog posts gets cited regularly.</p>
+<h3>Create your blog:</h3>
+<ol>
+<li>Go to <strong>Online Store → Blog Posts → Manage Blogs</strong></li>
+<li>Click <strong>Add Blog</strong></li>
+<li>Name it something topic-specific, not just "News"</li>
+</ol>
+<h3>Blog post structure for GEO:</h3>
+<ul>
+<li>H1 — The question (your title)</li>
+<li>Intro paragraph — Direct answer in 2–3 sentences (AI reads this first)</li>
+<li>H2 — Background / context</li>
+<li>H2 — Step-by-step or detailed explanation</li>
+<li>H2 — Common mistakes or FAQ</li>
+<li>H2 — Summary</li>
+</ul>
+<h3>Settings for each blog post:</h3>
+<ol>
+<li>Add a unique <strong>SEO title</strong> and <strong>meta description</strong> at the bottom of the post editor</li>
+<li>Add a <strong>featured image</strong> with a descriptive filename</li>
+<li>Add the image <strong>alt text</strong> describing exactly what is shown</li>
+<li>Assign relevant <strong>tags</strong></li>
+</ol>
+<hr>
+
+<h2>Step 5 — Fix Your Store's NAP Consistency</h2>
+<p>NAP stands for Name, Address, Phone. AI tools verify business legitimacy by cross-referencing these details. If they don't match across the web, you lose trust signals.</p>
+<ol>
+<li>Go to <strong>Settings → Store Details</strong></li>
+<li>Confirm your <strong>Store name</strong> is exactly how you want it to appear everywhere online</li>
+<li>Add your full business address and phone number</li>
+<li>Make sure these match exactly what is on your Google Business Profile, Yelp, and any other directory listings</li>
+</ol>
+<hr>
+
+<h2>Step 6 — Optimize Your Collection Pages</h2>
+<p>Collection pages are often ignored but are highly valuable for GEO. When someone asks an AI "where can I buy [product category]," AI tools look for collection pages with clear, informative descriptions.</p>
+<ol>
+<li>Go to <strong>Products → Collections</strong></li>
+<li>Click on any collection</li>
+<li>In the <strong>Description</strong> field, write 2–4 sentences explaining what products are in this collection, who they are for, and what makes them special</li>
+<li>Scroll down and click <strong>Edit website SEO</strong></li>
+<li>Add a unique SEO title and meta description for the collection</li>
+<li>Save</li>
+</ol>
+<hr>
+
+<h2>Step 7 — Build an "About" Page That AI Can Cite</h2>
+<p>AI tools use About pages to establish whether a business is real, credible, and authoritative.</p>
+<h3>What your About page must include:</h3>
+<ul>
+<li>Full name of founder(s) and where the business is located</li>
+<li>What you make or sell — specific, not vague</li>
+<li>How long you've been doing it</li>
+<li>Your process or sourcing</li>
+<li>Why you started the business — a specific, real story</li>
+<li>A physical address or region</li>
+<li>Contact information</li>
+</ul>
+<ol>
+<li>Go to <strong>Online Store → Pages</strong></li>
+<li>Click on your About page (or create one)</li>
+<li>Rewrite using the structure above</li>
+<li>Add a meta title and description</li>
+</ol>
+<hr>
+
+<h2>Step 8 — Connect Google Search Console</h2>
+<ol>
+<li>Go to <a href="https://search.google.com/search-console" target="_blank">search.google.com/search-console</a></li>
+<li>Click <strong>Add Property → URL Prefix</strong> and enter your Shopify store URL</li>
+<li>Choose <strong>HTML tag</strong> verification method and copy the meta tag</li>
+<li>In Shopify Admin, go to <strong>Online Store → Preferences</strong> and paste the tag in the <strong>Google Analytics</strong> field</li>
+<li>Return to Search Console and click <strong>Verify</strong></li>
+<li>Click <strong>Sitemaps</strong> and submit <code>sitemap.xml</code></li>
+</ol>
+<hr>
+
+<h2>Step 9 — Get Listed in AI-Friendly Directories</h2>
+<ul>
+<li><a href="https://business.google.com" target="_blank">Google Business Profile</a> — Free, essential</li>
+<li><a href="https://www.bingplaces.com" target="_blank">Bing Places for Business</a> — Free, feeds Bing/Copilot</li>
+<li><a href="https://biz.yelp.com" target="_blank">Yelp</a> — Important for local and product searches</li>
+<li><a href="https://www.bbb.org" target="_blank">Better Business Bureau</a> — High trust signal for AI</li>
+<li><a href="https://www.trustpilot.com" target="_blank">Trustpilot</a> — Review aggregator, heavily cited by AI</li>
+</ul>
+<hr>
+
+<h2>Step 10 — Get Reviews That AI Can Read</h2>
+<p>AI tools cite businesses that have publicly visible, text-based reviews. Star ratings alone don't help — the review <em>text</em> is what gets cited.</p>
+<ol>
+<li>After every order ships, send a follow-up email asking for a review</li>
+<li>Link directly to your Google Business Profile review form</li>
+<li>Install the built-in <strong>Product Reviews</strong> app (free, by Shopify) from the App Store</li>
+<li>Enable it on all product pages</li>
+</ol>
+<hr>
+
+<h2>Shopify GEO Checklist</h2>
+<label class="checklist-item"><input type="checkbox"> Homepage title and meta description updated (Step 1)</label>
+<label class="checklist-item"><input type="checkbox"> Top 10 product descriptions rewritten for AI readability (Step 2)</label>
+<label class="checklist-item"><input type="checkbox"> Schema markup added via app or theme code (Step 3)</label>
+<label class="checklist-item"><input type="checkbox"> Blog created with at least 3 question-answering posts (Step 4)</label>
+<label class="checklist-item"><input type="checkbox"> NAP consistency confirmed across Shopify settings and directories (Step 5)</label>
+<label class="checklist-item"><input type="checkbox"> All major collections have descriptions and SEO metadata (Step 6)</label>
+<label class="checklist-item"><input type="checkbox"> About page rewritten with founder story, location, and specifics (Step 7)</label>
+<label class="checklist-item"><input type="checkbox"> Google Search Console connected and sitemap submitted (Step 8)</label>
+<label class="checklist-item"><input type="checkbox"> Listed on Google Business Profile and Bing Places (Step 9)</label>
+<label class="checklist-item"><input type="checkbox"> Product Reviews app installed and review request emails set up (Step 10)</label>
+<hr>
+
+<h2>What Shopify Cannot Fix</h2>
+<p><strong>robots.txt</strong> — Only editable on Shopify Plus ($2,000+/mo). Focus your energy on the steps above instead.</p>
+<p><strong>Page speed</strong> — Compress images before uploading (use <a href="https://tinypng.com" target="_blank">TinyPNG</a>), remove unused apps, and use a lightweight theme (Dawn is Shopify's fastest free theme).</p>
+<p><strong>Custom URL structure</strong> — Shopify forces /products/, /collections/, and /blogs/ URL prefixes. This is acceptable — AI tools read the full page content, not just the URL.</p>
+
+<div class="footer">Guide produced by MyGeoRadar &mdash; mygeoradar.com &mdash; Version 1.0, June 2026</div>
+</body>
+</html>
