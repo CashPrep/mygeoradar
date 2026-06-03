@@ -773,6 +773,27 @@ Everything in this playbook compounds. A complete GBP feeds Gemini. That same GB
 
 The businesses that dominate AI search in 2027 are the ones that started in 2026 — before their competitors understood what was happening.
 
+> ✅ **Your first 30 minutes — do this before you close this tab.**
+>
+> Don't let this playbook become something you read and meant to act on. Here's the exact sequence for your first session:
+>
+> **Minutes 1–5: Run your baseline test.**
+> Open ChatGPT, Perplexity, Gemini, and Claude. In each one, type: *"What can you tell me about [your business name] in [your city]?"* Screenshot or copy each response. This is your before — you'll compare it to the same test in 60 days.
+>
+> **Minutes 6–10: Check your GBP completion.**
+> Go to [business.google.com](https://business.google.com). Look at your profile completeness score. Identify the single biggest gap — missing photos, no business description, incomplete hours. Fix that one thing right now.
+>
+> **Minutes 11–20: Audit your NAP on three platforms.**
+> Search your business name on Google, Yelp, and Facebook. Open all three side by side. Check that your name, address, and phone number are *identical* across all three. If they're not, update the one that's wrong before you move on.
+>
+> **Minutes 21–25: Add your review link to your email signature.**
+> Get your Google review short link from your GBP dashboard (under "Ask for reviews"). Add it to your email signature with the text: *"Happy with our service? Leave us a quick Google review — it takes 60 seconds."* This one change will generate reviews passively for months.
+>
+> **Minutes 26–30: Schedule your next session.**
+> Block two hours on your calendar within the next 7 days. Label it "AI Visibility — Part 2 (Schema)." The businesses that win at this don't work harder — they work consistently. One focused session per week for 8 weeks will put you ahead of 95% of your competitors.
+>
+> That's it. Five small actions. Thirty minutes. You're no longer in the "I should do this someday" camp — you're in motion.
+
 You've read the playbook. Now work through it, section by section, with your business in front of you.
 
 If you have questions or want feedback, email [hello@mygeoradar.com](mailto:hello@mygeoradar.com).
