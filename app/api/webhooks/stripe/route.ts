@@ -90,11 +90,13 @@ export async function POST(req: NextRequest) {
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
 
-    // ── Handler A: Found by AI Playbook ──────────────────────────────────────
+    // ── Handler A: Found by AI Playbook ──────────────────────────────────────────
     if (session.metadata?.product === 'found-by-ai-playbook') {
       const customerEmail = session.customer_details?.email
       const customerId    = session.customer as string | null
       const sessionId     = session.id
+      // platform is optional — present only when buyer selected a platform guide
+      const platform      = session.metadata?.platform ?? null
 
       if (!customerEmail) {
         console.error('[playbook webhook] No customer email in session:', sessionId)
@@ -117,6 +119,7 @@ export async function POST(req: NextRequest) {
                 stripe_customer_id: customerId,
                 email:              customerEmail.toLowerCase(),
                 product:            'found-by-ai-playbook',
+                platform,
                 purchased_at:       new Date().toISOString(),
               },
               { onConflict: 'stripe_session_id' }
