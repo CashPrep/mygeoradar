@@ -4,10 +4,15 @@ import { useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight, CheckCircle, AlertTriangle, XCircle,
-  Loader2, Radar, Lock, ExternalLink, RotateCcw,
+  Loader2, Radar, Lock, ExternalLink, RotateCcw, ChevronDown,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { EmailGate } from '@/components/scan/EmailGate'
+import { PlatformFeasibilityBadge } from '@/components/scan/PlatformFeasibilityBadge'
+import {
+  PLATFORM_LIST, PLATFORMS, type PlatformId,
+  getCheckFeasibility, getPlatformNote,
+} from '@/lib/platforms'
 
 type Status = 'pass' | 'warn' | 'fail'
 interface FreeCheck {
@@ -72,20 +77,20 @@ function statusBg(status: Status) {
 }
 
 export function AiReadinessScan() {
-  const [url,      setUrl]      = useState('')
-  const [bizName,  setBizName]  = useState('')
-  const [loading,  setLoading]  = useState(false)
-  const [progress, setProgress] = useState(0)
-  const [result,   setResult]   = useState<ScanResult | null>(null)
-  const [error,    setError]    = useState('')
-  const [paying,   setPaying]   = useState(false)
+  const [url,        setUrl]        = useState('')
+  const [bizName,    setBizName]    = useState('')
+  const [platform,   setPlatform]   = useState<PlatformId | ''>('')
+  const [loading,    setLoading]    = useState(false)
+  const [progress,   setProgress]   = useState(0)
+  const [result,     setResult]     = useState<ScanResult | null>(null)
+  const [error,      setError]      = useState('')
+  const [paying,     setPaying]     = useState(false)
+  const [expandNote, setExpandNote] = useState<string | null>(null)
 
   function reset() {
-    setResult(null)
-    setProgress(0)
-    setError('')
-    setUrl('')
-    setBizName('')
+    setResult(null); setProgress(0); setError('')
+    setUrl(''); setBizName(''); setPlatform('')
+    setExpandNote(null)
   }
 
   async function runScan(e: React.FormEvent) {
@@ -101,7 +106,7 @@ export function AiReadinessScan() {
       const res  = await fetch('/api/scan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: url.trim(), businessName: bizName.trim() }),
+        body: JSON.stringify({ url: url.trim(), businessName: bizName.trim(), platform: platform || undefined }),
       })
       const data = await res.json()
       clearInterval(tick)
@@ -140,6 +145,16 @@ export function AiReadinessScan() {
   const warnCount  = result?.checks.filter(c => c.status === 'warn').length ?? 0
   const issueCount = failCount + warnCount
 
+  // For the currently selected platform, count how many non-passing checks are actually fixable
+  const fixableCount = platform && result
+    ? result.checks
+        .filter(c => c.status !== 'pass')
+        .filter(c => getCheckFeasibility(c.id, platform) === 'full')
+        .length
+    : null
+
+  const selectedPlatform = platform ? PLATFORMS[platform] : null
+
   return (
     <div className="w-full max-w-2xl mx-auto">
 
@@ -160,6 +175,22 @@ export function AiReadinessScan() {
               className="input-base sm:w-52"
             />
           </div>
+
+          {/* Platform selector */}
+          <div className="relative">
+            <select
+              value={platform}
+              onChange={e => setPlatform(e.target.value as PlatformId | '')}
+              className="input-base w-full appearance-none pr-8 text-sm"
+            >
+              <option value="">Platform (optional — get fix-ability ratings)</option>
+              {PLATFORM_LIST.map(p => (
+                <option key={p.id} value={p.id}>{p.emoji} {p.label}</option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+          </div>
+
           <button
             type="submit"
             disabled={loading || !url.trim()}
@@ -211,6 +242,11 @@ export function AiReadinessScan() {
             <p className="text-sm text-muted">
               Results for{' '}
               <span className="font-mono font-medium text-foreground">{safeHostname(result.url)}</span>
+              {selectedPlatform && (
+                <span className="ml-2 text-muted">
+                  &middot; {selectedPlatform.emoji} {selectedPlatform.label}
+                </span>
+              )}
             </p>
             <button
               onClick={reset}
@@ -247,30 +283,96 @@ export function AiReadinessScan() {
                 )}
                 {failCount === 0 && warnCount === 0 && 'All checks passed.'}
               </p>
+              {/* Platform fixability summary */}
+              {selectedPlatform && issueCount > 0 && fixableCount !== null && (
+                <p className="text-xs text-muted mt-1.5">
+                  On <span className="font-semibold text-foreground">{selectedPlatform.label}</span>:{' '}
+                  <span className="text-emerald-600 font-semibold">{fixableCount} fixable yourself</span>
+                  {fixableCount < issueCount && (
+                    <span className="text-amber-600 font-semibold">
+                      {' '}· {issueCount - fixableCount} need an app or developer
+                    </span>
+                  )}
+                </p>
+              )}
             </div>
           </div>
 
           {/* Checks list */}
           <div className="flex flex-col gap-2">
-            {result.checks.map(c => (
-              <div
-                key={c.id}
-                className={clsx(
-                  'rounded-lg border flex items-center gap-3 px-4 py-3',
-                  statusBg(c.status),
-                )}
-              >
-                {statusIcon(c.status)}
-                <span className="flex-1 text-sm font-medium text-foreground">{c.label}</span>
-                <span className={clsx(
-                  'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded flex-shrink-0',
-                  c.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500',
-                )}>
-                  {c.impact}
-                </span>
-              </div>
-            ))}
+            {result.checks.map(c => {
+              const feasibility = getCheckFeasibility(c.id, platform || null)
+              const note        = getPlatformNote(c.id, platform || null)
+              const showNote    = expandNote === c.id
+              const hasPlatform = !!platform
+              return (
+                <div key={c.id} className="flex flex-col rounded-lg border overflow-hidden">
+                  <div
+                    className={clsx(
+                      'flex items-center gap-3 px-4 py-3',
+                      statusBg(c.status),
+                    )}
+                  >
+                    {statusIcon(c.status)}
+                    <span className="flex-1 text-sm font-medium text-foreground">{c.label}</span>
+
+                    {/* Impact badge */}
+                    <span className={clsx(
+                      'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded flex-shrink-0',
+                      c.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500',
+                    )}>
+                      {c.impact}
+                    </span>
+
+                    {/* Feasibility badge — only when platform selected and check is not passing */}
+                    {hasPlatform && c.status !== 'pass' && (
+                      <PlatformFeasibilityBadge
+                        feasibility={feasibility}
+                        note={note}
+                      />
+                    )}
+
+                    {/* Expand note button */}
+                    {hasPlatform && c.status !== 'pass' && note && (
+                      <button
+                        onClick={() => setExpandNote(showNote ? null : c.id)}
+                        aria-label={showNote ? 'Hide platform note' : 'Show platform note'}
+                        className="flex-shrink-0 text-muted hover:text-foreground transition-colors"
+                      >
+                        <ChevronDown className={clsx('w-3.5 h-3.5 transition-transform', showNote && 'rotate-180')} />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Inline platform note */}
+                  {showNote && note && (
+                    <div className="px-4 py-2.5 bg-white border-t border-border text-xs text-muted leading-relaxed">
+                      <span className="font-semibold text-foreground">{selectedPlatform?.emoji} {selectedPlatform?.label}: </span>
+                      {note}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
           </div>
+
+          {/* Platform legend — only when a platform is selected and there are issues */}
+          {platform && issueCount > 0 && (
+            <div className="flex flex-wrap gap-3 px-1 text-xs text-muted">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                Fixable — you can do this in {selectedPlatform?.label}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
+                Needs App — requires a plugin or app
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-red-500" />
+                Needs Dev — beyond platform limits
+              </span>
+            </div>
+          )}
 
           {/* ── Email Gate — shown after every scan ── */}
           <EmailGate
@@ -293,7 +395,9 @@ export function AiReadinessScan() {
                   <span className="font-mono">{safeHostname(result.url)}</span>
                 </p>
                 <p className="text-xs text-muted mb-4 max-w-xs mx-auto">
-                  Get a step-by-step fix guide for each issue &mdash; exactly what to do, in what order, with validation steps.
+                  {selectedPlatform
+                    ? `Get a step-by-step fix guide tailored for ${selectedPlatform.label} — including which issues you can fix yourself vs. which need help.`
+                    : 'Get a step-by-step fix guide for each issue — exactly what to do, in what order, with validation steps.'}
                 </p>
                 <button
                   onClick={unlockReport}
