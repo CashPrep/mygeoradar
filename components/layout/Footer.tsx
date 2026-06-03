@@ -1,123 +1,117 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail } from 'lucide-react'
+
+const productLinks = [
+  { href: '/',         label: 'Free AI Scan' },
+  { href: '/pricing',  label: 'Pricing' },
+  { href: '/playbook', label: 'GEO Playbook ($27)' },
+]
+const resourceLinks = [
+  { href: '/blog',    label: 'Blog' },
+  { href: '/about',   label: 'About' },
+  { href: '/reviews', label: 'Reviews' },
+]
+const locationLinks = [
+  { href: '/locations/new-york-ny',    label: 'New York' },
+  { href: '/locations/los-angeles-ca', label: 'Los Angeles' },
+  { href: '/locations/chicago-il',     label: 'Chicago' },
+  { href: '/locations/houston-tx',     label: 'Houston' },
+  { href: '/locations/miami-fl',       label: 'Miami' },
+]
+const industryLinks = [
+  { href: '/industries/restaurants',        label: 'Restaurants' },
+  { href: '/industries/real-estate-agents', label: 'Real Estate' },
+  { href: '/industries/lawyers',            label: 'Law Firms' },
+  { href: '/industries/dental-practices',   label: 'Dental' },
+  { href: '/industries/ecommerce-stores',   label: 'E-commerce' },
+]
+const legalLinks = [
+  { href: '/privacy', label: 'Privacy' },
+  { href: '/terms',   label: 'Terms' },
+  { href: '/refund',  label: 'Refund Policy' },
+]
 
 export function Footer() {
   const year = new Date().getFullYear()
 
   return (
     <footer className="border-t border-border bg-surface/50">
+      {/* Pre-footer CTA strip */}
+      <div className="bg-accent/5 border-b border-accent/20 py-6 px-4">
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            <p className="font-semibold text-foreground">Not showing up in AI search results?</p>
+            <p className="text-sm text-muted">Run a free scan and get your GEO score in 30 seconds.</p>
+          </div>
+          <Link
+            href="/"
+            className="shrink-0 px-5 py-2.5 rounded-lg bg-accent text-white text-sm font-semibold hover:bg-accent/90 transition-colors"
+          >
+            Run Free Scan
+          </Link>
+        </div>
+      </div>
+
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-12">
-
-        {/* Top row */}
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-10 mb-10">
-
-          {/* Brand */}
           <div className="max-w-xs">
             <Link
               href="/"
               className="inline-flex items-center gap-2 font-bold text-[15px] tracking-tight mb-3 hover:opacity-80 transition-opacity"
             >
-              <Image
-                src="/icon-512.png"
-                alt="MyGeoRadar logo"
-                width={28}
-                height={28}
-                className="rounded-lg"
-              />
-              <span>
-                My<span className="text-accent">Geo</span>Radar
-              </span>
+              <Image src="/icon-512.png" alt="MyGeoRadar logo" width={28} height={28} className="rounded-lg" />
+              <span>My<span className="text-accent">Geo</span>Radar</span>
             </Link>
             <p className="text-sm text-muted leading-relaxed">
-              Helping businesses get found and recommended by AI assistants like ChatGPT,
-              Perplexity, Gemini, and Claude.
+              The AI visibility platform that shows you exactly how ChatGPT,
+              Perplexity, Gemini and Claude talk about your business and how to rank higher.
             </p>
           </div>
 
-          {/* Nav columns */}
           <div className="flex flex-wrap gap-10">
-
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted/70 mb-3">
-                Product
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted/70 mb-3">Product</p>
               <ul className="flex flex-col gap-2">
-                {[
-                  { href: '/playbook', label: 'Found by AI Playbook' },
-                  { href: '/#scan',    label: 'Free AI Readiness Scan' },
-                  { href: '/#what-you-get', label: "What's Included" },
-                  { href: '/#pricing', label: 'Pricing' },
-                ].map(({ href, label }) => (
-                  <li key={href}>
-                    <Link
-                      href={href}
-                      className="text-sm text-muted hover:text-foreground transition-colors"
-                    >
-                      {label}
-                    </Link>
-                  </li>
+                {productLinks.map((l) => (
+                  <li key={l.href}><Link href={l.href} className="text-sm text-muted hover:text-foreground transition-colors">{l.label}</Link></li>
                 ))}
               </ul>
             </div>
-
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-muted/70 mb-3">
-                Company
-              </p>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted/70 mb-3">Resources</p>
               <ul className="flex flex-col gap-2">
-                {[
-                  { href: '/privacy', label: 'Privacy Policy' },
-                  { href: '/terms',   label: 'Terms of Service' },
-                  { href: '/refund',  label: 'Refund Policy' },
-                ].map(({ href, label }) => (
-                  <li key={href}>
-                    <Link
-                      href={href}
-                      className="text-sm text-muted hover:text-foreground transition-colors"
-                    >
-                      {label}
-                    </Link>
-                  </li>
+                {resourceLinks.map((l) => (
+                  <li key={l.href}><Link href={l.href} className="text-sm text-muted hover:text-foreground transition-colors">{l.label}</Link></li>
                 ))}
               </ul>
             </div>
-
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted/70 mb-3">Top Cities</p>
+              <ul className="flex flex-col gap-2">
+                {locationLinks.map((l) => (
+                  <li key={l.href}><Link href={l.href} className="text-sm text-muted hover:text-foreground transition-colors">{l.label}</Link></li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-muted/70 mb-3">Industries</p>
+              <ul className="flex flex-col gap-2">
+                {industryLinks.map((l) => (
+                  <li key={l.href}><Link href={l.href} className="text-sm text-muted hover:text-foreground transition-colors">{l.label}</Link></li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="divider mb-6" />
-
-        {/* Bottom row */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted">
-          <p>© {year} MyGeoRadar. All rights reserved.</p>
-
-          {/* Product Hunt Badge */}
-          <a
-            href="https://www.producthunt.com/products/become-suggested-by-ai?utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-become-suggested-by-ai"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              alt="Become suggested by AI - Helping small businesses survive Ai! | Product Hunt"
-              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1157613&theme=dark&t=1779967684776"
-              width={250}
-              height={54}
-              style={{ width: '250px', height: '54px' }}
-            />
-          </a>
-
-          <a
-            href="mailto:hello@mygeoradar.com"
-            className="inline-flex items-center gap-1.5 hover:text-foreground transition-colors"
-          >
-            <Mail className="w-3.5 h-3.5" />
-            hello@mygeoradar.com
-          </a>
+        <div className="border-t border-border pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted">
+          <p>&copy; {year} MyGeoRadar. All rights reserved.</p>
+          <div className="flex items-center gap-4">
+            {legalLinks.map((l) => (
+              <Link key={l.href} href={l.href} className="hover:text-foreground transition-colors">{l.label}</Link>
+            ))}
+          </div>
         </div>
-
       </div>
     </footer>
   )
