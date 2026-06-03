@@ -203,7 +203,7 @@ export default function ProgrammaticPage({ params }: Props) {
           <div className="max-w-3xl mx-auto flex flex-col sm:flex-row gap-6">
             <div className="flex-1">
               <p className="text-xs font-semibold uppercase tracking-[0.1em] text-muted mb-3">All cities — {industry!.plural}</p>
-              <Link href={`/${params.industry}`}>
+              <Link href={`/industries/${params.industry}`}>
                 <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full border border-border bg-white text-xs text-muted hover:border-accent/30 hover:text-accent transition-colors cursor-pointer">
                   <span>{industry!.emoji}</span> {industry!.plural} visibility scanner
                 </span>
