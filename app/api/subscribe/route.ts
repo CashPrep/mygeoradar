@@ -1,10 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-02-24.acacia',
 })
+
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !key) throw new Error('Missing Supabase env vars')
+  return createClient(url, key, { auth: { persistSession: false } })
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -45,6 +52,7 @@ export async function POST(req: NextRequest) {
     })
 
     try {
+      const supabase = getSupabase()
       await supabase.from('subscriptions').upsert({
         email,
         website,
