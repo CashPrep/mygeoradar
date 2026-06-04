@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WordPress GEO Fix Guide | MyGeoRadar</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; color: #1a1a1a; line-height: 1.7; }
+  h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; color: #0f172a; }
+  h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.5rem; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; color: #1e293b; }
+  p { margin: 0.6rem 0 1rem; }
+  ul, ol { padding-left: 1.5rem; margin: 0.5rem 0 1rem; }
+  li { margin-bottom: 0.4rem; }
+  table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.92rem; }
+  th { background: #0f172a; color: #fff; padding: 10px 14px; text-align: left; }
+  td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.88em; font-family: 'Courier New', monospace; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 1rem 0; }
+  pre code { background: none; padding: 0; color: inherit; font-size: 0.85rem; }
+  blockquote { border-left: 4px solid #6366f1; background: #f0f0ff; padding: 12px 16px; margin: 1rem 0; border-radius: 0 6px 6px 0; font-style: italic; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 2rem 0; }
+  a { color: #6366f1; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 8px; margin: 6px 0; cursor: pointer; }
+  .checklist-item input { margin-top: 4px; width: 16px; height: 16px; cursor: pointer; accent-color: #6366f1; }
+  .header-bar { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; padding: 28px 32px; border-radius: 12px; margin-bottom: 2rem; }
+  .header-bar p { color: rgba(255,255,255,0.85); margin: 4px 0 0; font-size: 0.95rem; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b; text-align: center; }
+</style>
+</head>
+<body>
+<div class="header-bar">
+  <h1 style="color:white;border:none;font-size:1.6rem;margin:0">WordPress GEO Fix Guide</h1>
+  <p>MyGeoRadar Platform-Specific Playbook &mdash; mygeoradar.com</p>
+</div>
+
+<h2>What This Guide Does</h2>
+<p>This guide walks WordPress users through every GEO fix available on the platform. GEO (Generative Engine Optimization) means making your site easy for AI tools like ChatGPT, Perplexity, Google AI Overviews, and Bing Copilot to read, trust, and cite.</p>
+<p>WordPress gives you more control than any other website builder covered in this series. You can edit every technical SEO setting, add full schema markup, control your robots.txt, manage crawl settings, and publish rich blog content. This makes WordPress the most powerful platform for GEO.</p>
+
+<hr>
+
+<h2>Before You Start: Choose Your SEO Plugin</h2>
+<p>WordPress does not have built-in SEO settings. You need an SEO plugin. Install one before starting this guide.</p>
+<table>
+<tr><th>Plugin</th><th>Best For</th><th>Cost</th></tr>
+<tr><td><strong>Rank Math</strong></td><td>Most features free, AI-assisted, best for GEO</td><td>Free / Pro</td></tr>
+<tr><td><strong>Yoast SEO</strong></td><td>Beginner-friendly, widely supported</td><td>Free / Premium</td></tr>
+<tr><td><strong>AIOSEO</strong></td><td>All-in-one with schema builder</td><td>Free / Pro</td></tr>
+</table>
+<p><strong>Recommended: Rank Math.</strong> It includes schema markup, AI-assisted meta descriptions, sitemap control, and GEO-ready structured data features in the free version.</p>
+<h3>How to install Rank Math</h3>
+<ol>
+<li>Go to your WordPress dashboard</li>
+<li>Click <strong>Plugins &rarr; Add New</strong></li>
+<li>Search for <strong>Rank Math SEO</strong></li>
+<li>Click <strong>Install Now</strong>, then <strong>Activate</strong></li>
+<li>Follow the setup wizard to connect Google Search Console and configure defaults</li>
+</ol>
+
+<hr>
+
+<h2>Step 1 &mdash; Fix Your Homepage Title and Meta Description</h2>
+<p>Your homepage title is the first thing AI systems read to understand what your site is about. It must be specific, not generic.</p>
+<h3>With Rank Math</h3>
+<ol>
+<li>Go to your WordPress homepage (front page or blog page)</li>
+<li>Click <strong>Edit</strong></li>
+<li>In the page editor, scroll down to the <strong>Rank Math SEO</strong> panel</li>
+<li>Click the <strong>Edit Snippet</strong> button</li>
+<li>Update the <strong>SEO Title</strong> field</li>
+<li>Update the <strong>Meta Description</strong> field</li>
+<li>Update the page</li>
+</ol>
+<h3>With Yoast SEO</h3>
+<ol>
+<li>Open the homepage in the editor</li>
+<li>Scroll to the <strong>Yoast SEO</strong> box</li>
+<li>Click the <strong>SEO</strong> tab</li>
+<li>Update <strong>SEO title</strong> and <strong>Meta description</strong></li>
+<li>Update the page</li>
+</ol>
+<h3>Title formula</h3>
+<p><code>[What the page covers] | [Brand Name]</code></p>
+<p><strong>Example:</strong> <code>AI GEO Visibility Audits | MyGeoRadar</code></p>
+<h3>Meta description formula</h3>
+<p><strong>Example:</strong> <code>MyGeoRadar scans your site and shows exactly what to fix to appear in ChatGPT, Perplexity, and Google AI Overviews. Free GEO score in 60 seconds.</code></p>
+
+<hr>
+
+<h2>Step 2 &mdash; Add SEO Titles and Descriptions to Every Key Page</h2>
+<p>Every important page needs its own unique title and description. Repeat the process from Step 1 for each page.</p>
+<h3>Pages to update in order</h3>
+<ol>
+<li>Homepage</li>
+<li>Services or product pages</li>
+<li>About page</li>
+<li>Contact page</li>
+<li>Pricing page</li>
+<li>Any landing pages</li>
+</ol>
+
+<hr>
+
+<h2>Step 3 &mdash; Set Up Schema Markup</h2>
+<p>WordPress is the best platform for schema markup because plugins handle it automatically for common types, and you can add custom JSON-LD for everything else.</p>
+<h3>Step 3A &mdash; Enable automatic schema in Rank Math</h3>
+<ol>
+<li>Go to <strong>Rank Math &rarr; Titles &amp; Meta</strong></li>
+<li>Click the <strong>Posts</strong> tab</li>
+<li>Set <strong>Schema Type</strong> to <strong>Article</strong> for blog posts</li>
+<li>Click the <strong>Pages</strong> tab</li>
+<li>Set <strong>Schema Type</strong> based on what your pages are (WebPage, Service, etc.)</li>
+<li>Save</li>
+</ol>
+<h3>Step 3B &mdash; Add Organization schema to your homepage</h3>
+<ol>
+<li>Open your homepage in the editor</li>
+<li>Scroll to the <strong>Rank Math SEO</strong> panel</li>
+<li>Click <strong>Schema</strong> (the star icon tab)</li>
+<li>Click <strong>Add New Schema &rarr; Organization</strong></li>
+<li>Fill in your business name, URL, logo, description, and social URLs</li>
+<li>Save and update the page</li>
+</ol>
+<h3>Step 3C &mdash; Add FAQPage schema</h3>
+<ol>
+<li>Open any page with a FAQ section</li>
+<li>In the Rank Math panel, click <strong>Schema &rarr; Add New Schema &rarr; FAQ</strong></li>
+<li>Add each question and answer pair</li>
+<li>Update the page</li>
+</ol>
+<h3>Step 3D &mdash; Add custom JSON-LD manually (advanced)</h3>
+<ol>
+<li>In the WordPress editor, add a <strong>Custom HTML block</strong></li>
+<li>Paste your JSON-LD schema directly</li>
+<li>Update the page</li>
+</ol>
+<h3>Verify all schema</h3>
+<ol>
+<li>Go to <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+<li>Enter each key page URL and confirm schema appears with no errors</li>
+</ol>
+
+<hr>
+
+<h2>Step 4 &mdash; Optimize Your Blog for GEO</h2>
+<p>Blog content is your single highest-value GEO asset. AI tools actively pull from blog posts when forming answers &mdash; especially posts structured to answer specific questions.</p>
+<h3>Blog post structure for GEO</h3>
+<ol>
+<li>H1 &mdash; The question or topic (your title)</li>
+<li>Opening paragraph &mdash; Direct 2&ndash;3 sentence answer (write this first)</li>
+<li>H2 &mdash; Background or context</li>
+<li>H2 &mdash; Step-by-step explanation or detailed breakdown</li>
+<li>H2 &mdash; Common mistakes or FAQ section</li>
+<li>Short closing paragraph or CTA</li>
+</ol>
+<blockquote>The opening paragraph matters most. AI systems often pull from the first 100 words of a post. Write a direct, quotable answer immediately after the title.</blockquote>
+<h3>Per-post publishing checklist</h3>
+<label class="checklist-item"><input type="checkbox"> SEO title filled in (Rank Math or Yoast panel)</label>
+<label class="checklist-item"><input type="checkbox"> Meta description filled in (150&ndash;160 characters)</label>
+<label class="checklist-item"><input type="checkbox"> Focus keyword set in SEO plugin</label>
+<label class="checklist-item"><input type="checkbox"> Featured image uploaded with descriptive filename</label>
+<label class="checklist-item"><input type="checkbox"> Alt text added to featured image</label>
+<label class="checklist-item"><input type="checkbox"> Clean URL slug (e.g. /what-is-geo-optimization)</label>
+<label class="checklist-item"><input type="checkbox"> Author name and bio visible on post</label>
+
+<hr>
+
+<h2>Step 5 &mdash; Add Author Bios to All Posts</h2>
+<p>AI systems favor content written by identified, credible authors. A missing or blank author bio is a trust signal gap that is easy to fix.</p>
+<h3>How to add an author bio in WordPress</h3>
+<ol>
+<li>Go to <strong>Users &rarr; Your Profile</strong> in the WordPress dashboard</li>
+<li>Fill in the <strong>Biographical Info</strong> field with 2&ndash;4 sentences about your name, title, expertise area, and experience</li>
+<li>Upload a <strong>Profile Picture</strong> via Gravatar (gravatar.com with your email)</li>
+<li>Save</li>
+</ol>
+<h3>Display the bio on posts</h3>
+<ol>
+<li>Go to <strong>Appearance &rarr; Theme Customizer</strong></li>
+<li>Look for a &ldquo;Post Meta&rdquo; or &ldquo;Author Bio&rdquo; toggle and enable it</li>
+</ol>
+<p>Or install the <strong>Simple Author Box</strong> plugin (free) which adds a clean author bio box to every post automatically.</p>
+
+<hr>
+
+<h2>Step 6 &mdash; Fix Image Alt Text</h2>
+<p>WordPress lets you add alt text to every image via the Media Library. Alt text helps AI crawlers and screen readers understand what images contain.</p>
+<h3>How to add alt text when uploading</h3>
+<ol>
+<li>Go to <strong>Media &rarr; Add New</strong></li>
+<li>Upload your image</li>
+<li>Click on the image to open its details</li>
+<li>Fill in the <strong>Alt Text</strong> field</li>
+<li>Save</li>
+</ol>
+<h3>How to fix existing images</h3>
+<ol>
+<li>Go to <strong>Media &rarr; Library</strong></li>
+<li>Click any image without alt text</li>
+<li>Add alt text in the right panel</li>
+<li>Update</li>
+</ol>
+<p><strong>Bad:</strong> <code>img_4521.jpg</code><br><strong>Good:</strong> <code>MyGeoRadar AI visibility audit dashboard showing GEO score breakdown</code></p>
+
+<hr>
+
+<h2>Step 7 &mdash; Configure Your Sitemap and robots.txt</h2>
+<p>WordPress with an SEO plugin gives you full control over both your sitemap and robots.txt.</p>
+<h3>Sitemap with Rank Math</h3>
+<ol>
+<li>Go to <strong>Rank Math &rarr; Sitemap Settings</strong></li>
+<li>Enable sitemaps for Posts, Pages, and any custom post types</li>
+<li>Your sitemap is live at <code>yoursite.com/sitemap_index.xml</code></li>
+</ol>
+<h3>Submit to Google Search Console</h3>
+<ol>
+<li>Go to <a href="https://search.google.com/search-console" target="_blank">Google Search Console</a></li>
+<li>Click <strong>Sitemaps</strong> in the left menu</li>
+<li>Enter <code>sitemap_index.xml</code> and click Submit</li>
+</ol>
+<h3>robots.txt</h3>
+<ol>
+<li>Go to <strong>Rank Math &rarr; General Settings &rarr; Edit robots.txt</strong></li>
+<li>Make sure your important pages are not blocked</li>
+</ol>
+<blockquote>Critical: Make sure your robots.txt does NOT contain <code>Disallow: /</code> for user agents like GPTBot or PerplexityBot.</blockquote>
+
+<hr>
+
+<h2>Step 8 &mdash; Improve Page Speed</h2>
+<p>Faster pages get crawled more completely, which directly impacts GEO visibility.</p>
+<h3>Install a caching plugin</h3>
+<ol>
+<li>Go to <strong>Plugins &rarr; Add New</strong></li>
+<li>Search for <strong>WP Super Cache</strong> or <strong>W3 Total Cache</strong> (both free)</li>
+<li>Install, activate, and follow the setup wizard</li>
+</ol>
+<h3>Compress and optimize images</h3>
+<ol>
+<li>Install the <strong>Smush</strong> plugin (free tier available)</li>
+<li>Go to <strong>Smush &rarr; Bulk Smush</strong></li>
+<li>Click <strong>Bulk Smush Now</strong></li>
+</ol>
+<h3>Check your speed</h3>
+<ol>
+<li>Go to <a href="https://pagespeed.web.dev" target="_blank">PageSpeed Insights</a></li>
+<li>Enter your URL and fix any red or orange issues</li>
+</ol>
+
+<hr>
+
+<h2>Step 9 &mdash; Build Strong Trust Pages</h2>
+<p>Your About and Contact pages are trust signals that AI systems use to verify your business is real.</p>
+<h3>About page &mdash; must include</h3>
+<ul>
+<li>Your name or founder name</li>
+<li>What the business does and who it helps</li>
+<li>Where you are based</li>
+<li>A real origin story (2&ndash;3 sentences minimum)</li>
+<li>Your credentials or experience in this area</li>
+<li>Contact info or link to contact page</li>
+</ul>
+<h3>Contact page &mdash; must include</h3>
+<ul>
+<li>Email address</li>
+<li>Phone number (if applicable)</li>
+<li>Physical address or service area</li>
+<li>Contact form</li>
+<li>Business hours and social links</li>
+</ul>
+<p>Your business Name, Address, and Phone must match exactly across your site, Google Business Profile, Bing Places, and any directory listing.</p>
+
+<hr>
+
+<h2>Step 10 &mdash; Build Off-Site Citations and Reviews</h2>
+<p>AI tools cross-reference your website against other trusted sources. Consistent, credible mentions increase your citation likelihood.</p>
+<h3>Priority listings to create</h3>
+<ol>
+<li><strong>Google Business Profile</strong> &mdash; <a href="https://business.google.com" target="_blank">business.google.com</a> &mdash; free and essential</li>
+<li><strong>Bing Places for Business</strong> &mdash; <a href="https://www.bingplaces.com" target="_blank">bingplaces.com</a> &mdash; feeds Bing/Copilot directly</li>
+<li><strong>Trustpilot</strong> &mdash; create a profile and collect text reviews</li>
+<li><strong>LinkedIn Company Page</strong> &mdash; link from your site footer</li>
+<li><strong>Better Business Bureau</strong> &mdash; high trust signal for AI</li>
+<li><strong>Niche directories</strong> &mdash; find 2&ndash;3 industry-specific directories</li>
+</ol>
+
+<hr>
+
+<h2>WordPress GEO Checklist</h2>
+<h3>Phase 1 &mdash; Plugin and core setup</h3>
+<label class="checklist-item"><input type="checkbox"> Rank Math or Yoast SEO installed and set up</label>
+<label class="checklist-item"><input type="checkbox"> Homepage title and meta description updated (Step 1)</label>
+<label class="checklist-item"><input type="checkbox"> All key pages have unique SEO titles and descriptions (Step 2)</label>
+<label class="checklist-item"><input type="checkbox"> Google Search Console connected</label>
+<h3>Phase 2 &mdash; Schema</h3>
+<label class="checklist-item"><input type="checkbox"> Automatic schema enabled for posts and pages (Step 3A)</label>
+<label class="checklist-item"><input type="checkbox"> Organization schema added to homepage (Step 3B)</label>
+<label class="checklist-item"><input type="checkbox"> FAQPage schema added to FAQ sections (Step 3C)</label>
+<label class="checklist-item"><input type="checkbox"> All schema tested via Rich Results Test</label>
+<h3>Phase 3 &mdash; Content and trust</h3>
+<label class="checklist-item"><input type="checkbox"> 3 blog posts published with GEO structure (Step 4)</label>
+<label class="checklist-item"><input type="checkbox"> Author bios added to all posts (Step 5)</label>
+<label class="checklist-item"><input type="checkbox"> Alt text added to all key images (Step 6)</label>
+<label class="checklist-item"><input type="checkbox"> About page includes real founder details (Step 9)</label>
+<label class="checklist-item"><input type="checkbox"> Contact page has full NAP info (Step 9)</label>
+<h3>Phase 4 &mdash; Technical and off-site</h3>
+<label class="checklist-item"><input type="checkbox"> Sitemap submitted to Search Console (Step 7)</label>
+<label class="checklist-item"><input type="checkbox"> robots.txt confirmed &mdash; AI crawlers not blocked (Step 7)</label>
+<label class="checklist-item"><input type="checkbox"> Caching plugin installed (Step 8)</label>
+<label class="checklist-item"><input type="checkbox"> Images compressed with Smush (Step 8)</label>
+<label class="checklist-item"><input type="checkbox"> Google Business Profile created or claimed (Step 10)</label>
+<label class="checklist-item"><input type="checkbox"> Bing Places listing created (Step 10)</label>
+<label class="checklist-item"><input type="checkbox"> Review request process set up (Step 10)</label>
+
+<div class="footer">Guide produced by MyGeoRadar &mdash; mygeoradar.com &mdash; Version 1.0, June 2026</div>
+</body>
+</html>
