@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { getCheckFeasibility, getPlatformNote } from '@/lib/platforms'
+import { rateLimit, getIp } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
 export const maxDuration = 25 // page fetch (8s) + robots (4s) + processing overhead
@@ -21,7 +22,6 @@ function extractText(html: string, regex: RegExp): string {
   return html.match(regex)?.[1]?.trim() ?? ''
 }
 
-// Supabase service-role client (server only, never exposed to browser)
 function getSupabase() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -30,11 +30,27 @@ function getSupabase() {
 }
 
 export async function POST(req: NextRequest) {
+  // ── Rate limiting: 5 scans per IP per hour ────────────────────────
+  const ip = getIp(req)
+  const { allowed, remaining, resetAt } = rateLimit(ip, { limit: 5, windowMs: 60 * 60 * 1000 })
+  if (!allowed) {
+    return NextResponse.json(
+      { error: 'Too many scans. Please try again in an hour.' },
+      {
+        status: 429,
+        headers: {
+          'Retry-After':       String(Math.ceil((resetAt - Date.now()) / 1000)),
+          'X-RateLimit-Limit': '5',
+          'X-RateLimit-Remaining': '0',
+        },
+      }
+    )
+  }
+
   try {
     const body = await req.json()
     const rawUrl: string       = body.url ?? ''
     const businessName: string = (body.businessName ?? '').trim()
-    // platform is optional — null / undefined means no builder selected
     const platform: string | null = body.platform ?? null
 
     if (!rawUrl) return NextResponse.json({ error: 'URL is required' }, { status: 400 })
@@ -103,7 +119,7 @@ export async function POST(req: NextRequest) {
     const h1Text       = h1Match ? h1Match[1].replace(/<[^>]+>/g, '').trim() : ''
     const hasH1        = !!h1Text
 
-    // ── Build full checks (saved to DB) ───────────────────────────
+    // ── Build full checks ─────────────────────────────────────────────
     type Status = 'pass' | 'warn' | 'fail'
     interface Check {
       id:     string
@@ -117,10 +133,8 @@ export async function POST(req: NextRequest) {
     const checks: Check[] = []
 
     checks.push({
-      id:     'https',
-      label:  'Secure connection (HTTPS)',
-      status: isHttps ? 'pass' : 'fail',
-      impact: 'High',
+      id: 'https', label: 'Secure connection (HTTPS)',
+      status: isHttps ? 'pass' : 'fail', impact: 'High',
       detail: isHttps
         ? 'Your site uses HTTPS — a baseline trust signal AI crawlers require.'
         : 'Your site is on HTTP. AI crawlers heavily deprioritise or skip non-HTTPS pages entirely.',
@@ -128,10 +142,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id:     'reachable',
-      label:  'Site is publicly accessible',
-      status: reachable ? 'pass' : 'fail',
-      impact: 'High',
+      id: 'reachable', label: 'Site is publicly accessible',
+      status: reachable ? 'pass' : 'fail', impact: 'High',
       detail: reachable
         ? 'Your site loaded successfully — AI crawlers can access the page.'
         : 'Your site returned an error or timed out. AI crawlers cannot index what they cannot reach.',
@@ -139,10 +151,8 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id:     'robots',
-      label:  'AI crawlers not blocked (robots.txt)',
-      status: robotsBlocksAny ? 'fail' : robotsTxt ? 'pass' : 'warn',
-      impact: 'High',
+      id: 'robots', label: 'AI crawlers not blocked (robots.txt)',
+      status: robotsBlocksAny ? 'fail' : robotsTxt ? 'pass' : 'warn', impact: 'High',
       detail: robotsBlocksAny
         ? `Your robots.txt is explicitly blocking AI crawlers${robotsBlocksGptBot ? ' (GPTBot detected)' : ''}${robotsBlocksClaudeBot ? ' (ClaudeBot detected)' : ''}. They will not index your site.`
         : robotsTxt
@@ -152,8 +162,7 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id:     'meta-title',
-      label:  'Page title (meta title)',
+      id: 'meta-title', label: 'Page title (meta title)',
       status: metaTitle && metaTitle.length >= 20 && metaTitle.length <= 70 ? 'pass'
             : metaTitle ? 'warn' : 'fail',
       impact: 'High',
@@ -164,8 +173,7 @@ export async function POST(req: NextRequest) {
     })
 
     checks.push({
-      id:     'meta-desc',
-      label:  'Meta description',
+      id: 'meta-desc', label: 'Meta description',
       status: metaDesc && metaDesc.length >= 80 && metaDesc.length <= 165 ? 'pass'
             : metaDesc ? 'warn' : 'fail',
       impact: 'High',
@@ -177,74 +185,49 @@ export async function POST(req: NextRequest) {
 
     const ogScore = [ogTitle, ogDesc, ogImage].filter(Boolean).length
     checks.push({
-      id:     'og-tags',
-      label:  'Open Graph tags (og:title, og:description, og:image)',
-      status: ogScore === 3 ? 'pass' : ogScore >= 1 ? 'warn' : 'fail',
-      impact: 'Medium',
-      detail: ogScore === 3
-        ? 'All three core Open Graph tags found.'
-        : ogScore === 0
-        ? 'No Open Graph tags found.'
-        : `Only ${ogScore}/3 OG tags found.`,
+      id: 'og-tags', label: 'Open Graph tags (og:title, og:description, og:image)',
+      status: ogScore === 3 ? 'pass' : ogScore >= 1 ? 'warn' : 'fail', impact: 'Medium',
+      detail: ogScore === 3 ? 'All three core Open Graph tags found.'
+            : ogScore === 0 ? 'No Open Graph tags found.' : `Only ${ogScore}/3 OG tags found.`,
       fix: 'Add og:title, og:description, and og:image to your page <head>.',
     })
 
     checks.push({
-      id:     'schema',
-      label:  'Structured data (Schema.org)',
-      status: schemaCount >= 2 ? 'pass' : hasSchemaOrg ? 'warn' : 'fail',
-      impact: 'High',
-      detail: schemaCount >= 2
-        ? `Found ${schemaCount} schema type(s).`
-        : hasSchemaOrg
-        ? `Found schema markup but only ${schemaCount} specific type(s).`
-        : 'No Schema.org structured data found.',
+      id: 'schema', label: 'Structured data (Schema.org)',
+      status: schemaCount >= 2 ? 'pass' : hasSchemaOrg ? 'warn' : 'fail', impact: 'High',
+      detail: schemaCount >= 2 ? `Found ${schemaCount} schema type(s).`
+            : hasSchemaOrg ? `Found schema markup but only ${schemaCount} specific type(s).`
+            : 'No Schema.org structured data found.',
       fix: 'Add JSON-LD structured data for Organization (or LocalBusiness) including name, url, description, address, and sameAs links.',
     })
 
     checks.push({
-      id:     'h1',
-      label:  'Clear H1 heading on page',
-      status: hasH1 ? 'pass' : 'fail',
-      impact: 'Medium',
-      detail: hasH1
-        ? `H1 found: "${h1Text.slice(0, 80)}${h1Text.length > 80 ? '…' : ''}"`
-        : 'No H1 heading found.',
+      id: 'h1', label: 'Clear H1 heading on page',
+      status: hasH1 ? 'pass' : 'fail', impact: 'Medium',
+      detail: hasH1 ? `H1 found: "${h1Text.slice(0, 80)}${h1Text.length > 80 ? '…' : ''}"` : 'No H1 heading found.',
       fix: 'Add a single H1 tag that clearly states what your business does.',
     })
 
     if (businessName) {
       checks.push({
-        id:     'business-name',
-        label:  'Business name appears on page',
-        status: nameOnPage ? 'pass' : 'fail',
-        impact: 'High',
-        detail: nameOnPage
-          ? `"${businessName}" was found on the page.`
-          : `"${businessName}" was NOT found on the page.`,
+        id: 'business-name', label: 'Business name appears on page',
+        status: nameOnPage ? 'pass' : 'fail', impact: 'High',
+        detail: nameOnPage ? `"${businessName}" was found on the page.` : `"${businessName}" was NOT found on the page.`,
         fix: 'Make sure your exact business name appears in the header, H1, and at least once in the body copy.',
       })
     }
 
     checks.push({
-      id:     'viewport',
-      label:  'Mobile-friendly viewport tag',
-      status: hasViewport ? 'pass' : 'warn',
-      impact: 'Medium',
-      detail: hasViewport
-        ? 'Viewport meta tag found.'
-        : 'No viewport meta tag.',
+      id: 'viewport', label: 'Mobile-friendly viewport tag',
+      status: hasViewport ? 'pass' : 'warn', impact: 'Medium',
+      detail: hasViewport ? 'Viewport meta tag found.' : 'No viewport meta tag.',
       fix: 'Add <meta name="viewport" content="width=device-width, initial-scale=1"> to your HTML <head>.',
     })
 
     checks.push({
-      id:     'canonical',
-      label:  'Canonical URL defined',
-      status: hasCanonical ? 'pass' : 'warn',
-      impact: 'Medium',
-      detail: hasCanonical
-        ? 'Canonical tag found.'
-        : 'No canonical URL tag.',
+      id: 'canonical', label: 'Canonical URL defined',
+      status: hasCanonical ? 'pass' : 'warn', impact: 'Medium',
+      detail: hasCanonical ? 'Canonical tag found.' : 'No canonical URL tag.',
       fix: 'Add <link rel="canonical" href="https://yourdomain.com/"> to your page <head>.',
     })
 
@@ -263,19 +246,13 @@ export async function POST(req: NextRequest) {
     }
     const finalScore = Math.round((score / maxScore) * 100)
 
-    // ── Save full result to Supabase ──────────────────────────────
+    // ── Save to Supabase ──────────────────────────────────────────
     let scanId: string | null = null
     try {
       const supabase = getSupabase()
       const { data, error } = await supabase
         .from('scans')
-        .insert({
-          url:           finalUrl,
-          business_name: businessName || null,
-          score:         finalScore,
-          checks,
-          platform:      platform || null,
-        })
+        .insert({ url: finalUrl, business_name: businessName || null, score: finalScore, checks, platform: platform || null })
         .select('id')
         .single()
       if (!error && data) scanId = data.id
@@ -283,31 +260,34 @@ export async function POST(req: NextRequest) {
       console.error('Supabase write error:', e)
     }
 
-    // ── Annotate free checks with platform feasibility ────────────
+    // ── Annotate with platform feasibility ─────────────────────────
     const freeChecks = checks.map(({ id, label, status, impact }) => {
       if (!platform) return { id, label, status, impact }
-
       const feasibility  = getCheckFeasibility(id, platform)
       const platformNote = getPlatformNote(id, platform)
-
       return {
-        id,
-        label,
-        status,
-        impact,
+        id, label, status, impact,
         ...(feasibility !== 'full' && { feasibility }),
         ...(platformNote            && { platformNote }),
       }
     })
 
-    return NextResponse.json({
-      scanId,
-      score:      finalScore,
-      url:        finalUrl,
-      checks:     freeChecks,
-      scannedAt:  new Date().toISOString(),
-      ...(platform && { platform }),
-    })
+    return NextResponse.json(
+      {
+        scanId,
+        score:     finalScore,
+        url:       finalUrl,
+        checks:    freeChecks,
+        scannedAt: new Date().toISOString(),
+        ...(platform && { platform }),
+      },
+      {
+        headers: {
+          'X-RateLimit-Limit':     '5',
+          'X-RateLimit-Remaining': String(remaining),
+        },
+      }
+    )
   } catch (err) {
     console.error('Scan error:', err)
     return NextResponse.json({ error: 'Scan failed. Please try again.' }, { status: 500 })

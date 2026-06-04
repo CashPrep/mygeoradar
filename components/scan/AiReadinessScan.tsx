@@ -79,7 +79,6 @@ function statusBg(status: Status) {
   return                        'bg-red-50     border-red-100'
 }
 
-// Platforms shown in the free scan pill row (no "other")
 const SCAN_PLATFORMS = PLATFORM_LIST.filter(p => p.id !== 'other')
 
 export function AiReadinessScan() {
@@ -114,11 +113,16 @@ export function AiReadinessScan() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ url: url.trim(), businessName: bizName.trim(), platform: platform || undefined }),
       })
-      const data = await res.json()
+      const data: ScanResult & { error?: string } = await res.json()
       clearInterval(tick)
       setProgress(100)
       await new Promise(r => setTimeout(r, 300))
       if (data.error) { setError(data.error); setLoading(false); return }
+
+      // Sync platform state from API response so feasibility badges
+      // always reflect what the server actually used for annotation
+      if (data.platform) setPlatform(data.platform as PlatformId)
+
       setResult(data)
     } catch {
       clearInterval(tick)
@@ -151,7 +155,6 @@ export function AiReadinessScan() {
   const warnCount  = result?.checks.filter(c => c.status === 'warn').length ?? 0
   const issueCount = failCount + warnCount
 
-  // Count issues the user can fix themselves on their platform
   const fixableCount = platform && result
     ? result.checks
         .filter(c => c.status !== 'pass')
@@ -167,7 +170,6 @@ export function AiReadinessScan() {
       {/* ── Form ── */}
       {!result && (
         <form onSubmit={runScan} className="flex flex-col gap-3">
-          {/* URL + biz name row */}
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="url" required value={url}
@@ -183,7 +185,7 @@ export function AiReadinessScan() {
             />
           </div>
 
-          {/* ── Platform pill buttons ── */}
+          {/* Platform selector */}
           <div className="flex flex-col gap-2">
             <label className="text-xs font-semibold text-muted uppercase tracking-wide flex items-center gap-1.5">
               <Monitor className="w-3.5 h-3.5" />
@@ -238,11 +240,7 @@ export function AiReadinessScan() {
       {loading && (
         <div className="mt-4">
           <div
-            role="progressbar"
-            aria-valuenow={progress}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-label="Scan progress"
+            role="progressbar" aria-valuenow={progress} aria-valuemin={0} aria-valuemax={100} aria-label="Scan progress"
             className="h-1.5 w-full bg-surface-2 rounded-full overflow-hidden"
           >
             <div className="h-full bg-accent rounded-full transition-all duration-300" style={{ width: `${progress}%` }} />
@@ -265,27 +263,22 @@ export function AiReadinessScan() {
       {result && (
         <div className="flex flex-col gap-5">
 
-          {/* Scan-again bar */}
           <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-surface border border-border">
             <p className="text-sm text-muted">
               Results for{' '}
               <span className="font-mono font-medium text-foreground">{safeHostname(result.url)}</span>
               {selectedPlatform && (
-                <span className="ml-2 text-muted">
-                  &middot; {selectedPlatform.emoji} {selectedPlatform.label}
-                </span>
+                <span className="ml-2 text-muted">&middot; {selectedPlatform.emoji} {selectedPlatform.label}</span>
               )}
             </p>
             <button
               onClick={reset}
               className="inline-flex items-center gap-1.5 text-sm font-semibold text-accent hover:text-accent/80 transition-colors flex-shrink-0"
             >
-              <RotateCcw className="w-3.5 h-3.5" />
-              Scan another site
+              <RotateCcw className="w-3.5 h-3.5" /> Scan another site
             </button>
           </div>
 
-          {/* Score header */}
           <div className="flex flex-col sm:flex-row items-center gap-6 p-6 rounded-2xl bg-surface border border-border shadow-card-hover">
             <ScoreRing score={result.score} />
             <div className="flex-1 text-center sm:text-left">
@@ -300,8 +293,7 @@ export function AiReadinessScan() {
               <p className="text-sm text-muted">
                 {failCount > 0 && (
                   <span className="text-red-600 font-semibold">
-                    {failCount} critical issue{failCount > 1 ? 's' : ''}
-                    {warnCount > 0 ? ' · ' : ''}
+                    {failCount} critical issue{failCount > 1 ? 's' : ''}{warnCount > 0 ? ' · ' : ''}
                   </span>
                 )}
                 {warnCount > 0 && (
@@ -311,7 +303,6 @@ export function AiReadinessScan() {
                 )}
                 {failCount === 0 && warnCount === 0 && 'All checks passed.'}
               </p>
-              {/* Platform fixability summary */}
               {selectedPlatform && issueCount > 0 && fixableCount !== null && (
                 <p className="text-xs text-muted mt-1.5">
                   On <span className="font-semibold text-foreground">{selectedPlatform.label}</span>:{' '}
@@ -323,7 +314,6 @@ export function AiReadinessScan() {
                   )}
                 </p>
               )}
-              {/* No platform selected nudge */}
               {!selectedPlatform && issueCount > 0 && (
                 <p className="text-xs text-muted/70 mt-1.5 italic">
                   Tip: re-scan with your platform selected to see which issues you can fix yourself.
@@ -335,42 +325,26 @@ export function AiReadinessScan() {
           {/* Checks list */}
           <div className="flex flex-col gap-2">
             {result.checks.map(c => {
-              const feasibility = getCheckFeasibility(c.id, platform || null)
-              const note        = getPlatformNote(c.id, platform || null)
-              const showNote    = expandNote === c.id
-              const hasPlatform = !!platform
-
-              // Platform-specific fix hint shown inline under each failing check
+              const feasibility    = getCheckFeasibility(c.id, platform || null)
+              const note           = getPlatformNote(c.id, platform || null)
+              const showNote       = expandNote === c.id
+              const hasPlatform    = !!platform
               const platformFixHint: string | null = hasPlatform && c.status !== 'pass' && note ? note : null
 
               return (
                 <div key={c.id} className="flex flex-col rounded-lg border overflow-hidden">
-                  <div
-                    className={clsx(
-                      'flex items-center gap-3 px-4 py-3',
-                      statusBg(c.status),
-                    )}
-                  >
+                  <div className={clsx('flex items-center gap-3 px-4 py-3', statusBg(c.status))}>
                     {statusIcon(c.status)}
                     <span className="flex-1 text-sm font-medium text-foreground">{c.label}</span>
-
-                    {/* Impact badge */}
                     <span className={clsx(
                       'text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded flex-shrink-0',
                       c.impact === 'High' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-500',
                     )}>
                       {c.impact}
                     </span>
-
-                    {/* Feasibility badge — only when platform selected and check is not passing */}
                     {hasPlatform && c.status !== 'pass' && (
-                      <PlatformFeasibilityBadge
-                        feasibility={feasibility}
-                        note={note}
-                      />
+                      <PlatformFeasibilityBadge feasibility={feasibility} note={note} />
                     )}
-
-                    {/* Expand note button */}
                     {hasPlatform && c.status !== 'pass' && note && (
                       <button
                         onClick={() => setExpandNote(showNote ? null : c.id)}
@@ -381,8 +355,6 @@ export function AiReadinessScan() {
                       </button>
                     )}
                   </div>
-
-                  {/* Inline platform-specific fix note */}
                   {showNote && platformFixHint && (
                     <div className="px-4 py-2.5 bg-white border-t border-border text-xs text-muted leading-relaxed">
                       <span className="font-semibold text-foreground">{selectedPlatform?.emoji} {selectedPlatform?.label}: </span>
@@ -394,25 +366,14 @@ export function AiReadinessScan() {
             })}
           </div>
 
-          {/* Platform legend */}
           {platform && issueCount > 0 && (
             <div className="flex flex-wrap gap-3 px-1 text-xs text-muted">
-              <span className="inline-flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                Fixable — you can do this in {selectedPlatform?.label}
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-amber-400" />
-                Needs App — requires a plugin or app
-              </span>
-              <span className="inline-flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-red-500" />
-                Needs Dev — beyond platform limits
-              </span>
+              <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-emerald-500" /> Fixable — you can do this in {selectedPlatform?.label}</span>
+              <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-amber-400" /> Needs App — requires a plugin or app</span>
+              <span className="inline-flex items-center gap-1.5"><span className="w-2 h-2 rounded-full bg-red-500" /> Needs Dev — beyond platform limits</span>
             </div>
           )}
 
-          {/* ── Email Gate ── */}
           <EmailGate
             scanId={result.scanId}
             score={result.score}
@@ -421,7 +382,6 @@ export function AiReadinessScan() {
             warnCount={warnCount}
           />
 
-          {/* ── Unlock paid report CTA ── */}
           {issueCount > 0 && (
             <div className="rounded-xl border border-accent/25 bg-white shadow-card-accent overflow-hidden">
               <div className="p-5 text-center">
@@ -453,14 +413,13 @@ export function AiReadinessScan() {
             </div>
           )}
 
-          {/* All passing — upsell playbook */}
           {failCount === 0 && warnCount === 0 && (
             <div className="p-6 rounded-2xl bg-emerald-50 border border-emerald-200 text-center">
               <CheckCircle className="w-8 h-8 text-emerald-500 mx-auto mb-2" />
               <p className="text-sm font-semibold text-emerald-800 mb-1">Your site&apos;s technical foundation is solid.</p>
               <p className="text-xs text-emerald-700 mb-4 max-w-md mx-auto">
                 Technical structure is only one layer. The playbook covers citation building,
-                content authority, review signals, and ongoing monitoring &mdash;
+                content authority, review signals, and ongoing monitoring —
                 the things that actually make AI recommend you over competitors.
               </p>
               <Link
