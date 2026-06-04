@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowRight, CheckCircle, AlertTriangle, XCircle,
-  Loader2, Radar, Lock, ExternalLink, RotateCcw, ChevronDown,
+  Loader2, Radar, Lock, ExternalLink, RotateCcw, ChevronDown, Monitor,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { EmailGate } from '@/components/scan/EmailGate'
@@ -20,6 +20,8 @@ interface FreeCheck {
   label: string
   status: Status
   impact: 'High' | 'Medium'
+  feasibility?: string
+  platformNote?: string
 }
 interface ScanResult {
   scanId: string | null
@@ -27,6 +29,7 @@ interface ScanResult {
   url: string
   checks: FreeCheck[]
   scannedAt: string
+  platform?: string
 }
 
 function safeHostname(url: string): string {
@@ -34,9 +37,9 @@ function safeHostname(url: string): string {
 }
 
 function scoreLabel(s: number) {
-  if (s >= 80) return { label: 'AI-Ready',         color: 'text-emerald-600', ring: 'stroke-emerald-500' }
-  if (s >= 55) return { label: 'Partially Visible', color: 'text-amber-500',   ring: 'stroke-amber-400'  }
-  return               { label: 'Hard to Read',     color: 'text-red-500',     ring: 'stroke-red-500'    }
+  if (s >= 80) return { label: 'AI-Ready',          color: 'text-emerald-600', ring: 'stroke-emerald-500' }
+  if (s >= 55) return { label: 'Partially Visible',  color: 'text-amber-500',   ring: 'stroke-amber-400'  }
+  return               { label: 'Hard to Read',      color: 'text-red-500',     ring: 'stroke-red-500'    }
 }
 
 function ScoreRing({ score }: { score: number }) {
@@ -75,6 +78,9 @@ function statusBg(status: Status) {
   if (status === 'warn') return 'bg-amber-50   border-amber-100'
   return                        'bg-red-50     border-red-100'
 }
+
+// Platforms shown in the free scan pill row (no "other")
+const SCAN_PLATFORMS = PLATFORM_LIST.filter(p => p.id !== 'other')
 
 export function AiReadinessScan() {
   const [url,        setUrl]        = useState('')
@@ -145,7 +151,7 @@ export function AiReadinessScan() {
   const warnCount  = result?.checks.filter(c => c.status === 'warn').length ?? 0
   const issueCount = failCount + warnCount
 
-  // For the currently selected platform, count how many non-passing checks are actually fixable
+  // Count issues the user can fix themselves on their platform
   const fixableCount = platform && result
     ? result.checks
         .filter(c => c.status !== 'pass')
@@ -161,6 +167,7 @@ export function AiReadinessScan() {
       {/* ── Form ── */}
       {!result && (
         <form onSubmit={runScan} className="flex flex-col gap-3">
+          {/* URL + biz name row */}
           <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="url" required value={url}
@@ -176,19 +183,40 @@ export function AiReadinessScan() {
             />
           </div>
 
-          {/* Platform selector */}
-          <div className="relative">
-            <select
-              value={platform}
-              onChange={e => setPlatform(e.target.value as PlatformId | '')}
-              className="input-base w-full appearance-none pr-8 text-sm"
-            >
-              <option value="">Platform (optional — get fix-ability ratings)</option>
-              {PLATFORM_LIST.map(p => (
-                <option key={p.id} value={p.id}>{p.emoji} {p.label}</option>
+          {/* ── Platform pill buttons ── */}
+          <div className="flex flex-col gap-2">
+            <label className="text-xs font-semibold text-muted uppercase tracking-wide flex items-center gap-1.5">
+              <Monitor className="w-3.5 h-3.5" />
+              What platform is your site on?
+              <span className="normal-case font-normal text-muted/70">(optional — get platform-specific fixes)</span>
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {SCAN_PLATFORMS.map(p => (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setPlatform(prev => prev === p.id ? '' : p.id as PlatformId)}
+                  className={clsx(
+                    'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border transition-all',
+                    platform === p.id
+                      ? 'bg-accent/10 border-accent/40 text-accent'
+                      : 'bg-surface-2 border-border text-muted hover:border-accent/30 hover:text-foreground',
+                  )}
+                >
+                  <span>{p.emoji}</span>
+                  <span>{p.label}</span>
+                </button>
               ))}
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+            </div>
+            {selectedPlatform ? (
+              <p className="text-xs text-accent/80">
+                ✓ Results will show exactly what you can fix on <strong>{selectedPlatform.label}</strong>. Tap again to deselect.
+              </p>
+            ) : (
+              <p className="text-xs text-muted">
+                Select your platform and every failing check will show whether you can fix it yourself or if it needs a developer.
+              </p>
+            )}
           </div>
 
           <button
@@ -287,12 +315,18 @@ export function AiReadinessScan() {
               {selectedPlatform && issueCount > 0 && fixableCount !== null && (
                 <p className="text-xs text-muted mt-1.5">
                   On <span className="font-semibold text-foreground">{selectedPlatform.label}</span>:{' '}
-                  <span className="text-emerald-600 font-semibold">{fixableCount} fixable yourself</span>
+                  <span className="text-emerald-600 font-semibold">{fixableCount} you can fix yourself</span>
                   {fixableCount < issueCount && (
                     <span className="text-amber-600 font-semibold">
                       {' '}· {issueCount - fixableCount} need an app or developer
                     </span>
                   )}
+                </p>
+              )}
+              {/* No platform selected nudge */}
+              {!selectedPlatform && issueCount > 0 && (
+                <p className="text-xs text-muted/70 mt-1.5 italic">
+                  Tip: re-scan with your platform selected to see which issues you can fix yourself.
                 </p>
               )}
             </div>
@@ -305,6 +339,10 @@ export function AiReadinessScan() {
               const note        = getPlatformNote(c.id, platform || null)
               const showNote    = expandNote === c.id
               const hasPlatform = !!platform
+
+              // Platform-specific fix hint shown inline under each failing check
+              const platformFixHint: string | null = hasPlatform && c.status !== 'pass' && note ? note : null
+
               return (
                 <div key={c.id} className="flex flex-col rounded-lg border overflow-hidden">
                   <div
@@ -344,11 +382,11 @@ export function AiReadinessScan() {
                     )}
                   </div>
 
-                  {/* Inline platform note */}
-                  {showNote && note && (
+                  {/* Inline platform-specific fix note */}
+                  {showNote && platformFixHint && (
                     <div className="px-4 py-2.5 bg-white border-t border-border text-xs text-muted leading-relaxed">
                       <span className="font-semibold text-foreground">{selectedPlatform?.emoji} {selectedPlatform?.label}: </span>
-                      {note}
+                      {platformFixHint}
                     </div>
                   )}
                 </div>
@@ -356,7 +394,7 @@ export function AiReadinessScan() {
             })}
           </div>
 
-          {/* Platform legend — only when a platform is selected and there are issues */}
+          {/* Platform legend */}
           {platform && issueCount > 0 && (
             <div className="flex flex-wrap gap-3 px-1 text-xs text-muted">
               <span className="inline-flex items-center gap-1.5">
@@ -374,7 +412,7 @@ export function AiReadinessScan() {
             </div>
           )}
 
-          {/* ── Email Gate — shown after every scan ── */}
+          {/* ── Email Gate ── */}
           <EmailGate
             scanId={result.scanId}
             score={result.score}
@@ -383,7 +421,7 @@ export function AiReadinessScan() {
             warnCount={warnCount}
           />
 
-          {/* Unlock paid report CTA */}
+          {/* ── Unlock paid report CTA ── */}
           {issueCount > 0 && (
             <div className="rounded-xl border border-accent/25 bg-white shadow-card-accent overflow-hidden">
               <div className="p-5 text-center">
