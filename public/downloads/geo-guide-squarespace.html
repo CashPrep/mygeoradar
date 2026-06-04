@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Squarespace GEO Fix Guide | MyGeoRadar</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; color: #1a1a1a; line-height: 1.7; }
+  h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; color: #0f172a; }
+  h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.5rem; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; color: #1e293b; }
+  p { margin: 0.6rem 0 1rem; }
+  ul, ol { padding-left: 1.5rem; margin: 0.5rem 0 1rem; }
+  li { margin-bottom: 0.4rem; }
+  table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.92rem; }
+  th { background: #0f172a; color: #fff; padding: 10px 14px; text-align: left; }
+  td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.88em; font-family: 'Courier New', monospace; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 1rem 0; }
+  pre code { background: none; padding: 0; color: inherit; font-size: 0.85rem; }
+  blockquote { border-left: 4px solid #6366f1; background: #f0f0ff; padding: 12px 16px; margin: 1rem 0; border-radius: 0 6px 6px 0; font-style: italic; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 2rem 0; }
+  a { color: #6366f1; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 8px; margin: 6px 0; cursor: pointer; }
+  .checklist-item input { margin-top: 4px; width: 16px; height: 16px; cursor: pointer; accent-color: #6366f1; }
+  .header-bar { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; padding: 28px 32px; border-radius: 12px; margin-bottom: 2rem; }
+  .header-bar p { color: rgba(255,255,255,0.85); margin: 4px 0 0; font-size: 0.95rem; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b; text-align: center; }
+</style>
+</head>
+<body>
+<div class="header-bar">
+  <h1 style="color:white;border:none;font-size:1.6rem;margin:0">Squarespace GEO Fix Guide</h1>
+  <p>MyGeoRadar Platform-Specific Playbook &mdash; mygeoradar.com</p>
+</div>
+
+<h2>What This Guide Does</h2>
+<p>This guide walks Squarespace users through every GEO fix available on the platform. GEO (Generative Engine Optimization) means making your site readable, trustworthy, and citable by AI tools like ChatGPT, Perplexity, Google AI Overviews, and Bing Copilot.</p>
+<p>Squarespace gives you solid control over titles, meta descriptions, Open Graph tags, robots.txt, and schema injection via Code Injection. It does not support dynamic schema or full robots.txt editing natively, but the workarounds are straightforward.</p>
+
+<hr>
+
+<h2>Step 1 &mdash; Fix Your Homepage Title and Meta Description</h2>
+<p>Your homepage title is the first signal AI systems use to understand your site. It must be specific and descriptive.</p>
+<h3>How to update in Squarespace</h3>
+<ol>
+<li>Go to <strong>Pages</strong> in the left sidebar</li>
+<li>Hover over your homepage and click the gear icon (Settings)</li>
+<li>Click the <strong>SEO</strong> tab</li>
+<li>Update the <strong>SEO Title</strong> field</li>
+<li>Update the <strong>SEO Description</strong> field</li>
+<li>Click <strong>Save</strong></li>
+</ol>
+<h3>Also update your site-wide title</h3>
+<ol>
+<li>Go to <strong>Settings &rarr; SEO &rarr; SEO Site Title</strong></li>
+<li>Set your site title to your exact business name</li>
+<li>Save</li>
+</ol>
+<h3>Title formula</h3>
+<p><code>[What the page covers] | [Brand Name]</code></p>
+<p><strong>Example:</strong> <code>AI GEO Visibility Audits | MyGeoRadar</code></p>
+<h3>Meta description formula</h3>
+<p>What do you offer, who is it for, what result do they get? Keep it 150&ndash;160 characters.</p>
+<p><strong>Example:</strong> <code>MyGeoRadar scans your site and shows exactly what to fix to appear in ChatGPT, Perplexity, and Google AI Overviews. Free GEO score in 60 seconds.</code></p>
+
+<hr>
+
+<h2>Step 2 &mdash; Add SEO Titles and Descriptions to Every Key Page</h2>
+<p>Every important page needs its own unique title and description. Repeat the process from Step 1 for each page.</p>
+<h3>Pages to update in order</h3>
+<ol>
+<li>Homepage</li>
+<li>Services or product pages</li>
+<li>About page</li>
+<li>Contact page</li>
+<li>Pricing page</li>
+<li>Any blog index page</li>
+</ol>
+<h3>For blog posts</h3>
+<ol>
+<li>Open any published blog post</li>
+<li>Click the gear icon &rarr; <strong>SEO</strong> tab</li>
+<li>Fill in the SEO Title and SEO Description</li>
+<li>Save</li>
+</ol>
+
+<hr>
+
+<h2>Step 3 &mdash; Inject Schema Markup via Code Injection</h2>
+<p>Squarespace does not have a built-in schema tool, but you can inject JSON-LD schema directly into the site header using Code Injection. This is the most important technical GEO fix on Squarespace.</p>
+<h3>Step 3A &mdash; Add Organization schema to your homepage</h3>
+<ol>
+<li>Go to <strong>Settings &rarr; Advanced &rarr; Code Injection</strong></li>
+<li>In the <strong>Header</strong> box, paste the following (fill in your details):</li>
+</ol>
+<pre><code class="language-json">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Your Business Name",
+  "url": "https://yoursite.com",
+  "logo": "https://yoursite.com/logo.png",
+  "description": "One sentence describing what your business does.",
+  "email": "hello@yoursite.com",
+  "sameAs": [
+    "https://www.linkedin.com/company/your-company",
+    "https://twitter.com/yourhandle"
+  ]
+}
+&lt;/script&gt;</code></pre>
+<ol>
+<li>Click <strong>Save</strong></li>
+</ol>
+<h3>Step 3B &mdash; Add FAQPage schema to pages with FAQ sections</h3>
+<ol>
+<li>Open the specific page in the editor</li>
+<li>Go to <strong>Page Settings &rarr; Advanced &rarr; Page Header Code Injection</strong></li>
+<li>Paste your FAQPage JSON-LD:</li>
+</ol>
+<pre><code class="language-json">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is GEO optimization?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "GEO optimization means structuring your website so AI tools like ChatGPT and Perplexity can read, trust, and cite it in their answers."
+      }
+    }
+  ]
+}
+&lt;/script&gt;</code></pre>
+<ol>
+<li>Save the page</li>
+</ol>
+<h3>Verify your schema</h3>
+<ol>
+<li>Go to <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+<li>Enter your page URL</li>
+<li>Confirm schema appears with no errors</li>
+</ol>
+
+<hr>
+
+<h2>Step 4 &mdash; Enable and Configure Open Graph Tags</h2>
+<p>Open Graph tags control how your pages appear when shared on social media and are used by AI crawlers as metadata signals.</p>
+<h3>How to set Open Graph in Squarespace</h3>
+<ol>
+<li>Go to <strong>Pages</strong> &rarr; hover over the page &rarr; click the gear icon</li>
+<li>Click the <strong>SEO</strong> tab</li>
+<li>Fill in the <strong>SEO Title</strong> and <strong>SEO Description</strong> (these also populate OG tags)</li>
+<li>Upload a <strong>Social Sharing Image</strong> (1200x630px recommended)</li>
+<li>Save</li>
+</ol>
+<h3>Set a default social sharing image for the whole site</h3>
+<ol>
+<li>Go to <strong>Settings &rarr; SEO &rarr; Social Sharing</strong></li>
+<li>Upload a default image (used when no page-specific image is set)</li>
+<li>Save</li>
+</ol>
+
+<hr>
+
+<h2>Step 5 &mdash; Fix Your Blog for GEO</h2>
+<p>Blog content is your highest-value GEO asset. AI systems actively pull from well-structured blog posts when forming answers.</p>
+<h3>Blog post structure for GEO</h3>
+<ol>
+<li>Title (H1) &mdash; the question or topic</li>
+<li>Opening paragraph &mdash; direct 2&ndash;3 sentence answer (write this first)</li>
+<li>H2 section &mdash; background or context</li>
+<li>H2 section &mdash; step-by-step or detailed breakdown</li>
+<li>H2 section &mdash; FAQ or common questions</li>
+<li>Short closing paragraph</li>
+</ol>
+<blockquote>The opening paragraph matters most. AI systems often pull from the first 100 words of a post. Write a direct, quotable answer immediately after the title.</blockquote>
+<h3>Per-post publishing checklist</h3>
+<label class="checklist-item"><input type="checkbox"> SEO title filled in (Page Settings &rarr; SEO tab)</label>
+<label class="checklist-item"><input type="checkbox"> Meta description filled in (150&ndash;160 characters)</label>
+<label class="checklist-item"><input type="checkbox"> Social sharing image uploaded (1200x630px)</label>
+<label class="checklist-item"><input type="checkbox"> Clean URL slug (e.g. /what-is-geo-optimization)</label>
+<label class="checklist-item"><input type="checkbox"> Author name visible on post</label>
+<label class="checklist-item"><input type="checkbox"> At least one H2 subheading used in body</label>
+
+<hr>
+
+<h2>Step 6 &mdash; Add Author Information</h2>
+<p>AI systems favor content written by identified, credible authors. Squarespace shows the author name on blog posts by default.</p>
+<h3>How to update your author profile</h3>
+<ol>
+<li>Go to <strong>Settings &rarr; Account &rarr; Profile</strong></li>
+<li>Fill in your <strong>Display Name</strong> (use your real name)</li>
+<li>Add a <strong>Bio</strong> &mdash; 2&ndash;4 sentences describing your expertise</li>
+<li>Upload a <strong>Profile Photo</strong></li>
+<li>Save</li>
+</ol>
+<h3>Make sure author name shows on posts</h3>
+<ol>
+<li>Go to <strong>Pages &rarr; Blog Settings</strong> (gear icon on your blog page)</li>
+<li>Make sure <strong>Author</strong> is toggled on in the post meta display settings</li>
+<li>Save</li>
+</ol>
+
+<hr>
+
+<h2>Step 7 &mdash; Fix Image Alt Text</h2>
+<p>Alt text helps AI crawlers and screen readers understand what images contain. Squarespace lets you add alt text to every image block.</p>
+<h3>How to add alt text in Squarespace</h3>
+<ol>
+<li>Click on any image in the editor to select it</li>
+<li>Click the pencil (edit) icon</li>
+<li>Find the <strong>Alt Text</strong> or <strong>Accessibility</strong> field</li>
+<li>Write a clear description of the image</li>
+<li>Save the block</li>
+</ol>
+<h3>Alt text rules</h3>
+<ul>
+<li>Describe what is shown in the image</li>
+<li>Include product, service, or context when relevant</li>
+<li>Keep it under 125 characters</li>
+<li>Never duplicate alt text across images</li>
+</ul>
+<p><strong>Bad:</strong> <code>image1.jpg</code><br><strong>Good:</strong> <code>MyGeoRadar GEO score dashboard showing AI visibility audit results</code></p>
+
+<hr>
+
+<h2>Step 8 &mdash; Configure robots.txt</h2>
+<p>Squarespace provides a limited robots.txt editor. The most important thing is making sure AI crawlers are NOT blocked.</p>
+<h3>How to access robots.txt in Squarespace</h3>
+<ol>
+<li>Go to <strong>Settings &rarr; Advanced &rarr; External Services</strong></li>
+<li>Look for the <strong>Robots.txt</strong> or crawl settings option</li>
+<li>Make sure no important pages or directories are blocked</li>
+</ol>
+<blockquote>Critical: Do not block AI crawlers. Make sure your robots.txt does NOT contain <code>Disallow: /</code> for user agents like GPTBot or PerplexityBot.</blockquote>
+<h3>Check your live robots.txt</h3>
+<ol>
+<li>Visit <code>yoursite.com/robots.txt</code> in your browser</li>
+<li>Confirm it does not block major crawlers</li>
+<li>If it blocks everything, go back to External Services and update</li>
+</ol>
+
+<hr>
+
+<h2>Step 9 &mdash; Build Strong Trust Pages</h2>
+<p>Your About and Contact pages are trust signals that AI systems use to verify your business is real and legitimate.</p>
+<h3>About page &mdash; must include</h3>
+<ul>
+<li>Your name or founder name</li>
+<li>What the business does</li>
+<li>Who it helps</li>
+<li>Where you are based</li>
+<li>A real origin story (2&ndash;3 sentences minimum)</li>
+<li>Your credentials or experience in this area</li>
+<li>Contact info or link to contact page</li>
+</ul>
+<h3>Contact page &mdash; must include</h3>
+<ul>
+<li>Email address</li>
+<li>Phone number (if applicable)</li>
+<li>Physical address or service area</li>
+<li>Contact form</li>
+<li>Social links</li>
+</ul>
+<h3>NAP consistency rule</h3>
+<p>Your business Name, Address, and Phone must match exactly across your Squarespace site, Google Business Profile, Bing Places, and any directory listings. Inconsistencies reduce AI citation likelihood.</p>
+
+<hr>
+
+<h2>Step 10 &mdash; Build Off-Site Citations and Reviews</h2>
+<p>AI tools cross-reference your website against other trusted sources. Consistent, credible mentions of your business across the web increase citation likelihood.</p>
+<h3>Priority listings to create</h3>
+<ol>
+<li><strong>Google Business Profile</strong> &mdash; <a href="https://business.google.com" target="_blank">business.google.com</a> &mdash; free and essential</li>
+<li><strong>Bing Places for Business</strong> &mdash; <a href="https://www.bingplaces.com" target="_blank">bingplaces.com</a> &mdash; feeds Bing/Copilot directly</li>
+<li><strong>Trustpilot</strong> &mdash; create a profile and ask customers to leave text reviews</li>
+<li><strong>LinkedIn Company Page</strong> &mdash; link from your site footer</li>
+<li><strong>Better Business Bureau</strong> &mdash; high trust signal for AI</li>
+<li><strong>Niche directories</strong> &mdash; find 2&ndash;3 industry-specific directories</li>
+</ol>
+
+<hr>
+
+<h2>Squarespace GEO Checklist</h2>
+<h3>Phase 1 &mdash; Core SEO</h3>
+<label class="checklist-item"><input type="checkbox"> Homepage SEO title updated (Step 1)</label>
+<label class="checklist-item"><input type="checkbox"> Homepage meta description updated (Step 1)</label>
+<label class="checklist-item"><input type="checkbox"> Site-wide SEO title set in Settings (Step 1)</label>
+<label class="checklist-item"><input type="checkbox"> All key pages have unique titles and descriptions (Step 2)</label>
+<h3>Phase 2 &mdash; Schema</h3>
+<label class="checklist-item"><input type="checkbox"> Organization schema injected in site header (Step 3A)</label>
+<label class="checklist-item"><input type="checkbox"> FAQPage schema added to FAQ pages (Step 3B)</label>
+<label class="checklist-item"><input type="checkbox"> Schema verified via Rich Results Test (Step 3)</label>
+<h3>Phase 3 &mdash; Content and trust</h3>
+<label class="checklist-item"><input type="checkbox"> Open Graph image uploaded for key pages (Step 4)</label>
+<label class="checklist-item"><input type="checkbox"> 3 blog posts published with GEO structure (Step 5)</label>
+<label class="checklist-item"><input type="checkbox"> Author bio updated with real name and expertise (Step 6)</label>
+<label class="checklist-item"><input type="checkbox"> Alt text added to all key images (Step 7)</label>
+<label class="checklist-item"><input type="checkbox"> About page includes real founder details (Step 9)</label>
+<label class="checklist-item"><input type="checkbox"> Contact page has full NAP info (Step 9)</label>
+<h3>Phase 4 &mdash; Technical and off-site</h3>
+<label class="checklist-item"><input type="checkbox"> robots.txt checked &mdash; AI crawlers not blocked (Step 8)</label>
+<label class="checklist-item"><input type="checkbox"> Google Business Profile created or claimed (Step 10)</label>
+<label class="checklist-item"><input type="checkbox"> Bing Places listing created (Step 10)</label>
+<label class="checklist-item"><input type="checkbox"> Review request process set up (Step 10)</label>
+
+<div class="footer">Guide produced by MyGeoRadar &mdash; mygeoradar.com &mdash; Version 1.0, June 2026</div>
+</body>
+</html>
