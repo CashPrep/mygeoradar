@@ -132,7 +132,6 @@ function CheckCard({
     check.status === 'warn' ? 'border-amber-200   bg-amber-50/40'   :
                               'border-red-200     bg-red-50/40'
 
-  // Use platform-specific steps when available, otherwise fall back to generic steps
   const platformSpecificSteps =
     platform && guide?.platformSteps?.[platform]
       ? guide.platformSteps[platform]
@@ -345,4 +344,22 @@ export default async function ReportPage({
           </section>
         )}
 
-        <div className="p-7 ro
+        <div className="p-7 rounded-2xl border border-accent/25 bg-accent/4 text-center">
+          <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-2">
+            Want the full system?
+          </p>
+          <p className="text-sm text-muted mb-4 max-w-md mx-auto">
+            This report fixes your technical signals. The Found by AI Playbook covers the rest — citation building, content authority, structured data, and the 30-day plan to make AI actually recommend your business.
+          </p>
+          <Link href="/playbook" className="btn-primary inline-flex text-sm px-6 py-3 rounded-lg shadow-glow-xs gap-2">
+            Get the full playbook — $27 <ArrowRight className="w-4 h-4" />
+          </Link>
+          <p className="text-xs text-muted mt-3">One-time · Instant download · 30-day money-back guarantee</p>
+        </div>
+
+      </div>
+
+      <Footer />
+    </main>
+  )
+}
