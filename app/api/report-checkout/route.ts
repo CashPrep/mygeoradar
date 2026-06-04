@@ -48,11 +48,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ url: `${baseUrl}/report/${existing.token}` })
     }
 
-    const stripe  = getStripe()
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://mygeoradar.com'
+    const stripe   = getStripe()
+    const baseUrl  = process.env.NEXT_PUBLIC_APP_URL ?? 'https://mygeoradar.com'
     const hostname = safeHostname(scan.url)
 
-    const checks = (scan.checks ?? []) as Array<{ status: string }>
+    const checks     = (scan.checks ?? []) as Array<{ status: string }>
     const issueCount = checks.filter(c => c.status === 'fail' || c.status === 'warn').length
     const issueLabel = issueCount > 0
       ? `${issueCount} issue${issueCount > 1 ? 's' : ''} found`
@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
         {
           price_data: {
             currency: 'usd',
-            unit_amount: 1000,
+            unit_amount: 999, // $9.99 — matches UI copy
             product_data: {
               name: `AI Visibility Fix Guides — ${issueLabel} for ${hostname}`,
               description: `Step-by-step fix guide for each of the ${issueLabel} on your site. Score: ${scan.score}/100.`,

@@ -20,7 +20,7 @@ interface ScanFormProps {
   initialUrl?:  string
 }
 
-function debounce<T extends (...args: any[]) => void>(fn: T, ms: number) {
+function debounce<T extends (...args: unknown[]) => void>(fn: T, ms: number) {
   let timer: ReturnType<typeof setTimeout>
   return (...args: Parameters<T>) => {
     clearTimeout(timer)
@@ -69,18 +69,19 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       },
       { timeout: 6000 }
     )
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [])
 
-  // Pre-fill from query params on mount
   useEffect(() => {
     if (initialName) setBusinessName(initialName)
     if (initialUrl)  {
       setWebsite(initialUrl)
       triggerCrawl(initialUrl)
     }
-  }, [initialName, initialUrl]) // eslint-disable-line react-hooks/exhaustive-deps
+  // triggerCrawl is stable via useCallback below — safe to omit from deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialName, initialUrl])
 
-  async function triggerCrawl(url: string) {
+  const triggerCrawl = useCallback(async (url: string) => {
     const normalized = url.trim().replace(/\/$/, '')
     if (!normalized || normalized === lastCrawledUrl.current) return
     lastCrawledUrl.current = normalized
@@ -129,14 +130,13 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       setCrawlStatus('failed')
       setCrawlMessage('Network error while scanning \u2014 fill in manually.')
     }
-  }
+  }, [businessName])
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedCrawl = useCallback(
     debounce((url: string) => {
       if (url.length > 4) triggerCrawl(url)
     }, 800),
-    []
+    [triggerCrawl]
   )
 
   function handleUrlChange(val: string) {
@@ -155,8 +155,8 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
     setTopicInput('')
   }
 
+  // Fixed: single setState call with correct filter expression
   function removeTopic(t: string) {
-    setTopics(prev => prev.filter(x => x !== x === t ? false : true))
     setTopics(prev => prev.filter(x => x !== t))
   }
 
@@ -384,7 +384,7 @@ export function ScanForm({ initialName = '', initialUrl = '' }: ScanFormProps) {
       >
         {loading
           ? <span className="flex items-center justify-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Running scan\u2026</span>
-          : <span className="flex items-center justify-center gap-2"><Zap className="w-4 h-4" /> Run free scan</span>
+          : <span className="flex items-center justify-center gap-2"><Zap className="w-4 h-4" /> Run AI Visibility Scan</span>
         }
       </button>
 

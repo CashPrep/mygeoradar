@@ -3,7 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 import { getCheckFeasibility, getPlatformNote } from '@/lib/platforms'
 
 export const runtime = 'nodejs'
-export const maxDuration = 15
+export const maxDuration = 25 // page fetch (8s) + robots (4s) + processing overhead
 
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (compatible; MyGeoRadar-Scanner/1.0)',
@@ -264,9 +264,6 @@ export async function POST(req: NextRequest) {
     const finalScore = Math.round((score / maxScore) * 100)
 
     // ── Save full result to Supabase ──────────────────────────────
-    // NOTE: ensure the `scans` table has a nullable `platform text` column.
-    // Migration (run once in Supabase SQL editor):
-    //   ALTER TABLE scans ADD COLUMN IF NOT EXISTS platform text;
     let scanId: string | null = null
     try {
       const supabase = getSupabase()
@@ -276,33 +273,28 @@ export async function POST(req: NextRequest) {
           url:           finalUrl,
           business_name: businessName || null,
           score:         finalScore,
-          checks,           // full data including detail + fix
-          platform:      platform || null,  // NEW — nullable platform id
+          checks,
+          platform:      platform || null,
         })
         .select('id')
         .single()
       if (!error && data) scanId = data.id
     } catch (e) {
-      // Non-fatal — scan still returns even if DB write fails
       console.error('Supabase write error:', e)
     }
 
     // ── Annotate free checks with platform feasibility ────────────
-    // feasibility + platformNote are additive — they never change the check
-    // status or hide any result. If no platform was selected both fields are
-    // omitted so the response is byte-for-byte identical to the old format.
     const freeChecks = checks.map(({ id, label, status, impact }) => {
       if (!platform) return { id, label, status, impact }
 
-      const feasibility   = getCheckFeasibility(id, platform)
-      const platformNote  = getPlatformNote(id, platform)
+      const feasibility  = getCheckFeasibility(id, platform)
+      const platformNote = getPlatformNote(id, platform)
 
       return {
         id,
         label,
         status,
         impact,
-        // Only include platform fields when a platform is selected
         ...(feasibility !== 'full' && { feasibility }),
         ...(platformNote            && { platformNote }),
       }
@@ -314,8 +306,6 @@ export async function POST(req: NextRequest) {
       url:        finalUrl,
       checks:     freeChecks,
       scannedAt:  new Date().toISOString(),
-      // Echo the platform back so the results UI can use it without
-      // re-reading it from state or local storage.
       ...(platform && { platform }),
     })
   } catch (err) {
