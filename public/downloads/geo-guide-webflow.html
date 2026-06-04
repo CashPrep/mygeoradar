@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Webflow GEO Fix Guide | MyGeoRadar</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 860px; margin: 0 auto; padding: 40px 24px 80px; color: #1a1a1a; line-height: 1.7; }
+  h1 { font-size: 2rem; font-weight: 800; margin-bottom: 4px; color: #0f172a; }
+  h2 { font-size: 1.35rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 0.5rem; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; }
+  h3 { font-size: 1.1rem; font-weight: 600; margin-top: 1.5rem; color: #1e293b; }
+  p { margin: 0.6rem 0 1rem; }
+  ul, ol { padding-left: 1.5rem; margin: 0.5rem 0 1rem; }
+  li { margin-bottom: 0.4rem; }
+  table { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.92rem; }
+  th { background: #0f172a; color: #fff; padding: 10px 14px; text-align: left; }
+  td { padding: 9px 14px; border-bottom: 1px solid #e2e8f0; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 4px; font-size: 0.88em; font-family: 'Courier New', monospace; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 8px; overflow-x: auto; margin: 1rem 0; }
+  pre code { background: none; padding: 0; color: inherit; font-size: 0.85rem; }
+  blockquote { border-left: 4px solid #6366f1; background: #f0f0ff; padding: 12px 16px; margin: 1rem 0; border-radius: 0 6px 6px 0; font-style: italic; }
+  hr { border: none; border-top: 1px solid #e2e8f0; margin: 2rem 0; }
+  a { color: #6366f1; }
+  .checklist-item { display: flex; align-items: flex-start; gap: 8px; margin: 6px 0; cursor: pointer; }
+  .checklist-item input { margin-top: 4px; width: 16px; height: 16px; cursor: pointer; accent-color: #6366f1; }
+  .header-bar { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: white; padding: 28px 32px; border-radius: 12px; margin-bottom: 2rem; }
+  .header-bar p { color: rgba(255,255,255,0.85); margin: 4px 0 0; font-size: 0.95rem; }
+  .footer { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0; font-size: 0.85rem; color: #64748b; text-align: center; }
+</style>
+</head>
+<body>
+<div class="header-bar">
+  <h1 style="color:white;border:none;font-size:1.6rem;margin:0">Webflow GEO Fix Guide</h1>
+  <p>MyGeoRadar Platform-Specific Playbook &mdash; mygeoradar.com</p>
+</div>
+
+<h2>What This Guide Does</h2>
+<p>This guide walks Webflow users through every GEO fix available on the platform. GEO (Generative Engine Optimization) means making your site readable, trustworthy, and citable by AI tools like ChatGPT, Perplexity, Google AI Overviews, and Bing Copilot.</p>
+<p>Webflow gives you more control than Squarespace or Wix &mdash; full SEO settings per page, custom code injection, robots.txt editing, sitemap control, and CMS field binding for dynamic schema. This makes it one of the strongest platforms for GEO without writing custom code.</p>
+
+<hr>
+
+<h2>Step 1 &mdash; Fix Your Homepage Title and Meta Description</h2>
+<p>Your homepage title is the first signal AI systems use to understand your site. It must be specific and descriptive, not generic.</p>
+<h3>How to update in Webflow</h3>
+<ol>
+<li>Open your project in the Webflow Designer</li>
+<li>Click on the <strong>Pages</strong> panel (top left)</li>
+<li>Hover over your homepage and click the gear icon (Page Settings)</li>
+<li>Update the <strong>Title Tag</strong> field</li>
+<li>Update the <strong>Meta Description</strong> field</li>
+<li>Click <strong>Save</strong> and republish</li>
+</ol>
+<h3>Title formula</h3>
+<p><code>[What the page covers] | [Brand Name]</code></p>
+<p><strong>Example:</strong> <code>AI GEO Visibility Audits | MyGeoRadar</code></p>
+<h3>Meta description formula</h3>
+<p>What do you offer, who is it for, what result do they get? Keep it 150&ndash;160 characters.</p>
+<p><strong>Example:</strong> <code>MyGeoRadar scans your site and shows exactly what to fix to appear in ChatGPT, Perplexity, and Google AI Overviews. Free GEO score in 60 seconds.</code></p>
+
+<hr>
+
+<h2>Step 2 &mdash; Add SEO Settings to Every Key Page</h2>
+<p>Webflow lets you set a unique title and description for every page. Repeat the process from Step 1 for each page in your Pages panel.</p>
+<h3>Pages to update in order</h3>
+<ol>
+<li>Homepage</li>
+<li>Services or product pages</li>
+<li>About page</li>
+<li>Contact page</li>
+<li>Pricing page</li>
+<li>Any landing pages</li>
+</ol>
+<h3>For CMS collection pages (blog posts)</h3>
+<ol>
+<li>Go to <strong>CMS &rarr; Collections &rarr; Blog Posts</strong></li>
+<li>Click into any blog post</li>
+<li>Fill in the <strong>SEO Title</strong> and <strong>Meta Description</strong> fields</li>
+<li>Save and publish</li>
+</ol>
+<blockquote>Pro tip: In Webflow CMS, you can bind the SEO Title field to your post Title field so it auto-fills for every new post. Set this up in the Collection Template page settings.</blockquote>
+
+<hr>
+
+<h2>Step 3 &mdash; Add Schema Markup</h2>
+<p>Webflow gives you full control over schema markup. You can add static JSON-LD for the whole site, page-specific schema via custom code, or dynamic CMS-bound schema for blog posts.</p>
+<h3>Step 3A &mdash; Add Organization schema to your homepage</h3>
+<ol>
+<li>In the Designer, open your homepage</li>
+<li>Go to <strong>Page Settings &rarr; Custom Code &rarr; Head Code</strong></li>
+<li>Paste your Organization schema:</li>
+</ol>
+<pre><code class="language-json">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Your Business Name",
+  "url": "https://yoursite.com",
+  "logo": "https://yoursite.com/logo.png",
+  "description": "One sentence describing what your business does.",
+  "email": "hello@yoursite.com",
+  "sameAs": [
+    "https://www.linkedin.com/company/your-company",
+    "https://twitter.com/yourhandle"
+  ]
+}
+&lt;/script&gt;</code></pre>
+<ol>
+<li>Save and publish</li>
+</ol>
+<h3>Step 3B &mdash; Add Article schema to blog posts (CMS bound)</h3>
+<ol>
+<li>Open your Blog Post Collection Template in the Designer</li>
+<li>Go to <strong>Page Settings &rarr; Custom Code &rarr; Head Code</strong></li>
+<li>Paste the Article schema using CMS field bindings:</li>
+</ol>
+<pre><code class="language-json">&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{{wf {&quot;path&quot;:&quot;name&quot;} }}",
+  "datePublished": "{{wf {&quot;path&quot;:&quot;published-on&quot;,&quot;type&quot;:&quot;Date&quot;} }}",
+  "author": {
+    "@type": "Person",
+    "name": "Your Name"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Your Business Name",
+    "url": "https://yoursite.com"
+  }
+}
+&lt;/script&gt;</code></pre>
+<ol>
+<li>Save and publish</li>
+</ol>
+<h3>Step 3C &mdash; Add FAQPage schema to pages with FAQ sections</h3>
+<ol>
+<li>Open the specific page in the Designer</li>
+<li>Go to <strong>Page Settings &rarr; Custom Code &rarr; Head Code</strong></li>
+<li>Paste your FAQPage JSON-LD with your real questions and answers</li>
+<li>Save and publish</li>
+</ol>
+<h3>Verify all schema</h3>
+<ol>
+<li>Go to <a href="https://search.google.com/test/rich-results" target="_blank">Google Rich Results Test</a></li>
+<li>Enter each key page URL</li>
+<li>Confirm schema types appear with no errors</li>
+</ol>
+
+<hr>
+
+<h2>Step 4 &mdash; Optimize Your Blog for GEO</h2>
+<p>Blog content is your highest-value GEO asset. AI tools actively pull from well-structured blog posts when forming answers.</p>
+<h3>Blog post structure for GEO</h3>
+<ol>
+<li>Title (H1) &mdash; the question or topic</li>
+<li>Opening paragraph &mdash; direct 2&ndash;3 sentence answer (write this first)</li>
+<li>H2 section &mdash; background or context</li>
+<li>H2 section &mdash; step-by-step or detailed breakdown</li>
+<li>H2 section &mdash; FAQ or common questions</li>
+<li>Short closing paragraph</li>
+</ol>
+<blockquote>The opening paragraph matters most. AI systems often pull from the first 100 words of a post. Write a direct, quotable answer immediately after the title.</blockquote>
+<h3>Per-post CMS checklist</h3>
+<label class="checklist-item"><input type="checkbox"> SEO Title filled in (CMS field)</label>
+<label class="checklist-item"><input type="checkbox"> Meta Description filled in (150&ndash;160 characters)</label>
+<label class="checklist-item"><input type="checkbox"> Featured image uploaded with descriptive alt text</label>
+<label class="checklist-item"><input type="checkbox"> Clean URL slug (e.g. /what-is-geo-optimization)</label>
+<label class="checklist-item"><input type="checkbox"> Author name visible on post</label>
+<label class="checklist-item"><input type="checkbox"> Published date set correctly</label>
+
+<hr>
+
+<h2>Step 5 &mdash; Fix Image Alt Text</h2>
+<p>Webflow lets you add alt text to every image element in the Designer. This is a quick but high-impact fix.</p>
+<h3>How to add alt text in Webflow</h3>
+<ol>
+<li>Click on any image element in the Designer</li>
+<li>In the right panel, find the <strong>Alt Text</strong> field</li>
+<li>Write a clear description of the image</li>
+<li>Republish</li>
+</ol>
+<h3>For CMS images</h3>
+<ol>
+<li>Go to your CMS collection</li>
+<li>Click into each item</li>
+<li>Find the image field and add alt text in the field settings</li>
+<li>Save</li>
+</ol>
+<p><strong>Bad:</strong> <code>image1.jpg</code><br><strong>Good:</strong> <code>MyGeoRadar GEO score dashboard showing AI visibility audit results</code></p>
+
+<hr>
+
+<h2>Step 6 &mdash; Configure robots.txt</h2>
+<p>Webflow gives you full robots.txt editing &mdash; one of the best features for GEO compared to other visual builders.</p>
+<h3>How to edit robots.txt in Webflow</h3>
+<ol>
+<li>Go to <strong>Project Settings &rarr; SEO</strong></li>
+<li>Scroll to the <strong>Robots.txt</strong> section</li>
+<li>Edit the robots.txt content directly</li>
+<li>Save and republish</li>
+</ol>
+<blockquote>Critical: Make sure your robots.txt does NOT block AI crawlers like GPTBot, PerplexityBot, or Googlebot. If they cannot crawl your site, you cannot be cited.</blockquote>
+<p>A safe default robots.txt:</p>
+<pre><code>User-agent: *
+Allow: /
+
+Sitemap: https://yoursite.com/sitemap.xml</code></pre>
+
+<hr>
+
+<h2>Step 7 &mdash; Submit Your Sitemap</h2>
+<p>Webflow automatically generates a sitemap at <code>yoursite.com/sitemap.xml</code>. Submit it to Google Search Console.</p>
+<h3>How to submit your sitemap</h3>
+<ol>
+<li>Go to <a href="https://search.google.com/search-console" target="_blank">Google Search Console</a></li>
+<li>Select your property</li>
+<li>Click <strong>Sitemaps</strong> in the left sidebar</li>
+<li>Enter <code>sitemap.xml</code> and click <strong>Submit</strong></li>
+</ol>
+<h3>Confirm sitemap is enabled in Webflow</h3>
+<ol>
+<li>Go to <strong>Project Settings &rarr; SEO</strong></li>
+<li>Make sure <strong>Auto-generate sitemap</strong> is enabled</li>
+<li>Save</li>
+</ol>
+
+<hr>
+
+<h2>Step 8 &mdash; Open Graph and Social Tags</h2>
+<p>Webflow automatically generates Open Graph tags from your page SEO title and description. Make sure these are filled in for every key page (see Step 1 and 2).</p>
+<h3>Set a default OG image</h3>
+<ol>
+<li>Go to <strong>Project Settings &rarr; SEO</strong></li>
+<li>Upload a <strong>Default Open Graph Image</strong> (1200x630px)</li>
+<li>Save and republish</li>
+</ol>
+<h3>Set page-specific OG images</h3>
+<ol>
+<li>Open the page in the Designer</li>
+<li>Go to <strong>Page Settings &rarr; SEO</strong></li>
+<li>Upload a specific <strong>Open Graph Image</strong> for that page</li>
+<li>Save and republish</li>
+</ol>
+
+<hr>
+
+<h2>Step 9 &mdash; Build Strong Trust Pages</h2>
+<p>Your About and Contact pages are trust signals that AI systems use to verify your business is real and legitimate.</p>
+<h3>About page &mdash; must include</h3>
+<ul>
+<li>Your name or founder name</li>
+<li>What the business does and who it helps</li>
+<li>Where you are based</li>
+<li>A real origin story (2&ndash;3 sentences minimum)</li>
+<li>Your credentials or experience</li>
+<li>Contact info or link to contact page</li>
+</ul>
+<h3>Contact page &mdash; must include</h3>
+<ul>
+<li>Email address</li>
+<li>Phone number (if applicable)</li>
+<li>Physical address or service area</li>
+<li>Contact form</li>
+<li>Social links</li>
+</ul>
+<p>Your business Name, Address, and Phone must match exactly across your site, Google Business Profile, Bing Places, and any directory listings.</p>
+
+<hr>
+
+<h2>Step 10 &mdash; Build Off-Site Citations and Reviews</h2>
+<p>AI tools cross-reference your website against other trusted sources. Consistent, credible mentions of your business across the web increase citation likelihood.</p>
+<h3>Priority listings to create</h3>
+<ol>
+<li><strong>Google Business Profile</strong> &mdash; <a href="https://business.google.com" target="_blank">business.google.com</a> &mdash; free and essential</li>
+<li><strong>Bing Places for Business</strong> &mdash; <a href="https://www.bingplaces.com" target="_blank">bingplaces.com</a> &mdash; feeds Bing/Copilot directly</li>
+<li><strong>Trustpilot</strong> &mdash; create a profile and collect text reviews</li>
+<li><strong>LinkedIn Company Page</strong> &mdash; link from your site footer</li>
+<li><strong>Better Business Bureau</strong> &mdash; high trust signal for AI</li>
+<li><strong>Niche directories</strong> &mdash; find 2&ndash;3 industry-specific directories</li>
+</ol>
+
+<hr>
+
+<h2>Webflow GEO Checklist</h2>
+<h3>Phase 1 &mdash; Core SEO</h3>
+<label class="checklist-item"><input type="checkbox"> Homepage title and meta description updated (Step 1)</label>
+<label class="checklist-item"><input type="checkbox"> All key pages have unique titles and descriptions (Step 2)</label>
+<label class="checklist-item"><input type="checkbox"> CMS posts have SEO title and description fields filled (Step 2)</label>
+<h3>Phase 2 &mdash; Schema</h3>
+<label class="checklist-item"><input type="checkbox"> Organization schema added to homepage head code (Step 3A)</label>
+<label class="checklist-item"><input type="checkbox"> Article schema added to blog post template (Step 3B)</label>
+<label class="checklist-item"><input type="checkbox"> FAQPage schema added to FAQ pages (Step 3C)</label>
+<label class="checklist-item"><input type="checkbox"> All schema verified via Rich Results Test (Step 3)</label>
+<h3>Phase 3 &mdash; Content and trust</h3>
+<label class="checklist-item"><input type="checkbox"> 3 blog posts published with GEO structure (Step 4)</label>
+<label class="checklist-item"><input type="checkbox"> Alt text added to all images (Step 5)</label>
+<label class="checklist-item"><input type="checkbox"> Default OG image uploaded (Step 8)</label>
+<label class="checklist-item"><input type="checkbox"> About page includes real founder details (Step 9)</label>
+<label class="checklist-item"><input type="checkbox"> Contact page has full NAP info (Step 9)</label>
+<h3>Phase 4 &mdash; Technical and off-site</h3>
+<label class="checklist-item"><input type="checkbox"> robots.txt confirmed &mdash; AI crawlers not blocked (Step 6)</label>
+<label class="checklist-item"><input type="checkbox"> Sitemap submitted to Google Search Console (Step 7)</label>
+<label class="checklist-item"><input type="checkbox"> Google Business Profile created or claimed (Step 10)</label>
+<label class="checklist-item"><input type="checkbox"> Bing Places listing created (Step 10)</label>
+<label class="checklist-item"><input type="checkbox"> Review request process set up (Step 10)</label>
+
+<div class="footer">Guide produced by MyGeoRadar &mdash; mygeoradar.com &mdash; Version 1.0, June 2026</div>
+</body>
+</html>
