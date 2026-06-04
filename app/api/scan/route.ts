@@ -30,20 +30,30 @@ function getSupabase() {
 }
 
 /**
+ * Extract all capture group 1 matches from a regex against a string.
+ * Uses exec loop instead of matchAll spread to avoid TS downlevelIteration issues.
+ */
+function matchAllGroup1(str: string, regex: RegExp): string[] {
+  const results: string[] = []
+  let m: RegExpExecArray | null
+  while ((m = regex.exec(str)) !== null) {
+    results.push(m[1] ?? '')
+  }
+  return results
+}
+
+/**
  * Parse robots.txt per-section so that Allow: / correctly overrides Disallow: /
- * within the same User-agent block. The previous regex [\s\S]*? would greedily
- * match across multiple User-agent sections, causing false-fail results.
+ * within the same User-agent block.
  */
 function robotsBlocksAgent(txt: string, agent: string): boolean {
-  // Split on every line that starts a new User-agent block
   const sections = txt.split(/(?=^user-agent:)/im)
   for (const section of sections) {
     if (!new RegExp(`^user-agent:\\s*${agent}\\s*$`, 'im').test(section)) continue
-    const disallows = [...section.matchAll(/^disallow:\s*(\S*)/gim)].map(m => m[1])
-    const allows    = [...section.matchAll(/^allow:\s*(\S*)/gim)].map(m => m[1])
+    const disallows = matchAllGroup1(section, /^disallow:\s*(\S*)/gim)
+    const allows    = matchAllGroup1(section, /^allow:\s*(\S*)/gim)
     const blocksRoot = disallows.some(d => d === '/')
     const allowsRoot = allows.some(a => a === '/' || a === '')
-    // Only block if Disallow: / exists AND there is no Allow: / to override it
     if (blocksRoot && !allowsRoot) return true
   }
   return false
@@ -114,21 +124,16 @@ export async function POST(req: NextRequest) {
     // ── Parse signals ────────────────────────────────────────────
     const lcHtml = html.toLowerCase()
 
-    // FIX: Use per-section robots parser instead of cross-section regex
     const robotsBlocksAll       = robotsBlocksAgent(robotsTxt, '\\*')
     const robotsBlocksGptBot    = robotsBlocksAgent(robotsTxt, 'gptbot')
     const robotsBlocksClaudeBot = robotsBlocksAgent(robotsTxt, 'claudebot')
     const robotsBlocksAny       = robotsBlocksAll || robotsBlocksGptBot || robotsBlocksClaudeBot
 
-    // FIX: Detect schema.org in both inline HTML and <script type="application/ld+json"> blocks
-    // Next.js and other frameworks inject schema via script tags which may not appear as plain text
     const hasSchemaOrg          = lcHtml.includes('schema.org')
     const hasOrganizationSchema = lcHtml.includes('"organization"') || lcHtml.includes("'organization'")
     const hasLocalBizSchema     = lcHtml.includes('"localbusiness"') || lcHtml.includes("'localbusiness'")
     const hasProductSchema      = lcHtml.includes('"product"') || lcHtml.includes("'product'")
     const hasFaqSchema          = lcHtml.includes('"faqpage"') || lcHtml.includes("'faqpage'")
-    // FIX: Include WebSite and SoftwareApplication in schema count — these are
-    // valid and common schema types used by Next.js and SaaS sites
     const hasWebsiteSchema      = lcHtml.includes('"website"') || lcHtml.includes("'website'")
     const hasSoftwareSchema     = lcHtml.includes('"softwareapplication"') || lcHtml.includes("'softwareapplication'")
     const schemaCount           = [
@@ -197,8 +202,6 @@ export async function POST(req: NextRequest) {
 
     checks.push({
       id: 'meta-title', label: 'Page title (meta title)',
-      // FIX: Raise upper threshold from 70 to 80 chars — AI crawlers don't truncate
-      // at 70 chars like Google SERPs do. 70 was causing false-warns on valid titles.
       status: metaTitle && metaTitle.length >= 20 && metaTitle.length <= 80 ? 'pass'
             : metaTitle ? 'warn' : 'fail',
       impact: 'High',
