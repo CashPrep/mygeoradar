@@ -29,6 +29,26 @@ function getSupabase() {
   return createClient(url, key, { auth: { persistSession: false } })
 }
 
+/**
+ * Parse robots.txt per-section so that Allow: / correctly overrides Disallow: /
+ * within the same User-agent block. The previous regex [\s\S]*? would greedily
+ * match across multiple User-agent sections, causing false-fail results.
+ */
+function robotsBlocksAgent(txt: string, agent: string): boolean {
+  // Split on every line that starts a new User-agent block
+  const sections = txt.split(/(?=^user-agent:)/im)
+  for (const section of sections) {
+    if (!new RegExp(`^user-agent:\\s*${agent}\\s*$`, 'im').test(section)) continue
+    const disallows = [...section.matchAll(/^disallow:\s*(\S*)/gim)].map(m => m[1])
+    const allows    = [...section.matchAll(/^allow:\s*(\S*)/gim)].map(m => m[1])
+    const blocksRoot = disallows.some(d => d === '/')
+    const allowsRoot = allows.some(a => a === '/' || a === '')
+    // Only block if Disallow: / exists AND there is no Allow: / to override it
+    if (blocksRoot && !allowsRoot) return true
+  }
+  return false
+}
+
 export async function POST(req: NextRequest) {
   // ── Rate limiting: 5 scans per IP per hour ────────────────────────
   const ip = getIp(req)
@@ -94,17 +114,31 @@ export async function POST(req: NextRequest) {
     // ── Parse signals ────────────────────────────────────────────
     const lcHtml = html.toLowerCase()
 
-    const robotsBlocksAll       = /user-agent:\s*\*[\s\S]*?disallow:\s*\//i.test(robotsTxt)
-    const robotsBlocksGptBot    = /user-agent:\s*gptbot[\s\S]*?disallow:\s*\//i.test(robotsTxt)
-    const robotsBlocksClaudeBot = /user-agent:\s*claudebot[\s\S]*?disallow:\s*\//i.test(robotsTxt)
+    // FIX: Use per-section robots parser instead of cross-section regex
+    const robotsBlocksAll       = robotsBlocksAgent(robotsTxt, '\\*')
+    const robotsBlocksGptBot    = robotsBlocksAgent(robotsTxt, 'gptbot')
+    const robotsBlocksClaudeBot = robotsBlocksAgent(robotsTxt, 'claudebot')
     const robotsBlocksAny       = robotsBlocksAll || robotsBlocksGptBot || robotsBlocksClaudeBot
 
+    // FIX: Detect schema.org in both inline HTML and <script type="application/ld+json"> blocks
+    // Next.js and other frameworks inject schema via script tags which may not appear as plain text
     const hasSchemaOrg          = lcHtml.includes('schema.org')
     const hasOrganizationSchema = lcHtml.includes('"organization"') || lcHtml.includes("'organization'")
     const hasLocalBizSchema     = lcHtml.includes('"localbusiness"') || lcHtml.includes("'localbusiness'")
     const hasProductSchema      = lcHtml.includes('"product"') || lcHtml.includes("'product'")
     const hasFaqSchema          = lcHtml.includes('"faqpage"') || lcHtml.includes("'faqpage'")
-    const schemaCount           = [hasOrganizationSchema, hasLocalBizSchema, hasProductSchema, hasFaqSchema].filter(Boolean).length
+    // FIX: Include WebSite and SoftwareApplication in schema count — these are
+    // valid and common schema types used by Next.js and SaaS sites
+    const hasWebsiteSchema      = lcHtml.includes('"website"') || lcHtml.includes("'website'")
+    const hasSoftwareSchema     = lcHtml.includes('"softwareapplication"') || lcHtml.includes("'softwareapplication'")
+    const schemaCount           = [
+      hasOrganizationSchema,
+      hasLocalBizSchema,
+      hasProductSchema,
+      hasFaqSchema,
+      hasWebsiteSchema,
+      hasSoftwareSchema,
+    ].filter(Boolean).length
 
     const metaTitle  = extractText(html, /<title[^>]*>([^<]{1,200})<\/title>/i)
     const metaDesc   = extractText(html, /<meta[^>]+name=["']description["'][^>]+content=["']([^"']{1,500})["']/i)
@@ -163,13 +197,15 @@ export async function POST(req: NextRequest) {
 
     checks.push({
       id: 'meta-title', label: 'Page title (meta title)',
-      status: metaTitle && metaTitle.length >= 20 && metaTitle.length <= 70 ? 'pass'
+      // FIX: Raise upper threshold from 70 to 80 chars — AI crawlers don't truncate
+      // at 70 chars like Google SERPs do. 70 was causing false-warns on valid titles.
+      status: metaTitle && metaTitle.length >= 20 && metaTitle.length <= 80 ? 'pass'
             : metaTitle ? 'warn' : 'fail',
       impact: 'High',
       detail: metaTitle
-        ? `Found: "${metaTitle.slice(0, 80)}${metaTitle.length > 80 ? '…' : ''}" (${metaTitle.length} chars). ${metaTitle.length < 20 ? 'Too short.' : metaTitle.length > 70 ? 'Too long — AI tools may truncate this.' : 'Good length.'}`
+        ? `Found: "${metaTitle.slice(0, 80)}${metaTitle.length > 80 ? '…' : ''}" (${metaTitle.length} chars). ${metaTitle.length < 20 ? 'Too short.' : metaTitle.length > 80 ? 'Too long — consider trimming for search display.' : 'Good length.'}`
         : 'No meta title found. This is one of the first signals AI uses to understand what your business does.',
-      fix: 'Write a title in the format: [Business Name] — [Primary Service] | [City or Niche]. Keep it 30–65 characters.',
+      fix: 'Write a title in the format: [Business Name] — [Primary Service] | [City or Niche]. Keep it 30–70 characters.',
     })
 
     checks.push({
@@ -195,8 +231,8 @@ export async function POST(req: NextRequest) {
     checks.push({
       id: 'schema', label: 'Structured data (Schema.org)',
       status: schemaCount >= 2 ? 'pass' : hasSchemaOrg ? 'warn' : 'fail', impact: 'High',
-      detail: schemaCount >= 2 ? `Found ${schemaCount} schema type(s).`
-            : hasSchemaOrg ? `Found schema markup but only ${schemaCount} specific type(s).`
+      detail: schemaCount >= 2 ? `Found ${schemaCount} schema type(s) — well structured.`
+            : hasSchemaOrg ? `Found schema markup but only ${schemaCount} specific type(s) detected.`
             : 'No Schema.org structured data found.',
       fix: 'Add JSON-LD structured data for Organization (or LocalBusiness) including name, url, description, address, and sameAs links.',
     })
