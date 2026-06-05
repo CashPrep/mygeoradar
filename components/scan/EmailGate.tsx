@@ -75,11 +75,11 @@ export function EmailGate({ scanId, score, url, failCount, warnCount }: EmailGat
             <Mail className="w-4 h-4 text-accent" />
           </div>
           <p className="text-sm font-semibold">
-            Get your full results + fix guide emailed to you
+            Get your scan results emailed to you
           </p>
         </div>
         <p className="text-xs text-muted mb-4">
-          We&apos;ll send your score breakdown, what each issue means, and exactly how to fix it — free.
+          We&apos;ll send your score breakdown and what each issue means — free.
         </p>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
