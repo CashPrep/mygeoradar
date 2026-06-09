@@ -242,16 +242,17 @@ export function FeaturesGrid() {
 
   return (
     <section className="section">
-      <div className="text-center mb-12">
+      <div className="text-center mb-10 md:mb-12">
         <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">What you get</p>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Everything in one scan</h2>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">Everything in one scan</h2>
         <p className="mt-4 text-foreground-dim max-w-xl mx-auto">
           One payment. Seven reports. No subscriptions.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 max-w-5xl mx-auto">
-        <div className="flex flex-col gap-1">
+      <div className="flex flex-col lg:grid lg:grid-cols-[280px_1fr] gap-4 md:gap-6 max-w-5xl mx-auto">
+        {/* On mobile: horizontal scrollable pill tabs */}
+        <div className="flex lg:flex-col gap-1 overflow-x-auto pb-1 lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0 scrollbar-none">
           {features.map((feat, i) => {
             const FIcon = feat.icon
             return (
@@ -259,21 +260,21 @@ export function FeaturesGrid() {
                 key={feat.tag}
                 onClick={() => setActive(i)}
                 className={clsx(
-                  'flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-sm',
+                  'flex items-center gap-2 lg:gap-3 px-3 lg:px-4 py-2 lg:py-3 rounded-xl text-left transition-all text-sm shrink-0 lg:shrink',
                   active === i
                     ? 'bg-accent/10 border border-accent/30 text-foreground'
                     : 'border border-transparent text-muted hover:text-foreground-dim hover:bg-surface-2'
                 )}
               >
                 <FIcon className="w-4 h-4 shrink-0" style={{ color: active === i ? feat.accent : undefined }} />
-                <span className="font-medium">{feat.tag}</span>
-                {active === i && <ChevronRight className="w-3.5 h-3.5 ml-auto text-accent" />}
+                <span className="font-medium whitespace-nowrap lg:whitespace-normal">{feat.tag}</span>
+                {active === i && <ChevronRight className="w-3.5 h-3.5 ml-auto text-accent hidden lg:block" />}
               </button>
             )
           })}
         </div>
 
-        <div className="card p-6 flex flex-col gap-5">
+        <div className="card p-4 md:p-6 flex flex-col gap-4 md:gap-5">
           <div className="flex items-center gap-3">
             <div
               className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
@@ -283,7 +284,7 @@ export function FeaturesGrid() {
             </div>
             <div>
               <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: f.accent }}>{f.tag}</span>
-              <h3 className="font-bold text-foreground leading-snug text-lg">{f.title}</h3>
+              <h3 className="font-bold text-foreground leading-snug text-base md:text-lg">{f.title}</h3>
             </div>
           </div>
 
@@ -296,7 +297,7 @@ export function FeaturesGrid() {
 
           <div>
             <p className="text-xs text-muted uppercase tracking-wider font-semibold mb-3">Live preview</p>
-            <div className="p-4 bg-surface-2 border border-border rounded-xl">
+            <div className="p-3 md:p-4 bg-surface-2 border border-border rounded-xl">
               {f.mockup}
             </div>
           </div>

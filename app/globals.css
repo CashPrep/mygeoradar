@@ -131,7 +131,7 @@
   /* ── Sections ───────────────────────────────────── */
 
   .section {
-    @apply py-24 px-4 md:px-8 max-w-6xl mx-auto;
+    @apply py-16 md:py-24 px-4 md:px-8 max-w-6xl mx-auto;
   }
 
   /* Clean horizontal rule with fade */
@@ -210,4 +210,9 @@
 
   .text-balance { text-wrap: balance; }
   .text-pretty  { text-wrap: pretty; }
+
+  /* ── Mobile-only: prevent horizontal overflow ───── */
+  @media (max-width: 767px) {
+    body { overflow-x: hidden; }
+  }
 }

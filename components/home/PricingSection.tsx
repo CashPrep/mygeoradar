@@ -14,9 +14,9 @@ const included = [
 export function PricingSection() {
   return (
     <section id="pricing" className="section">
-      <div className="text-center mb-14">
+      <div className="text-center mb-10 md:mb-14">
         <p className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Pricing</p>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight">One scan. One payment.</h2>
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">One scan. One payment.</h2>
         <p className="mt-4 text-foreground-dim max-w-xl mx-auto">
           No monthly fees. No subscriptions. Pay only when you scan.
         </p>
@@ -24,11 +24,11 @@ export function PricingSection() {
 
       <div className="max-w-sm mx-auto flex flex-col gap-4">
 
-        <div className="card p-8 flex flex-col gap-6 border-accent/20 shadow-glow-sm">
+        <div className="card p-6 md:p-8 flex flex-col gap-6 border-accent/20 shadow-glow-sm">
           <div className="text-center">
             <div className="flex items-end justify-center gap-1">
-              <span className="text-6xl font-extrabold text-accent">${Math.floor(SCAN_PRICE_USD)}</span>
-              <span className="text-accent text-2xl font-bold mb-2">.{String(SCAN_PRICE_USD.toFixed(2).split('.')[1])}</span>
+              <span className="text-5xl md:text-6xl font-extrabold text-accent">${Math.floor(SCAN_PRICE_USD)}</span>
+              <span className="text-accent text-xl md:text-2xl font-bold mb-2">.{String(SCAN_PRICE_USD.toFixed(2).split('.')[1])}</span>
             </div>
             <p className="text-sm font-semibold text-foreground-dim mt-1">one-time · no subscription</p>
           </div>
