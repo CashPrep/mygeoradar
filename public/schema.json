@@ -1,48 +1,95 @@
 [
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": ["Organization", "WebSite"],
     "name": "MyGeoRadar",
+    "alternateName": "My GEO Radar",
     "url": "https://www.mygeoradar.com",
-    "logo": "https://www.mygeoradar.com/icon-512.png",
-    "description": "MyGeoRadar helps businesses get found and recommended by AI assistants like ChatGPT, Perplexity, Gemini, and Claude.",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.mygeoradar.com/icon-512.png",
+      "width": 512,
+      "height": 512
+    },
+    "description": "MyGeoRadar is a free AI visibility scanner that shows businesses exactly how ChatGPT, Perplexity, Gemini, and Claude respond when customers search for their services — and gives a prioritized fix plan to get cited more.",
+    "keywords": "GEO, generative engine optimization, AI visibility, AI search, ChatGPT visibility, Perplexity ranking, AI SEO, llms.txt, business AI score",
+    "about": {
+      "@type": "Thing",
+      "name": "Generative Engine Optimization",
+      "description": "GEO is the practice of optimizing your online presence so AI language models can find, understand, and recommend your business in AI-generated answers."
+    },
     "founder": {
       "@type": "Person",
-      "name": "Andrew Garber"
+      "name": "Andrew Garber",
+      "sameAs": [
+        "https://twitter.com/MyGEORadar"
+      ]
     },
+    "foundingDate": "2024",
     "sameAs": [
-      "https://twitter.com/MyGEORadar"
+      "https://twitter.com/MyGEORadar",
+      "https://www.producthunt.com/products/mygeoradar",
+      "https://launchboosts.com/project/my-geo-radar"
     ],
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer support",
-      "url": "https://www.mygeoradar.com"
+      "url": "https://www.mygeoradar.com",
+      "availableLanguage": "English"
+    },
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://www.mygeoradar.com/?url={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
     }
   },
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
+    "@type": ["SoftwareApplication", "WebApplication"],
     "name": "MyGeoRadar AI Visibility Scanner",
+    "alternateName": "GEO Scanner",
     "url": "https://www.mygeoradar.com",
     "applicationCategory": "BusinessApplication",
+    "applicationSubCategory": "SEO Tool",
     "operatingSystem": "Web",
-    "description": "Scan your website and get a free AI visibility score. See how ChatGPT, Perplexity, Gemini & Claude crawl your site — and get a step-by-step action plan to show up more.",
+    "browserRequirements": "Requires JavaScript",
+    "description": "Scan your website and get a free AI visibility score in 60 seconds. See how ChatGPT, Perplexity, Gemini & Claude crawl your site — and get a step-by-step action plan to show up more in AI answers.",
+    "abstract": "MyGeoRadar analyzes 20+ technical and content signals to score how visible your business is to AI assistants. It checks schema markup, llms.txt, robots.txt, AI bot access, NAP consistency, authority signals, and citation gaps.",
     "featureList": [
-      "Free AI visibility score",
+      "Free AI visibility score (0-100)",
       "ChatGPT visibility analysis",
       "Perplexity presence check",
+      "Gemini local ranking analysis",
+      "Claude citation probability",
       "GEO optimization recommendations",
-      "Step-by-step fix playbook"
+      "Step-by-step fix playbook",
+      "llms.txt checker",
+      "Schema markup validator",
+      "AI bot crawlability audit"
     ],
     "screenshot": "https://www.mygeoradar.com/og-image.png",
-    "offers": {
-      "@type": "Offer",
-      "price": "27",
-      "priceCurrency": "USD",
-      "name": "Found by AI Playbook",
-      "description": "Step-by-step guide to get your business found by ChatGPT, Perplexity, Gemini, and Claude.",
-      "url": "https://www.mygeoradar.com"
-    },
+    "isAccessibleForFree": true,
+    "offers": [
+      {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "name": "Free AI Visibility Scan",
+        "description": "Free GEO score scan — no signup required.",
+        "url": "https://www.mygeoradar.com"
+      },
+      {
+        "@type": "Offer",
+        "price": "27",
+        "priceCurrency": "USD",
+        "name": "Found by AI Playbook",
+        "description": "30-day step-by-step guide to get your business found by ChatGPT, Perplexity, Gemini, and Claude.",
+        "url": "https://www.mygeoradar.com"
+      }
+    ],
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
@@ -54,6 +101,48 @@
       "@type": "Organization",
       "name": "MyGeoRadar",
       "url": "https://www.mygeoradar.com"
+    },
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Small business owners, digital marketers, SEO agencies, SaaS founders"
     }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is MyGeoRadar?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "MyGeoRadar is a free AI visibility scanner that checks how your business appears in ChatGPT, Perplexity, Gemini, and Claude responses. It gives you a scored report and prioritized fix plan in under 60 seconds."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is a GEO score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "A GEO score (0-100) measures how visible and citable your business is to AI language models. It evaluates schema markup, AI bot access, content clarity, authority signals, and citation consistency."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the AI visibility scan really free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. The full AI visibility scan on MyGeoRadar is completely free with no account required. Enter your URL and get your GEO score in 60 seconds."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I improve my GEO score?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The top ways to improve your GEO score are: add an llms.txt file, fix schema markup (especially Organization and LocalBusiness), ensure AI bots are allowed in robots.txt, build citations on authoritative directories, and create clear entity-defining content about your business."
+        }
+      }
+    ]
   }
 ]
