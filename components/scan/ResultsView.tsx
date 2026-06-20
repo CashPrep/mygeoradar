@@ -8,7 +8,19 @@ import { EngineCard } from './EngineCard'
 import { ActionPlan } from './ActionPlan'
 import type { ScanReport } from '@/lib/types'
 import { formatDate } from '@/lib/utils'
-import { ArrowRight, Zap, Share2, BookOpen, CheckCircle } from 'lucide-react'
+import { ArrowRight, Zap, Share2, BookOpen, CheckCircle, BookMarked, Lock } from 'lucide-react'
+
+// Maps scan check IDs to relevant guide slugs and labels
+const ISSUE_GUIDE_MAP: Record<string, { label: string; href: string }> = {
+  schema:           { label: 'How to Add Schema Markup',           href: '/guides' },
+  'llms-txt':       { label: 'How to Create an llms.txt File',     href: '/guides' },
+  robots:           { label: 'How to Fix Your robots.txt for AI',  href: '/guides' },
+  gbp:              { label: 'How to Complete Your GBP',           href: '/guides' },
+  nap:              { label: 'How to Fix NAP Inconsistency',       href: '/guides' },
+  'meta-desc':      { label: 'How to Write AI-Optimized Meta Descriptions', href: '/guides' },
+  citations:        { label: 'How to Build AI-Trusted Citations',  href: '/guides' },
+  'page-speed':     { label: 'Core Web Vitals & AI Crawlability',  href: '/guides' },
+}
 
 export function ResultsView({ report }: { report: ScanReport }) {
   function share() {
@@ -21,6 +33,15 @@ export function ResultsView({ report }: { report: ScanReport }) {
   }
 
   const hasGaps = report.overallScore < 80
+
+  // Find top 3 actions that have a matching guide
+  const topGuides = (report.topActions ?? [])
+    .map((action: { checkId?: string; id?: string }) => {
+      const id = action.checkId ?? action.id ?? ''
+      return ISSUE_GUIDE_MAP[id] ? { ...ISSUE_GUIDE_MAP[id], id } : null
+    })
+    .filter(Boolean)
+    .slice(0, 3) as { label: string; href: string; id: string }[]
 
   return (
     <div className="max-w-4xl mx-auto px-4 flex flex-col gap-10">
@@ -63,13 +84,46 @@ export function ResultsView({ report }: { report: ScanReport }) {
             <h2 className="font-bold">Quick wins</h2>
           </div>
           <ul className="flex flex-col gap-2">
-            {report.quickWins.map((w, i) => (
+            {report.quickWins.map((w: string, i: number) => (
               <li key={i} className="flex items-start gap-2 text-sm text-foreground-dim">
                 <span className="text-warning mt-0.5">&#8250;</span>
                 {w}
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {/* ── GUIDE FUNNEL — shown when we have matched guides ── */}
+      {topGuides.length > 0 && (
+        <div className="rounded-2xl border border-border bg-surface overflow-hidden">
+          <div className="px-6 py-4 border-b border-border bg-white flex items-center gap-2">
+            <BookMarked className="w-4 h-4 text-accent" />
+            <p className="font-semibold text-sm">Fix the easy wins yourself — free guides</p>
+          </div>
+          <div className="p-5 flex flex-col gap-3">
+            <p className="text-xs text-muted mb-1">
+              Based on your scan results, these guides are most relevant to your site:
+            </p>
+            {topGuides.map(({ label, href, id }) => (
+              <Link
+                key={id}
+                href={href}
+                className="flex items-center gap-3 p-3.5 rounded-lg bg-white border border-border hover:border-accent/25 hover:shadow-card-lift transition-all duration-200"
+              >
+                <BookOpen className="w-4 h-4 text-accent flex-shrink-0" />
+                <span className="text-sm font-medium flex-1">{label}</span>
+                <ArrowRight className="w-4 h-4 text-accent flex-shrink-0" />
+              </Link>
+            ))}
+            <p className="text-xs text-muted pt-1">
+              Came from your scan? Fix one issue here, then{' '}
+              <Link href="/playbook" className="text-accent font-semibold hover:underline">
+                unlock your full report
+              </Link>{' '}
+              to see everything else.
+            </p>
+          </div>
         </div>
       )}
 
@@ -83,20 +137,23 @@ export function ResultsView({ report }: { report: ScanReport }) {
 
             {/* Icon */}
             <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/8 border border-accent/15 flex items-center justify-center">
-              <BookOpen className="w-6 h-6 text-accent" />
+              <Lock className="w-6 h-6 text-accent" />
             </div>
 
             <div className="flex-1">
               <p className="text-xs font-semibold uppercase tracking-wider text-accent mb-1.5">
-                {hasGaps ? 'You have gaps. Here’s the complete fix.' : 'Keep the momentum going.'}
+                {hasGaps ? 'You have gaps. Here is the complete fix.' : 'Keep the momentum going.'}
               </p>
               <h3 className="text-xl font-bold mb-2 tracking-tight">
                 Found by AI — The AI Visibility Playbook
               </h3>
-              <p className="text-sm text-muted leading-relaxed mb-5">
+              <p className="text-sm text-muted leading-relaxed mb-1">
                 {hasGaps
-                  ? 'This scan shows you where the gaps are. The playbook gives you the exact step-by-step system to close them — a 27-point checklist, 10 copy-paste audit prompts, and a 30-day action plan. One time, $27.'
-                  : 'Your technical structure is solid. The playbook takes you deeper — covering content authority, citation building, and review signals that this scan doesn’t measure. One time, $27.'}
+                  ? 'This scan shows you where the gaps are. The playbook gives you the exact step-by-step system to close them — a 27-point checklist, 10 copy-paste audit prompts, and a 30-day action plan.'
+                  : 'Your technical structure is solid. The playbook takes you deeper — covering content authority, citation building, and review signals this scan does not measure.'}
+              </p>
+              <p className="text-xs text-accent font-semibold mb-4">
+                ⚡ Beta pricing — price increases as we add more checks
               </p>
 
               <ul className="flex flex-wrap gap-x-5 gap-y-2 mb-6">
@@ -115,7 +172,7 @@ export function ResultsView({ report }: { report: ScanReport }) {
 
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                 <Link href="/playbook">
-                  <button className="btn-primary text-sm px-6 py-2.5 rounded-lg shadow-glow-xs">
+                  <button className="btn-primary text-sm px-6 py-2.5 rounded-lg shadow-glow-xs inline-flex items-center gap-2">
                     Get the Playbook — $27 <ArrowRight className="w-4 h-4" />
                   </button>
                 </Link>
@@ -128,7 +185,7 @@ export function ResultsView({ report }: { report: ScanReport }) {
 
       {/* Bottom actions */}
       <div className="flex flex-col sm:flex-row gap-3 justify-center pb-10">
-        <Button variant="primary" onClick={() => window.location.href = '/scan'}>
+        <Button variant="primary" onClick={() => window.location.href = '/#scan'}>
           Run another scan <ArrowRight className="w-4 h-4" />
         </Button>
         <Button variant="secondary" onClick={share}>
