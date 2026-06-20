@@ -7,9 +7,9 @@ import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
+  { href: '/guides',    label: 'Guides' },
   { href: '/pricing',   label: 'Pricing' },
   { href: '/playbook',  label: 'Playbook' },
-  { href: '/invisible', label: 'Why Invisible?' },
   { href: '/blog',      label: 'Blog' },
   { href: '/about',     label: 'About' },
 ]
@@ -77,7 +77,7 @@ export function Navbar() {
               </Link>
             ))}
             <Link
-              href="/"
+              href="/#scan"
               className="ml-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-semibold hover:bg-accent/90 transition-colors"
             >
               Free Scan
@@ -107,7 +107,7 @@ export function Navbar() {
               </Link>
             ))}
             <Link
-              href="/"
+              href="/#scan"
               className="mt-2 px-4 py-2.5 rounded-lg bg-accent text-white text-sm font-semibold text-center hover:bg-accent/90 transition-colors"
             >
               Free Scan
