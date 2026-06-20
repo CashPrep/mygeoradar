@@ -22,13 +22,13 @@ import {
 import { Button } from '@/components/ui/Button'
 
 export const metadata: Metadata = {
-  title: 'MyGeoRadar | Free Business Visibility Scanner — Local SEO, Citations & AI Search',
+  title: 'MyGeoRadar | Free GEO Scanner — See If AI Recommends Your Business',
   description:
-    'Run a free scan to find exactly why your business is not showing up on Google, in directories, or in AI answers. Get a specific action plan to fix every gap — starting at $27.',
+    'Run a free scan to find exactly why your business is not showing up in ChatGPT, Perplexity, or Google AI answers. Get a personalized pass/fail list — then unlock the Full GEO Report for $29.99.',
   openGraph: {
-    title: 'MyGeoRadar | Free Business Visibility Scanner — Local SEO, Citations & AI Search',
+    title: 'MyGeoRadar | Free GEO Scanner — See If AI Recommends Your Business',
     description:
-      'Find out why your business is invisible online. Free scan checks your local SEO, directory citations, and AI visibility — then shows you exactly what to fix.',
+      'Find out why your business is invisible to AI. Free scan checks your GEO signals across ChatGPT, Perplexity, Gemini & Claude — then shows you exactly what to fix.',
     url: 'https://mygeoradar.com',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
   },
@@ -50,7 +50,7 @@ const jsonLd = {
       },
       sameAs: ['https://twitter.com/MyGEORadar'],
       description:
-        'MyGeoRadar helps local businesses fix visibility gaps across Google, directories, and AI answers through a free scan and affordable fix guides.',
+        'MyGeoRadar helps businesses fix GEO visibility gaps across ChatGPT, Perplexity, Gemini, and Claude through a free scan and a $29.99 Full GEO Report.',
     },
     {
       '@type': 'WebSite',
@@ -62,27 +62,27 @@ const jsonLd = {
     {
       '@type': 'SoftwareApplication',
       '@id': 'https://mygeoradar.com/#tool',
-      name: 'MyGeoRadar Business Visibility Scanner',
+      name: 'MyGeoRadar GEO Scanner',
       url: 'https://mygeoradar.com',
       applicationCategory: 'BusinessApplication',
       offers: {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'USD',
-        description: 'Free business visibility scan',
+        description: 'Free GEO visibility scan',
       },
       publisher: { '@id': 'https://mygeoradar.com/#organization' },
     },
     {
       '@type': 'Product',
       '@id': 'https://mygeoradar.com/#product',
-      name: 'Found by AI — The Business Visibility & GEO Optimization Playbook',
-      url: 'https://mygeoradar.com/playbook',
+      name: 'Full GEO Report — myGEOradar',
+      url: 'https://mygeoradar.com/checkout',
       description:
-        'Step-by-step system to fix every visibility gap across local SEO, directory citations, and AI search. Includes a 27-point checklist, prompt pack, and 30-day plan.',
+        'Complete GEO audit report with every signal scored, every gap flagged, and a prioritized fix list for AI search visibility across ChatGPT, Perplexity, Gemini & Claude.',
       offers: {
         '@type': 'Offer',
-        price: '27.00',
+        price: '29.99',
         priceCurrency: 'USD',
         availability: 'https://schema.org/InStock',
         priceValidUntil: '2027-12-31',
@@ -122,77 +122,76 @@ const visibilityLayers = [
 const includes = [
   {
     icon: BookOpen,
-    title: 'The Complete Business Visibility Playbook',
+    title: 'Complete GEO Audit — Every Signal Scored',
     description:
-      'Step-by-step fixes for every visibility layer — local SEO, citations, schema, and AI search. No jargon. No agency required.',
+      'Your site checked against every factor AI systems use to decide who to recommend. Pass/fail for each one.',
   },
   {
     icon: FileText,
-    title: 'The 27-Point Visibility Checklist',
+    title: 'Prioritized Fix List',
     description:
-      '27 concrete actions, each one checkable and completable in under an hour. Know exactly where you stand and what to do next.',
+      'Every gap ranked by impact. Know exactly what to fix first — no guessing, no wasted effort.',
   },
   {
     icon: Zap,
-    title: 'Prompt Pack — 10 AI Audit Prompts',
+    title: 'Platform-Specific Fix Guides',
     description:
-      'Paste into ChatGPT, Perplexity, Gemini, and Claude to see exactly how AI describes your business right now and where you need to improve.',
+      'Step-by-step instructions for your CMS — WordPress, Shopify, Webflow, Wix, or Squarespace.',
   },
   {
     icon: Shield,
-    title: '30-Day Visibility Action Plan',
+    title: '30-Day Rescan Included',
     description:
-      'Day-by-day calendar for your first 30 days. One clear task per day. Consistent progress without overwhelm.',
+      'Fix your issues, then rescan at 30 days to confirm your GEO score improved. Included free.',
   },
 ]
 
 const faqs = [
   {
     q: 'What does the free scan actually check?',
-    a: 'The scan analyzes your site structure, schema markup, page signals, and metadata — the technical factors that determine whether Google, directories, and AI systems can understand and surface your business. It is not a full audit but gives you a clear starting score and top issues.',
+    a: 'The scan analyzes your site structure, schema markup, page signals, and metadata — the technical factors that determine whether Google, directories, and AI systems can understand and surface your business. You get a scored breakdown and top issues instantly.',
   },
   {
-    q: 'Do I need to be technical or know SEO to use this?',
-    a: 'Not at all. The playbook is written for business owners, marketers, and founders with no coding or deep SEO background. If you can edit your website or Google Business Profile, you can complete everything in this guide.',
+    q: 'What is the Full GEO Report?',
+    a: 'The Full GEO Report ($29.99) is a complete audit of every GEO signal on your site — every factor scored, every gap flagged, with a prioritized fix list. The free scan shows you the top issues; the Full Report shows you everything.',
+  },
+  {
+    q: 'Do I need to be technical to use this?',
+    a: 'Not at all. The fix guides are written for business owners, marketers, and founders with no coding background. If you can edit your website or Google Business Profile, you can complete everything.',
   },
   {
     q: 'How is this different from other SEO tools?',
-    a: 'Most SEO tools show you data without telling you what to do. MyGeoRadar gives you a free diagnosis and a step-by-step fix plan — including local citations, schema, and AI visibility — in one place, for a one-time cost, not a $99/month subscription.',
+    a: 'Most SEO tools show you data without telling you what to do. MyGeoRadar gives you a free GEO diagnosis + platform-specific fix guides in one place — for a one-time cost, not a $99/month subscription.',
   },
   {
-    q: 'What AI assistants does the playbook cover?',
-    a: 'ChatGPT, Perplexity, Gemini, and Claude — the four assistants that handle the vast majority of AI search traffic today. The visibility principles also apply to future assistants as they grow.',
+    q: 'What AI assistants does this cover?',
+    a: 'ChatGPT, Perplexity, Gemini, and Claude — the four assistants handling the vast majority of AI search traffic today.',
   },
   {
-    q: 'Is this a subscription or recurring charge?',
-    a: 'No. You pay $27 once and get the full playbook, checklist, prompt pack, and 30-day plan. No recurring charges. All future updates are included at no extra cost.',
+    q: 'Is this a subscription or a one-time charge?',
+    a: 'One-time. The Full GEO Report is $29.99. No recurring charges. The 30-day rescan is included.',
   },
   {
     q: 'What if I am not satisfied?',
-    a: 'If you follow the steps and are not satisfied within 30 days, email us at hello@mygeoradar.com for a full refund. No questions asked.',
+    a: 'Email us at hello@mygeoradar.com within 30 days for a full refund. No questions asked.',
   },
 ]
 
 const howItWorks = [
   {
     step: '01',
-    title: 'Run your free visibility scan',
-    body: 'Enter your URL. In seconds, see a scored breakdown of your site\'s visibility signals — what is working, what is broken, and where the biggest gaps are.',
+    title: 'Scan your site — free',
+    body: 'Enter your URL. In 30 seconds, get a scored breakdown of your GEO signals — what AI systems see, what they miss, and where your biggest gaps are. No signup required.',
   },
   {
     step: '02',
-    title: 'Read your specific findings',
-    body: 'Your results page shows exactly which visibility problems your site has — GBP issues, schema errors, citation gaps, and AI-readiness — not vague suggestions.',
+    title: 'Read the guides for your issues',
+    body: 'Your results link directly to platform-specific fix guides — WordPress, Shopify, Webflow, Wix, or Squarespace. Each guide has step-by-step instructions for the exact issues found on your site.',
   },
   {
     step: '03',
-    title: 'Get the fix guide for your issues',
-    body: 'Pick up the $27 complete playbook or a targeted fix guide for your specific problem. Each guide has step-by-step instructions, not just theory.',
-  },
-  {
-    step: '04',
-    title: 'Re-scan and track your improvement',
-    body: 'After working through your fixes, run the scan again. See your score go up and confirm that AI systems and search engines can now find your business.',
+    title: 'Unlock your Full GEO Report — $29.99',
+    body: 'The free scan shows your top issues. The Full GEO Report shows everything — every signal scored, every gap flagged, with a prioritized fix list and a 30-day rescan to confirm your improvements.',
   },
 ]
 
@@ -230,6 +229,39 @@ const problemStats = [
   },
 ]
 
+const guidesTeaser = [
+  {
+    platform: 'WordPress',
+    slug: 'wordpress',
+    score: 9,
+    tagline: 'The gold standard for GEO. Full schema control, Yoast/Rank Math, and custom headers.',
+  },
+  {
+    platform: 'Shopify',
+    slug: 'shopify',
+    score: 7,
+    tagline: 'Good out of the box but schema gaps for AI search. Know what to add.',
+  },
+  {
+    platform: 'Webflow',
+    slug: 'webflow',
+    score: 8,
+    tagline: 'Strong technical foundation. Custom JSON-LD is manual but fully possible.',
+  },
+  {
+    platform: 'Wix',
+    slug: 'wix',
+    score: 5,
+    tagline: 'Schema tools are improving but still limited. Several GEO signals need workarounds.',
+  },
+  {
+    platform: 'Squarespace',
+    slug: 'squarespace',
+    score: 5,
+    tagline: 'Clean design, tight GEO control. Custom schema requires code injection.',
+  },
+]
+
 export default function HomePage() {
   return (
     <>
@@ -250,7 +282,7 @@ export default function HomePage() {
             <div className="flex justify-center mb-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/8 border border-accent/20 text-accent text-xs font-medium animate-fade-in">
                 <Radar className="w-3 h-3" />
-                Free business visibility scanner — no signup required
+                Free GEO scanner — no signup required
               </div>
             </div>
 
@@ -259,16 +291,18 @@ export default function HomePage() {
               {/* Left: headline + trust signals */}
               <div className="flex flex-col justify-center pt-4">
                 <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-[1.1] mb-3 text-balance">
-                  Find out why your business isn&apos;t getting found
+                  Is your business showing up in AI answers?
                 </h1>
                 <h2 className="text-xl md:text-2xl font-medium text-muted leading-snug mb-5 text-balance">
-                  One free scan. Every visibility gap across{' '}
-                  <span className="text-gradient-accent">Google, directories, and AI search.</span>
+                  Scan free in 30 seconds.{' '}
+                  <span className="text-gradient-accent">See your pass/fail across ChatGPT, Perplexity, Gemini & Claude.</span>
                 </h2>
                 <p className="text-base text-muted leading-relaxed mb-8 text-pretty">
-                  Missing citations, broken schema, incomplete GBP, and AI invisibility are each costing
-                  you customers right now. Run a free scan in 30 seconds and see exactly which problems
-                  your business has — with a clear fix for each one.
+                  Most businesses are invisible to AI — missing schema, broken citations, and gaps
+                  that no one told them about. The free scan shows exactly what’s wrong.
+                  The{' '}
+                  <strong className="text-foreground">Full GEO Report ($29.99)</strong>{' '}
+                  shows everything and tells you exactly what to fix first.
                 </p>
 
                 {/* Quick trust bullets */}
@@ -276,7 +310,7 @@ export default function HomePage() {
                   {[
                     'Free — no signup needed',
                     'Results in 30 seconds',
-                    'No credit card',
+                    'Full Report — $29.99 one-time',
                   ].map((label) => (
                     <div key={label} className="flex items-center gap-1.5">
                       <CheckCircle className="w-3.5 h-3.5 text-accent flex-shrink-0" />
@@ -290,9 +324,9 @@ export default function HomePage() {
                   <Quote className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
                   <p className="text-sm leading-relaxed">
                     <span className="font-semibold text-foreground">
-                      Went from a 78 to a 100 visibility score in 30 days.
+                      Went from a 78 to a 100 GEO score in 30 days.
                     </span>{' '}
-                    The checklist is the most actionable thing I&apos;ve found.
+                    The fix list is the most actionable thing I&apos;ve found.
                     <span className="block text-xs text-muted mt-1">
                       — Johnathan Lightfoot, business owner
                     </span>
@@ -301,30 +335,36 @@ export default function HomePage() {
 
                 <div className="mt-6">
                   <Link
-                    href="/#what-you-get"
+                    href="/#how-it-works"
                     className="text-sm text-muted hover:text-foreground transition-colors"
                   >
-                    See what&apos;s included in the fix guide ↓
+                    See how it works ↓
                   </Link>
                 </div>
               </div>
 
-              {/* Right: scan widget */}
+              {/* Right: scan widget — PRIMARY hero action */}
               <div
                 id="scan"
-                className="rounded-2xl border border-border bg-white shadow-card-accent p-6 md:p-8"
+                className="rounded-2xl border-2 border-accent/40 bg-white shadow-card-accent p-6 md:p-8"
               >
                 <div className="mb-5">
-                  <p className="font-semibold text-[15px] mb-1">Check your business visibility — free</p>
+                  <p className="font-bold text-[17px] mb-1">Run your free GEO scan</p>
                   <p className="text-sm text-muted leading-relaxed">
-                    Enter your website URL. We&apos;ll scan your site structure, schema, and local
-                    signals to show you exactly where your visibility is breaking down.
+                    Enter your website URL. Get an instant pass/fail on every GEO signal AI systems
+                    use to decide who to recommend.
                   </p>
                   <p className="text-xs text-muted/60 mt-2">
                     Analyzes technical signals only — results reflect site structure, not guaranteed rankings.
                   </p>
                 </div>
                 <AiReadinessScan />
+                <p className="text-center text-xs text-muted mt-4">
+                  Want everything?{' '}
+                  <Link href="/checkout" className="text-accent font-semibold hover:underline">
+                    Unlock the Full GEO Report — $29.99 →
+                  </Link>
+                </p>
               </div>
 
             </div>
@@ -336,11 +376,11 @@ export default function HomePage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-2xl md:text-3xl font-bold mb-4 text-balance">
-                Most businesses are invisible online — and don&apos;t know why
+                Most businesses are invisible to AI — and don&apos;t know why
               </h2>
               <p className="text-muted leading-relaxed max-w-2xl mx-auto text-pretty">
-                It is rarely one big problem. It is four small ones compounding: an incomplete Google
-                Business Profile, inconsistent citations, missing schema, and zero presence in AI answers.
+                It is rarely one big problem. It is four small ones compounding: missing schema, inconsistent
+                citations, no GBP signals, and zero presence in AI answers.
                 Each one alone costs you customers. Together they make you nearly unfindable.
               </p>
             </div>
@@ -372,10 +412,10 @@ export default function HomePage() {
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
-                Every layer of your business visibility — in one scan
+                Every GEO signal — in one scan
               </h2>
               <p className="text-muted max-w-xl mx-auto">
-                The free scan checks the four most common reasons local businesses fail to show up where customers are looking.
+                The free scan checks the four most common reasons businesses fail to appear in AI answers.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -394,7 +434,7 @@ export default function HomePage() {
             <div className="text-center mt-10">
               <Link href="#scan">
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  Run my free visibility scan <ArrowRight className="w-4 h-4" />
+                  Run my free GEO scan <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             </div>
@@ -402,11 +442,14 @@ export default function HomePage() {
         </section>
 
         {/* ── HOW IT WORKS ── */}
-        <section className="py-24 px-4 md:px-8 border-t border-border">
+        <section id="how-it-works" className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-14 tracking-tight">
-              Scan. Diagnose. Fix.
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-3 tracking-tight">
+              How it works
             </h2>
+            <p className="text-center text-muted mb-14 max-w-lg mx-auto">
+              Three steps from invisible to showing up in AI answers.
+            </p>
             <div className="flex flex-col gap-4">
               {howItWorks.map(({ step, title, body }) => (
                 <div
@@ -421,21 +464,84 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+            <div className="text-center mt-10">
+              <Link href="#scan">
+                <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
+                  Start with the free scan <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+              <p className="text-xs text-muted mt-3">
+                Full GEO Report unlocks after your scan &middot; <strong>$29.99 one-time</strong>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── GUIDES TEASER ── */}
+        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
+                Fix guides for every platform
+              </h2>
+              <p className="text-muted max-w-xl mx-auto">
+                After your scan, go straight to the guide for your CMS. Step-by-step GEO fixes —
+                no developer required.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {guidesTeaser.map(({ platform, slug, score, tagline }) => (
+                <Link
+                  key={slug}
+                  href={`/guides/${slug}`}
+                  className="group block p-5 rounded-2xl bg-white border border-border hover:border-accent/30 hover:shadow-card-lift transition-all duration-200"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-bold text-[15px] text-foreground">{platform}</span>
+                    <span
+                      className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                        score >= 8
+                          ? 'bg-emerald-100 text-emerald-700'
+                          : score >= 6
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-red-100 text-red-700'
+                      }`}
+                    >
+                      {score}/10 GEO
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted leading-relaxed mb-3">{tagline}</p>
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-accent group-hover:gap-2 transition-all">
+                    Read guide <ArrowRight className="w-3 h-3" />
+                  </span>
+                </Link>
+              ))}
+              {/* All guides link */}
+              <Link
+                href="/guides"
+                className="group flex flex-col items-center justify-center p-5 rounded-2xl border border-dashed border-border hover:border-accent/30 hover:bg-accent/4 transition-all duration-200 text-center min-h-[120px]"
+              >
+                <BookOpen className="w-6 h-6 text-muted mb-2 group-hover:text-accent transition-colors" />
+                <span className="text-sm font-semibold text-muted group-hover:text-accent transition-colors">
+                  View all platform guides
+                </span>
+                <span className="text-xs text-muted/60 mt-1">WordPress, Shopify, Webflow & more</span>
+              </Link>
+            </div>
           </div>
         </section>
 
         {/* ── WHAT YOU GET ── */}
-        <section id="what-you-get" className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
+        <section id="what-you-get" className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-14">
               <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
-                The scan is free. The fix is $27.
-                <br />
-                <span className="text-gradient-accent">Four assets. One complete system.</span>
+                The scan is free. The full picture is{' '}
+                <span className="text-gradient-accent">$29.99.</span>
               </h2>
               <p className="text-muted max-w-xl mx-auto">
-                No subscription. No monthly tool fee. One purchase gets you everything you need to fix
-                your business visibility across local search, directories, and AI.
+                The Full GEO Report gives you every signal scored, every gap flagged, and a
+                prioritized fix list — plus a 30-day rescan to confirm your improvements.
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -452,24 +558,25 @@ export default function HomePage() {
               ))}
             </div>
             <div className="text-center mt-10">
-              <Link href="/playbook">
+              <Link href="/checkout">
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  See everything in the visibility playbook <ArrowRight className="w-4 h-4" />
+                  Unlock Full GEO Report — $29.99 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
+              <p className="text-xs text-muted mt-3">One-time &middot; 30-day rescan included &middot; 30-day money-back guarantee</p>
             </div>
           </div>
         </section>
 
         {/* ── CHECKLIST PREVIEW ── */}
-        <section className="py-24 px-4 md:px-8 border-t border-border">
+        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-5xl mx-auto">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-3 tracking-tight">
-                A real look inside the visibility playbook
+                A real look at what the full report covers
               </h2>
               <p className="text-muted max-w-xl mx-auto">
-                Sample from two of the four included assets — the checklist and the AI audit prompt pack.
+                The free scan shows your top issues. The Full GEO Report goes deeper — every signal, scored.
               </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -477,7 +584,7 @@ export default function HomePage() {
               <div className="rounded-2xl border border-border bg-white overflow-hidden shadow-card-lift">
                 <div className="flex items-center gap-3 px-5 py-3.5 border-b border-border bg-surface">
                   <FileText className="w-4 h-4 text-accent" />
-                  <span className="font-semibold text-sm">27-Point Visibility Checklist</span>
+                  <span className="font-semibold text-sm">GEO Signal Checklist</span>
                   <span className="ml-auto text-xs text-muted bg-surface-2 px-2 py-0.5 rounded-full">
                     1–8 of 27
                   </span>
@@ -512,7 +619,7 @@ export default function HomePage() {
                     </div>
                   ))}
                   <p className="text-xs text-muted italic border-t border-border pt-3 mt-1">
-                    + 19 more items covering citations, schema, AI visibility, and content signals&hellip;
+                    + 19 more signals checked in the Full GEO Report&hellip;
                   </p>
                 </div>
               </div>
@@ -540,7 +647,7 @@ export default function HomePage() {
                     </div>
                     <p className="text-xs text-muted mt-3">
                       <strong className="text-foreground">What to look for:</strong> Does your business
-                      appear? How is it described? The playbook explains what each answer means and
+                      appear? How is it described? The Full GEO Report explains what each answer means and
                       exactly what to fix.
                     </p>
                   </div>
@@ -552,20 +659,20 @@ export default function HomePage() {
               </div>
             </div>
             <div className="text-center mt-10">
-              <Link href="/playbook">
+              <Link href="/checkout">
                 <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
-                  Fix my business visibility — $27 <ArrowRight className="w-4 h-4" />
+                  Get the Full GEO Report — $29.99 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <p className="text-xs text-muted mt-3">
-                Instant download &middot; 30-day money-back guarantee
+                One-time &middot; 30-day rescan included &middot; 30-day money-back guarantee
               </p>
             </div>
           </div>
         </section>
 
         {/* ── WHY NOW ── */}
-        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
+        <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-5 text-balance">
               The businesses fixing this now will be the ones AI recommends in six months
@@ -575,7 +682,7 @@ export default function HomePage() {
               citations, better schema, and more authoritative content, they get harder to displace in AI
               answers.{' '}
               <strong className="text-foreground">
-                The best time to fix your visibility gaps was six months ago. The second-best time is today.
+                The best time to fix your GEO gaps was six months ago. The second-best time is today.
               </strong>
             </p>
             <p className="text-xs text-muted/55 italic mb-10 max-w-lg mx-auto">
@@ -585,7 +692,7 @@ export default function HomePage() {
             <div className="inline-flex items-center gap-3 px-5 py-4 rounded-xl bg-accent/5 border border-accent/15 text-left max-w-sm mx-auto">
               <Clock className="w-5 h-5 text-accent flex-shrink-0" />
               <p className="text-sm">
-                <strong>The full fix guide is $27 — one time.</strong> One SEO agency
+                <strong>The Full GEO Report is $29.99 — one time.</strong> One SEO agency
                 consultation costs $300+. Start fixing today.
               </p>
             </div>
@@ -593,7 +700,7 @@ export default function HomePage() {
         </section>
 
         {/* ── WHO IT'S FOR ── */}
-        <section className="py-24 px-4 md:px-8 border-t border-border">
+        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-2xl md:text-3xl font-bold mb-10 tracking-tight">
               This is for you if&hellip;
@@ -602,10 +709,10 @@ export default function HomePage() {
               {[
                 'You own or run a local or online business',
                 'Customers tell you they "couldn\'t find you online"',
-                'Your Google Business Profile is incomplete or inconsistent',
+                'You tested AI assistants and your business didn\'t appear',
                 'You don\'t want to pay $99/month for a tool you barely use',
-                'AI assistants don\'t mention you when you test them',
-                'You want a specific, done-for-you action plan — not more theory',
+                'You want a personalized pass/fail — not vague generic advice',
+                'You want a specific, prioritized action plan — not more theory',
               ].map((item) => (
                 <div
                   key={item}
@@ -620,14 +727,14 @@ export default function HomePage() {
         </section>
 
         {/* ── SOCIAL PROOF ── */}
-        <section className="py-16 px-4 md:px-8 border-t border-border bg-surface/40">
+        <section className="py-16 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto">
             <div className="rounded-2xl border border-accent/20 bg-accent/4 p-7 flex flex-col md:flex-row gap-6 items-start">
               <Quote className="w-7 h-7 text-accent flex-shrink-0 mt-1" />
               <div>
                 <p className="text-foreground font-medium leading-relaxed mb-3">
-                  &ldquo;I went from a 78 to a 100 visibility score in 30 days. I followed the
-                  checklist exactly — most items took less than an hour each. The prompt pack alone was
+                  &ldquo;I went from a 78 to a 100 GEO score in 30 days. I followed the
+                  fix list exactly — most items took less than an hour each. The prompt pack alone was
                   worth it just to see how ChatGPT was describing my business before I fixed
                   things.&rdquo;
                 </p>
@@ -640,7 +747,7 @@ export default function HomePage() {
                       Johnathan Lightfoot
                     </span>
                     <span className="text-xs text-muted">
-                      Business owner &middot; 78 → 100 visibility score in 30 days
+                      Business owner &middot; 78 → 100 GEO score in 30 days
                     </span>
                   </div>
                 </div>
@@ -650,27 +757,26 @@ export default function HomePage() {
         </section>
 
         {/* ── PRICING ── */}
-        <section id="pricing" className="py-24 px-4 md:px-8 border-t border-border">
+        <section id="pricing" className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-md mx-auto">
             <div className="relative rounded-2xl border border-accent/40 bg-white p-8 text-center shadow-card-accent overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-accent to-transparent" />
               <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-accent mb-5 mt-1">
-                Complete Business Visibility Bundle
+                Full GEO Report
               </p>
               <div className="mb-1">
-                <span className="text-6xl font-black text-gradient tracking-tight">$27</span>
+                <span className="text-6xl font-black text-gradient tracking-tight">$29.99</span>
               </div>
               <p className="text-sm text-muted mb-8">
-                One-time &middot; No subscription &middot; Instant download
+                One-time &middot; No subscription &middot; 30-day rescan included
               </p>
               <ul className="flex flex-col gap-3 text-left mb-8">
                 {[
-                  'The Complete Business Visibility Playbook',
-                  'The 27-Point Visibility Checklist',
-                  'Prompt Pack — 10 copy-paste AI audit prompts',
-                  '30-Day Visibility Action Plan calendar',
+                  'Every GEO signal scored — pass/fail for each',
+                  'Prioritized fix list ranked by impact',
+                  'Platform-specific fix guides (WordPress, Shopify, Webflow, Wix, Squarespace)',
+                  '30-day rescan to confirm your improvements',
                   '30-day money-back guarantee',
-                  'All future updates included free',
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm">
                     <CheckCircle className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
@@ -678,23 +784,23 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <Link href="/playbook">
+              <Link href="/checkout">
                 <Button variant="primary" size="lg" className="w-full gap-2 shadow-glow-sm">
-                  Fix my business visibility — $27 <ArrowRight className="w-4 h-4" />
+                  Get the Full GEO Report — $29.99 <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
               <p className="text-xs text-muted/70 mt-3 italic">
-                Join the business owners who ran their free scan this week.
+                Run the free scan first — unlock the full report from your results page.
               </p>
               <p className="text-xs text-muted mt-1">
-                Secure checkout via Stripe &middot; PDF delivered instantly
+                Secure checkout via Stripe
               </p>
             </div>
           </div>
         </section>
 
         {/* ── FOUNDER TRUST BLOCK ── */}
-        <section className="py-20 px-4 md:px-8 border-t border-border bg-surface/40">
+        <section className="py-20 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto">
             <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
               <div className="flex-shrink-0 w-20 h-20 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center text-2xl font-black text-accent select-none">
@@ -707,9 +813,9 @@ export default function HomePage() {
                 </h3>
                 <p className="text-sm text-muted leading-relaxed">
                   MyGeoRadar was built after noticing that almost every local business was invisible
-                  online — including businesses with strong Google rankings and loyal customer bases.
-                  The scan and playbook are built from research into the exact signals that Google,
-                  directories, and AI systems use to decide which businesses to surface and recommend.
+                  to AI — including businesses with strong Google rankings and loyal customer bases.
+                  The scanner and Full GEO Report are built from research into the exact signals that
+                  ChatGPT, Perplexity, Gemini, and Claude use to decide which businesses to surface and recommend.
                 </p>
                 <Link
                   href="/about"
@@ -723,7 +829,7 @@ export default function HomePage() {
         </section>
 
         {/* ── FAQ ── */}
-        <section className="py-24 px-4 md:px-8 border-t border-border">
+        <section className="py-24 px-4 md:px-8 border-t border-border bg-surface/40">
           <div className="max-w-2xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12 tracking-tight">
               Common questions
@@ -746,12 +852,12 @@ export default function HomePage() {
         <section className="py-24 px-4 md:px-8 border-t border-border">
           <div className="max-w-2xl mx-auto text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight text-balance">
-              Your customers are searching. Make sure they can find you.
+              Your customers are searching AI. Make sure they find you.
             </h2>
             <p className="text-muted mb-8 text-pretty">
-              The free scan takes 30 seconds. The fix guide is{' '}
-              <strong className="text-foreground">$27 — one time</strong>. Every day you wait is
-              another day a competitor shows up where you don&apos;t.
+              The free scan takes 30 seconds. The{' '}
+              <strong className="text-foreground">Full GEO Report is $29.99 — one time</strong>.
+              Every day you wait is another day a competitor shows up in AI answers where you don&apos;t.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link href="#scan">
@@ -759,14 +865,14 @@ export default function HomePage() {
                   Run my free scan first
                 </Button>
               </Link>
-              <Link href="/playbook">
+              <Link href="/checkout">
                 <Button variant="primary" size="xl" className="gap-2 shadow-glow-sm">
-                  Get the fix guide — $27 <ArrowRight className="w-5 h-5" />
+                  Get Full GEO Report — $29.99 <ArrowRight className="w-5 h-5" />
                 </Button>
               </Link>
             </div>
             <p className="text-xs text-muted mt-4">
-              One-time &middot; Instant download &middot; 30-day money-back guarantee
+              One-time &middot; 30-day rescan included &middot; 30-day money-back guarantee
             </p>
           </div>
         </section>
