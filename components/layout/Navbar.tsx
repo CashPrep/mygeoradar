@@ -7,11 +7,10 @@ import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 
 const navLinks = [
-  { href: '/guides',    label: 'Guides' },
-  { href: '/pricing',   label: 'Pricing' },
-  { href: '/playbook',  label: 'Playbook' },
-  { href: '/blog',      label: 'Blog' },
-  { href: '/about',     label: 'About' },
+  { href: '/',         label: 'Home' },
+  { href: '/guides',   label: 'Guides' },
+  { href: '/#pricing', label: 'Pricing' },
+  { href: '/login',    label: 'Login' },
 ]
 
 export function Navbar() {
@@ -32,6 +31,9 @@ export function Navbar() {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
+
+  const isActive = (href: string) =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href.split('#')[0]) && href !== '/#pricing'
 
   return (
     <>
@@ -61,14 +63,14 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-5">
             {navLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 className={[
                   'text-sm font-medium transition-colors',
-                  pathname === l.href
+                  isActive(l.href)
                     ? 'text-accent'
                     : 'text-foreground/70 hover:text-foreground',
                 ].join(' ')}
@@ -76,11 +78,13 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
+
+            {/* Scan CTA — primary accent button */}
             <Link
-              href="/#scan"
-              className="ml-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-semibold hover:bg-accent/90 transition-colors"
+              href="/scan"
+              className="ml-2 px-4 py-2 rounded-lg bg-accent text-white text-sm font-bold hover:bg-accent/90 active:scale-[0.97] transition-all shadow-sm ring-2 ring-accent/20"
             >
-              Free Scan
+              Free Scan →
             </Link>
           </nav>
 
@@ -96,21 +100,26 @@ export function Navbar() {
 
         {/* Mobile drawer */}
         {mobileOpen && (
-          <div className="md:hidden bg-white border-t border-border px-4 pb-6 pt-4 flex flex-col gap-4">
+          <div className="md:hidden bg-white border-t border-border px-4 pb-6 pt-4 flex flex-col gap-1">
             {navLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-sm font-medium text-foreground/80 hover:text-foreground"
+                className={[
+                  'px-2 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                  isActive(l.href)
+                    ? 'text-accent bg-accent/6'
+                    : 'text-foreground/80 hover:text-foreground hover:bg-surface',
+                ].join(' ')}
               >
                 {l.label}
               </Link>
             ))}
             <Link
-              href="/#scan"
-              className="mt-2 px-4 py-2.5 rounded-lg bg-accent text-white text-sm font-semibold text-center hover:bg-accent/90 transition-colors"
+              href="/scan"
+              className="mt-3 px-4 py-3 rounded-xl bg-accent text-white text-sm font-bold text-center hover:bg-accent/90 transition-colors shadow-sm"
             >
-              Free Scan
+              Free Scan →
             </Link>
           </div>
         )}
