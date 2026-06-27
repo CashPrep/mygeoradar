@@ -36,3 +36,14 @@ export function getIp(req: Request): string {
     'unknown'
   )
 }
+
+/**
+ * Returns true if the IP is in the OWNER_IPS env var (comma-separated).
+ * These IPs bypass all scan limits — for owner/demo use.
+ * Set OWNER_IPS in your Vercel env: e.g. "12.34.56.78,98.76.54.32"
+ */
+export function isOwnerIp(ip: string): boolean {
+  const raw = process.env.OWNER_IPS ?? ''
+  if (!raw) return false
+  return raw.split(',').map(s => s.trim()).includes(ip)
+}

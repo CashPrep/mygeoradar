@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { getCheckFeasibility, getPlatformNote } from '@/lib/platforms'
-import { rateLimit, getIp } from '@/lib/rate-limit'
+import { getIp, isOwnerIp } from '@/lib/rate-limit'
 
 export const runtime = 'nodejs'
 export const maxDuration = 25 // page fetch (8s) + robots (4s) + processing overhead
@@ -60,21 +60,29 @@ function robotsBlocksAgent(txt: string, agent: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
-  // ── Rate limiting: 5 scans per IP per hour ────────────────────────
   const ip = getIp(req)
-  const { allowed, remaining, resetAt } = rateLimit(ip, { limit: 5, windowMs: 60 * 60 * 1000 })
-  if (!allowed) {
-    return NextResponse.json(
-      { error: 'Too many scans. Please try again in an hour.' },
-      {
-        status: 429,
-        headers: {
-          'Retry-After':       String(Math.ceil((resetAt - Date.now()) / 1000)),
-          'X-RateLimit-Limit': '5',
-          'X-RateLimit-Remaining': '0',
-        },
+  const ownerBypass = isOwnerIp(ip)
+
+  // ── Per-IP scan limit: 1 free scan per IP (persistent via Supabase) ──
+  // Owner IPs skip this check entirely.
+  if (!ownerBypass) {
+    try {
+      const supabase = getSupabase()
+      const { count } = await supabase
+        .from('scans')
+        .select('id', { count: 'exact', head: true })
+        .eq('ip_address', ip)
+
+      if ((count ?? 0) >= 1) {
+        return NextResponse.json(
+          { error: 'You have already used your free scan. Upgrade to scan more sites.' },
+          { status: 429 }
+        )
       }
-    )
+    } catch (e) {
+      console.error('IP check error:', e)
+      // Fail open — don't block users if the check itself errors
+    }
   }
 
   try {
@@ -291,7 +299,14 @@ export async function POST(req: NextRequest) {
       const supabase = getSupabase()
       const { data, error } = await supabase
         .from('scans')
-        .insert({ url: finalUrl, business_name: businessName || null, score: finalScore, checks, platform: platform || null })
+        .insert({
+          url: finalUrl,
+          business_name: businessName || null,
+          score: finalScore,
+          checks,
+          platform: platform || null,
+          ip_address: ip,
+        })
         .select('id')
         .single()
       if (!error && data) scanId = data.id
@@ -320,12 +335,6 @@ export async function POST(req: NextRequest) {
         scannedAt: new Date().toISOString(),
         ...(platform && { platform }),
       },
-      {
-        headers: {
-          'X-RateLimit-Limit':     '5',
-          'X-RateLimit-Remaining': String(remaining),
-        },
-      }
     )
   } catch (err) {
     console.error('Scan error:', err)
