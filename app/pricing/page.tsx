@@ -142,7 +142,7 @@ export default function PricingPage() {
             Simple, transparent pricing
           </div>
           <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4 text-balance">
-            Fix exactly what’s broken.
+            Fix exactly what&#39;s broken.
             <br />
             <span className="text-gradient-accent">Nothing more, nothing less.</span>
           </h1>
@@ -281,11 +281,21 @@ export default function PricingPage() {
                       Get the full playbook <ArrowRight className="w-4 h-4" />
                     </Button>
                   </Link>
+                  {/* ── 30-DAY GUARANTEE TRUST BADGE ── */}
+                  <div className="flex items-start gap-2.5 rounded-xl border border-green-200 bg-green-50 px-3 py-2.5">
+                    <Shield className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="text-xs font-semibold text-green-800 leading-tight">30-Day Money-Back Guarantee</p>
+                      <p className="text-[11px] text-green-700 leading-snug mt-0.5">
+                        Not happy? Email{' '}
+                        <a href="mailto:hello@mygeoradar.com" className="underline font-medium">hello@mygeoradar.com</a>{' '}
+                        within 30 days for a full refund. No questions asked.{' '}
+                        <Link href="/refund" className="underline font-medium">See refund policy →</Link>
+                      </p>
+                    </div>
+                  </div>
                   <p className="text-xs text-center text-muted">
-                    Secure checkout via Stripe
-                  </p>
-                  <p className="text-xs text-center text-muted">
-                    30-day money-back guarantee
+                    🔒 Secure checkout via Stripe
                   </p>
                 </div>
               </div>
@@ -426,7 +436,7 @@ export default function PricingPage() {
           </h2>
           <p className="text-muted mb-8">
             Run the free scan first. It will show you exactly which of the four visibility layers
-            is most broken — then you’ll know exactly which fix guide you need.
+            is most broken — then you&#39;ll know exactly which fix guide you need.
           </p>
           <Link href="/#scan">
             <Button variant="primary" size="lg" className="gap-2 shadow-glow-sm">
