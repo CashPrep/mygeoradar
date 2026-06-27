@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
 import './globals.css'
+import CookieBanner from '@/components/CookieBanner'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -291,6 +292,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="bg-background text-foreground font-sans antialiased min-h-screen">
         {children}
+        <CookieBanner />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-49BR1TEVM4"
           strategy="afterInteractive"
