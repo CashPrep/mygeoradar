@@ -12,11 +12,11 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'MyGeoRadar | Free AI Visibility Scanner — Get Found by ChatGPT, Perplexity & AI Search',
+    default: 'MyGeoRadar | Free AI Visibility Scanner for Your Business',
     template: '%s | MyGeoRadar',
   },
   description:
-    'Run a free AI visibility scan in 30 seconds. See if ChatGPT, Perplexity & Gemini recommend your business — then fix every gap with our $27 GEO optimization (Generative Engine Optimization) playbook.',
+    'Free AI visibility scan in 30 seconds. See if ChatGPT, Perplexity & Gemini recommend your business — then fix every gap with our $27 GEO playbook.',
   keywords: [
     'AI visibility',
     'AI visibility scanner',
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://www.mygeoradar.com',
-    title: 'MyGeoRadar | Free AI Visibility Scanner — Get Found by ChatGPT, Perplexity & AI Search',
+    title: 'MyGeoRadar | Free AI Visibility Scanner for Your Business',
     description:
       'Most businesses are invisible to AI assistants. Run a free AI visibility scan to see your score — then fix it with the Found by AI Playbook.',
     siteName: 'MyGeoRadar',
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     site: '@MyGEORadar',
     creator: '@MyGEORadar',
-    title: 'MyGeoRadar | Free AI Visibility Scanner — Get Found by ChatGPT & AI Search',
+    title: 'MyGeoRadar | Free AI Visibility Scanner for Your Business',
     description:
       'Most businesses are invisible to AI assistants. Run a free AI visibility scan, see your score, fix it. $27 one-time playbook.',
     images: ['/og-image.png'],
